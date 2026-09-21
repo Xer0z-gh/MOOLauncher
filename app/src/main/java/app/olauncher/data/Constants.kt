@@ -19,6 +19,7 @@ object Constants {
         const val HOME = 1
         const val APPEARANCE = 2
         const val GESTURES = 3
+        const val APPS = 4
     }
 
     /**

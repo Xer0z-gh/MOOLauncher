@@ -94,6 +94,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.sectionHome.isVisible = section == Constants.Section.HOME
         binding.sectionAppearance.isVisible = section == Constants.Section.APPEARANCE
         binding.sectionGestures.isVisible = section == Constants.Section.GESTURES
+        binding.sectionApps.isVisible = section == Constants.Section.APPS
     }
 
     private fun openSection(target: Int) {
@@ -159,6 +160,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.hubHome -> openSection(Constants.Section.HOME)
             R.id.hubAppearance -> openSection(Constants.Section.APPEARANCE)
             R.id.hubGestures -> openSection(Constants.Section.GESTURES)
+            R.id.hubApps -> openSection(Constants.Section.APPS)
+            R.id.hiddenAppsRow -> showHiddenApps()
             R.id.olauncherHiddenApps -> showHiddenApps()
             R.id.moreFeatures -> viewModel.showDialog.postValue(Constants.Dialog.PRO_MESSAGE)
             R.id.screenTimeOnOff -> viewModel.showDialog.postValue(Constants.Dialog.DIGITAL_WELLBEING)
@@ -286,6 +289,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.hubHome.setOnClickListener(this)
         binding.hubAppearance.setOnClickListener(this)
         binding.hubGestures.setOnClickListener(this)
+        binding.hubApps.setOnClickListener(this)
+        binding.hiddenAppsRow.setOnClickListener(this)
         binding.colorTheme.setOnClickListener(this)
         binding.appIcons.setOnClickListener(this)
         binding.iconStyle.setOnClickListener(this)
@@ -912,6 +917,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             getString(if (prefs.homeAnimations) R.string.on else R.string.off)
         binding.unlockCount.text =
             getString(if (prefs.showUnlockCount) R.string.on else R.string.off)
+        binding.hiddenAppsRow.text = prefs.hiddenApps.size.toString()
         binding.homeSpacing.text =
             if (prefs.homeSpacingExtra == 0) getString(R.string._0)
             else getString(R.string.home_spacing_value, prefs.homeSpacingExtra)
