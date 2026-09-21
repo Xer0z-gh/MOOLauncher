@@ -170,23 +170,28 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
      * idea what it toggles, and Voice Access offered a dozen identical "On" targets. Two of
      * them, App theme "Dark" and Font "Light", were impossible to tell apart by ear.
      */
-    private fun labelSettingsRows(root: ViewGroup? = null) {
+    private fun labelSettingsRows(root: ViewGroup? = null, ring: Int = focusRingColor()) {
         if (_binding == null || !isAdded) return
         @Suppress("NAME_SHADOWING") val root = root ?: binding.scrollLayout
-        val ring = focusRingColor()
         for (i in 0 until root.childCount) {
             val child = root.getChildAt(i) as? ViewGroup ?: continue
+            // applySection() leaves four of the five sections GONE. Walking them anyway meant
+            // most of the work on every pass was for rows nobody could see.
+            if (!child.isVisible) continue
             val texts = (0 until child.childCount)
                 .map { child.getChildAt(it) }
                 .filterIsInstance<TextView>()
             val value = texts.firstOrNull { it.isClickable }
             val label = texts.firstOrNull { !it.isClickable && it.text.isNotBlank() }
             if (value != null && label != null) {
-                value.contentDescription = getString(R.string.a11y_pair, label.text, value.text)
+                // setContentDescription does not request layout, so this is safe to run from a
+                // layout listener. Anything that DOES request layout is not - see the focus ring.
+                val name = getString(R.string.a11y_pair, label.text, value.text)
+                if (value.contentDescription != name) value.contentDescription = name
                 label.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             }
             value?.applyFocusOutline(ring)
-            labelSettingsRows(child)
+            labelSettingsRows(child, ring)
         }
     }
 

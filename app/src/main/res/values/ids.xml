@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Remembers the colour a view's focus ring was last built for. applyFocusOutline assigns a
+        new StateListDrawable, and View.setForeground short-circuits only on reference identity -
+        so without this tag a fresh object is installed on every call and setForeground's trailing
+        requestLayout() runs every time. Driven from an OnGlobalLayoutListener that turned into a
+        measure/layout loop at the display refresh rate.
+    -->
+    <item name="focus_ring_color" type="id" />
+</resources>

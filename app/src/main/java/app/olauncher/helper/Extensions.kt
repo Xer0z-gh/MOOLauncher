@@ -245,6 +245,13 @@ fun View.clearLayoutTransitions() {
 }
 
 fun View.applyFocusOutline(@ColorInt color: Int) {
+    // Idempotent on purpose. View.setForeground() short-circuits only when the drawable is the
+    // SAME OBJECT, so handing it a freshly built StateListDrawable always falls through to its
+    // trailing requestLayout(). Called from a layout listener, that is a measure/layout loop that
+    // never settles: layout -> onGlobalLayout -> setForeground -> requestLayout -> layout. The tag
+    // is what lets a repeat call cost nothing.
+    if (getTag(R.id.focus_ring_color) == color) return
+    setTag(R.id.focus_ring_color, color)
     val ring = GradientDrawable().apply {
         shape = GradientDrawable.RECTANGLE
         cornerRadius = 4f * resources.displayMetrics.density
