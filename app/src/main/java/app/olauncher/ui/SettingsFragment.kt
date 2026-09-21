@@ -106,7 +106,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         populateColorTheme()
         populateIconSettings()
         populateGestures()
-        populateLockSettings()
         // Home button for recents feature disabled
         // populateHomeButtonRecents()
         populateWallpaperText()
@@ -132,7 +131,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.screenTimeOnOff -> viewModel.showDialog.postValue(Constants.Dialog.DIGITAL_WELLBEING)
             R.id.appInfo -> openAppInfo(requireContext(), Process.myUserHandle(), BuildConfig.APPLICATION_ID)
             R.id.setLauncher -> viewModel.resetLauncherLiveData.call()
-            R.id.toggleLock -> toggleLockMode()
             // Home button for recents feature disabled
             // R.id.homeButtonRecents -> toggleHomeButtonRecents()
             R.id.autoShowKeyboard -> toggleKeyboardText()
@@ -196,7 +194,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.appThemeText -> showAppThemeMenu(view, showSystem = true)
             R.id.swipeLeftApp -> toggleSwipeLeft()
             R.id.swipeRightApp -> toggleSwipeRight()
-            R.id.toggleLock -> startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
             // Long press jumps straight to the system screen, mirroring toggleLock above. This is
             // the way back in when access was revoked outside the app.
             R.id.notificationBadges -> openNotificationAccessSettings()
@@ -223,7 +220,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         populateColorTheme()
         populateIconSettings()
         populateGestures()
-        populateLockSettings()
         populateScreenTimeOnOff()
     }
 
@@ -234,7 +230,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.aboutOlauncher.setOnClickListener(this)
         binding.moreFeatures.setOnClickListener(this)
         binding.autoShowKeyboard.setOnClickListener(this)
-        binding.toggleLock.setOnClickListener(this)
         // Home button for recents feature disabled
         // binding.homeButtonRecents.setOnClickListener(this)
         binding.homeAppsNum.setOnClickListener(this)
@@ -278,7 +273,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.appThemeText.setOnLongClickListener(this)
         binding.swipeLeftApp.setOnLongClickListener(this)
         binding.swipeRightApp.setOnLongClickListener(this)
-        binding.toggleLock.setOnLongClickListener(this)
     }
 
     private fun initObservers() {
@@ -531,6 +525,19 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
                 R.id.actionLaunchApp -> Constants.GestureAction.LAUNCH_APP
                 else -> Constants.GestureAction.NOTHING
             }
+            // Locking the screen needs the accessibility grant. This is the only control for it
+            // now, so it asks here rather than leaving a gesture that reads "Lock screen" and
+            // quietly does nothing - which is exactly what the old separate toggle allowed.
+            if (action == Constants.GestureAction.LOCK_SCREEN) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
+                    !isAccessServiceEnabled(requireContext())
+                ) {
+                    showAccessibilityDialog()
+                    return@showPopupMenu
+                }
+                prefs.lockModeOn = true
+            }
+
             prefs.setGestureAction(row.gesture, action)
             // Picking "Launch app" is only half a choice: send them straight to the app picker
             // rather than leaving a gesture bound to nothing in particular.
@@ -833,34 +840,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
 
     private fun openAccessibilityService() {
         // prefs.lockModeOn = true
-        populateLockSettings()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-    }
-
-    private fun toggleLockMode() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            if (!prefs.lockModeOn && !isAccessServiceEnabled(requireContext())) {
-                showAccessibilityDialog()
-                return
-            }
-            prefs.lockModeOn = !prefs.lockModeOn
-        } else {
-            val isAdmin: Boolean = deviceManager.isAdminActive(componentName)
-            if (isAdmin) {
-                removeActiveAdmin("Admin permission removed.")
-                prefs.lockModeOn = false
-            } else {
-                val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
-                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
-                intent.putExtra(
-                    DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                    getString(R.string.admin_permission_message)
-                )
-                requireActivity().startActivityForResult(intent, Constants.REQUEST_CODE_ENABLE_ADMIN)
-            }
-        }
-        populateLockSettings()
     }
 
     private fun removeActiveAdmin(toastMessage: String? = null) {
@@ -1054,20 +1035,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
     //         else R.string.off
     //     )
     // }
-
-    private fun populateLockSettings() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            binding.toggleLock.text = getString(
-                if (prefs.lockModeOn && isAccessServiceEnabled(requireContext())) R.string.on
-                else R.string.off
-            )
-        } else {
-            binding.toggleLock.text = getString(
-                if (prefs.lockModeOn) R.string.on
-                else R.string.off
-            )
-        }
-    }
 
     private fun populateSwipeApps() {
         binding.swipeLeftApp.text = prefs.appNameSwipeLeft
