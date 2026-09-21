@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The notification panel.
+
+    Structure follows the one thing this screen is for: read what is in the shade, then act on
+    one or clear it. So the list is the screen, the header is one line, and everything else is
+    absent. No cards, no section chrome, no empty hero - a launcher screen that costs a swipe
+    has to repay it in the first half second.
+
+    The content column is capped to panel_max_width in code rather than here: on a tablet, an
+    unfolded foldable, or a phone in landscape, a full-bleed list drags the eye across the whole
+    screen to read a 30-character message. Below that width the cap never applies.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/panelRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/primaryColorInverseTrans90"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Header: what this screen is, then the two things it can do. -->
+        <TextView
+            android:id="@+id/panelTitle"
+            style="@style/TextLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingHorizontal="@dimen/panel_padding_horizontal"
+            android:paddingVertical="8dp"
+            android:text="@string/notifications" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/panel_padding_horizontal">
+
+            <TextView
+                android:id="@+id/filterToggle"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:minWidth="48dp"
+                android:paddingEnd="20dp"
+                android:text="@string/notifications_filtered"
+                android:textAllCaps="true" />
+
+            <TextView
+                android:id="@+id/allToggle"
+                style="@style/TextSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:text="@string/notifications_all"
+                android:textAllCaps="true" />
+
+            <TextView
+                android:id="@+id/clearAll"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical|end"
+                android:minHeight="48dp"
+                android:minWidth="48dp"
+                android:paddingStart="16dp"
+                android:text="@string/clear_all"
+                android:textAllCaps="true" />
+
+        </LinearLayout>
+
+        <!--
+            Empty and error share one TextView because they are the same shape - a sentence
+            explaining why the list is blank - and the only difference is whether tapping it
+            does something. Two views would drift apart in styling for no gain.
+        -->
+        <TextView
+            android:id="@+id/emptyState"
+            style="@style/TextSmall"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:minHeight="48dp"
+            android:paddingHorizontal="32dp"
+            android:visibility="gone"
+            tools:text="Nothing in the shade"
+            tools:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:fadingEdgeLength="24dp"
+            android:paddingBottom="24dp"
+            android:requiresFadingEdge="vertical"
+            tools:listitem="@layout/adapter_notification" />
+
+    </LinearLayout>
+
+</LinearLayout>

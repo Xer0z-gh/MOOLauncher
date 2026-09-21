@@ -254,4 +254,20 @@
     <string name="invalid_shortcut">Invalid shortcut</string>
     <string name="shortcut_not_found">Shortcut not found</string>
     <string name="unable_to_open_shortcut">Unable to open shortcut</string>
+    <!-- Notification panel -->
+    <string name="notifications">Notifications</string>
+    <string name="notifications_filtered">Filtered</string>
+    <string name="notifications_all">All</string>
+    <string name="clear_all">Clear all</string>
+    <string name="nothing_in_the_shade">Nothing in the shade</string>
+    <string name="nothing_unfiltered">Nothing from the apps you kept. Tap All to see the rest.</string>
+    <string name="nothing_to_clear">Nothing here can be cleared</string>
+    <string name="notification_access_needed">Notification access is off. Tap to turn it on.</string>
+    <string name="notification_service_connecting">Connecting to notifications\u2026</string>
+    <string name="notification_cannot_open">This notification has nothing to open</string>
+    <string name="app_muted_for_notifications">%1$s muted</string>
+    <string name="app_unmuted_for_notifications">%1$s unmuted</string>
+    <string name="filter_selected">%1$s, selected</string>
+    <string name="filter_not_selected">%1$s, not selected</string>
+    <string name="action_notification_panel">Notification panel</string>
 </resources>

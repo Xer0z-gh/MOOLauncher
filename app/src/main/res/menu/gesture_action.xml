@@ -11,7 +11,7 @@
         android:title="@string/action_launch_app" />
     <item
         android:id="@+id/actionMissedNotifications"
-        android:title="@string/action_missed_notifications" />
+        android:title="@string/action_notification_panel" />
     <item
         android:id="@+id/actionNotificationShade"
         android:title="@string/action_notification_shade" />

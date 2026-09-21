@@ -595,7 +595,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             Constants.GestureAction.NOTIFICATION_SHADE -> getString(R.string.action_notification_shade)
             Constants.GestureAction.LAUNCHER_SETTINGS -> getString(R.string.action_launcher_settings)
             Constants.GestureAction.LOCK_SCREEN -> getString(R.string.action_lock_screen)
-            Constants.GestureAction.MISSED_NOTIFICATIONS -> getString(R.string.action_missed_notifications)
+            Constants.GestureAction.MISSED_NOTIFICATIONS -> getString(R.string.action_notification_panel)
             Constants.GestureAction.LAUNCH_APP ->
                 prefs.getGestureAppName(gesture).ifBlank { getString(R.string.action_launch_app) }
 

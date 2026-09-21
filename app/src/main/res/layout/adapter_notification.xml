@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    One notification row.
+
+    The reading order is what someone scanning a shade actually wants: who sent it, then what it
+    said, then when. The app name is drawn once per run of rows from the same app rather than on
+    every row - repeating "WhatsApp" six times down the screen is noise, and the run itself is
+    what communicates the grouping.
+
+    Hierarchy is weight and opacity, never colour: the title is full ink, the body and the app
+    name are the dimmed variant, and nothing here uses the accent. The accent in this launcher
+    means "live/active", and every row in a list of notifications would qualify, which is the
+    same as none of them qualifying.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/panel_padding_horizontal">
+
+    <TextView
+        android:id="@+id/appLabel"
+        style="@style/TextSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAllCaps="true"
+        android:letterSpacing="0.04"
+        tools:text="Messages" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:orientation="horizontal"
+        android:paddingVertical="6dp">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="@dimen/panel_icon_size"
+            android:layout_height="@dimen/panel_icon_size"
+            android:layout_marginEnd="14dp"
+            android:importantForAccessibility="no"
+            android:visibility="gone"
+            tools:src="@drawable/ic_rounded"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/TextMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Mom" />
+
+            <TextView
+                android:id="@+id/body"
+                style="@style/TextSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                tools:text="Call me when you land" />
+
+        </LinearLayout>
+
+        <!-- Tabular figures so the times form a column instead of a ragged edge. -->
+        <TextView
+            android:id="@+id/time"
+            style="@style/TextSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFeatureSettings="tnum"
+            android:gravity="end"
+            android:maxLines="1"
+            tools:text="12:04" />
+
+    </LinearLayout>
+
+</LinearLayout>

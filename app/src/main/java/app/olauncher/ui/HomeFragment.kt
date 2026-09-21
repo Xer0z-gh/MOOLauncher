@@ -1147,35 +1147,22 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      * more - it deliberately cannot act on, dismiss or reply to a notification, because that is
      * the notification shade's job and duplicating it is how a minimal launcher stops being one.
      */
-    private fun showMissedNotifications() {
-        if (!prefs.showNotificationBadges || !requireContext().notificationAccessGranted()) {
-            requireContext().showToast(getString(R.string.notification_badges_are_off))
-            return
+    /**
+     * Opens the notification panel.
+     *
+     * This gesture used to raise a dialog of missed counts for home apps only. The panel shows
+     * the whole shade, grouped by app, and can act on what is in it - so the dialog had nothing
+     * left that the panel does not do better.
+     */
+    private fun openNotificationPanel() {
+        if (!requireContext().notificationAccessGranted()) {
+            requireContext().showToast(getString(R.string.notification_access_needed))
         }
-
-        val sections = mutableListOf<String>()
-        for (location in 1..prefs.homeAppsNum) {
-            if (prefs.getIsShortcut(location) || prefs.getAppPackage(location).isEmpty()) continue
-            val key = badgeKeyFor(location)
-            val count = NotificationCounts.countFor(key)
-            if (count <= 0) continue
-            val lines = NotificationCounts.linesFor(key).asReversed()
-            val header = resources.getQuantityString(
-                R.plurals.missed_notifications, count, prefs.getAppName(location), count
-            )
-            sections += if (lines.isEmpty()) header else header + "\n" + lines.joinToString("\n")
+        try {
+            findNavController().navigate(R.id.action_mainFragment_to_notificationPanelFragment)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
-        val body = if (sections.isEmpty()) getString(R.string.nothing_missed)
-        else sections.joinToString("\n\n")
-
-        requireContext().createDialog(
-            title = R.string.missed,
-            action = R.string.close,
-            content = { container ->
-                TextView(container.context, null, 0, R.style.TextSmall).apply { text = body }
-            }
-        ).showRespectingStatusBar()
     }
 
     /**
@@ -1199,7 +1186,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             Constants.GestureAction.NOTIFICATION_SHADE -> expandNotificationDrawer(requireContext())
             Constants.GestureAction.LAUNCHER_SETTINGS -> openLauncherSettings()
             Constants.GestureAction.LOCK_SCREEN -> lockPhoneByGesture()
-            Constants.GestureAction.MISSED_NOTIFICATIONS -> showMissedNotifications()
+            Constants.GestureAction.MISSED_NOTIFICATIONS -> openNotificationPanel()
             Constants.GestureAction.LAUNCH_APP -> {
                 val packageName = prefs.getGestureAppPackage(gesture)
                 if (packageName.isEmpty()) {

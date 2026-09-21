@@ -1,9 +1,35 @@
 package app.olauncher.helper
 
 import android.app.Notification
+import android.app.PendingIntent
+import android.os.UserHandle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import app.olauncher.data.Prefs
+
+/**
+ * One notification, flattened to what a list row needs and nothing more.
+ *
+ * Deliberately holds no Notification, no Bundle, no Icon and no RemoteViews - those are the
+ * expensive parts, and a panel that retained them would pin every notification's bitmaps in
+ * the launcher's heap on a 4 GB phone. [contentIntent] is a token, not a graph, so keeping it
+ * costs nothing and is the only way tapping a row can open what sent it.
+ */
+data class NotificationItem(
+    val key: String,
+    val packageName: String,
+    val user: UserHandle,
+    val userString: String,
+    val title: String?,
+    val text: String?,
+    val postTime: Long,
+    val contentIntent: PendingIntent?,
+    val clearable: Boolean,
+    val autoCancel: Boolean,
+) {
+    /** "package|user", the same identity Prefs and NotificationCounts use. */
+    val appKey: String get() = NotificationCounts.key(packageName, userString)
+}
 
 /**
  * Feeds [NotificationCounts] so the home screen can badge apps with what the user missed.
@@ -36,6 +62,43 @@ class NotificationService : NotificationListenerService() {
             service.backfill()
             return true
         }
+
+        /**
+         * Everything currently in the shade, newest first.
+         *
+         * Does binder work (activeNotifications) so it must not be called on the main thread.
+         * Returns null when the listener is not connected, which the caller shows as "access
+         * is off" rather than as an empty shade - those are different states and conflating
+         * them is how a permission problem reads as "no notifications".
+         */
+        fun snapshot(): List<NotificationItem>? {
+            val service = instance ?: return null
+            val active = runCatching { service.activeNotifications }.getOrNull() ?: return null
+            return active
+                .filter { service.panelWorthy(it) }
+                .map { service.itemFor(it) }
+                .sortedByDescending { it.postTime }
+        }
+
+        /** Dismisses one notification. Returns false when the listener is not connected. */
+        fun dismiss(key: String): Boolean {
+            val service = instance ?: return false
+            return runCatching { service.cancelNotification(key) }.isSuccess
+        }
+
+        /** Dismisses several at once - one binder call rather than one per row. */
+        fun dismissAll(keys: List<String>): Boolean {
+            val service = instance ?: return false
+            if (keys.isEmpty()) return true
+            return runCatching { service.cancelNotifications(keys.toTypedArray()) }.isSuccess
+        }
+
+        /**
+         * Called on the main thread whenever the shade changes. Set by the panel while it is
+         * visible and cleared when it leaves, so nothing is observed when nothing is watching.
+         */
+        @Volatile
+        var onShadeChanged: (() -> Unit)? = null
     }
 
     private val prefs by lazy { Prefs(applicationContext) }
@@ -71,13 +134,21 @@ class NotificationService : NotificationListenerService() {
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
+        onShadeChanged?.invoke()
         if (sbn == null || !prefs.showNotificationBadges) return
         count(sbn)
     }
 
-    // Intentionally no onNotificationRemoved override. Clearing a notification from the shade does
-    // not clear the badge: the point of the badge is what was missed, and the reset is opening the
-    // app. Removing this comment and adding a decrement would change the feature's meaning.
+    /**
+     * Only ever tells the panel to re-read. It deliberately does NOT touch the badge counters:
+     * clearing a notification from the shade does not clear the badge, because the point of the
+     * badge is what was missed and the reset is opening the app. Adding a decrement here would
+     * change what the badge means.
+     */
+    override fun onNotificationRemoved(sbn: StatusBarNotification?) {
+        super.onNotificationRemoved(sbn)
+        onShadeChanged?.invoke()
+    }
 
     private fun count(sbn: StatusBarNotification) {
         if (!badgeWorthy(sbn)) return
@@ -132,5 +203,54 @@ class NotificationService : NotificationListenerService() {
         }
     }.getOrNull()
 
+    /**
+     * Whether a notification belongs in the panel.
+     *
+     * Looser than [badgeWorthy] on purpose. A badge is "you missed something", so ongoing
+     * media and navigation are noise. A panel is "what is in my shade", and a shade with the
+     * music player missing from it is wrong - the user can see it in the system shade and
+     * would read its absence here as a bug. Group summaries stay out either way: they are a
+     * duplicate of the children, not an extra notification.
+     */
+    private fun panelWorthy(sbn: StatusBarNotification): Boolean {
+        if (sbn.packageName == packageName) return false
+        val notification = sbn.notification ?: return false
+        if (notification.flags and Notification.FLAG_GROUP_SUMMARY != 0) return false
+        // Something with neither a title nor a body is a row with nothing to read.
+        return !titleOf(sbn).isNullOrEmpty() || !textOf(sbn).isNullOrEmpty()
+    }
 
+    private fun itemFor(sbn: StatusBarNotification): NotificationItem {
+        val notification = sbn.notification
+        return NotificationItem(
+            key = sbn.key,
+            packageName = sbn.packageName,
+            user = sbn.user,
+            userString = sbn.user.toString(),
+            title = titleOf(sbn),
+            text = textOf(sbn),
+            postTime = sbn.postTime,
+            contentIntent = notification?.contentIntent,
+            clearable = sbn.isClearable,
+            autoCancel = (notification?.flags ?: 0) and Notification.FLAG_AUTO_CANCEL != 0,
+        )
+    }
+
+    /**
+     * Reading extras can throw on OEM builds that put a custom Parcelable in there, so both
+     * of these are guarded - the same reason [lineFor] is.
+     */
+    private fun titleOf(sbn: StatusBarNotification): String? = runCatching {
+        sbn.notification?.extras
+            ?.getCharSequence(Notification.EXTRA_TITLE)?.toString()?.trim()?.ifEmpty { null }
+    }.getOrNull()
+
+    private fun textOf(sbn: StatusBarNotification): String? = runCatching {
+        val extras = sbn.notification?.extras ?: return@runCatching null
+        val text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString()?.trim()
+        // A messaging-style notification often puts nothing in EXTRA_TEXT and everything in
+        // the big text; without this fallback those rows read as a title with no body.
+        val big = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString()?.trim()
+        (text ?: big)?.ifEmpty { null }
+    }.getOrNull()
 }

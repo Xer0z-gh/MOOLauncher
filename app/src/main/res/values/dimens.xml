@@ -4,4 +4,13 @@
     <dimen name="alphabet_recycler_margin_end">10dp</dimen>
     <dimen name="alphabet_recycler_margin_start">320dp</dimen>
     <dimen name="dialog_blur_behind_radius">4dp</dimen>
+
+    <!--
+        Notification panel. The column cap is applied in code, not by a layout qualifier,
+        because it has to catch a phone in landscape as well as a tablet - a 640dp-wide phone
+        is not sw600dp but reads just as badly full-bleed.
+    -->
+    <dimen name="panel_max_width">560dp</dimen>
+    <dimen name="panel_padding_horizontal">24dp</dimen>
+    <dimen name="panel_icon_size">32dp</dimen>
 </resources>

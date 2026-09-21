@@ -37,6 +37,7 @@ class Prefs(context: Context) {
     private val TEXT_SIZE_SCALE = "TEXT_SIZE_SCALE"
     private val BOLD_FONT = "BOLD_FONT"
     private val SHOW_NOTIFICATION_BADGES = "SHOW_NOTIFICATION_BADGES"
+    private val PANEL_SHOW_ALL = "PANEL_SHOW_ALL"
     private val BADGE_STYLE = "BADGE_STYLE"
     private val COLOR_THEME_ID = "COLOR_THEME_ID"
     private val SHOW_APP_ICONS = "SHOW_APP_ICONS"
@@ -233,6 +234,17 @@ class Prefs(context: Context) {
     var showNotificationBadges: Boolean
         get() = prefs.getBoolean(SHOW_NOTIFICATION_BADGES, false)
         set(value) = prefs.edit { putBoolean(SHOW_NOTIFICATION_BADGES, value) }
+
+    /**
+     * Whether the notification panel shows muted apps too.
+     *
+     * Defaults to filtered, because the filter is the reason to open this screen rather than
+     * the system shade. Remembered across visits: a filter you have to re-pick every time is
+     * a filter you stop using.
+     */
+    var panelShowAll: Boolean
+        get() = prefs.getBoolean(PANEL_SHOW_ALL, false)
+        set(value) = prefs.edit { putBoolean(PANEL_SHOW_ALL, value) }
 
     /**
      * Icons are per-surface, not one global switch.
