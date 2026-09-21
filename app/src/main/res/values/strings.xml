@@ -178,6 +178,9 @@
     <string name="theme_cream">Cream</string>
     <string name="theme_sand">Sand</string>
     <string name="theme_mist">Mist</string>
+    <string name="preview_app_one">Messages</string>
+    <string name="preview_app_two">Photos</string>
+    <string name="preview_app_three">Music</string>
     <string name="theme_selected">%1$s, selected</string>
     <string name="theme_not_selected">%1$s</string>
     <string name="badge_style">Badge style</string>

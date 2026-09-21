@@ -16,6 +16,7 @@ import android.view.View
 import android.graphics.drawable.GradientDrawable
 import android.view.ViewGroup
 import android.widget.GridLayout
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
@@ -68,6 +69,11 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
     private val binding get() = _binding!!
     private val showPentastic = System.currentTimeMillis() % 2 == 0L
     private var dialog: OlDialog? = null
+
+    private companion object {
+        /** App names drawn inside each theme preview tile. */
+        const val PREVIEW_LINES = 3
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
@@ -551,59 +557,95 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         ).also { it.showRespectingStatusBar() }
     }
 
+    /**
+     * The names shown inside a theme preview. Uses the user's own home apps, so the preview is a
+     * picture of their home screen rather than of a generic one; falls back to sample names when
+     * no home apps are set yet.
+     */
+    private fun previewLabels(): List<String> {
+        val names = (1..prefs.homeAppsNum)
+            .map { prefs.getAppName(it) }
+            .filter { it.isNotBlank() }
+            .take(PREVIEW_LINES)
+        return if (names.isNotEmpty()) names
+        else listOf(
+            getString(R.string.preview_app_one),
+            getString(R.string.preview_app_two),
+            getString(R.string.preview_app_three),
+        )
+    }
+
     private fun buildThemeGrid(container: ViewGroup): View {
         val context = container.context
-        val columns = 3
-        // Three 88dp cells plus margins overflowed the dialog and clipped the right column on a
-        // 1080p phone. Sized to fit the narrowest dialog the app shows rather than the widest.
-        val cell = 72.dpToPx()
         val gap = 6.dpToPx()
+        val tileWidth = 72.dpToPx()
+        val tileHeight = 92.dpToPx()
+        val labels = previewLabels()
 
         val grid = GridLayout(context).apply {
-            columnCount = columns
+            columnCount = 3
             setPadding(gap, gap, gap, gap)
         }
 
         ColorTheme.ALL.forEach { theme ->
             val isSystem = theme.id == ColorTheme.SYSTEM_ID
             val selected = prefs.colorThemeId == theme.id
+            val tileColor =
+                if (isSystem) requireContext().getColorFromAttr(R.attr.primaryShadeColor)
+                else theme.background
+            val foreground =
+                if (isSystem) requireContext().getColorFromAttr(R.attr.primaryColor)
+                else theme.text
 
-            val swatch = TextView(context).apply {
-                text = getString(theme.nameRes)
+            // The preview: a miniature of the home screen in this theme's colours, so what is on
+            // screen is what choosing it produces, rather than a colour you have to imagine text on.
+            val preview = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
                 gravity = Gravity.CENTER
-                setTextColor(
-                    if (isSystem) requireContext().getColorFromAttr(R.attr.primaryColor)
-                    else theme.text
-                )
-                textSize = 13f
+                setPadding(gap, gap, gap, gap)
+                background = GradientDrawable().apply {
+                    cornerRadius = 10.dpToPx().toFloat()
+                    setColor(tileColor)
+                    // Every tile is outlined, not just the selected one: a black tile on a
+                    // near-black dialog is otherwise invisible, which is what happened to Ink
+                    // and System. The outline is the tile's own text colour, so it reads on a
+                    // near-black and a near-white tile alike.
+                    if (selected) setStroke(3.dpToPx(), foreground)
+                    else setStroke(1.dpToPx(), foreground.withAlpha(0x55))
+                }
+                labels.forEach { label ->
+                    addView(TextView(context).apply {
+                        text = label
+                        setTextColor(foreground)
+                        textSize = 8f
+                        maxLines = 1
+                        ellipsize = android.text.TextUtils.TruncateAt.END
+                        gravity = Gravity.CENTER
+                        setPadding(0, 1.dpToPx(), 0, 1.dpToPx())
+                    })
+                }
+            }
+
+            val cell = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
+                gravity = Gravity.CENTER_HORIZONTAL
+                isFocusable = true
                 contentDescription = getString(
                     if (selected) R.string.theme_selected else R.string.theme_not_selected,
                     getString(theme.nameRes)
                 )
-                background = GradientDrawable().apply {
-                    cornerRadius = 10.dpToPx().toFloat()
-                    setColor(
-                        if (isSystem) requireContext().getColorFromAttr(R.attr.primaryShadeColor)
-                        else theme.background
-                    )
-                    // Every swatch is outlined, not just the selected one: a black tile on a
-                    // near-black dialog is otherwise invisible, which is exactly what happened
-                    // to Ink and System. The outline is in the swatch's own text colour, so it
-                    // stays legible on a near-black and a near-white tile alike; the selected
-                    // one is simply thicker and fully opaque.
-                    val outline =
-                        if (isSystem) requireContext().getColorFromAttr(R.attr.primaryColor)
-                        else theme.text
-                    if (selected) setStroke(3.dpToPx(), outline)
-                    else setStroke(1.dpToPx(), outline.withAlpha(0x55))
-                }
-                isFocusable = true
                 setOnClickListener { applyColorTheme(theme) }
+                addView(preview, LinearLayout.LayoutParams(tileWidth, tileHeight))
+                addView(TextView(context).apply {
+                    text = getString(theme.nameRes)
+                    setTextColor(requireContext().getColorFromAttr(R.attr.primaryColor))
+                    textSize = 11f
+                    gravity = Gravity.CENTER
+                    setPadding(0, 4.dpToPx(), 0, 0)
+                })
             }
 
-            grid.addView(swatch, GridLayout.LayoutParams().apply {
-                width = cell
-                height = cell
+            grid.addView(cell, GridLayout.LayoutParams().apply {
                 setMargins(gap / 2, gap / 2, gap / 2, gap / 2)
             })
         }
