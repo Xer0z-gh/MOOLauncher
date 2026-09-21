@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.FragmentAppDrawerBinding
 import app.olauncher.helper.deletePinnedShortcut
+import app.olauncher.helper.dpToPx
 import app.olauncher.helper.hideKeyboard
 import app.olauncher.helper.isEinkDisplay
 import app.olauncher.helper.isSystemAnimationsDisabled
@@ -40,6 +42,11 @@ import app.olauncher.helper.showToast
 import app.olauncher.helper.uninstall
 
 class AppDrawerFragment : BaseFragment() {
+
+    private companion object {
+        /** Drawer icon edge length. Matched to the home screen so the two read as one launcher. */
+        const val ICON_SIZE_DP = 32
+    }
 
     private lateinit var prefs: Prefs
     private lateinit var adapter: AppDrawerAdapter
@@ -161,6 +168,16 @@ class AppDrawerFragment : BaseFragment() {
         adapter.themeTextColor = theme.text
     }
 
+    /**
+     * Hands the adapter what it needs to draw icons. The scope is the fragment's, so every
+     * in-flight icon load is cancelled when the drawer closes rather than outliving it.
+     */
+    private fun applyIconSettings() {
+        adapter.iconSizePx = if (prefs.showAppIcons) ICON_SIZE_DP.dpToPx() else 0
+        adapter.iconGrayscale = prefs.iconStyle == Constants.IconStyle.GRAYSCALE
+        adapter.iconScope = viewLifecycleOwner.lifecycleScope
+    }
+
     private fun initAdapter() {
         adapter = AppDrawerAdapter(
             flag,
@@ -268,6 +285,7 @@ class AppDrawerFragment : BaseFragment() {
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = adapter
         applyColorTheme()
+        applyIconSettings()
         binding.recyclerView.addOnScrollListener(getRecyclerViewOnScrollListener())
         binding.recyclerView.itemAnimator = null
         if (requireContext().isEinkDisplay())

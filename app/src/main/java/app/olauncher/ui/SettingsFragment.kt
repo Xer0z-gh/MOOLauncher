@@ -48,6 +48,7 @@ import app.olauncher.helper.rateApp
 import app.olauncher.helper.setPlainWallpaper
 import app.olauncher.helper.setPlainWallpaperColor
 import app.olauncher.helper.shareApp
+import app.olauncher.helper.IconCache
 import app.olauncher.helper.NotificationCounts
 import app.olauncher.helper.OlDialog
 import app.olauncher.helper.showPopupMenu
@@ -92,6 +93,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         populateNotificationBadges()
         populateBadgeOptions()
         populateColorTheme()
+        populateIconSettings()
         populateGestures()
         populateLockSettings()
         // Home button for recents feature disabled
@@ -131,6 +133,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.dateTime -> showDateTimeMenu(view)
             R.id.appThemeText -> showAppThemeMenu(view, showSystem = false)
             R.id.colorTheme -> showColorThemeDialog()
+            R.id.appIcons -> toggleAppIcons()
+            R.id.iconStyle -> showIconStyleMenu(view)
             R.id.textSizeValue -> showTextSizeDialog()
             R.id.boldFont -> toggleBoldFont()
             R.id.notificationBadges -> toggleNotificationBadges()
@@ -205,6 +209,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         populateNotificationBadges()
         populateBadgeOptions()
         populateColorTheme()
+        populateIconSettings()
         populateGestures()
         populateLockSettings()
         populateScreenTimeOnOff()
@@ -225,6 +230,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.notificationBadges.setOnClickListener(this)
         binding.notificationBadges.setOnLongClickListener(this)
         binding.colorTheme.setOnClickListener(this)
+        binding.appIcons.setOnClickListener(this)
+        binding.iconStyle.setOnClickListener(this)
         binding.badgeStyle.setOnClickListener(this)
         binding.badgeTapDetails.setOnClickListener(this)
         binding.gestureSwipeUp.setOnClickListener(this)
@@ -615,10 +622,45 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             setPlainWallpaperColor(requireContext(), theme.background)
         }
         populateColorTheme()
+        populateIconSettings()
         dialog?.dismiss()
         // Colours are read at inflate time in several places, so restart to repaint everything
         // consistently rather than leaving half the launcher on the old scheme.
         requireActivity().recreate()
+    }
+
+    private fun toggleAppIcons() {
+        prefs.showAppIcons = !prefs.showAppIcons
+        populateIconSettings()
+        viewModel.refreshHome(false)
+    }
+
+    private fun showIconStyleMenu(anchor: View) {
+        if (!prefs.showAppIcons) {
+            requireContext().showToast(getString(R.string.turn_on_app_icons_first))
+            return
+        }
+        anchor.showPopupMenu(R.menu.icon_style) { item ->
+            val style = when (item.itemId) {
+                R.id.iconStyleGrayscale -> Constants.IconStyle.GRAYSCALE
+                else -> Constants.IconStyle.FULL_COLOR
+            }
+            if (style != prefs.iconStyle) {
+                prefs.iconStyle = style
+                // Cached icons are baked at one style, so the old ones are now wrong.
+                IconCache.clear()
+            }
+            populateIconSettings()
+            viewModel.refreshHome(false)
+        }
+    }
+
+    private fun populateIconSettings() {
+        binding.appIcons.text = getString(if (prefs.showAppIcons) R.string.on else R.string.off)
+        binding.iconStyle.text = getString(
+            if (prefs.iconStyle == Constants.IconStyle.GRAYSCALE) R.string.icon_style_grayscale
+            else R.string.icon_style_full_color
+        )
     }
 
     private fun populateColorTheme() {

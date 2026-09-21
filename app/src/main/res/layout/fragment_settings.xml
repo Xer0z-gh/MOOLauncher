@@ -425,6 +425,56 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:paddingVertical="8dp"
+                        android:text="@string/app_icons"
+                        android:textColor="?attr/primaryColor" />
+
+                    <TextView
+                        android:id="@+id/appIcons"
+                        style="@style/TextSmallBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|bottom"
+                        android:layout_marginEnd="4dp"
+                        android:padding="8dp"
+                        android:text="@string/off" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
+
+                    <TextView
+                        style="@style/TextSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:paddingVertical="8dp"
+                        android:text="@string/icon_style"
+                        android:textColor="?attr/primaryColor" />
+
+                    <TextView
+                        android:id="@+id/iconStyle"
+                        style="@style/TextSmallBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|bottom"
+                        android:layout_marginEnd="4dp"
+                        android:padding="8dp"
+                        android:text="@string/icon_style_full_color" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
+
+                    <TextView
+                        style="@style/TextSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:paddingVertical="8dp"
                         android:text="@string/theme_mode"
                         android:textColor="?attr/primaryColor" />
 

@@ -41,6 +41,8 @@ class Prefs(context: Context) {
     private val SHOW_NOTIFICATION_BADGES = "SHOW_NOTIFICATION_BADGES"
     private val BADGE_STYLE = "BADGE_STYLE"
     private val COLOR_THEME_ID = "COLOR_THEME_ID"
+    private val SHOW_APP_ICONS = "SHOW_APP_ICONS"
+    private val ICON_STYLE = "ICON_STYLE"
     private val BADGE_TAP_DETAILS = "BADGE_TAP_DETAILS"
     private val HIDE_SET_DEFAULT_LAUNCHER = "HIDE_SET_DEFAULT_LAUNCHER"
     private val SCREEN_TIME_LAST_UPDATED = "SCREEN_TIME_LAST_UPDATED"
@@ -216,6 +218,19 @@ class Prefs(context: Context) {
     var showNotificationBadges: Boolean
         get() = prefs.getBoolean(SHOW_NOTIFICATION_BADGES, false)
         set(value) = prefs.edit { putBoolean(SHOW_NOTIFICATION_BADGES, value) }
+
+    /**
+     * Off by default. Olauncher is a text launcher and staying one is the point; icons are here
+     * because Before has them and some people want them, not because they are the better default.
+     */
+    var showAppIcons: Boolean
+        get() = prefs.getBoolean(SHOW_APP_ICONS, false)
+        set(value) = prefs.edit { putBoolean(SHOW_APP_ICONS, value) }
+
+    /** Constants.IconStyle. Grayscale keeps icons legible without them shouting colour. */
+    var iconStyle: Int
+        get() = prefs.getInt(ICON_STYLE, Constants.IconStyle.FULL_COLOR)
+        set(value) = prefs.edit { putInt(ICON_STYLE, value) }
 
     /** ColorTheme.id. SYSTEM means follow light/dark and leave the wallpaper alone. */
     var colorThemeId: Int

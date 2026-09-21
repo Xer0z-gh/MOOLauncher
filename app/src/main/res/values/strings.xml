@@ -160,6 +160,11 @@
     <string name="missed_notifications">%1$s · %2$d missed</string>
     <string name="badge_dot">•</string>
     <string name="color_theme">Colour theme</string>
+    <string name="app_icons">App icons</string>
+    <string name="icon_style">Icon style</string>
+    <string name="icon_style_full_color">Full colour</string>
+    <string name="icon_style_grayscale">Grayscale</string>
+    <string name="turn_on_app_icons_first">Turn on app icons first</string>
     <string name="theme_system">System</string>
     <string name="theme_ink">Ink</string>
     <string name="theme_paper">Paper</string>

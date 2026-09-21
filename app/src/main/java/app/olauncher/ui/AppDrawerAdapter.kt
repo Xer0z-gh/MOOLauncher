@@ -18,11 +18,17 @@ import app.olauncher.data.AppModel
 import app.olauncher.data.Constants
 import app.olauncher.databinding.AdapterAppDrawerBinding
 import app.olauncher.databinding.AdapterPrivateSpaceHeaderBinding
+import app.olauncher.helper.IconCache
+import app.olauncher.helper.dpToPx
 import app.olauncher.helper.hideKeyboard
 import app.olauncher.helper.tintTextTree
 import app.olauncher.helper.withAlpha
 import app.olauncher.helper.isSystemApp
 import app.olauncher.helper.showKeyboard
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.Normalizer
 
 class AppDrawerAdapter(
@@ -40,6 +46,9 @@ class AppDrawerAdapter(
     companion object {
         const val VIEW_TYPE_APP = 0
         const val VIEW_TYPE_PRIVATE_HEADER = 1
+
+        /** Gap between a drawer icon and its label, in pixels at this device's density. */
+        private val ICON_GAP_PX = 12.dpToPx()
 
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<AppModel>() {
             override fun areItemsTheSame(oldItem: AppModel, newItem: AppModel): Boolean = when {
@@ -65,6 +74,17 @@ class AppDrawerAdapter(
      * tree the way the home screen does it.
      */
     var themeTextColor: Int = 0
+
+    /**
+     * Icon settings for the drawer. [iconSizePx] of 0 means icons are off.
+     *
+     * Loads are tagged with the row's own package so a slow load landing after the row has been
+     * recycled onto a different app is dropped rather than painting the wrong icon - the classic
+     * RecyclerView image bug, and very visible during a fling through 200 apps.
+     */
+    var iconSizePx: Int = 0
+    var iconGrayscale: Boolean = false
+    var iconScope: CoroutineScope? = null
 
     private var autoLaunch = true
     private var isBangSearch = false
@@ -131,10 +151,43 @@ class AppDrawerAdapter(
                     )
                     if (themeTextColor != 0)
                         holder.itemView.tintTextTree(themeTextColor, themeTextColor.withAlpha(0x80))
+                    bindIcon(holder, appModel)
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    private fun bindIcon(holder: ViewHolder, appModel: AppModel) {
+        val title = holder.itemView.findViewById<android.widget.TextView>(R.id.appTitle)
+        // Always clear first: this row was showing some other app a moment ago.
+        title.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
+
+        val size = iconSizePx
+        val scope = iconScope
+        if (size <= 0 || scope == null) return
+        if (appModel !is AppModel.App || appModel.appPackage.isEmpty()) return
+
+        title.compoundDrawablePadding = ICON_GAP_PX
+        val packageName = appModel.appPackage
+        val className = appModel.activityClassName.orEmpty()
+        val user = appModel.user
+
+        IconCache.peek(packageName, className, user, size, iconGrayscale)?.let {
+            title.setCompoundDrawablesRelative(it, null, null, null)
+            return
+        }
+
+        val context = title.context.applicationContext
+        scope.launch {
+            val icon = withContext(Dispatchers.IO) {
+                IconCache.load(context, packageName, className, user, size, iconGrayscale)
+            } ?: return@launch
+            // The holder may have been recycled onto a different app while this was loading.
+            val current = appFilteredList.getOrNull(holder.bindingAdapterPosition)
+            if (current !is AppModel.App || current.appPackage != packageName) return@launch
+            title.setCompoundDrawablesRelative(icon, null, null, null)
         }
     }
 

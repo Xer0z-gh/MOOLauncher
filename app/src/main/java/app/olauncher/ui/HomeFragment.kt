@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -33,6 +34,7 @@ import app.olauncher.data.ColorTheme
 import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.FragmentHomeBinding
+import app.olauncher.helper.IconCache
 import app.olauncher.helper.NotificationCounts
 import app.olauncher.helper.appUsagePermissionGranted
 import app.olauncher.helper.createDialog
@@ -53,6 +55,9 @@ import app.olauncher.helper.tintTextTree
 import app.olauncher.helper.withAlpha
 import app.olauncher.listener.OnSwipeTouchListener
 import app.olauncher.listener.ViewSwipeTouchListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -62,6 +67,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     private companion object {
         /** Space between the end of an app name and its badge. */
         const val BADGE_GAP_DP = 10
+
+        /** Home app icon edge length, and the gap between it and the name. */
+        const val ICON_SIZE_DP = 32
+        const val ICON_GAP_DP = 12
     }
 
     private lateinit var prefs: Prefs
@@ -379,8 +388,58 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.mainLayout.tintTextTree(theme.text, theme.text.withAlpha(0x80))
     }
 
+    /**
+     * Puts an app icon before each home app name, or clears them when icons are off.
+     *
+     * A cached icon is applied straight away so the common path never waits. A miss is loaded on
+     * a background thread and applied when it arrives, with the slot's package re-checked first -
+     * by then the user may have changed which app that row points at.
+     */
+    private fun refreshHomeIcons() {
+        val names = homeAppNameViews()
+        if (!prefs.showAppIcons) {
+            names.forEach { it.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null) }
+            return
+        }
+
+        val sizePx = ICON_SIZE_DP.dpToPx()
+        val grayscale = prefs.iconStyle == Constants.IconStyle.GRAYSCALE
+        val context = requireContext().applicationContext
+
+        names.forEachIndexed { index, name ->
+            val location = index + 1
+            val packageName = prefs.getAppPackage(location)
+            if (!name.isVisible || packageName.isEmpty() || prefs.getIsShortcut(location)) {
+                name.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
+                return@forEachIndexed
+            }
+
+            val className = prefs.getAppActivityClassName(location)
+            val user = getUserHandleFromString(context, prefs.getAppUser(location))
+            name.compoundDrawablePadding = ICON_GAP_DP.dpToPx()
+
+            val cached = IconCache.peek(packageName, className, user, sizePx, grayscale)
+            if (cached != null) {
+                name.setCompoundDrawablesRelative(cached, null, null, null)
+                return@forEachIndexed
+            }
+
+            name.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
+            viewLifecycleOwner.lifecycleScope.launch {
+                val icon = withContext(Dispatchers.IO) {
+                    IconCache.load(context, packageName, className, user, sizePx, grayscale)
+                } ?: return@launch
+                // The row may point somewhere else by the time this lands.
+                if (prefs.getAppPackage(location) != packageName) return@launch
+                name.setCompoundDrawablesRelative(icon, null, null, null)
+                positionBadge(name, homeAppBadgeViews()[index])
+            }
+        }
+    }
+
     private fun populateHomeScreen(appCountUpdated: Boolean) {
         populateHomeRows(appCountUpdated)
+        refreshHomeIcons()
         applyColorTheme()
         // Must run after the rows, and outside populateHomeRows: that function returns early at
         // every one of the eight app-count checks, so anything appended to its body would be

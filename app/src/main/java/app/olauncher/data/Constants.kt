@@ -69,6 +69,12 @@ object Constants {
         const val LONG_PRESS = "LONG_PRESS"
     }
 
+    /** How app icons are rendered, when they are shown at all. */
+    object IconStyle {
+        const val FULL_COLOR = 0
+        const val GRAYSCALE = 1
+    }
+
     /** How a notification badge is drawn on the home screen. */
     object BadgeStyle {
         const val COUNT = 0
