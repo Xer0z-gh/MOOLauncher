@@ -71,6 +71,9 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         /** Home app icon edge length, and the gap between it and the name. */
         const val ICON_SIZE_DP = 32
         const val ICON_GAP_DP = 12
+
+        /** Space between the date/time block and the screen time line under it. */
+        const val SCREEN_TIME_GAP_DP = 4
     }
 
     private lateinit var prefs: Prefs
@@ -137,6 +140,12 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      * wrapping to two lines - and every one of them is a layout pass on the name.
      */
     private fun initBadgeFollowers() {
+        // The date/time block changes height with the date format, font and text size, so the
+        // screen time line is repositioned whenever it settles rather than once at startup.
+        binding.dateTimeLayout.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            positionScreenTime()
+        }
+
         val badges = homeAppBadgeViews()
         homeAppNameViews().forEachIndexed { index, name ->
             val badge = badges[index]
@@ -416,6 +425,27 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         }
         binding.tvScreenTime.layoutParams = params
         binding.tvScreenTime.setPadding(10.dpToPx())
+        positionScreenTime()
+    }
+
+    /**
+     * Drops the screen time line below the clock instead of guessing a top margin.
+     *
+     * The hardcoded margins above clear a short "2h 11m" and nothing longer: adding the unlock
+     * count made the line wide enough to run straight through a centre-aligned clock. Measuring
+     * where the date/time block actually ends is robust to any string, font or text size, none of
+     * which a fixed margin can know about.
+     */
+    private fun positionScreenTime() {
+        val params = binding.tvScreenTime.layoutParams as? FrameLayout.LayoutParams ?: return
+        val dateBlock = binding.dateTimeLayout
+        if (!dateBlock.isVisible || dateBlock.height == 0) return
+
+        val desired = dateBlock.bottom + SCREEN_TIME_GAP_DP.dpToPx()
+        // Guarded so the relayout this triggers does not loop.
+        if (params.topMargin == desired) return
+        params.topMargin = desired
+        binding.tvScreenTime.layoutParams = params
     }
 
     /**

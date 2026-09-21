@@ -51,6 +51,7 @@ class Prefs(context: Context) {
     private val HOME_ANIMATIONS = "HOME_ANIMATIONS"
     private val SHOW_UNLOCK_COUNT = "SHOW_UNLOCK_COUNT"
     private val HOME_SPACING_EXTRA = "HOME_SPACING_EXTRA"
+    private val FONT_INDEX = "FONT_INDEX"
     private val BADGE_TAP_DETAILS = "BADGE_TAP_DETAILS"
     private val HIDE_SET_DEFAULT_LAUNCHER = "HIDE_SET_DEFAULT_LAUNCHER"
     private val SCREEN_TIME_LAST_UPDATED = "SCREEN_TIME_LAST_UPDATED"
@@ -245,6 +246,20 @@ class Prefs(context: Context) {
     /** True when icons are shown anywhere; gates the icon style and pack settings. */
     val showAppIcons: Boolean
         get() = showHomeIcons || showDrawerIcons
+
+    /**
+     * Chosen font, as an index into Constants.Font.
+     *
+     * Replaces the old bold-font toggle, which only ever switched between light and regular and
+     * would otherwise be a second control for the same thing. Anyone who had bold on lands on
+     * Regular, which is exactly what that toggle did.
+     */
+    var fontIndex: Int
+        get() = prefs.getInt(
+            FONT_INDEX,
+            if (prefs.getBoolean(BOLD_FONT, false)) Constants.Font.REGULAR else Constants.Font.LIGHT
+        )
+        set(value) = prefs.edit { putInt(FONT_INDEX, value) }
 
     /** Index into ColorTheme-style date patterns; see Constants.DateFormat. */
     var dateFormatIndex: Int

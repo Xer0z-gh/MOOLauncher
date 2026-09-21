@@ -139,7 +139,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         populateWallpaperText()
         populateAppThemeText()
         populateTextSize()
-        populateBoldFont()
+        populateFont()
         populateAlignment()
         populateStatusBar()
         populateDateTime()
@@ -189,7 +189,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.iconStyle -> showIconStyleMenu(view)
             R.id.iconPack -> showIconPackDialog()
             R.id.textSizeValue -> showTextSizeDialog()
-            R.id.boldFont -> toggleBoldFont()
+            R.id.fontChoice -> showFontMenu(view)
             R.id.notificationBadges -> toggleNotificationBadges()
             R.id.badgeStyle -> showBadgeStyleMenu(view)
             R.id.badgeFilter -> showBadgeFilter()
@@ -307,7 +307,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.swipeRightApp.setOnClickListener(this)
         binding.appThemeText.setOnClickListener(this)
         binding.textSizeValue.setOnClickListener(this)
-        binding.boldFont.setOnClickListener(this)
+        binding.fontChoice.setOnClickListener(this)
 
         binding.share.setOnClickListener(this)
         binding.rate.setOnClickListener(this)
@@ -1123,14 +1123,33 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.textSizeValue.text = formatScale(prefs.textSizeScale)
     }
 
-    private fun toggleBoldFont() {
-        prefs.boldFont = !prefs.boldFont
-        populateBoldFont()
-        requireActivity().recreate()
+    private fun showFontMenu(anchor: View) {
+        anchor.showPopupMenu(R.menu.font_choice) { item ->
+            prefs.fontIndex = when (item.itemId) {
+                R.id.fontRegular -> Constants.Font.REGULAR
+                R.id.fontMedium -> Constants.Font.MEDIUM
+                R.id.fontCondensed -> Constants.Font.CONDENSED
+                R.id.fontSerif -> Constants.Font.SERIF
+                R.id.fontMonospace -> Constants.Font.MONOSPACE
+                else -> Constants.Font.LIGHT
+            }
+            populateFont()
+            // The font is a theme attribute, so it can only change when the theme is applied.
+            requireActivity().recreate()
+        }
     }
 
-    private fun populateBoldFont() {
-        binding.boldFont.text = getString(if (prefs.boldFont) R.string.on else R.string.off)
+    private fun populateFont() {
+        binding.fontChoice.text = getString(
+            when (prefs.fontIndex) {
+                Constants.Font.REGULAR -> R.string.font_regular
+                Constants.Font.MEDIUM -> R.string.font_medium
+                Constants.Font.CONDENSED -> R.string.font_condensed
+                Constants.Font.SERIF -> R.string.font_serif
+                Constants.Font.MONOSPACE -> R.string.font_monospace
+                else -> R.string.font_light
+            }
+        )
     }
 
     private fun populateScreenTimeOnOff() {

@@ -151,6 +151,13 @@
     <string name="missed_notifications">%1$s · %2$d missed</string>
     <string name="badge_dot">•</string>
     <string name="apps_section">Apps</string>
+    <string name="font">Font</string>
+    <string name="font_light">Light</string>
+    <string name="font_regular">Regular</string>
+    <string name="font_medium">Medium</string>
+    <string name="font_condensed">Condensed</string>
+    <string name="font_serif">Serif</string>
+    <string name="font_monospace">Monospace</string>
     <string name="date_format">Date format</string>
     <string name="date_format_short">Sun, 21 Sep</string>
     <string name="date_format_long">Sunday, 21 September</string>

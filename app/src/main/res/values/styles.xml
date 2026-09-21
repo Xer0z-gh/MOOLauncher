@@ -53,9 +53,35 @@
 
     </style>
 
-    <!-- Applied over AppTheme when bold font is enabled -->
-    <style name="BoldFontOverlay">
+    <!--
+        Font choices, applied as a theme overlay in MainActivity.onCreate.
+
+        Deliberately only faces Android already ships, so text renders in something the phone
+        actually has rather than a bundled display face that stands out against everything else
+        on screen. Light is the launcher's original look and stays the default.
+    -->
+    <style name="FontLight">
+        <item name="mainFontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="FontRegular">
         <item name="mainFontFamily">sans-serif</item>
+    </style>
+
+    <style name="FontMedium">
+        <item name="mainFontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="FontCondensed">
+        <item name="mainFontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="FontSerif">
+        <item name="mainFontFamily">serif</item>
+    </style>
+
+    <style name="FontMonospace">
+        <item name="mainFontFamily">monospace</item>
     </style>
 
     <style name="WindowAnimationTransition">

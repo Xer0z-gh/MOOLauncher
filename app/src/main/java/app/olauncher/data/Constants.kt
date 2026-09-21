@@ -106,6 +106,16 @@ object Constants {
         val PATTERNS = listOf("EEE, d MMM", "EEEE, d MMMM", "d MMM yyyy", "EEEE", "d/M/yyyy")
     }
 
+    /** Font choices, stored as an index. Append only; these numbers are saved data. */
+    object Font {
+        const val LIGHT = 0
+        const val REGULAR = 1
+        const val MEDIUM = 2
+        const val CONDENSED = 3
+        const val SERIF = 4
+        const val MONOSPACE = 5
+    }
+
     /** How app icons are rendered, when they are shown at all. */
     object IconStyle {
         const val FULL_COLOR = 0

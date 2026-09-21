@@ -68,6 +68,19 @@ class MainActivity : AppCompatActivity() {
 //            super.onBackPressed()
 //    }
 
+    /**
+     * Font is a theme attribute, so it can only be chosen at theme-application time - which is
+     * why changing it restarts the Activity rather than repainting.
+     */
+    private fun fontOverlay(index: Int): Int = when (index) {
+        Constants.Font.REGULAR -> R.style.FontRegular
+        Constants.Font.MEDIUM -> R.style.FontMedium
+        Constants.Font.CONDENSED -> R.style.FontCondensed
+        Constants.Font.SERIF -> R.style.FontSerif
+        Constants.Font.MONOSPACE -> R.style.FontMonospace
+        else -> R.style.FontLight
+    }
+
     override fun attachBaseContext(context: Context) {
         val newConfig = Configuration(context.resources.configuration)
         newConfig.fontScale = Prefs(context).textSizeScale
@@ -80,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         if (isEinkDisplay()) prefs.appTheme = AppCompatDelegate.MODE_NIGHT_NO
         AppCompatDelegate.setDefaultNightMode(prefs.appTheme)
         super.onCreate(savedInstanceState)
-        if (prefs.boldFont) theme.applyStyle(R.style.BoldFontOverlay, true)
+        theme.applyStyle(fontOverlay(prefs.fontIndex), true)
         if (isEinkDisplay() || isSystemAnimationsDisabled()) theme.applyStyle(R.style.NoAnimationOverlay, true)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

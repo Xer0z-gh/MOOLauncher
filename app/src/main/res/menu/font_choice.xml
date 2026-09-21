@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fontLight"
+        android:title="@string/font_light" />
+    <item
+        android:id="@+id/fontRegular"
+        android:title="@string/font_regular" />
+    <item
+        android:id="@+id/fontMedium"
+        android:title="@string/font_medium" />
+    <item
+        android:id="@+id/fontCondensed"
+        android:title="@string/font_condensed" />
+    <item
+        android:id="@+id/fontSerif"
+        android:title="@string/font_serif" />
+    <item
+        android:id="@+id/fontMonospace"
+        android:title="@string/font_monospace" />
+</menu>
