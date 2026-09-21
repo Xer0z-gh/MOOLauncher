@@ -6,6 +6,19 @@ object Constants {
         const val FLAG = "flag"
         const val RENAME = "rename"
         const val KEYBOARD_MODE = "keyboard_mode"
+        const val SECTION = "section"
+    }
+
+    /**
+     * Which part of Settings to show. The settings list runs to about thirty rows in one scroll,
+     * which is where Before Launcher splits into a short menu and one focused screen per section.
+     * Same fragment either way - the hub simply shows the menu card and each section shows its own.
+     */
+    object Section {
+        const val HUB = 0
+        const val HOME = 1
+        const val APPEARANCE = 2
+        const val GESTURES = 3
     }
 
     /**

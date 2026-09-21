@@ -21,6 +21,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import app.olauncher.BuildConfig
@@ -80,6 +81,30 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         const val PREVIEW_LINES = 3
     }
 
+    /** Which section this instance is showing; see Constants.Section. */
+    private var section = Constants.Section.HUB
+
+    /**
+     * Shows one section at a time. The header and footer cards stay on every screen so the app
+     * name, the default-launcher prompt and the links are always reachable, which is also how
+     * Before keeps its settings navigable without a back-and-forth.
+     */
+    private fun applySection() {
+        binding.sectionHub.isVisible = section == Constants.Section.HUB
+        binding.sectionHome.isVisible = section == Constants.Section.HOME
+        binding.sectionAppearance.isVisible = section == Constants.Section.APPEARANCE
+        binding.sectionGestures.isVisible = section == Constants.Section.GESTURES
+    }
+
+    private fun openSection(target: Int) {
+        runCatching {
+            findNavController().navigate(
+                R.id.settingsFragment,
+                bundleOf(Constants.Key.SECTION to target)
+            )
+        }.onFailure { it.printStackTrace() }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
@@ -96,6 +121,10 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         deviceManager = requireContext().getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
         componentName = ComponentName(requireContext(), DeviceAdmin::class.java)
         checkAdminPermission()
+
+        section = arguments?.getInt(Constants.Key.SECTION, Constants.Section.HUB)
+            ?: Constants.Section.HUB
+        applySection()
 
         binding.homeAppsNum.text = prefs.homeAppsNum.toString()
         populateProMessage()
@@ -126,6 +155,9 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
 
     override fun onClick(view: View) {
         when (view.id) {
+            R.id.hubHome -> openSection(Constants.Section.HOME)
+            R.id.hubAppearance -> openSection(Constants.Section.APPEARANCE)
+            R.id.hubGestures -> openSection(Constants.Section.GESTURES)
             R.id.olauncherHiddenApps -> showHiddenApps()
             R.id.moreFeatures -> viewModel.showDialog.postValue(Constants.Dialog.PRO_MESSAGE)
             R.id.screenTimeOnOff -> viewModel.showDialog.postValue(Constants.Dialog.DIGITAL_WELLBEING)
@@ -236,6 +268,9 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.screenTimeOnOff.setOnClickListener(this)
         binding.notificationBadges.setOnClickListener(this)
         binding.notificationBadges.setOnLongClickListener(this)
+        binding.hubHome.setOnClickListener(this)
+        binding.hubAppearance.setOnClickListener(this)
+        binding.hubGestures.setOnClickListener(this)
         binding.colorTheme.setOnClickListener(this)
         binding.appIcons.setOnClickListener(this)
         binding.iconStyle.setOnClickListener(this)
