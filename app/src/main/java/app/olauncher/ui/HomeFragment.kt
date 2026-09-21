@@ -777,7 +777,12 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         // translationX is a DELTA from where the view was laid out, not an absolute x. The
         // badge's layout_gravity is `start`, which is the RIGHT edge in RTL, so treating the
         // target as absolute pushed it straight off an RTL row.
-        badge.translationX = ((if (fits) trailing else leading) - badge.left).toFloat()
+        var left = if (fits) trailing else leading
+        // Neither side fits when the name is long enough to fill the row - a wrapped label,
+        // or a wide one at a large text size. Clamping keeps the count on screen; the old
+        // code let the row clip it away with no error, which reads as "no notifications".
+        if (row != null) left = left.coerceIn(0, (row.width - badge.width).coerceAtLeast(0))
+        badge.translationX = (left - badge.left).toFloat()
     }
 
     /**

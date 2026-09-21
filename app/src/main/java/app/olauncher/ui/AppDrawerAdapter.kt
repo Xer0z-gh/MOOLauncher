@@ -25,6 +25,7 @@ import app.olauncher.helper.applyFocusOutline
 import app.olauncher.helper.applyTextWeight
 import app.olauncher.helper.getColorFromAttr
 import app.olauncher.helper.styleTextTree
+import app.olauncher.helper.tintCompoundDrawables
 import app.olauncher.helper.tintTextTree
 import app.olauncher.helper.withAlpha
 import app.olauncher.helper.isSystemApp
@@ -151,6 +152,10 @@ class AppDrawerAdapter(
                 if (themeTextColor != 0) themeTextColor.withAlpha(0xB3) else null,
                 textWeight,
             )
+            // The action row's icons are compound drawables, which carry the APP theme's
+            // tint - invisible on a drawer painted by a colour theme of the opposite
+            // polarity. styleTextTree only reaches text colour, not compound drawables.
+            if (themeTextColor != 0) holder.itemView.tintCompoundDrawables(themeTextColor)
             holder.itemView.applyFocusOutline(
                 if (themeTextColor != 0) themeTextColor
                 else holder.itemView.context.getColorFromAttr(R.attr.primaryColor)

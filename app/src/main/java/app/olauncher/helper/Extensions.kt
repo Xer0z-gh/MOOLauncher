@@ -31,6 +31,7 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.widget.TextViewCompat
 import app.olauncher.BuildConfig
 import app.olauncher.R
 import app.olauncher.data.Constants
@@ -271,6 +272,24 @@ fun View.styleTextTree(@ColorInt color: Int?, @ColorInt hintColor: Int?, weight:
 
         is ViewGroup -> for (i in 0 until childCount)
             getChildAt(i).styleTextTree(color, hintColor, weight)
+    }
+}
+
+/**
+ * Tints every compound drawable under this view.
+ *
+ * Text colour and drawable tint are separate on a TextView, so a colour theme that repaints
+ * the text left the little action icons beside it in the app theme's colour - which is the
+ * wrong polarity whenever the painted background disagrees with the app theme.
+ */
+fun View.tintCompoundDrawables(@ColorInt color: Int) {
+    when (this) {
+        is TextView -> TextViewCompat.setCompoundDrawableTintList(
+            this, ColorStateList.valueOf(color)
+        )
+
+        is ViewGroup -> for (i in 0 until childCount)
+            getChildAt(i).tintCompoundDrawables(color)
     }
 }
 
