@@ -17,14 +17,41 @@ import app.olauncher.data.Prefs
  */
 class NotificationService : NotificationListenerService() {
 
+    companion object {
+        /** A peek line is a preview, not the notification; long ones are truncated. */
+        const val MAX_LINE_CHARS = 100
+
+        @Volatile
+        private var instance: NotificationService? = null
+
+        /**
+         * Counts the notifications already in the shade, for when badges are switched on
+         * while the listener is ALREADY bound. requestRebind does nothing in that case, so
+         * onListenerConnected never re-runs and nothing would badge until the next
+         * notification arrived. Returns false when the service is not connected, which is
+         * when requestRebind is the right call instead.
+         */
+        fun rescanActive(): Boolean {
+            val service = instance ?: return false
+            service.backfill()
+            return true
+        }
+    }
+
     private val prefs by lazy { Prefs(applicationContext) }
 
     override fun onListenerConnected() {
         super.onListenerConnected()
+        instance = this
         NotificationCounts.connected = true
+        backfill()
+    }
 
-        // Rebuild from scratch: we may have missed events entirely while unbound, so whatever is
-        // in the store is untrustworthy. Persisting counts across this would only preserve lies.
+    /**
+     * Rebuilds from scratch: we may have missed events entirely while unbound, so whatever is
+     * in the store is untrustworthy. Persisting counts across this would only preserve lies.
+     */
+    private fun backfill() {
         NotificationCounts.clear()
         if (!prefs.showNotificationBadges) return
 
@@ -34,7 +61,13 @@ class NotificationService : NotificationListenerService() {
 
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
+        instance = null
         NotificationCounts.connected = false
+    }
+
+    override fun onDestroy() {
+        instance = null
+        super.onDestroy()
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
@@ -99,7 +132,5 @@ class NotificationService : NotificationListenerService() {
         }
     }.getOrNull()
 
-    private companion object {
-        const val MAX_LINE_CHARS = 100
-    }
+
 }

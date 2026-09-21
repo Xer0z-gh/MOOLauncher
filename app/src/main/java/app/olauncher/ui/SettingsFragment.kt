@@ -52,6 +52,7 @@ import app.olauncher.helper.setPlainWallpaper
 import app.olauncher.helper.IconCache
 import app.olauncher.helper.IconPack
 import app.olauncher.helper.NotificationCounts
+import app.olauncher.helper.NotificationService
 import app.olauncher.helper.OlDialog
 import app.olauncher.helper.showPopupMenu
 import app.olauncher.helper.showStatusBar
@@ -1062,7 +1063,10 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         }
         prefs.showNotificationBadges = !prefs.showNotificationBadges
         if (prefs.showNotificationBadges) {
-            runCatching {
+            // rescanActive first: requestRebind is a no-op when the listener is already
+            // bound, which is the common case here, and nothing would have badged until the
+            // next notification arrived.
+            if (!NotificationService.rescanActive()) runCatching {
                 NotificationListenerService.requestRebind(context.notificationListenerComponent())
             }
         } else {
