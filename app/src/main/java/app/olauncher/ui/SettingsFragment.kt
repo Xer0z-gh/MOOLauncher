@@ -276,6 +276,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.notificationBadges -> toggleNotificationBadges()
             R.id.badgeStyle -> showBadgeStyleMenu(view)
             R.id.badgeFilter -> showBadgeFilter()
+            R.id.notificationPanel -> openNotificationPanel()
             R.id.badgeTapDetails -> {
                 prefs.badgeTapShowsDetails = !prefs.badgeTapShowsDetails
                 populateBadgeOptions()
@@ -356,6 +357,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.iconPack.setOnClickListener(this)
         binding.badgeStyle.setOnClickListener(this)
         binding.badgeFilter.setOnClickListener(this)
+        binding.notificationPanel.setOnClickListener(this)
         binding.dateFormat.setOnClickListener(this)
         binding.homeAnimations.setOnClickListener(this)
         binding.homeSpacing.setOnClickListener(this)
@@ -976,6 +978,22 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.homeSpacing.text =
             if (prefs.homeSpacingExtra == 0) getString(R.string._0)
             else getString(R.string.home_spacing_value, prefs.homeSpacingExtra)
+    }
+
+    /**
+     * Opens the notification panel from Settings.
+     *
+     * The panel is otherwise only reachable from a gesture, and no gesture points at it by
+     * default - swipe down opens the system shade, which is the right default and not
+     * something to change on someone's behalf. Without this row the screen would exist and
+     * nobody would find it.
+     */
+    private fun openNotificationPanel() {
+        try {
+            findNavController().navigate(R.id.action_settingsFragment_to_notificationPanelFragment)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     /**

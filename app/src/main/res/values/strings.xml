@@ -208,10 +208,10 @@
     <string name="preview_app_three">Music</string>
     <string name="theme_selected">%1$s, selected</string>
     <string name="theme_not_selected">%1$s</string>
-    <string name="badge_filter">Apps to badge</string>
+    <string name="badge_filter">Apps to show</string>
     <string name="all">All</string>
     <string name="badge_muted_count">%1$d muted</string>
-    <string name="badge_filter_hint">Tap an app to mute its badge</string>
+    <string name="badge_filter_hint">Tap an app to mute it</string>
     <string name="badge_muted_app">%1$s · muted</string>
     <string name="badge_style">Badge style</string>
     <string name="badge_style_count">Number</string>
@@ -270,4 +270,6 @@
     <string name="filter_selected">%1$s, selected</string>
     <string name="filter_not_selected">%1$s, not selected</string>
     <string name="action_notification_panel">Notification panel</string>
+    <string name="notification_panel">Notification panel</string>
+    <string name="open_now">Open</string>
 </resources>

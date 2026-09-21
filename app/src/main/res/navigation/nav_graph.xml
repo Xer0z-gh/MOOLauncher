@@ -60,6 +60,13 @@
         android:label="SettingsFragment"
         android:layout="@layout/fragment_settings">
         <action
+            android:id="@+id/action_settingsFragment_to_notificationPanelFragment"
+            app:destination="@id/notificationPanelFragment"
+            app:enterAnim="@anim/fade_enter"
+            app:exitAnim="@anim/fade_exit"
+            app:popEnterAnim="@anim/fade_enter"
+            app:popExitAnim="@anim/fade_exit" />
+        <action
             android:id="@+id/action_settingsFragment_to_appListFragment"
             app:destination="@id/appListFragment"
             app:enterAnim="@anim/fade_enter"
