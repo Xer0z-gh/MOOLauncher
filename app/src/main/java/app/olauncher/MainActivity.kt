@@ -24,6 +24,7 @@ import androidx.navigation.findNavController
 import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.ActivityMainBinding
+import app.olauncher.helper.IconCache
 import app.olauncher.helper.getColorFromAttr
 import app.olauncher.helper.hasBeenDays
 import app.olauncher.helper.hasBeenHours
@@ -129,6 +130,9 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         restartLauncherOrCheckTheme()
+        // The cache is a process-wide singleton, so it has to learn the chosen pack once per
+        // process start rather than only when the setting is changed.
+        IconCache.iconPackPackage = prefs.iconPackPackage
     }
 
     override fun onResume() {

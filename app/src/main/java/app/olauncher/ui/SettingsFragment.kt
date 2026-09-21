@@ -50,12 +50,17 @@ import app.olauncher.helper.setPlainWallpaper
 import app.olauncher.helper.setPlainWallpaperColor
 import app.olauncher.helper.shareApp
 import app.olauncher.helper.IconCache
+import app.olauncher.helper.IconPack
 import app.olauncher.helper.NotificationCounts
 import app.olauncher.helper.OlDialog
 import app.olauncher.helper.showPopupMenu
 import app.olauncher.helper.showStatusBar
 import app.olauncher.helper.showToast
 import app.olauncher.helper.withAlpha
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import app.olauncher.listener.DeviceAdmin
 
 class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListener {
@@ -141,6 +146,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.colorTheme -> showColorThemeDialog()
             R.id.appIcons -> toggleAppIcons()
             R.id.iconStyle -> showIconStyleMenu(view)
+            R.id.iconPack -> showIconPackDialog()
             R.id.textSizeValue -> showTextSizeDialog()
             R.id.boldFont -> toggleBoldFont()
             R.id.notificationBadges -> toggleNotificationBadges()
@@ -238,6 +244,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.colorTheme.setOnClickListener(this)
         binding.appIcons.setOnClickListener(this)
         binding.iconStyle.setOnClickListener(this)
+        binding.iconPack.setOnClickListener(this)
         binding.badgeStyle.setOnClickListener(this)
         binding.badgeTapDetails.setOnClickListener(this)
         binding.gestureSwipeUp.setOnClickListener(this)
@@ -697,12 +704,71 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         }
     }
 
+    /**
+     * Lists the icon packs installed on the device. Discovery queries the package manager, which
+     * is binder work over every installed app, so it happens off the main thread and the dialog
+     * opens when the list is ready.
+     */
+    private fun showIconPackDialog() {
+        if (!prefs.showAppIcons) {
+            requireContext().showToast(getString(R.string.turn_on_app_icons_first))
+            return
+        }
+        val context = requireContext().applicationContext
+        viewLifecycleOwner.lifecycleScope.launch {
+            val packs = withContext(Dispatchers.IO) { IconPack.installedPacks(context) }
+            if (!isAdded) return@launch
+            if (packs.isEmpty()) {
+                requireContext().showToast(getString(R.string.no_icon_packs_installed))
+                return@launch
+            }
+            dialog?.dismiss()
+            dialog = requireContext().createDialog(
+                title = R.string.icon_pack,
+                action = R.string.close,
+                content = { container -> buildIconPackList(container, packs) }
+            ).also { it.showRespectingStatusBar() }
+        }
+    }
+
+    private fun buildIconPackList(container: ViewGroup, packs: List<IconPack.Pack>): View {
+        val context = container.context
+        val list = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
+
+        // "Default" first, so turning a pack back off is as easy as turning it on.
+        val entries = listOf(IconPack.Pack("", getString(R.string.icon_pack_default))) + packs
+        entries.forEach { pack ->
+            val selected = prefs.iconPackPackage == pack.packageName
+            list.addView(TextView(context, null, 0, R.style.TextSmall).apply {
+                text = if (selected) getString(R.string.icon_pack_selected, pack.label) else pack.label
+                setPadding(8.dpToPx(), 12.dpToPx(), 8.dpToPx(), 12.dpToPx())
+                isFocusable = true
+                setOnClickListener { applyIconPack(pack.packageName) }
+            })
+        }
+        return list
+    }
+
+    private fun applyIconPack(packPackage: String) {
+        prefs.iconPackPackage = packPackage
+        IconCache.iconPackPackage = packPackage
+        populateIconSettings()
+        dialog?.dismiss()
+        viewModel.refreshHome(false)
+    }
+
     private fun populateIconSettings() {
         binding.appIcons.text = getString(if (prefs.showAppIcons) R.string.on else R.string.off)
         binding.iconStyle.text = getString(
             if (prefs.iconStyle == Constants.IconStyle.GRAYSCALE) R.string.icon_style_grayscale
             else R.string.icon_style_full_color
         )
+        val pack = prefs.iconPackPackage
+        binding.iconPack.text = if (pack.isEmpty()) getString(R.string.icon_pack_default)
+        else runCatching {
+            val pm = requireContext().packageManager
+            pm.getApplicationLabel(pm.getApplicationInfo(pack, 0)).toString()
+        }.getOrDefault(getString(R.string.icon_pack_default))
     }
 
     private fun populateColorTheme() {

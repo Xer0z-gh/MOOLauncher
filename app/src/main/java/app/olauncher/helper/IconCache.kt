@@ -32,13 +32,23 @@ object IconCache {
 
     private val cache = object : LruCache<String, Drawable>(MAX_ENTRIES) {}
 
+    /** The chosen icon pack's package, or empty for the apps' own icons. */
+    @Volatile
+    var iconPackPackage: String = ""
+        set(value) {
+            if (field == value) return
+            field = value
+            IconPack.reset()
+            clear()
+        }
+
     private fun key(
         packageName: String,
         className: String,
         user: UserHandle,
         sizePx: Int,
         grayscale: Boolean,
-    ) = "$packageName|$className|${user.hashCode()}|$sizePx|$grayscale"
+    ) = "$packageName|$className|${user.hashCode()}|$sizePx|$grayscale|$iconPackPackage"
 
     /** Cached icon, or null if it has not been loaded yet. Safe on any thread. */
     fun peek(
@@ -89,6 +99,13 @@ object IconCache {
         // Prefer the exact activity the home slot points at; a package can expose several.
         val match = activities.firstOrNull { it.componentName.className == className }
             ?: activities.first()
+
+        // A chosen pack wins where it has an icon. Packs are always partial, so anything it does
+        // not cover falls back to the app's own icon rather than leaving a hole in the list.
+        val pack = iconPackPackage
+        if (pack.isNotEmpty()) {
+            IconPack.iconFor(context, pack, match.componentName)?.let { return it }
+        }
         return match.getBadgedIcon(0)
     }
 

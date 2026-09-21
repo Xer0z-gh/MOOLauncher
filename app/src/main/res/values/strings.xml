@@ -165,6 +165,10 @@
     <string name="icon_style_full_color">Full colour</string>
     <string name="icon_style_grayscale">Grayscale</string>
     <string name="turn_on_app_icons_first">Turn on app icons first</string>
+    <string name="icon_pack">Icon pack</string>
+    <string name="icon_pack_default">App default</string>
+    <string name="icon_pack_selected">%1$s ·</string>
+    <string name="no_icon_packs_installed">No icon packs installed</string>
     <string name="theme_system">System</string>
     <string name="theme_ink">Ink</string>
     <string name="theme_paper">Paper</string>
