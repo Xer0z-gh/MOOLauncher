@@ -1,5 +1,6 @@
 package app.olauncher.helper.usageStats
 
+import app.olauncher.BuildConfig
 import android.app.ActivityManager
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
@@ -207,7 +208,8 @@ class EventLogWrapper(private val context: Context) {
                             foregroundProcess
                         )
                     )
-                    Log.d("EventLogWrapper", "Assuming that application $foregroundProcess has been used the whole query time")
+                    if (BuildConfig.DEBUG)
+                        Log.d("EventLogWrapper", "Assuming that application $foregroundProcess has been used the whole query time")
                 }
             }
         }

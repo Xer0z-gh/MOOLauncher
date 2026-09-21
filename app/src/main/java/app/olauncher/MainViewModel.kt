@@ -11,6 +11,8 @@ import android.os.UserManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -441,30 +443,41 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         homeAppAlignment.value = prefs.homeAlignment
     }
 
+    private var screenTimeJob: Job? = null
+
+    /**
+     * Walks a full day of usage events and aggregates them, which on a phone in daily use is
+     * thousands of events plus a per-close-event rescan. This used to run synchronously on the
+     * main thread from HomeFragment.onResume, so the home screen froze for the length of the scan
+     * every time the user pressed Home - the most visible possible moment to stall.
+     */
     fun getTodaysScreenTime() {
         if (prefs.screenTimeLastUpdated.hasBeenMinutes(1).not()) return
-
-        val eventLogWrapper = EventLogWrapper(
-            appContext
-        )
-        // Start of today in millis
-        val calendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-        val startTime = calendar.timeInMillis
+        // Claim the minute window BEFORE going async. The gate above reads a timestamp that used
+        // to be written at the end of a synchronous scan; off the main thread, two resumes a
+        // second apart would both pass it and start concurrent full-day scans.
+        if (screenTimeJob?.isActive == true) return
         val endTime = System.currentTimeMillis()
-
-        val timeSpent = eventLogWrapper.aggregateSimpleUsageStats(
-            eventLogWrapper.aggregateForegroundStats(
-                eventLogWrapper.getForegroundStatsByTimestamps(startTime, endTime)
-            )
-        )
-        val viewTimeSpent = appContext.formattedTimeSpent(timeSpent)
-        screenTimeValue.postValue(viewTimeSpent)
         prefs.screenTimeLastUpdated = endTime
+
+        screenTimeJob = viewModelScope.launch(Dispatchers.Default) {
+            val eventLogWrapper = EventLogWrapper(appContext)
+            // Start of today in millis
+            val calendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+            val startTime = calendar.timeInMillis
+
+            val timeSpent = eventLogWrapper.aggregateSimpleUsageStats(
+                eventLogWrapper.aggregateForegroundStats(
+                    eventLogWrapper.getForegroundStatsByTimestamps(startTime, endTime)
+                )
+            )
+            screenTimeValue.postValue(appContext.formattedTimeSpent(timeSpent))
+        }
     }
 
     fun getPrivateSpaceAppList() {

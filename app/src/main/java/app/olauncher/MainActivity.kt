@@ -44,6 +44,7 @@ import app.olauncher.helper.shareApp
 import app.olauncher.helper.showLauncherSelector
 import app.olauncher.helper.showMessageDialog
 import app.olauncher.helper.showToast
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -134,15 +135,29 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         isResumed = true
         viewModel.isPrivateSpaceToggling = false
-        viewModel.getAppList()
+        // No getAppList() here on purpose: it enumerated every launchable activity, resolved a
+        // label per app and re-sorted with a Collator on every single Home press, even when only
+        // the home screen was showing and nothing consumed the list. The LauncherApps.Callback
+        // above now refreshes it when the set of installed apps actually changes.
     }
 
     private fun registerShortcutCallback() {
         val launcherApps = getSystemService(LauncherApps::class.java)
         launcherAppsCallback = object : LauncherApps.Callback() {
-            override fun onPackageRemoved(packageName: String, user: android.os.UserHandle) = Unit
-            override fun onPackageAdded(packageName: String, user: android.os.UserHandle) = Unit
-            override fun onPackageChanged(packageName: String, user: android.os.UserHandle) = Unit
+            // These three used to be no-ops, which is why onResume re-scanned every launchable
+            // activity on every Home press. Answering the platform's own events instead means the
+            // scan runs when the app list actually changes, which is rarely.
+            override fun onPackageRemoved(packageName: String, user: android.os.UserHandle) {
+                viewModel.getAppList()
+            }
+
+            override fun onPackageAdded(packageName: String, user: android.os.UserHandle) {
+                viewModel.getAppList()
+            }
+
+            override fun onPackageChanged(packageName: String, user: android.os.UserHandle) {
+                viewModel.getAppList()
+            }
             override fun onPackagesAvailable(
                 packageNames: Array<out String>,
                 user: android.os.UserHandle,
@@ -366,7 +381,10 @@ class MainActivity : AppCompatActivity() {
     private fun restartLauncherOrCheckTheme(forceRestart: Boolean = false) {
         if (forceRestart || prefs.launcherRestartTimestamp.hasBeenHours(4)) {
             prefs.launcherRestartTimestamp = System.currentTimeMillis()
-            cacheDir.deleteRecursively()
+            // Off the main thread: a recursive filesystem delete was running inside onStart, and
+            // recreate() does not depend on it finishing.
+            val cache = cacheDir
+            lifecycleScope.launch(Dispatchers.IO) { runCatching { cache.deleteRecursively() } }
             recreate()
         } else
             checkTheme()

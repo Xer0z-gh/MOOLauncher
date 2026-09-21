@@ -1,5 +1,6 @@
 package app.olauncher.helper.usageStats
 
+import app.olauncher.BuildConfig
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.util.Log
@@ -56,8 +57,12 @@ class UnmatchedCloseEventGuardian(private val usageStatsManager: UsageStatsManag
             }
         }
 
-        val result = if (open) "True" else "Faulty"
-        Log.d("Guardian", "Scanned for package ${event.packageName} and determined event to be $result")
+        // Debug-gated: this is the innermost loop of the screen time scan, and building the
+        // message allocates a String per close event even when nothing reads the log.
+        if (BuildConfig.DEBUG) {
+            val result = if (open) "True" else "Faulty"
+            Log.d("Guardian", "Scanned for package ${event.packageName} and determined event to be $result")
+        }
 
         // Event is valid if it was previously opened (within SCAN_INTERVAL)
         return open

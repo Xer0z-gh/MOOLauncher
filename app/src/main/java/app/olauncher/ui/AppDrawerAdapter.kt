@@ -3,8 +3,6 @@ package app.olauncher.ui
 import android.content.Context
 import android.content.pm.LauncherApps
 import android.os.UserHandle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -287,23 +285,11 @@ class AppDrawerAdapter(
             etAppRename.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
                 appTitle.visibility = if (hasFocus) View.INVISIBLE else View.VISIBLE
             }
-            etAppRename.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    etAppRename.hint = getAppName(etAppRename.context, appModel.appPackage, appModel.user)
-                }
-
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int,
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    etAppRename.hint = ""
-                }
-            })
+            // A TextWatcher used to be added here on every bind and never removed, so a recycled
+            // row accumulated one per rebind, each holding a stale AppModel and each running a
+            // PackageManager lookup on every keystroke. It was also a no-op: onTextChanged cleared
+            // the hint and afterTextChanged immediately put it back, and the rename click handler
+            // above already sets that hint when the field opens.
             etAppRename.setOnEditorActionListener { _, actionCode, _ ->
                 if (actionCode == EditorInfo.IME_ACTION_DONE) {
                     val renameLabel = etAppRename.text.toString().trim()
