@@ -18,6 +18,7 @@ class Prefs(context: Context) {
     private val HOME_APPS_NUM = "HOME_APPS_NUM"
     private val AUTO_SHOW_KEYBOARD = "AUTO_SHOW_KEYBOARD"
     private val AUTO_LAUNCH_FROM_SEARCH = "AUTO_LAUNCH_FROM_SEARCH"
+    private val TEXT_WEIGHT = "TEXT_WEIGHT"
     private val KEYBOARD_MESSAGE = "KEYBOARD_MESSAGE"
     private val DAILY_WALLPAPER = "DAILY_WALLPAPER"
     private val DAILY_WALLPAPER_URL = "DAILY_WALLPAPER_URL"
@@ -159,6 +160,10 @@ class Prefs(context: Context) {
     var lockModeOn: Boolean
         get() = prefs.getBoolean(LOCK_MODE, false)
         set(value) = prefs.edit { putBoolean(LOCK_MODE, value) }
+
+    var textWeight: Int
+        get() = prefs.getInt(TEXT_WEIGHT, Constants.TextWeight.REGULAR)
+        set(value) = prefs.edit { putInt(TEXT_WEIGHT, value) }
 
     var autoLaunchFromSearch: Boolean
         get() = prefs.getBoolean(AUTO_LAUNCH_FROM_SEARCH, true)

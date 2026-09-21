@@ -35,6 +35,7 @@ import app.olauncher.data.Prefs
 import app.olauncher.databinding.DialogTextSizeBinding
 import app.olauncher.databinding.FragmentSettingsBinding
 import app.olauncher.helper.applyFocusOutline
+import app.olauncher.helper.applyTextWeight
 import app.olauncher.helper.appUsagePermissionGranted
 import app.olauncher.helper.createDialog
 import app.olauncher.helper.dpToPx
@@ -147,6 +148,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         populateAppThemeText()
         populateTextSize()
         populateFont()
+        populateTextWeight()
         populateAlignment()
         populateStatusBar()
         populateDateTime()
@@ -162,6 +164,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         // version of this crashed the launcher on the way out of Settings by dereferencing a
         // binding that was already null.
         rowLabeller = ViewTreeObserver.OnGlobalLayoutListener { labelSettingsRows() }
+        binding.scrollLayout.applyTextWeight(Constants.TextWeight.value(prefs.textWeight))
         rowLabellerObserver = binding.scrollLayout.viewTreeObserver
         rowLabellerObserver?.addOnGlobalLayoutListener(rowLabeller)
     }
@@ -262,6 +265,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.iconPack -> showIconPackDialog()
             R.id.textSizeValue -> showTextSizeDialog()
             R.id.fontChoice -> showFontMenu(view)
+            R.id.textWeight -> showTextWeightMenu(view)
             R.id.notificationBadges -> toggleNotificationBadges()
             R.id.badgeStyle -> showBadgeStyleMenu(view)
             R.id.badgeFilter -> showBadgeFilter()
@@ -370,6 +374,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.appThemeText.setOnClickListener(this)
         binding.textSizeValue.setOnClickListener(this)
         binding.fontChoice.setOnClickListener(this)
+        binding.textWeight.setOnClickListener(this)
 
         binding.github.setOnClickListener(this)
 
@@ -1236,6 +1241,32 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             }
             populateFont()
             // The font is a theme attribute, so it can only change when the theme is applied.
+            requireActivity().recreate()
+        }
+    }
+
+    private fun populateTextWeight() {
+        binding.textWeight.text = getString(
+            when (prefs.textWeight) {
+                Constants.TextWeight.MEDIUM -> R.string.weight_medium
+                Constants.TextWeight.BOLD -> R.string.weight_bold
+                else -> R.string.weight_regular
+            }
+        )
+    }
+
+    /**
+     * Weight is a theme attribute, so the Activity is recreated to apply it - the same as
+     * the font picker beside it.
+     */
+    private fun showTextWeightMenu(anchor: View) {
+        anchor.showPopupMenu(R.menu.text_weight) { item ->
+            prefs.textWeight = when (item.itemId) {
+                R.id.weightMedium -> Constants.TextWeight.MEDIUM
+                R.id.weightBold -> Constants.TextWeight.BOLD
+                else -> Constants.TextWeight.REGULAR
+            }
+            populateTextWeight()
             requireActivity().recreate()
         }
     }

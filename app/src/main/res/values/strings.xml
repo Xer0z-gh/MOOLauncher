@@ -132,6 +132,10 @@
         <item quantity="other">%1$s · %2$d missed notifications</item>
     </plurals>
     <string name="a11y_pair" translatable="false">%1$s, %2$s</string>
+    <string name="text_weight">Text weight</string>
+    <string name="weight_regular">Regular</string>
+    <string name="weight_medium">Medium</string>
+    <string name="weight_bold">Bold</string>
     <string name="dismiss">Dismiss</string>
     <string name="a11y_work_profile">%1$s, work profile</string>
     <string name="a11y_screen_time">Screen time, %1$s</string>

@@ -84,6 +84,30 @@ object IconCache {
         return flattened
     }
 
+    /**
+     * Warms the cache for up to [limit] apps. Must be called off the main thread.
+     *
+     * Without this the drawer resolves each icon as its row scrolls into view - a binder
+     * call into LauncherApps plus an AdaptiveIconDrawable rasterise, per row. Doing the
+     * first screenful in advance is the difference between a list that draws and one that
+     * pops in as you scroll. Bounded by [limit] and by the cache itself, so this cannot
+     * grow past the ceiling the cache already guarantees.
+     */
+    fun warm(
+        context: Context,
+        apps: List<Triple<String, String, UserHandle>>,
+        sizePx: Int,
+        grayscale: Boolean,
+        limit: Int = MAX_ENTRIES,
+    ) {
+        if (sizePx <= 0) return
+        for ((packageName, className, user) in apps.take(limit)) {
+            if (packageName.isEmpty()) continue
+            if (peek(packageName, className, user, sizePx, grayscale) != null) continue
+            load(context, packageName, className, user, sizePx, grayscale)
+        }
+    }
+
     /** Drops everything, for when the icon style changes or apps are added or removed. */
     fun clear() = cache.evictAll()
 

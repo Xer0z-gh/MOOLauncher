@@ -8,6 +8,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
@@ -238,6 +239,29 @@ fun View.tintTextTree(@ColorInt color: Int, @ColorInt hintColor: Int) {
  * system animation scale says - there is no per-view opt-out in XML. The only way to honour
  * "Remove animations" for those is to null the transition the flag created.
  */
+/**
+ * Applies a font weight to every TextView under this view.
+ *
+ * Done in code because the declarative route does not work: pointing
+ * android:textFontWeight at a theme attribute is silently ignored - measured on a device,
+ * 400, 500 and 700 all rendered the same string at exactly the same width. Typeface.create
+ * with an explicit weight is the API that has an effect, and Android caches the results, so
+ * re-applying on a repopulate does not allocate a typeface per view per pass.
+ */
+fun View.applyTextWeight(weight: Int) {
+    when (this) {
+        is TextView -> {
+            val base = typeface
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                typeface = Typeface.create(base, weight, base?.isItalic == true)
+            else if (weight >= 600)
+                setTypeface(base, Typeface.BOLD)
+        }
+
+        is ViewGroup -> for (i in 0 until childCount) getChildAt(i).applyTextWeight(weight)
+    }
+}
+
 fun View.clearLayoutTransitions() {
     if (this !is ViewGroup) return
     layoutTransition = null

@@ -26,6 +26,9 @@ import app.olauncher.data.ColorTheme
 import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.FragmentAppDrawerBinding
+import app.olauncher.helper.IconCache
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import app.olauncher.helper.deletePinnedShortcut
 import app.olauncher.helper.dpToPx
 import app.olauncher.helper.hideKeyboard
@@ -161,6 +164,22 @@ class AppDrawerFragment : BaseFragment() {
         }
         cachedIsCjkKeyboard = result
         return result
+    }
+
+    /**
+     * Warms the icon cache for the top of the list, off the main thread, as soon as the app
+     * list arrives - so the rows that are about to be drawn already have their icons.
+     */
+    private fun preloadIcons(apps: List<AppModel>?) {
+        if (apps.isNullOrEmpty() || !prefs.showDrawerIcons) return
+        val size = ICON_SIZE_DP.dpToPx()
+        val grayscale = prefs.iconStyle == Constants.IconStyle.GRAYSCALE
+        val context = requireContext().applicationContext
+        val entries = apps.filterIsInstance<AppModel.App>()
+            .map { Triple(it.appPackage, it.activityClassName.orEmpty(), it.user) }
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            IconCache.warm(context, entries, size, grayscale)
+        }
     }
 
     /**
@@ -341,6 +360,7 @@ class AppDrawerFragment : BaseFragment() {
 
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = adapter
+        adapter.textWeight = Constants.TextWeight.value(prefs.textWeight)
         applyColorTheme()
         applyMotionPreference()
         applySearchFieldHeight()
@@ -367,6 +387,7 @@ class AppDrawerFragment : BaseFragment() {
             viewModel.appList.observe(viewLifecycleOwner) {
                 currentAppList = it
                 updateCombinedAppList()
+                preloadIcons(it)
             }
             if (flag == Constants.FLAG_LAUNCH_APP) {
                 viewModel.privateSpaceAvailable.observe(viewLifecycleOwner) {

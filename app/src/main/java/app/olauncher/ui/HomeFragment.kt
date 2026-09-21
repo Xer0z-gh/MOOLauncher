@@ -41,6 +41,7 @@ import app.olauncher.helper.IconCache
 import app.olauncher.helper.MyAccessibilityService
 import app.olauncher.helper.NotificationCounts
 import app.olauncher.helper.applyFocusOutline
+import app.olauncher.helper.applyTextWeight
 import app.olauncher.helper.appUsagePermissionGranted
 import app.olauncher.helper.getColorFromAttr
 import app.olauncher.helper.createDialog
@@ -520,6 +521,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      */
     private fun applyColorTheme() {
         applyFocusOutlines()
+        binding.mainLayout.applyTextWeight(Constants.TextWeight.value(prefs.textWeight))
         if (!ColorTheme.isCustom(prefs.colorThemeId)) {
             binding.mainLayout.setBackgroundColor(android.graphics.Color.TRANSPARENT)
             applySystemBarIcons(requireContext().isDarkThemeOn().not())

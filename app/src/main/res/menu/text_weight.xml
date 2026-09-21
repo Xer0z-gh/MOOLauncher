@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/weightRegular"
+        android:title="@string/weight_regular" />
+    <item
+        android:id="@+id/weightMedium"
+        android:title="@string/weight_medium" />
+    <item
+        android:id="@+id/weightBold"
+        android:title="@string/weight_bold" />
+</menu>

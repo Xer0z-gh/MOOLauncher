@@ -84,6 +84,23 @@ object Constants {
         const val MISSED_NOTIFICATIONS = 7
     }
 
+    /**
+     * How heavy the launcher's text is drawn. MEDIUM is the weight Before Launcher uses for
+     * its own text (Fakt Pro Medium); BOLD is heavier than Before goes.
+     */
+    object TextWeight {
+        const val REGULAR = 0
+        const val MEDIUM = 1
+        const val BOLD = 2
+
+        /** The CSS-style weight each choice maps to. 500 is Before's own text weight. */
+        fun value(choice: Int): Int = when (choice) {
+            MEDIUM -> 500
+            BOLD -> 700
+            else -> 400
+        }
+    }
+
     /** The gestures that can be reassigned. The string is the Prefs key prefix. */
     object Gesture {
         const val SWIPE_UP = "SWIPE_UP"

@@ -22,6 +22,7 @@ import app.olauncher.helper.IconCache
 import app.olauncher.helper.dpToPx
 import app.olauncher.helper.hideKeyboard
 import app.olauncher.helper.applyFocusOutline
+import app.olauncher.helper.applyTextWeight
 import app.olauncher.helper.getColorFromAttr
 import app.olauncher.helper.tintTextTree
 import app.olauncher.helper.withAlpha
@@ -95,6 +96,9 @@ class AppDrawerAdapter(
     var iconGrayscale: Boolean = false
     var iconScope: CoroutineScope? = null
 
+    /** CSS-style font weight for every row; see Constants.TextWeight. */
+    var textWeight: Int = 400
+
     private var autoLaunch = true
     private var isBangSearch = false
     var allowAutoLaunch = true
@@ -142,6 +146,7 @@ class AppDrawerAdapter(
             if (themeTextColor != 0) holder.itemView.tintTextTree(
                 themeTextColor, themeTextColor.withAlpha(0xB3)
             )
+            holder.itemView.applyTextWeight(textWeight)
             holder.itemView.applyFocusOutline(
                 if (themeTextColor != 0) themeTextColor
                 else holder.itemView.context.getColorFromAttr(R.attr.primaryColor)
