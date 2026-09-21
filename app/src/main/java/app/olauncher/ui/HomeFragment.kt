@@ -24,6 +24,9 @@ import androidx.core.os.bundleOf
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowInsetsControllerCompat
 import app.olauncher.helper.isDarkThemeOn
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
@@ -86,6 +89,12 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
         /** Weather is refreshed at most this often; a launcher has no business polling. */
         const val WEATHER_REFRESH_MINUTES = 60
+
+        /**
+         * How much system bar the layout's own top margin already accounts for. Matches
+         * fragment_home.xml's layout_marginTop on the date block; only the excess is padded.
+         */
+        const val ABSORBED_TOP_DP = 56
     }
 
     private lateinit var prefs: Prefs
@@ -182,11 +191,32 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
         basePaddingPx = binding.homeApp1.paddingTop
 
+        applyTopInset()
         initObservers()
         setHomeAlignment(prefs.homeAlignment)
         initSwipeTouchListener()
         initClickListeners()
         initBadgeFollowers()
+    }
+
+    /**
+     * Pads the home screen down by however much of the system bar the layout cannot
+     * already absorb.
+     *
+     * The window is laid out under the bars on purpose so the wallpaper shows through, and
+     * the layout compensates with fixed margins. Measured with the emulator's tall cutout
+     * (a 126px / 48dp inset) the clock still clears it by 21px, so this is additive rather
+     * than a rewrite: a device where it already looks right gets nothing added, and one
+     * with a taller bar than the layout allows for stops drawing underneath it.
+     */
+    private fun applyTopInset() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.mainLayout) { view, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            view.updatePadding(top = (bars.top - ABSORBED_TOP_DP.dpToPx()).coerceAtLeast(0))
+            insets
+        }
     }
 
     /**
