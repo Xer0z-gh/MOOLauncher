@@ -144,6 +144,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         populateAlignment()
         populateStatusBar()
         populateDateTime()
+        populateHomeLayoutOptions()
         populateSwipeApps()
         populateActionHints()
         initClickListeners()
@@ -172,6 +173,14 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.alignment -> showAlignmentMenu(view)
             R.id.statusBar -> toggleStatusBar()
             R.id.dateTime -> showDateTimeMenu(view)
+            R.id.dateFormat -> showDateFormatMenu(view)
+            R.id.homeAnimations -> {
+                prefs.homeAnimations = !prefs.homeAnimations
+                populateHomeLayoutOptions()
+                viewModel.refreshHome(false)
+            }
+
+            R.id.homeSpacing -> cycleHomeSpacing()
             R.id.appThemeText -> showAppThemeMenu(view, showSystem = false)
             R.id.colorTheme -> showColorThemeDialog()
             R.id.appIcons -> showIconPlacesMenu(view)
@@ -278,6 +287,9 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.iconPack.setOnClickListener(this)
         binding.badgeStyle.setOnClickListener(this)
         binding.badgeFilter.setOnClickListener(this)
+        binding.dateFormat.setOnClickListener(this)
+        binding.homeAnimations.setOnClickListener(this)
+        binding.homeSpacing.setOnClickListener(this)
         binding.badgeTapDetails.setOnClickListener(this)
         binding.gestureSwipeUp.setOnClickListener(this)
         binding.gestureSwipeDown.setOnClickListener(this)
@@ -460,6 +472,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
     private fun toggleDateTime(selected: Int) {
         prefs.dateTimeVisibility = selected
         populateDateTime()
+        populateHomeLayoutOptions()
         viewModel.toggleDateTime()
     }
 
@@ -851,6 +864,49 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
 
     private fun populateColorTheme() {
         binding.colorTheme.text = getString(ColorTheme.byId(prefs.colorThemeId).nameRes)
+    }
+
+    private fun showDateFormatMenu(anchor: View) {
+        anchor.showPopupMenu(R.menu.date_format) { item ->
+            prefs.dateFormatIndex = when (item.itemId) {
+                R.id.dateFormat1 -> 1
+                R.id.dateFormat2 -> 2
+                R.id.dateFormat3 -> 3
+                R.id.dateFormat4 -> 4
+                else -> 0
+            }
+            populateHomeLayoutOptions()
+            viewModel.refreshHome(false)
+        }
+    }
+
+    /** Cycles row spacing through a few steps; a slider for four values would be overkill. */
+    private fun cycleHomeSpacing() {
+        prefs.homeSpacingExtra = when (prefs.homeSpacingExtra) {
+            0 -> 4
+            4 -> 8
+            8 -> 14
+            else -> 0
+        }
+        populateHomeLayoutOptions()
+        viewModel.refreshHome(false)
+    }
+
+    private fun populateHomeLayoutOptions() {
+        binding.dateFormat.text = getString(
+            when (prefs.dateFormatIndex) {
+                1 -> R.string.date_format_long
+                2 -> R.string.date_format_with_year
+                3 -> R.string.date_format_weekday
+                4 -> R.string.date_format_numeric
+                else -> R.string.date_format_short
+            }
+        )
+        binding.homeAnimations.text =
+            getString(if (prefs.homeAnimations) R.string.on else R.string.off)
+        binding.homeSpacing.text =
+            if (prefs.homeSpacingExtra == 0) getString(R.string._0)
+            else getString(R.string.home_spacing_value, prefs.homeSpacingExtra)
     }
 
     private fun showBadgeFilter() {

@@ -97,6 +97,14 @@ object Constants {
         const val LONG_PRESS = "LONG_PRESS"
     }
 
+    /**
+     * Date patterns offered on the home screen, in the order they appear in the menu. Stored as
+     * an index, so entries are appended and never reordered.
+     */
+    object DateFormat {
+        val PATTERNS = listOf("EEE, d MMM", "EEEE, d MMMM", "d MMM yyyy", "EEEE", "d/M/yyyy")
+    }
+
     /** How app icons are rendered, when they are shown at all. */
     object IconStyle {
         const val FULL_COLOR = 0

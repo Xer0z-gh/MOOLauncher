@@ -77,6 +77,13 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     private lateinit var viewModel: MainViewModel
     private lateinit var deviceManager: DevicePolicyManager
 
+    /**
+     * The XML padding for a home row at this screen density, captured before any spacing setting
+     * is applied. Read from the layout rather than hard-coded, because it differs per density
+     * bucket, and re-reading it after we have changed it would let the setting compound.
+     */
+    private var basePaddingPx = 0
+
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -93,6 +100,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         } ?: throw Exception("Invalid Activity")
 
         deviceManager = context?.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+
+        basePaddingPx = binding.homeApp1.paddingTop
 
         initObservers()
         setHomeAlignment(prefs.homeAlignment)
@@ -339,7 +348,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.date.isVisible = Constants.DateTime.isDateVisible(prefs.dateTimeVisibility)
 
 //        var dateText = SimpleDateFormat("EEE, d MMM", Locale.getDefault()).format(Date())
-        val dateFormat = SimpleDateFormat("EEE, d MMM", Locale.getDefault())
+        val pattern = Constants.DateFormat.PATTERNS.getOrElse(prefs.dateFormatIndex) {
+            Constants.DateFormat.PATTERNS.first()
+        }
+        val dateFormat = SimpleDateFormat(pattern, Locale.getDefault())
         var dateText = dateFormat.format(Date())
 
         if (!prefs.showStatusBar) {
@@ -437,7 +449,23 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         }
     }
 
+    /**
+     * Applies the home layout options: whether visibility changes animate, and how much air each
+     * row gets. Spacing is added on top of the density default rather than replacing it, so a
+     * setting of zero still looks right on every screen size.
+     */
+    private fun applyHomeLayoutOptions() {
+        binding.mainLayout.layoutTransition =
+            if (prefs.homeAnimations) android.animation.LayoutTransition() else null
+
+        val extra = prefs.homeSpacingExtra.dpToPx()
+        homeAppNameViews().forEach { name ->
+            name.setPadding(name.paddingLeft, basePaddingPx + extra, name.paddingRight, basePaddingPx + extra)
+        }
+    }
+
     private fun populateHomeScreen(appCountUpdated: Boolean) {
+        applyHomeLayoutOptions()
         populateHomeRows(appCountUpdated)
         refreshHomeIcons()
         applyColorTheme()

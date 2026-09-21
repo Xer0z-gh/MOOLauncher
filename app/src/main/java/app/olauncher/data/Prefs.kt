@@ -47,6 +47,9 @@ class Prefs(context: Context) {
     private val ICON_STYLE = "ICON_STYLE"
     private val ICON_PACK_PACKAGE = "ICON_PACK_PACKAGE"
     private val BADGE_MUTED_APPS = "BADGE_MUTED_APPS"
+    private val DATE_FORMAT_INDEX = "DATE_FORMAT_INDEX"
+    private val HOME_ANIMATIONS = "HOME_ANIMATIONS"
+    private val HOME_SPACING_EXTRA = "HOME_SPACING_EXTRA"
     private val BADGE_TAP_DETAILS = "BADGE_TAP_DETAILS"
     private val HIDE_SET_DEFAULT_LAUNCHER = "HIDE_SET_DEFAULT_LAUNCHER"
     private val SCREEN_TIME_LAST_UPDATED = "SCREEN_TIME_LAST_UPDATED"
@@ -241,6 +244,26 @@ class Prefs(context: Context) {
     /** True when icons are shown anywhere; gates the icon style and pack settings. */
     val showAppIcons: Boolean
         get() = showHomeIcons || showDrawerIcons
+
+    /** Index into ColorTheme-style date patterns; see Constants.DateFormat. */
+    var dateFormatIndex: Int
+        get() = prefs.getInt(DATE_FORMAT_INDEX, 0)
+        set(value) = prefs.edit { putInt(DATE_FORMAT_INDEX, value) }
+
+    /**
+     * Layout animations on the home screen. Off by default, which is both Before's default and
+     * the cheaper one: the root animates its direct children, and every resume toggles the
+     * clock, date and screen time, so leaving it on animates state restoration nobody asked to
+     * watch and costs a layout pass each time.
+     */
+    var homeAnimations: Boolean
+        get() = prefs.getBoolean(HOME_ANIMATIONS, false)
+        set(value) = prefs.edit { putBoolean(HOME_ANIMATIONS, value) }
+
+    /** Extra vertical padding per home row, in dp on top of the density default. 0 means default. */
+    var homeSpacingExtra: Int
+        get() = prefs.getInt(HOME_SPACING_EXTRA, 0)
+        set(value) = prefs.edit { putInt(HOME_SPACING_EXTRA, value) }
 
     /** Package name of the chosen icon pack, or empty for each app's own icon. */
     var iconPackPackage: String

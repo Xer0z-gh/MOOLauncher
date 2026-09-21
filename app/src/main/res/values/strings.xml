@@ -159,6 +159,15 @@
     <string name="no_notification_details">Nothing to show for this app yet</string>
     <string name="missed_notifications">%1$s · %2$d missed</string>
     <string name="badge_dot">•</string>
+    <string name="date_format">Date format</string>
+    <string name="date_format_short">Sun, 21 Sep</string>
+    <string name="date_format_long">Sunday, 21 September</string>
+    <string name="date_format_with_year">21 Sep 2026</string>
+    <string name="date_format_weekday">Sunday</string>
+    <string name="date_format_numeric">21/9/2026</string>
+    <string name="home_animations">Animations</string>
+    <string name="home_spacing">Row spacing</string>
+    <string name="home_spacing_value">+%1$d</string>
     <string name="color_theme">Colour theme</string>
     <string name="app_icons">App icons</string>
     <string name="icons_home_only">Home only</string>
