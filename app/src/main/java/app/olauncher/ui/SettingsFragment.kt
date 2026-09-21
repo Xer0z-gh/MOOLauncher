@@ -128,6 +128,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
 
         binding.homeAppsNum.text = prefs.homeAppsNum.toString()
         populateKeyboardText()
+        populateAutoLaunchText()
         populateScreenTimeOnOff()
         populateNotificationBadges()
         populateBadgeOptions()
@@ -163,6 +164,10 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             // Home button for recents feature disabled
             // R.id.homeButtonRecents -> toggleHomeButtonRecents()
             R.id.autoShowKeyboard -> toggleKeyboardText()
+            R.id.autoLaunchFromSearch -> {
+                prefs.autoLaunchFromSearch = !prefs.autoLaunchFromSearch
+                populateAutoLaunchText()
+            }
             R.id.homeAppsNum -> showHomeAppsNumMenu(view)
             R.id.dailyWallpaperUrl -> requireContext().openUrl(prefs.dailyWallpaperUrl)
             R.id.dailyWallpaper -> toggleDailyWallpaperUpdate()
@@ -255,6 +260,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.appInfo.setOnClickListener(this)
         binding.setLauncher.setOnClickListener(this)
         binding.autoShowKeyboard.setOnClickListener(this)
+        binding.autoLaunchFromSearch.setOnClickListener(this)
         // Home button for recents feature disabled
         // binding.homeButtonRecents.setOnClickListener(this)
         binding.homeAppsNum.setOnClickListener(this)
@@ -407,8 +413,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
                 title = R.string.gestures,
                 action = if (serviceEnabled) R.string.disable else R.string.enable,
                 message = R.string.accessibility_disclosure,
-                neutral = R.string.not_working,
-                onNeutral = { requireContext().openUrl(Constants.URL_DOUBLE_TAP) },
+                // The "Not working?" button opened Olauncher's own troubleshooting page. A
+                // button in this app that explains a different app is worse than no button.
                 onAction = { openAccessibilityService() },
             )
         )
@@ -1191,6 +1197,11 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             if (requireContext().appUsagePermissionGranted()) binding.screenTimeOnOff.text = getString(R.string.on)
             else binding.screenTimeOnOff.text = getString(R.string.off)
         } else binding.screenTimeLayout.visibility = View.GONE
+    }
+
+    private fun populateAutoLaunchText() {
+        binding.autoLaunchFromSearch.text =
+            getString(if (prefs.autoLaunchFromSearch) R.string.on else R.string.off)
     }
 
     private fun populateKeyboardText() {

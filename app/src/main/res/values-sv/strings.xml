@@ -77,7 +77,6 @@
     <string name="home_button_show_recents">Hemknapp för senaste appar</string>
     <string name="enable">Aktivera</string>
     <string name="disable">Inaktivera</string>
-    <string name="not_working"><u>Fungerar inte?</u></string>
     <string name="info">Info</string>
     <string name="delete">Avinstallera</string>
     <string name="text_size">Textstorlek</string>

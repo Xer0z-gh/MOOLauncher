@@ -79,7 +79,7 @@
             android:paddingEnd="8dp"
             android:visibility="gone"
             tools:ignore="RtlSymmetry"
-            tools:text="@string/not_working"
+            tools:text="@string/okay"
             tools:visibility="visible" />
 
         <Space

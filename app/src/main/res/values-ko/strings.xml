@@ -72,7 +72,6 @@
     <string name="double_tap_lock">두 번 탭하여 잠금</string>
     <string name="enable">활성화</string>
     <string name="disable">비활성화</string>
-    <string name="not_working"><u>작동하지 않나요?</u></string>
     <string name="info">정보</string>
     <string name="delete">제거</string>
     <string name="text_size">텍스트 크기</string>

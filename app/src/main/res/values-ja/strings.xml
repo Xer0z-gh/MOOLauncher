@@ -31,7 +31,6 @@
     <string name="home_button_show_recents">ホームボタンで最近のアプリ</string>
     <string name="enable">有効にする</string>
     <string name="disable">無効にする</string>
-    <string name="not_working"><u>動作しませんか？</u></string>
     <string name="info">情報</string>
     <string name="delete">アンインストール</string>
     <string name="text_size">文字サイズ</string>

@@ -32,7 +32,6 @@
     <string name="home_button_show_recents">زر الرئيسية للتطبيقات الأخيرة</string>
     <string name="enable">تشغيل</string>
     <string name="disable">إيقاف</string>
-    <string name="not_working"><u>لا يعمل؟</u></string>
     <string name="info">معلومات</string>
     <string name="delete">إلغاء التثبيت</string>
     <string name="text_size">حجم الخط</string>

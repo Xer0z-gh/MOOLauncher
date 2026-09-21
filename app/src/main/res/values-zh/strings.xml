@@ -21,7 +21,6 @@
     <string name="home_button_show_recents">主页键用于最近应用</string>
     <string name="enable">启用</string>
     <string name="disable">禁用</string>
-    <string name="not_working"><u>不起作用？</u></string>
     <string name="info">信息</string>
     <string name="delete">卸载</string>
     <string name="text_size">字体大小</string>

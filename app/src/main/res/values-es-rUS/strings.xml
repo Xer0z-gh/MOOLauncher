@@ -76,7 +76,6 @@
     <string name="home_button_show_recents">Botón de inicio para recientes</string>
     <string name="enable">Activar</string>
     <string name="disable">Desactivar</string>
-    <string name="not_working"><u>¿No funciona?</u></string>
     <string name="info">Información</string>
     <string name="delete">Desinstalar</string>
     <string name="text_size">Tamaño del texto</string>

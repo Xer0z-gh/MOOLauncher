@@ -75,7 +75,6 @@
     <string name="double_tap_lock">Lukitse kaksoisnapautuksella</string>
     <string name="enable">Ota käyttöön</string>
     <string name="disable">Poista käytöstä</string>
-    <string name="not_working"><u>Eikö toimi?</u></string>
     <string name="info">Tiedot</string>
     <string name="delete">Poista asennus</string>
     <string name="text_size">Tekstin koko</string>

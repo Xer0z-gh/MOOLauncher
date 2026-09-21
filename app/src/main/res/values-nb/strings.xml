@@ -75,7 +75,6 @@
     <string name="double_tap_lock">Dobbelttrykk for å låse</string>
     <string name="enable">Aktiver</string>
     <string name="disable">Deaktiver</string>
-    <string name="not_working"><u>Fungerer det ikke?</u></string>
     <string name="info">Info</string>
     <string name="delete">Avinstaller</string>
     <string name="text_size">Tekststørrelse</string>
