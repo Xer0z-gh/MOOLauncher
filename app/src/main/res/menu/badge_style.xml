@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/badgeStyleCount"
+        android:title="@string/badge_style_count" />
+    <item
+        android:id="@+id/badgeStyleDot"
+        android:title="@string/badge_style_dot" />
+</menu>

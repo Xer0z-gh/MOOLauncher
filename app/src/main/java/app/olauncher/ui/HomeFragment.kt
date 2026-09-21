@@ -555,7 +555,11 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                 return@forEachIndexed
             }
 
-            val label = if (count > 99) getString(R.string.badge_count_overflow) else count.toString()
+            val label = when {
+                prefs.badgeStyle == Constants.BadgeStyle.DOT -> getString(R.string.badge_dot)
+                count > 99 -> getString(R.string.badge_count_overflow)
+                else -> count.toString()
+            }
             // Guard the write: setting identical text still costs a measure pass on a TextView.
             if (badge.text?.toString() != label) badge.text = label
             val spoken = getString(R.string.missed_notifications, prefs.getAppName(location), count)
@@ -571,6 +575,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      * panel: it shows the few most recent lines, newest first, and cannot act on them.
      */
     private fun showBadgeDetails(location: Int) {
+        if (!prefs.badgeTapShowsDetails) {
+            homeAppClicked(location)
+            return
+        }
         val lines = NotificationCounts.linesFor(badgeKeyFor(location))
         val appName = prefs.getAppName(location)
         val body = if (lines.isEmpty()) getString(R.string.no_notification_details)
@@ -815,6 +823,84 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         }
     }
 
+    /**
+     * Everything missed across every home app, in one place. This is the opt-in stand-in for
+     * Before Launcher's notification screen: it shows what arrived, grouped by app, and nothing
+     * more - it deliberately cannot act on, dismiss or reply to a notification, because that is
+     * the notification shade's job and duplicating it is how a minimal launcher stops being one.
+     */
+    private fun showMissedNotifications() {
+        if (!prefs.showNotificationBadges || !requireContext().notificationAccessGranted()) {
+            requireContext().showToast(getString(R.string.notification_badges_are_off))
+            return
+        }
+
+        val sections = mutableListOf<String>()
+        for (location in 1..prefs.homeAppsNum) {
+            if (prefs.getIsShortcut(location) || prefs.getAppPackage(location).isEmpty()) continue
+            val key = badgeKeyFor(location)
+            val count = NotificationCounts.countFor(key)
+            if (count <= 0) continue
+            val lines = NotificationCounts.linesFor(key).asReversed()
+            val header = getString(R.string.missed_notifications, prefs.getAppName(location), count)
+            sections += if (lines.isEmpty()) header else header + "\n" + lines.joinToString("\n")
+        }
+
+        val body = if (sections.isEmpty()) getString(R.string.nothing_missed)
+        else sections.joinToString("\n\n")
+
+        requireContext().createDialog(
+            title = R.string.missed,
+            action = R.string.close,
+            content = { container ->
+                TextView(container.context, null, 0, R.style.TextSmall).apply { text = body }
+            }
+        ).showRespectingStatusBar()
+    }
+
+    /**
+     * Runs whatever the user bound to a gesture. Every home gesture routes through here, so the
+     * set of possible actions lives in exactly one place.
+     */
+    private fun runGesture(gesture: String, defaultAction: Int) {
+        when (prefs.getGestureAction(gesture, defaultAction)) {
+            Constants.GestureAction.NOTHING -> Unit
+            Constants.GestureAction.APP_LIST -> showAppList(Constants.FLAG_LAUNCH_APP)
+            Constants.GestureAction.APP_SEARCH -> showAppList(Constants.FLAG_LAUNCH_APP)
+            Constants.GestureAction.NOTIFICATION_SHADE -> expandNotificationDrawer(requireContext())
+            Constants.GestureAction.LAUNCHER_SETTINGS -> openLauncherSettings()
+            Constants.GestureAction.LOCK_SCREEN -> lockPhoneByGesture()
+            Constants.GestureAction.MISSED_NOTIFICATIONS -> showMissedNotifications()
+            Constants.GestureAction.LAUNCH_APP -> {
+                val packageName = prefs.getGestureAppPackage(gesture)
+                if (packageName.isEmpty()) {
+                    requireContext().showToast(getString(R.string.no_app_selected_for_gesture))
+                    return
+                }
+                launchApp(
+                    prefs.getGestureAppName(gesture),
+                    packageName,
+                    prefs.getGestureAppClassName(gesture),
+                    prefs.getGestureAppUser(gesture)
+                )
+            }
+        }
+    }
+
+    private fun openLauncherSettings() {
+        try {
+            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
+            viewModel.firstOpen(false)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun lockPhoneByGesture() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) binding.lock.performClick()
+        else lockPhone()
+    }
+
     private fun showLongPressToast() = requireContext().showToast(getString(R.string.long_press_to_select_app))
 
     private fun textOnClick(view: View) = onClick(view)
@@ -835,31 +921,29 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
             override fun onSwipeUp() {
                 super.onSwipeUp()
-                showAppList(Constants.FLAG_LAUNCH_APP)
+                runGesture(Constants.Gesture.SWIPE_UP, Constants.GestureAction.APP_LIST)
             }
 
             override fun onSwipeDown() {
                 super.onSwipeDown()
-                expandNotificationDrawer(requireContext())
+                runGesture(Constants.Gesture.SWIPE_DOWN, Constants.GestureAction.NOTIFICATION_SHADE)
             }
 
             override fun onLongClick() {
                 super.onLongClick()
-                try {
-                    findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
-                    viewModel.firstOpen(false)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+                runGesture(Constants.Gesture.LONG_PRESS, Constants.GestureAction.LAUNCHER_SETTINGS)
             }
 
             override fun onDoubleClick() {
                 super.onDoubleClick()
-                if (!prefs.lockModeOn) return
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                    binding.lock.performClick()
-                else
-                    lockPhone()
+                // Lock is the historical default and still needs the accessibility grant; any
+                // other bound action is the user's explicit choice and does not.
+                val action = prefs.getGestureAction(
+                    Constants.Gesture.DOUBLE_TAP,
+                    Constants.GestureAction.LOCK_SCREEN
+                )
+                if (action == Constants.GestureAction.LOCK_SCREEN && !prefs.lockModeOn) return
+                runGesture(Constants.Gesture.DOUBLE_TAP, Constants.GestureAction.LOCK_SCREEN)
             }
 
             override fun onClick() {

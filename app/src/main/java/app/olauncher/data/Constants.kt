@@ -46,6 +46,48 @@ object Constants {
         const val HIDE = 101
     }
 
+    /**
+     * What a home screen gesture does. Stored as an Int in Prefs, so the numbers are part of the
+     * saved data: add new actions at the end, never renumber.
+     */
+    object GestureAction {
+        const val NOTHING = 0
+        const val APP_LIST = 1
+        const val APP_SEARCH = 2
+        const val NOTIFICATION_SHADE = 3
+        const val LAUNCHER_SETTINGS = 4
+        const val LOCK_SCREEN = 5
+        const val LAUNCH_APP = 6
+        const val MISSED_NOTIFICATIONS = 7
+    }
+
+    /** The gestures that can be reassigned. The string is the Prefs key prefix. */
+    object Gesture {
+        const val SWIPE_UP = "SWIPE_UP"
+        const val SWIPE_DOWN = "SWIPE_DOWN"
+        const val DOUBLE_TAP = "DOUBLE_TAP"
+        const val LONG_PRESS = "LONG_PRESS"
+    }
+
+    /** How a notification badge is drawn on the home screen. */
+    object BadgeStyle {
+        const val COUNT = 0
+        const val DOT = 1
+    }
+
+    const val FLAG_SET_GESTURE_APP_SWIPE_UP = 21
+    const val FLAG_SET_GESTURE_APP_SWIPE_DOWN = 22
+    const val FLAG_SET_GESTURE_APP_DOUBLE_TAP = 23
+    const val FLAG_SET_GESTURE_APP_LONG_PRESS = 24
+
+    fun gestureForFlag(flag: Int): String? = when (flag) {
+        FLAG_SET_GESTURE_APP_SWIPE_UP -> Gesture.SWIPE_UP
+        FLAG_SET_GESTURE_APP_SWIPE_DOWN -> Gesture.SWIPE_DOWN
+        FLAG_SET_GESTURE_APP_DOUBLE_TAP -> Gesture.DOUBLE_TAP
+        FLAG_SET_GESTURE_APP_LONG_PRESS -> Gesture.LONG_PRESS
+        else -> null
+    }
+
     val CLOCK_APP_PACKAGES = arrayOf(
         "com.google.android.deskclock", //Google Clock
         "com.sec.android.app.clockpackage", //Samsung Clock

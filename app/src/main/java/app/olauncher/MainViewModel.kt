@@ -95,6 +95,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             Constants.FLAG_SET_HOME_APP_7 -> saveHomeApp(appModel, 7)
             Constants.FLAG_SET_HOME_APP_8 -> saveHomeApp(appModel, 8)
 
+            Constants.FLAG_SET_GESTURE_APP_SWIPE_UP,
+            Constants.FLAG_SET_GESTURE_APP_SWIPE_DOWN,
+            Constants.FLAG_SET_GESTURE_APP_DOUBLE_TAP,
+            Constants.FLAG_SET_GESTURE_APP_LONG_PRESS,
+                -> Constants.gestureForFlag(flag)?.let { saveGestureApp(appModel, it) }
+
             Constants.FLAG_SET_SWIPE_LEFT_APP -> saveSwipeApp(appModel, isLeft = true)
             Constants.FLAG_SET_SWIPE_RIGHT_APP -> saveSwipeApp(appModel, isLeft = false)
             Constants.FLAG_SET_CLOCK_APP -> saveClockApp(appModel)
@@ -278,6 +284,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         refreshHome(false)
+    }
+
+    /**
+     * Binds an app to a gesture. Shortcuts are not accepted: a pinned shortcut needs the
+     * LauncherApps shortcut path to start, which the gesture dispatcher does not use, so
+     * accepting one here would save a binding that silently does nothing.
+     */
+    private fun saveGestureApp(appModel: AppModel, gesture: String) {
+        val app = appModel as? AppModel.App ?: return
+        prefs.setGestureApp(
+            gesture = gesture,
+            name = app.appLabel,
+            appPackage = app.appPackage,
+            className = app.activityClassName.orEmpty(),
+            user = app.user.toString()
+        )
     }
 
     private fun saveSwipeApp(appModel: AppModel, isLeft: Boolean) {

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/actionAppList"
+        android:title="@string/action_app_list" />
+    <item
+        android:id="@+id/actionAppSearch"
+        android:title="@string/action_app_search" />
+    <item
+        android:id="@+id/actionLaunchApp"
+        android:title="@string/action_launch_app" />
+    <item
+        android:id="@+id/actionMissedNotifications"
+        android:title="@string/action_missed_notifications" />
+    <item
+        android:id="@+id/actionNotificationShade"
+        android:title="@string/action_notification_shade" />
+    <item
+        android:id="@+id/actionLockScreen"
+        android:title="@string/action_lock_screen" />
+    <item
+        android:id="@+id/actionLauncherSettings"
+        android:title="@string/action_launcher_settings" />
+    <item
+        android:id="@+id/actionNothing"
+        android:title="@string/action_nothing" />
+</menu>

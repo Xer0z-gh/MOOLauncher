@@ -39,6 +39,8 @@ class Prefs(context: Context) {
     private val BOLD_FONT = "BOLD_FONT"
     private val PRO_MESSAGE_SHOWN = "PRO_MESSAGE_SHOWN"
     private val SHOW_NOTIFICATION_BADGES = "SHOW_NOTIFICATION_BADGES"
+    private val BADGE_STYLE = "BADGE_STYLE"
+    private val BADGE_TAP_DETAILS = "BADGE_TAP_DETAILS"
     private val HIDE_SET_DEFAULT_LAUNCHER = "HIDE_SET_DEFAULT_LAUNCHER"
     private val SCREEN_TIME_LAST_UPDATED = "SCREEN_TIME_LAST_UPDATED"
     private val LAUNCHER_RESTART_TIMESTAMP = "LAUNCHER_RECREATE_TIMESTAMP"
@@ -213,6 +215,16 @@ class Prefs(context: Context) {
     var showNotificationBadges: Boolean
         get() = prefs.getBoolean(SHOW_NOTIFICATION_BADGES, false)
         set(value) = prefs.edit { putBoolean(SHOW_NOTIFICATION_BADGES, value) }
+
+    /** Constants.BadgeStyle - a number, or a plain dot for people who only want the signal. */
+    var badgeStyle: Int
+        get() = prefs.getInt(BADGE_STYLE, Constants.BadgeStyle.COUNT)
+        set(value) = prefs.edit { putInt(BADGE_STYLE, value) }
+
+    /** Whether tapping a badge peeks at what the notification said. */
+    var badgeTapShowsDetails: Boolean
+        get() = prefs.getBoolean(BADGE_TAP_DETAILS, true)
+        set(value) = prefs.edit { putBoolean(BADGE_TAP_DETAILS, value) }
 
     var hideSetDefaultLauncher: Boolean
         get() = prefs.getBoolean(HIDE_SET_DEFAULT_LAUNCHER, false)
@@ -646,6 +658,38 @@ class Prefs(context: Context) {
         if (appPackageSwipeLeft == packageName) appActivityClassNameSwipeLeft = activityClassName
         if (appPackageSwipeRight == packageName) appActivityClassNameRight = activityClassName
     }
+
+    // --- Gestures -------------------------------------------------------------------------
+    // Keyed by prefix rather than written out as four sets of properties, because every gesture
+    // stores the same five values and hand-rolling twenty properties invites a copy-paste bug.
+
+    private fun gestureKey(gesture: String, field: String) = "GESTURE_${gesture}_$field"
+
+    fun getGestureAction(gesture: String, default: Int): Int =
+        prefs.getInt(gestureKey(gesture, "ACTION"), default)
+
+    fun setGestureAction(gesture: String, action: Int) =
+        prefs.edit { putInt(gestureKey(gesture, "ACTION"), action) }
+
+    fun getGestureAppName(gesture: String): String =
+        prefs.getString(gestureKey(gesture, "APP_NAME"), "").toString()
+
+    fun getGestureAppPackage(gesture: String): String =
+        prefs.getString(gestureKey(gesture, "APP_PACKAGE"), "").toString()
+
+    fun getGestureAppClassName(gesture: String): String =
+        prefs.getString(gestureKey(gesture, "APP_CLASS"), "").toString()
+
+    fun getGestureAppUser(gesture: String): String =
+        prefs.getString(gestureKey(gesture, "APP_USER"), "").toString()
+
+    fun setGestureApp(gesture: String, name: String, appPackage: String, className: String, user: String) =
+        prefs.edit {
+            putString(gestureKey(gesture, "APP_NAME"), name)
+            putString(gestureKey(gesture, "APP_PACKAGE"), appPackage)
+            putString(gestureKey(gesture, "APP_CLASS"), className)
+            putString(gestureKey(gesture, "APP_USER"), user)
+        }
 
     fun getAppRenameLabel(appPackage: String): String = prefs.getString(appPackage, "").toString()
 

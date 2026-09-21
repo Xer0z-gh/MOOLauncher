@@ -83,6 +83,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         populateKeyboardText()
         populateScreenTimeOnOff()
         populateNotificationBadges()
+        populateBadgeOptions()
+        populateGestures()
         populateLockSettings()
         // Home button for recents feature disabled
         // populateHomeButtonRecents()
@@ -123,6 +125,14 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.textSizeValue -> showTextSizeDialog()
             R.id.boldFont -> toggleBoldFont()
             R.id.notificationBadges -> toggleNotificationBadges()
+            R.id.badgeStyle -> showBadgeStyleMenu(view)
+            R.id.badgeTapDetails -> {
+                prefs.badgeTapShowsDetails = !prefs.badgeTapShowsDetails
+                populateBadgeOptions()
+            }
+
+            R.id.gestureSwipeUp, R.id.gestureSwipeDown,
+            R.id.gestureDoubleTap, R.id.gestureLongPress -> showGestureMenu(view)
 
             R.id.swipeLeftApp -> showAppListIfEnabled(Constants.FLAG_SET_SWIPE_LEFT_APP)
             R.id.swipeRightApp -> showAppListIfEnabled(Constants.FLAG_SET_SWIPE_RIGHT_APP)
@@ -165,6 +175,13 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             // Long press jumps straight to the system screen, mirroring toggleLock above. This is
             // the way back in when access was revoked outside the app.
             R.id.notificationBadges -> openNotificationAccessSettings()
+
+            // Long press re-picks the app without having to choose "Launch app" again.
+            R.id.gestureSwipeUp, R.id.gestureSwipeDown,
+            R.id.gestureDoubleTap, R.id.gestureLongPress -> gestureRowFor(view.id)?.let { row ->
+                prefs.setGestureAction(row.gesture, Constants.GestureAction.LAUNCH_APP)
+                showAppListIfEnabled(row.flag)
+            }
         }
         return true
     }
@@ -177,6 +194,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
     override fun onResume() {
         super.onResume()
         populateNotificationBadges()
+        populateBadgeOptions()
+        populateGestures()
         populateLockSettings()
         populateScreenTimeOnOff()
     }
@@ -195,6 +214,16 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.screenTimeOnOff.setOnClickListener(this)
         binding.notificationBadges.setOnClickListener(this)
         binding.notificationBadges.setOnLongClickListener(this)
+        binding.badgeStyle.setOnClickListener(this)
+        binding.badgeTapDetails.setOnClickListener(this)
+        binding.gestureSwipeUp.setOnClickListener(this)
+        binding.gestureSwipeDown.setOnClickListener(this)
+        binding.gestureDoubleTap.setOnClickListener(this)
+        binding.gestureLongPress.setOnClickListener(this)
+        binding.gestureSwipeUp.setOnLongClickListener(this)
+        binding.gestureSwipeDown.setOnLongClickListener(this)
+        binding.gestureDoubleTap.setOnLongClickListener(this)
+        binding.gestureLongPress.setOnLongClickListener(this)
         binding.dailyWallpaperUrl.setOnClickListener(this)
         binding.dailyWallpaper.setOnClickListener(this)
         binding.alignment.setOnClickListener(this)
@@ -404,6 +433,100 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
      * The row reads On only when the user's own opt-in AND the system grant are both in place,
      * because either one going away silently stops the badges working.
      */
+    // --- Gestures ---------------------------------------------------------------------------
+
+    private data class GestureRow(val gesture: String, val default: Int, val flag: Int)
+
+    private fun gestureRowFor(viewId: Int): GestureRow? = when (viewId) {
+        R.id.gestureSwipeUp -> GestureRow(
+            Constants.Gesture.SWIPE_UP, Constants.GestureAction.APP_LIST,
+            Constants.FLAG_SET_GESTURE_APP_SWIPE_UP
+        )
+
+        R.id.gestureSwipeDown -> GestureRow(
+            Constants.Gesture.SWIPE_DOWN, Constants.GestureAction.NOTIFICATION_SHADE,
+            Constants.FLAG_SET_GESTURE_APP_SWIPE_DOWN
+        )
+
+        R.id.gestureDoubleTap -> GestureRow(
+            Constants.Gesture.DOUBLE_TAP, Constants.GestureAction.LOCK_SCREEN,
+            Constants.FLAG_SET_GESTURE_APP_DOUBLE_TAP
+        )
+
+        R.id.gestureLongPress -> GestureRow(
+            Constants.Gesture.LONG_PRESS, Constants.GestureAction.LAUNCHER_SETTINGS,
+            Constants.FLAG_SET_GESTURE_APP_LONG_PRESS
+        )
+
+        else -> null
+    }
+
+    private fun actionLabel(gesture: String, default: Int): String =
+        when (prefs.getGestureAction(gesture, default)) {
+            Constants.GestureAction.NOTHING -> getString(R.string.action_nothing)
+            Constants.GestureAction.APP_LIST -> getString(R.string.action_app_list)
+            Constants.GestureAction.APP_SEARCH -> getString(R.string.action_app_search)
+            Constants.GestureAction.NOTIFICATION_SHADE -> getString(R.string.action_notification_shade)
+            Constants.GestureAction.LAUNCHER_SETTINGS -> getString(R.string.action_launcher_settings)
+            Constants.GestureAction.LOCK_SCREEN -> getString(R.string.action_lock_screen)
+            Constants.GestureAction.MISSED_NOTIFICATIONS -> getString(R.string.action_missed_notifications)
+            Constants.GestureAction.LAUNCH_APP ->
+                prefs.getGestureAppName(gesture).ifBlank { getString(R.string.action_launch_app) }
+
+            else -> getString(R.string.action_nothing)
+        }
+
+    private fun populateGestures() {
+        binding.gestureSwipeUp.text =
+            actionLabel(Constants.Gesture.SWIPE_UP, Constants.GestureAction.APP_LIST)
+        binding.gestureSwipeDown.text =
+            actionLabel(Constants.Gesture.SWIPE_DOWN, Constants.GestureAction.NOTIFICATION_SHADE)
+        binding.gestureDoubleTap.text =
+            actionLabel(Constants.Gesture.DOUBLE_TAP, Constants.GestureAction.LOCK_SCREEN)
+        binding.gestureLongPress.text =
+            actionLabel(Constants.Gesture.LONG_PRESS, Constants.GestureAction.LAUNCHER_SETTINGS)
+    }
+
+    private fun showGestureMenu(anchor: View) {
+        val row = gestureRowFor(anchor.id) ?: return
+        anchor.showPopupMenu(R.menu.gesture_action) { item ->
+            val action = when (item.itemId) {
+                R.id.actionAppList -> Constants.GestureAction.APP_LIST
+                R.id.actionAppSearch -> Constants.GestureAction.APP_SEARCH
+                R.id.actionNotificationShade -> Constants.GestureAction.NOTIFICATION_SHADE
+                R.id.actionLauncherSettings -> Constants.GestureAction.LAUNCHER_SETTINGS
+                R.id.actionLockScreen -> Constants.GestureAction.LOCK_SCREEN
+                R.id.actionMissedNotifications -> Constants.GestureAction.MISSED_NOTIFICATIONS
+                R.id.actionLaunchApp -> Constants.GestureAction.LAUNCH_APP
+                else -> Constants.GestureAction.NOTHING
+            }
+            prefs.setGestureAction(row.gesture, action)
+            // Picking "Launch app" is only half a choice: send them straight to the app picker
+            // rather than leaving a gesture bound to nothing in particular.
+            if (action == Constants.GestureAction.LAUNCH_APP) showAppListIfEnabled(row.flag)
+            else populateGestures()
+        }
+    }
+
+    private fun showBadgeStyleMenu(anchor: View) {
+        anchor.showPopupMenu(R.menu.badge_style) { item ->
+            prefs.badgeStyle = when (item.itemId) {
+                R.id.badgeStyleDot -> Constants.BadgeStyle.DOT
+                else -> Constants.BadgeStyle.COUNT
+            }
+            populateBadgeOptions()
+        }
+    }
+
+    private fun populateBadgeOptions() {
+        binding.badgeStyle.text = getString(
+            if (prefs.badgeStyle == Constants.BadgeStyle.DOT) R.string.badge_style_dot
+            else R.string.badge_style_count
+        )
+        binding.badgeTapDetails.text =
+            getString(if (prefs.badgeTapShowsDetails) R.string.on else R.string.off)
+    }
+
     private fun populateNotificationBadges() {
         binding.notificationBadges.text = getString(
             if (prefs.showNotificationBadges && requireContext().notificationAccessGranted())
