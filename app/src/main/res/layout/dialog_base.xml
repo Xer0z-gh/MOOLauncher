@@ -33,8 +33,11 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/dismiss"
             android:focusable="true"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="6dp"
+            android:minHeight="48dp"
+            android:minWidth="48dp"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="14dp"
+            android:scaleType="center"
             android:src="@drawable/ic_close" />
     </FrameLayout>
 
