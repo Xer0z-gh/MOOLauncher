@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
+import android.widget.LinearLayout
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -228,10 +229,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         // so a swipe that happens to start on the badge behaves identically to one on the label.
         val names = homeAppNameViews()
         homeAppBadgeViews().forEachIndexed { index, badge ->
-            val name = names[index]
-            badge.setOnTouchListener(getViewSwipeTouchListener(context, name))
-            badge.setOnClickListener { showBadgeDetails(index + 1) }
-            badge.setOnLongClickListener { name.performLongClick() }
+            // The badge needs its OWN listener, not the name's. ViewSwipeTouchListener dispatches
+            // onClick with the view it was constructed against, so reusing the name's listener
+            // made tapping a badge launch the app instead of showing what was missed.
+            badge.setOnTouchListener(getBadgeSwipeTouchListener(context, badge, names[index], index + 1))
         }
         binding.homeApp1.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp1))
         binding.homeApp2.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp2))
@@ -279,6 +280,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         val verticalGravity = if (prefs.homeBottomAlignment) Gravity.BOTTOM else Gravity.CENTER_VERTICAL
         binding.homeAppsLayout.gravity = horizontalGravity or verticalGravity
         binding.dateTimeLayout.gravity = horizontalGravity
+        // Each row is a full-width horizontal container, so the row's gravity is what actually
+        // positions the name and its badge. They move as one group, keeping the badge beside the
+        // name under left, centre and right alignment.
+        homeAppRows().forEach { it.gravity = horizontalGravity or Gravity.CENTER_VERTICAL }
         binding.homeApp1.gravity = horizontalGravity
         binding.homeApp2.gravity = horizontalGravity
         binding.homeApp3.gravity = horizontalGravity
@@ -457,6 +462,11 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     private fun homeAppNameViews(): List<TextView> = listOf(
         binding.homeApp1, binding.homeApp2, binding.homeApp3, binding.homeApp4,
         binding.homeApp5, binding.homeApp6, binding.homeApp7, binding.homeApp8
+    )
+
+    private fun homeAppRows(): List<LinearLayout> = listOf(
+        binding.homeAppRow1, binding.homeAppRow2, binding.homeAppRow3, binding.homeAppRow4,
+        binding.homeAppRow5, binding.homeAppRow6, binding.homeAppRow7, binding.homeAppRow8
     )
 
     private fun homeAppBadgeViews(): List<TextView> = listOf(
@@ -810,6 +820,48 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             override fun onClick() {
                 super.onClick()
                 viewModel.checkForMessages.call()
+            }
+        }
+    }
+
+    /**
+     * Same gestures as an app row, except a tap peeks at what was missed instead of launching.
+     * Long press still opens the app picker for that slot, so the badge never becomes a dead zone
+     * over the row's own behaviour.
+     */
+    private fun getBadgeSwipeTouchListener(
+        context: Context,
+        badge: View,
+        nameView: View,
+        location: Int,
+    ): View.OnTouchListener {
+        return object : ViewSwipeTouchListener(context, badge) {
+            override fun onSwipeLeft() {
+                super.onSwipeLeft()
+                openSwipeLeftApp()
+            }
+
+            override fun onSwipeRight() {
+                super.onSwipeRight()
+                openSwipeRightApp()
+            }
+
+            override fun onSwipeUp() {
+                super.onSwipeUp()
+                showAppList(Constants.FLAG_LAUNCH_APP)
+            }
+
+            override fun onSwipeDown() {
+                super.onSwipeDown()
+                expandNotificationDrawer(context)
+            }
+
+            override fun onLongClick(view: View) {
+                textOnLongClick(nameView)
+            }
+
+            override fun onClick(view: View) {
+                showBadgeDetails(location)
             }
         }
     }
