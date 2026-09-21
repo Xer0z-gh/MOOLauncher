@@ -77,6 +77,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
     private val binding get() = _binding!!
     private var dialog: OlDialog? = null
     private var rowLabeller: ViewTreeObserver.OnGlobalLayoutListener? = null
+    private var rowLabellerObserver: ViewTreeObserver? = null
 
     private companion object {
         /** App names drawn inside each theme preview tile. */
@@ -159,7 +160,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         // version of this crashed the launcher on the way out of Settings by dereferencing a
         // binding that was already null.
         rowLabeller = ViewTreeObserver.OnGlobalLayoutListener { labelSettingsRows() }
-        binding.scrollLayout.viewTreeObserver.addOnGlobalLayoutListener(rowLabeller)
+        rowLabellerObserver = binding.scrollLayout.viewTreeObserver
+        rowLabellerObserver?.addOnGlobalLayoutListener(rowLabeller)
     }
 
     /**
@@ -182,7 +184,9 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
                 .map { child.getChildAt(it) }
                 .filterIsInstance<TextView>()
             val value = texts.firstOrNull { it.isClickable }
-            val label = texts.firstOrNull { !it.isClickable && it.text.isNotBlank() }
+            // Not `!isClickable`: on rows where BOTH halves are clickable - Daily wallpaper
+            // is one - that found no label and the control announced a bare "On".
+            val label = texts.firstOrNull { it !== value && it.text.isNotBlank() }
             if (value != null && label != null) {
                 // setContentDescription does not request layout, so this is safe to run from a
                 // layout listener. Anything that DOES request layout is not - see the focus ring.
@@ -190,15 +194,19 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
                 if (value.contentDescription != name) value.contentDescription = name
                 label.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             }
-            value?.applyFocusOutline(ring)
+            // Every clickable text in the row, not just the first: a row with two controls
+            // left the second one with no visible focus at all.
+            texts.filter { it.isClickable }.forEach { it.applyFocusOutline(ring) }
             labelSettingsRows(child, ring)
         }
     }
 
-    /** The colour a focus ring has to be visible against, which a custom theme owns. */
-    private fun focusRingColor(): Int =
-        if (ColorTheme.isCustom(prefs.colorThemeId)) ColorTheme.byId(prefs.colorThemeId).text
-        else requireContext().getColorFromAttr(R.attr.primaryColor)
+    /**
+     * Settings is NOT painted with the colour theme - only the home screen and the drawer
+     * are. Drawing the ring in the theme's text colour here put, say, Cream's near-black on
+     * the app theme's near-black background, which is no indicator at all.
+     */
+    private fun focusRingColor(): Int = requireContext().getColorFromAttr(R.attr.primaryColor)
 
     override fun onClick(view: View) {
         when (view.id) {
@@ -276,10 +284,15 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             // the way back in when access was revoked outside the app.
             R.id.notificationBadges -> openNotificationAccessSettings()
 
-            // Long press re-picks the app without having to choose "Launch app" again.
-            R.id.gestureSwipeUp, R.id.gestureSwipeDown,
-            R.id.gestureDoubleTap, R.id.gestureLongPress -> gestureRowFor(view.id)?.let { row ->
-                prefs.setGestureAction(row.gesture, Constants.GestureAction.LAUNCH_APP)
+            // Long press re-picks the app without having to choose "Launch app" again. All
+            // six rows, not four - swipe left and right were long-clickable but fell through
+            // this branch and did nothing.
+            R.id.gestureSwipeUp, R.id.gestureSwipeDown, R.id.gestureDoubleTap,
+            R.id.gestureLongPress, R.id.gestureSwipeLeft,
+            R.id.gestureSwipeRight -> gestureRowFor(view.id)?.let { row ->
+                // The action is NOT set here. Setting it before the picker opened meant
+                // backing out of the picker still changed the gesture; MainViewModel sets it
+                // when an app is actually chosen.
                 showAppListIfEnabled(row.flag)
             }
         }
@@ -371,11 +384,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         }
         viewModel.homeAppAlignment.observe(viewLifecycleOwner) {
             populateAlignment()
-        }
-        viewModel.updateSwipeApps.observe(viewLifecycleOwner) {
-            populateGestures()
-        }
-    }
+        }    }
 
     // Popup menus
 
@@ -604,17 +613,21 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             // Locking the screen needs the accessibility grant. This is the only control for it
             // now, so it asks here rather than leaving a gesture that reads "Lock screen" and
             // quietly does nothing - which is exactly what the old separate toggle allowed.
-            if (action == Constants.GestureAction.LOCK_SCREEN) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
-                    !isAccessServiceEnabled(requireContext())
-                ) {
-                    showAccessibilityDialog()
-                    return@showPopupMenu
-                }
-                prefs.lockModeOn = true
-            }
+            if (action == Constants.GestureAction.LOCK_SCREEN) prefs.lockModeOn = true
 
+            // Save FIRST. Asking for the accessibility grant used to return early, which
+            // threw the choice away: you picked Lock screen, granted access, came back, and
+            // the row still read whatever it said before.
             prefs.setGestureAction(row.gesture, action)
+
+            if (action == Constants.GestureAction.LOCK_SCREEN &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
+                !isAccessServiceEnabled(requireContext())
+            ) {
+                populateGestures()
+                showAccessibilityDialog()
+                return@showPopupMenu
+            }
             // Picking "Launch app" is only half a choice: send them straight to the app picker
             // rather than leaving a gesture bound to nothing in particular.
             if (action == Constants.GestureAction.LAUNCH_APP) showAppListIfEnabled(row.flag)
@@ -1306,7 +1319,13 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         dialog?.dismiss()
         dialog = null
         applyTextSizeScale()
-        rowLabeller?.let { binding.scrollLayout.viewTreeObserver.removeOnGlobalLayoutListener(it) }
+        // Remove from the SAME observer it was added to. binding.scrollLayout.viewTreeObserver
+        // returns a different, dead instance once the view is detached, which makes the
+        // removal a silent no-op and leaks the fragment.
+        rowLabeller?.let { l ->
+            rowLabellerObserver?.takeIf { it.isAlive }?.removeOnGlobalLayoutListener(l)
+        }
+        rowLabellerObserver = null
         rowLabeller = null
         super.onDestroyView()
         _binding = null

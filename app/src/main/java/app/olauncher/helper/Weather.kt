@@ -1,5 +1,6 @@
 package app.olauncher.helper
 
+import java.util.Locale
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -50,9 +51,13 @@ object Weather {
                 .maxByOrNull { it.time }
         }.getOrNull() ?: return null
 
+        // Locale.US, not the default: a comma-decimal locale formats 48.123 as "48,123"
+        // and the query string is then malformed for every user in one.
+        val lat = String.format(Locale.US, "%.3f", location.latitude)
+        val lon = String.format(Locale.US, "%.3f", location.longitude)
         val url = "https://api.open-meteo.com/v1/forecast" +
-            "?latitude=${"%.3f".format(location.latitude)}" +
-            "&longitude=${"%.3f".format(location.longitude)}" +
+            "?latitude=$lat" +
+            "&longitude=$lon" +
             "&current=temperature_2m,weather_code"
 
         return runCatching {

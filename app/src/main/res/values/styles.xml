@@ -112,6 +112,9 @@
     </style>
 
     <style name="TextDefault" parent="@android:style/TextAppearance.Large">
+        <!-- The picked font belongs on the base style, or the clock, date, screen
+             time line and every settings row silently keep the default. -->
+        <item name="android:fontFamily">?attr/mainFontFamily</item>
         <item name="android:textColor">@drawable/text_colors_default</item>
         <item name="android:textColorHint">?attr/primaryColorTrans80</item>
         <item name="android:shadowColor">?attr/primaryTextShadowColor</item>

@@ -21,6 +21,9 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.bundleOf
+import androidx.core.graphics.ColorUtils
+import androidx.core.view.WindowInsetsControllerCompat
+import app.olauncher.helper.isDarkThemeOn
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
@@ -95,6 +98,9 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      */
     private var basePaddingPx = 0
 
+    /** Guards against two resumes firing the same weather request; see refreshWeather. */
+    private var weatherFetchInFlight = false
+
     private var latestScreenTime: String = ""
     private var latestUnlockCount: Int = -1
 
@@ -138,13 +144,21 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         if (!Weather.hasLocationPermission(context)) return
         if (!prefs.weatherUpdatedAt.hasBeenMinutes(WEATHER_REFRESH_MINUTES)) return
 
-        // Claimed before going async, so two quick resumes cannot both fire a request.
-        prefs.weatherUpdatedAt = System.currentTimeMillis()
+        // In-flight flag, not the stored timestamp: stamping before the fetch meant one
+        // failed request (no signal, airplane mode) blocked the next hour of retries.
+        if (weatherFetchInFlight) return
+        weatherFetchInFlight = true
         val fahrenheit = prefs.weatherFahrenheit
         viewLifecycleOwner.lifecycleScope.launch {
-            val reading = withContext(Dispatchers.IO) { Weather.fetch(context) } ?: return@launch
-            prefs.weatherCached = Weather.format(reading, fahrenheit)
-            renderScreenTimeLine()
+            try {
+                val reading = withContext(Dispatchers.IO) { Weather.fetch(context) }
+                    ?: return@launch
+                prefs.weatherUpdatedAt = System.currentTimeMillis()
+                prefs.weatherCached = Weather.format(reading, fahrenheit)
+                renderScreenTimeLine()
+            } finally {
+                weatherFetchInFlight = false
+            }
         }
     }
 
@@ -508,6 +522,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         applyFocusOutlines()
         if (!ColorTheme.isCustom(prefs.colorThemeId)) {
             binding.mainLayout.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+            applySystemBarIcons(requireContext().isDarkThemeOn().not())
             return
         }
         val theme = ColorTheme.byId(prefs.colorThemeId)
@@ -517,6 +532,21 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         // was behind it is unreadable, which is exactly what Cream looked like when it happened.
         binding.mainLayout.setBackgroundColor(theme.background)
         binding.mainLayout.tintTextTree(theme.text, theme.text.withAlpha(0xB3))
+        applySystemBarIcons(ColorUtils.calculateLuminance(theme.background) > 0.5)
+    }
+
+    /**
+     * The status and navigation bar icons are drawn light or dark by the APP theme, but the
+     * background behind them now comes from the COLOUR theme. Pick Cream while the app theme
+     * is dark and you get white icons on a cream bar - invisible. Derive them from what is
+     * actually painted instead.
+     */
+    private fun applySystemBarIcons(lightBackground: Boolean) {
+        val window = activity?.window ?: return
+        WindowInsetsControllerCompat(window, window.decorView).apply {
+            isAppearanceLightStatusBars = lightBackground
+            isAppearanceLightNavigationBars = lightBackground
+        }
     }
 
     /**
@@ -689,10 +719,12 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                     return true
                 }
                 textView.text = ""
+                textView.contentDescription = getString(R.string.empty_home_slot)
                 return false
             } catch (e: Exception) {
                 e.printStackTrace()
                 textView.text = ""
+                textView.contentDescription = getString(R.string.empty_home_slot)
                 return false
             }
         }
@@ -723,19 +755,27 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      */
     private fun positionBadge(name: TextView, badge: TextView) {
         if (!badge.isVisible) return
+        // A badge shown for the first time has width 0 until it is laid out; placing it from
+        // that put it in the wrong spot until something else happened to trigger a pass.
+        if (badge.width == 0) {
+            badge.post { positionBadge(name, badge) }
+            return
+        }
         val gap = BADGE_GAP_DP.dpToPx()
         val row = badge.parent as? View
         val rtl = badge.layoutDirection == View.LAYOUT_DIRECTION_RTL
         val trailing = if (rtl) (name.left - badge.width - gap) else (name.right + gap)
+        val leading = if (rtl) (name.right + gap) else (name.left - badge.width - gap)
         // A right-aligned home screen ends the name flush with the row, so the trailing
         // position lands outside it and the row clips the badge away completely - the count
         // disappears for everyone, with no error. Fall back to the leading side when it
         // does not fit, which is the only place left that is still inside the row.
         val fits = row == null ||
             (trailing >= 0 && trailing + badge.width <= row.width)
-        badge.translationX = if (fits) trailing.toFloat()
-        else if (rtl) (name.right + gap).toFloat()
-        else (name.left - badge.width - gap).toFloat()
+        // translationX is a DELTA from where the view was laid out, not an absolute x. The
+        // badge's layout_gravity is `start`, which is the RIGHT edge in RTL, so treating the
+        // target as absolute pushed it straight off an RTL row.
+        badge.translationX = ((if (fits) trailing else leading) - badge.left).toFloat()
     }
 
     /**
@@ -872,6 +912,12 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             showLongPressToast()
             return
         }
+        // Opening the app is the reset, and this is the one funnel every launch path goes
+        // through - home tap, gesture, clock, calendar, screen time. Clearing at the
+        // homeAppClicked caller instead meant launching the same app any other way left the
+        // badge showing notifications you had just read.
+        if (packageName.isNotEmpty())
+            NotificationCounts.clearApp(NotificationCounts.key(packageName, userString))
         if (isShortcut && !shortcutId.isNullOrEmpty()) {
             launchShortcut(
                 packageName = packageName,
@@ -938,8 +984,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     private fun homeAppClicked(location: Int) {
-        // Opening the app is the reset. This is the only place a badge count goes back to zero.
-        NotificationCounts.clearApp(badgeKeyFor(location))
         launchAppOrShortcut(
             appName = prefs.getAppName(location),
             packageName = prefs.getAppPackage(location),

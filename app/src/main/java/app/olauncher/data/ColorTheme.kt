@@ -6,9 +6,10 @@ import app.olauncher.R
 /**
  * A home screen colour scheme: a flat background and the text colour that sits on it.
  *
- * The launcher draws over the wallpaper, so "background" means a plain wallpaper of that colour.
- * Only the system wallpaper is touched, never the lock screen - changing someone's lock screen
- * because they picked a launcher theme is not a thing a launcher should do.
+ * The launcher paints this background itself and never writes the wallpaper. It used to, and that
+ * was wrong twice over - a launcher theme is not a change to the device, and the previous
+ * wallpaper cannot be read back, so applying a theme destroyed something the user could not get
+ * returned. The system bar icons are derived from this background's luminance for the same reason.
  *
  * [id] is written to preferences, so the numbers are saved data: add new themes at the end and
  * never renumber an existing one.

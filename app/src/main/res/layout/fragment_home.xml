@@ -36,7 +36,6 @@
             android:gravity="center"
             android:minHeight="48dp"
             android:minWidth="48dp"
-            android:fontFamily="sans-serif-light"
             android:format12Hour="h:mm"
             android:textSize="@dimen/time_size"
             tools:text="02:34" />

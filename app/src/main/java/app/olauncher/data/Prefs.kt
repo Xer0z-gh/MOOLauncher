@@ -765,8 +765,16 @@ class Prefs(context: Context) {
         if (clockAppPackage == packageName) clockAppClassName = activityClassName
         if (calendarAppPackage == packageName) calendarAppClassName = activityClassName
         if (screenTimeAppPackage == packageName) screenTimeAppClassName = activityClassName
-        if (appPackageSwipeLeft == packageName) appActivityClassNameSwipeLeft = activityClassName
-        if (appPackageSwipeRight == packageName) appActivityClassNameRight = activityClassName
+        // The live gesture keys, not the retired swipe ones: renaming an app used to refresh
+        // storage nothing reads any more and leave the real binding stale.
+        for (gesture in listOf(
+            Constants.Gesture.SWIPE_UP, Constants.Gesture.SWIPE_DOWN,
+            Constants.Gesture.DOUBLE_TAP, Constants.Gesture.LONG_PRESS,
+            Constants.Gesture.SWIPE_LEFT, Constants.Gesture.SWIPE_RIGHT,
+        )) {
+            if (getGestureAppPackage(gesture) == packageName)
+                prefs.edit { putString(gestureKey(gesture, "APP_CLASS"), activityClassName) }
+        }
     }
 
     // --- Gestures -------------------------------------------------------------------------

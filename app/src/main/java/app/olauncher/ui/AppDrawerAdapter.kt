@@ -21,6 +21,8 @@ import app.olauncher.databinding.AdapterPrivateSpaceHeaderBinding
 import app.olauncher.helper.IconCache
 import app.olauncher.helper.dpToPx
 import app.olauncher.helper.hideKeyboard
+import app.olauncher.helper.applyFocusOutline
+import app.olauncher.helper.getColorFromAttr
 import app.olauncher.helper.tintTextTree
 import app.olauncher.helper.withAlpha
 import app.olauncher.helper.isSystemApp
@@ -135,6 +137,15 @@ class AppDrawerAdapter(
         try {
             if (appFilteredList.isEmpty() || position == RecyclerView.NO_POSITION) return
             val appModel = appFilteredList[holder.bindingAdapterPosition]
+            // Outside the `is ViewHolder` branch so the private-space header is tinted too;
+            // it was left in the app theme's colour on a painted drawer background.
+            if (themeTextColor != 0) holder.itemView.tintTextTree(
+                themeTextColor, themeTextColor.withAlpha(0xB3)
+            )
+            holder.itemView.applyFocusOutline(
+                if (themeTextColor != 0) themeTextColor
+                else holder.itemView.context.getColorFromAttr(R.attr.primaryColor)
+            )
             when (holder) {
                 is PrivateSpaceHeaderViewHolder -> {
                     holder.bind(

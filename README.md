@@ -24,9 +24,10 @@ mute any app individually.
 a colour square. The launcher paints its own background, so a theme never
 depends on — or overwrites — your wallpaper.
 
-**Assignable gestures.** Swipe up, swipe down, double tap and long press, each
-taking any of: nothing, app list, app search, notification shade, launcher
-settings, lock screen, launch a chosen app, or the missed-notifications view.
+**Assignable gestures.** Swipe up, swipe down, swipe left, swipe right, double
+tap and long press — all six take any of: nothing, app list, app search,
+notification shade, launcher settings, lock screen, launch a chosen app, or the
+missed-notifications view.
 
 **Icons, where you want them.** Off, home only, app list only, or both — because
 wanting icons while browsing every installed app but not on a spare home screen

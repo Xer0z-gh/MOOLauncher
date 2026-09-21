@@ -48,7 +48,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val firstOpen = MutableLiveData<Boolean>()
     val refreshHome = MutableLiveData<Boolean>()
     val toggleDateTime = MutableLiveData<Unit>()
-    val updateSwipeApps = MutableLiveData<Any>()
     val appList = MutableLiveData<List<AppModel>?>()
     val hiddenApps = MutableLiveData<List<AppModel>?>()
     val isOlauncherDefault = MutableLiveData<Boolean>()
@@ -296,6 +295,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * accepting one here would save a binding that silently does nothing.
      */
     private fun saveGestureApp(appModel: AppModel, gesture: String) {
+        // Choosing an app IS choosing Launch app. Set it here, after the pick, so abandoning
+        // the picker leaves the gesture as it was.
+        if (appModel !is AppModel.PrivateSpaceHeader)
+            prefs.setGestureAction(gesture, Constants.GestureAction.LAUNCH_APP)
         when (appModel) {
             is AppModel.PrivateSpaceHeader -> return
             is AppModel.App -> prefs.setGestureApp(
@@ -353,10 +356,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun toggleDateTime() {
         toggleDateTime.postValue(Unit)
-    }
-
-    private fun updateSwipeApps() {
-        updateSwipeApps.postValue(Unit)
     }
 
     private fun launchApp(packageName: String, activityClassName: String?, userHandle: UserHandle) {

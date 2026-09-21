@@ -70,6 +70,9 @@
     </style>
 
     <style name="TextDefault" parent="@android:style/TextAppearance.Large">
+        <!-- The picked font belongs on the base style, or the clock, date, screen
+             time line and every settings row silently keep the default. -->
+        <item name="android:fontFamily">?attr/mainFontFamily</item>
         <item name="android:textColor">@drawable/text_colors_default</item>
         <item name="android:textColorHint">?attr/primaryColorTrans80</item>
         <item name="android:shadowColor">?attr/primaryTextShadowColor</item>
@@ -89,10 +92,6 @@
 
     <style name="TextSmall" parent="TextDefault">
         <item name="android:textSize">@dimen/text_small</item>
-    </style>
-
-    <style name="TextSmallBold" parent="TextSmall">
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextSmallLight" parent="TextSmall">
