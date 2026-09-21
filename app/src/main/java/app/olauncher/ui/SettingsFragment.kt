@@ -13,6 +13,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
@@ -173,8 +174,13 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
      * idea what it toggles, and Voice Access offered a dozen identical "On" targets. Two of
      * them, App theme "Dark" and Font "Light", were impossible to tell apart by ear.
      */
-    private fun labelSettingsRows(root: ViewGroup? = null, ring: Int = focusRingColor()) {
+    private fun labelSettingsRows(root: ViewGroup? = null, ringColor: Int? = null) {
+        // The guard has to come before ANY fragment access. A default argument of
+        // `ring: Int = focusRingColor()` was evaluated BEFORE this body ran, so requireContext()
+        // threw the instant the layout listener fired while the fragment was detaching - which is
+        // what opening a settings section does, and it crashed the launcher every time.
         if (_binding == null || !isAdded) return
+        val ring = ringColor ?: focusRingColor()
         @Suppress("NAME_SHADOWING") val root = root ?: binding.scrollLayout
         for (i in 0 until root.childCount) {
             val child = root.getChildAt(i) as? ViewGroup ?: continue
@@ -207,7 +213,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
      * are. Drawing the ring in the theme's text colour here put, say, Cream's near-black on
      * the app theme's near-black background, which is no indicator at all.
      */
-    private fun focusRingColor(): Int = requireContext().getColorFromAttr(R.attr.primaryColor)
+    private fun focusRingColor(): Int =
+        context?.getColorFromAttr(R.attr.primaryColor) ?: Color.TRANSPARENT
 
     override fun onClick(view: View) {
         when (view.id) {
