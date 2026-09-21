@@ -163,7 +163,14 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         // Kept and removed by hand: a ViewTreeObserver outlives onDestroyView, and the first
         // version of this crashed the launcher on the way out of Settings by dereferencing a
         // binding that was already null.
-        rowLabeller = ViewTreeObserver.OnGlobalLayoutListener { labelSettingsRows() }
+        // Guarded on purpose. This listener has caused four defects - a null binding, a
+        // relayout loop, a crash from a default argument, and it runs on every layout pass
+        // of a screen inside the app that IS the home screen. What it does is decoration:
+        // an accessible name and a focus ring. Decoration must never take the launcher down.
+        // Functional paths are deliberately NOT wrapped like this, so real bugs still show.
+        rowLabeller = ViewTreeObserver.OnGlobalLayoutListener {
+            runCatching { labelSettingsRows() }.onFailure { it.printStackTrace() }
+        }
         binding.scrollLayout.applyTextWeight(Constants.TextWeight.value(prefs.textWeight))
         rowLabellerObserver = binding.scrollLayout.viewTreeObserver
         rowLabellerObserver?.addOnGlobalLayoutListener(rowLabeller)

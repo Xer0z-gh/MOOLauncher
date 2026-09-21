@@ -204,24 +204,13 @@ fun Context.appUsagePermissionGranted(): Boolean {
  * instant it is picked, so the home screen and app drawer tint their own text instead. It is a
  * walk over a few dozen views on a screen that is not scrolling, which costs nothing measurable.
  */
-fun View.tintTextTree(@ColorInt color: Int, @ColorInt hintColor: Int) {
-    when (this) {
-        is TextView -> {
-            // A flat int REPLACES the ColorStateList from text_colors_default.xml, which is
-            // where the pressed-state dim lives - so every custom theme silently lost press
-            // feedback on home apps and drawer rows. Rebuild the states instead.
-            setTextColor(
-                ColorStateList(
-                    arrayOf(intArrayOf(android.R.attr.state_pressed), intArrayOf()),
-                    intArrayOf(color.withAlpha(0x80), color)
-                )
-            )
-            setHintTextColor(hintColor)
-        }
-
-        is ViewGroup -> for (i in 0 until childCount) getChildAt(i).tintTextTree(color, hintColor)
-    }
-}
+/**
+ * Paints text and hint colour. A flat int REPLACES the ColorStateList from
+ * text_colors_default.xml, which is where the pressed-state dim lives - so a custom theme
+ * used to silently lose press feedback on home apps and drawer rows. The states are rebuilt.
+ */
+fun View.tintTextTree(@ColorInt color: Int, @ColorInt hintColor: Int) =
+    styleTextTree(color, hintColor, null)
 
 /**
  * A visible focus ring for d-pad, keyboard and switch access.
@@ -248,17 +237,40 @@ fun View.tintTextTree(@ColorInt color: Int, @ColorInt hintColor: Int) {
  * with an explicit weight is the API that has an effect, and Android caches the results, so
  * re-applying on a repopulate does not allocate a typeface per view per pass.
  */
-fun View.applyTextWeight(weight: Int) {
+fun View.applyTextWeight(weight: Int) = styleTextTree(null, null, weight)
+
+/**
+ * One walk that applies colour and weight together.
+ *
+ * The drawer used to walk each row's tree three times per bind - the tint twice and the
+ * weight once - while also resolving an icon. Over twelve flings that measured 14.09% janky
+ * frames with a 97 ms p99. Each argument is optional so callers that only want one of them
+ * still pay for a single traversal.
+ */
+fun View.styleTextTree(@ColorInt color: Int?, @ColorInt hintColor: Int?, weight: Int?) {
     when (this) {
         is TextView -> {
-            val base = typeface
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                typeface = Typeface.create(base, weight, base?.isItalic == true)
-            else if (weight >= 600)
-                setTypeface(base, Typeface.BOLD)
+            if (color != null) setTextColor(
+                ColorStateList(
+                    arrayOf(intArrayOf(android.R.attr.state_pressed), intArrayOf()),
+                    intArrayOf(color.withAlpha(0x80), color)
+                )
+            )
+            if (hintColor != null) setHintTextColor(hintColor)
+            if (weight != null) {
+                val base = typeface
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    // Skip the work when it is already right: a recycled row usually is.
+                    if (base == null || base.weight != weight)
+                        typeface = Typeface.create(base, weight, base?.isItalic == true)
+                } else if (weight >= 600 && base?.isBold != true) {
+                    setTypeface(base, Typeface.BOLD)
+                }
+            }
         }
 
-        is ViewGroup -> for (i in 0 until childCount) getChildAt(i).applyTextWeight(weight)
+        is ViewGroup -> for (i in 0 until childCount)
+            getChildAt(i).styleTextTree(color, hintColor, weight)
     }
 }
 

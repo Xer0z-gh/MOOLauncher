@@ -24,6 +24,7 @@ import app.olauncher.helper.hideKeyboard
 import app.olauncher.helper.applyFocusOutline
 import app.olauncher.helper.applyTextWeight
 import app.olauncher.helper.getColorFromAttr
+import app.olauncher.helper.styleTextTree
 import app.olauncher.helper.tintTextTree
 import app.olauncher.helper.withAlpha
 import app.olauncher.helper.isSystemApp
@@ -141,12 +142,15 @@ class AppDrawerAdapter(
         try {
             if (appFilteredList.isEmpty() || position == RecyclerView.NO_POSITION) return
             val appModel = appFilteredList[holder.bindingAdapterPosition]
-            // Outside the `is ViewHolder` branch so the private-space header is tinted too;
-            // it was left in the app theme's colour on a painted drawer background.
-            if (themeTextColor != 0) holder.itemView.tintTextTree(
-                themeTextColor, themeTextColor.withAlpha(0xB3)
+            // ONE walk for colour and weight. This ran three times per bind - the tint here
+            // and again inside the holder branch, plus the weight - while the row was also
+            // resolving an icon. Outside the branch so the private-space header is styled
+            // too; it was left in the app theme's colour on a painted drawer background.
+            holder.itemView.styleTextTree(
+                if (themeTextColor != 0) themeTextColor else null,
+                if (themeTextColor != 0) themeTextColor.withAlpha(0xB3) else null,
+                textWeight,
             )
-            holder.itemView.applyTextWeight(textWeight)
             holder.itemView.applyFocusOutline(
                 if (themeTextColor != 0) themeTextColor
                 else holder.itemView.context.getColorFromAttr(R.attr.primaryColor)
@@ -172,8 +176,6 @@ class AppDrawerAdapter(
                         appHideListener,
                         appRenameListener
                     )
-                    if (themeTextColor != 0)
-                        holder.itemView.tintTextTree(themeTextColor, themeTextColor.withAlpha(0xB3))
                     bindIcon(holder, appModel)
                     bindMutedState(holder, appModel)
                 }
