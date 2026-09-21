@@ -114,6 +114,13 @@ class NotificationPanelFragment : BaseFragment() {
             v.updatePadding(top = bars.top, bottom = bars.bottom, left = bars.left, right = bars.right)
             insets
         }
+        // Defensive, and honestly labelled as such: insets are dispatched to a window once, and
+        // a view added afterwards - which this fragment is, since it arrives on navigation - can
+        // miss that dispatch and never have the listener above run at all. Measured on an API 36
+        // emulator switched to three-button navigation, the list ends at 2274 of 2400 either way,
+        // so on that device the dispatch was already reaching it and this changes nothing. Kept
+        // because the failure it guards against is real and documented, not because it was seen.
+        ViewCompat.requestApplyInsets(binding.panelRoot)
     }
 
     private fun applyColorTheme() {
@@ -230,15 +237,23 @@ class NotificationPanelFragment : BaseFragment() {
      * Groups by app without a second view type: rows stay a flat list, and the app name is drawn
      * only on the first of each run. Apps are ordered by their most recent notification, so the
      * newest conversation is at the top with the rest of its run underneath rather than scattered.
+     *
+     * Grouped by the app's NAME, not its package. His shade had two different system packages
+     * both presenting as "Android System", which produced that heading twice with an unrelated
+     * app between them - and two identical headings read as a rendering fault, whatever is true
+     * underneath. Muting still acts on the package, which each row carries for itself, so the
+     * heading being shared does not make the filter coarser.
      */
     private fun buildRows(context: Context, items: List<NotificationItem>): List<PanelRow> {
-        val byApp = LinkedHashMap<String, MutableList<NotificationItem>>()
+        val byLabel = LinkedHashMap<String, MutableList<NotificationItem>>()
         // items arrive newest first, so first-seen order is already most-recent-app order.
-        for (item in items) byApp.getOrPut(item.appKey) { mutableListOf() }.add(item)
+        for (item in items) {
+            val label = labelFor(context, item.packageName, item.user, item.appKey)
+            byLabel.getOrPut(label) { mutableListOf() }.add(item)
+        }
 
         val rows = ArrayList<PanelRow>(items.size)
-        for ((appKey, group) in byApp) {
-            val label = labelFor(context, group.first().packageName, group.first().user, appKey)
+        for ((label, group) in byLabel) {
             group.forEachIndexed { index, item ->
                 rows += PanelRow(item = item, appLabel = label, showAppLabel = index == 0)
             }
