@@ -494,8 +494,16 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      * the stock light/dark behaviour and any wallpaper the user set are left completely alone.
      */
     private fun applyColorTheme() {
-        if (!ColorTheme.isCustom(prefs.colorThemeId)) return
+        if (!ColorTheme.isCustom(prefs.colorThemeId)) {
+            binding.mainLayout.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+            return
+        }
         val theme = ColorTheme.byId(prefs.colorThemeId)
+        // The launcher paints its own background rather than trusting the wallpaper to match.
+        // Relying on the wallpaper meant the two could drift apart - a wallpaper changed from
+        // anywhere else, or the daily wallpaper worker running - and dark theme text on whatever
+        // was behind it is unreadable, which is exactly what Cream looked like when it happened.
+        binding.mainLayout.setBackgroundColor(theme.background)
         binding.mainLayout.tintTextTree(theme.text, theme.text.withAlpha(0x80))
     }
 

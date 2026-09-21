@@ -48,7 +48,6 @@ import app.olauncher.helper.openAppInfo
 import app.olauncher.helper.openUrl
 import app.olauncher.helper.rateApp
 import app.olauncher.helper.setPlainWallpaper
-import app.olauncher.helper.setPlainWallpaperColor
 import app.olauncher.helper.shareApp
 import app.olauncher.helper.IconCache
 import app.olauncher.helper.IconPack
@@ -730,7 +729,10 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
                 prefs.dailyWallpaper = false
                 viewModel.cancelWallpaperWorker()
             }
-            setPlainWallpaperColor(requireContext(), theme.background)
+            // Deliberately does NOT write the wallpaper. The launcher paints its own background
+            // now, so it does not need to, and overwriting someone's wallpaper to change a
+            // launcher theme is a far bigger side effect than the feature is worth - it is also
+            // not undoable, since the previous wallpaper cannot be read back.
         }
         populateColorTheme()
         populateIconSettings()
