@@ -2,6 +2,8 @@ package app.olauncher.helper
 
 import android.app.Notification
 import android.app.PendingIntent
+import android.os.Handler
+import android.os.Looper
 import android.os.UserHandle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
@@ -94,11 +96,31 @@ class NotificationService : NotificationListenerService() {
         }
 
         /**
-         * Called on the main thread whenever the shade changes. Set by the panel while it is
+         * Called on the main thread when the shade has changed. Set by the panel while it is
          * visible and cleared when it leaves, so nothing is observed when nothing is watching.
          */
         @Volatile
         var onShadeChanged: (() -> Unit)? = null
+
+        /** Notifications arrive in bursts; one refresh per burst, not per notification. */
+        private const val COALESCE_MS = 150L
+
+        private val handler = Handler(Looper.getMainLooper())
+        private val notifyPanel = Runnable { onShadeChanged?.invoke() }
+
+        /**
+         * Asks the panel to re-read, at most once per [COALESCE_MS].
+         *
+         * Without this a burst - a sync finishing, a group chat, a boot - started one full
+         * snapshot per notification, and a snapshot is a binder call that parcels every active
+         * notification across plus a label lookup per new app. This is the same coalescing
+         * NotificationCounts already does for the badges.
+         */
+        private fun scheduleShadeNotice() {
+            if (onShadeChanged == null) return
+            handler.removeCallbacks(notifyPanel)
+            handler.postDelayed(notifyPanel, COALESCE_MS)
+        }
     }
 
     private val prefs by lazy { Prefs(applicationContext) }
@@ -134,7 +156,9 @@ class NotificationService : NotificationListenerService() {
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
-        onShadeChanged?.invoke()
+        // Only if the panel would actually show it. A group summary is filtered out of the
+        // panel, so refreshing for one is a binder call that changes nothing on screen.
+        if (sbn != null && panelWorthy(sbn)) scheduleShadeNotice()
         if (sbn == null || !prefs.showNotificationBadges) return
         count(sbn)
     }
@@ -147,7 +171,9 @@ class NotificationService : NotificationListenerService() {
      */
     override fun onNotificationRemoved(sbn: StatusBarNotification?) {
         super.onNotificationRemoved(sbn)
-        onShadeChanged?.invoke()
+        // No panelWorthy check here: something the panel was showing may have just gone, and
+        // a removal carries no reliable way to know whether it was on screen.
+        scheduleShadeNotice()
     }
 
     private fun count(sbn: StatusBarNotification) {
