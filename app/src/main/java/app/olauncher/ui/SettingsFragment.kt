@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import android.provider.Settings
+import android.service.notification.NotificationListenerService
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -34,11 +35,14 @@ import app.olauncher.helper.isDarkThemeOn
 import app.olauncher.helper.isEinkDisplay
 import app.olauncher.helper.isOlauncherDefault
 import app.olauncher.helper.isTablet
+import app.olauncher.helper.notificationAccessGranted
+import app.olauncher.helper.notificationListenerComponent
 import app.olauncher.helper.openAppInfo
 import app.olauncher.helper.openUrl
 import app.olauncher.helper.rateApp
 import app.olauncher.helper.setPlainWallpaper
 import app.olauncher.helper.shareApp
+import app.olauncher.helper.NotificationCounts
 import app.olauncher.helper.OlDialog
 import app.olauncher.helper.showPopupMenu
 import app.olauncher.helper.showStatusBar
@@ -78,6 +82,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         populateProMessage()
         populateKeyboardText()
         populateScreenTimeOnOff()
+        populateNotificationBadges()
         populateLockSettings()
         // Home button for recents feature disabled
         // populateHomeButtonRecents()
@@ -117,6 +122,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.appThemeText -> showAppThemeMenu(view, showSystem = false)
             R.id.textSizeValue -> showTextSizeDialog()
             R.id.boldFont -> toggleBoldFont()
+            R.id.notificationBadges -> toggleNotificationBadges()
 
             R.id.swipeLeftApp -> showAppListIfEnabled(Constants.FLAG_SET_SWIPE_LEFT_APP)
             R.id.swipeRightApp -> showAppListIfEnabled(Constants.FLAG_SET_SWIPE_RIGHT_APP)
@@ -156,8 +162,23 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.swipeLeftApp -> toggleSwipeLeft()
             R.id.swipeRightApp -> toggleSwipeRight()
             R.id.toggleLock -> startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+            // Long press jumps straight to the system screen, mirroring toggleLock above. This is
+            // the way back in when access was revoked outside the app.
+            R.id.notificationBadges -> openNotificationAccessSettings()
         }
         return true
+    }
+
+    /**
+     * Granting notification access happens on a system screen that returns no result, so without
+     * re-reading on resume the row would still say Off after the user came back having granted it.
+     * The other two permission-backed rows have the same latent bug and are refreshed here too.
+     */
+    override fun onResume() {
+        super.onResume()
+        populateNotificationBadges()
+        populateLockSettings()
+        populateScreenTimeOnOff()
     }
 
     private fun initClickListeners() {
@@ -172,6 +193,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         // binding.homeButtonRecents.setOnClickListener(this)
         binding.homeAppsNum.setOnClickListener(this)
         binding.screenTimeOnOff.setOnClickListener(this)
+        binding.notificationBadges.setOnClickListener(this)
+        binding.notificationBadges.setOnLongClickListener(this)
         binding.dailyWallpaperUrl.setOnClickListener(this)
         binding.dailyWallpaper.setOnClickListener(this)
         binding.alignment.setOnClickListener(this)
@@ -375,6 +398,57 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         val isAdmin: Boolean = deviceManager.isAdminActive(componentName)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
             prefs.lockModeOn = isAdmin
+    }
+
+    /**
+     * The row reads On only when the user's own opt-in AND the system grant are both in place,
+     * because either one going away silently stops the badges working.
+     */
+    private fun populateNotificationBadges() {
+        binding.notificationBadges.text = getString(
+            if (prefs.showNotificationBadges && requireContext().notificationAccessGranted())
+                R.string.on else R.string.off
+        )
+    }
+
+    private fun showNotificationDialog() {
+        requireContext().createDialog(
+            title = R.string.notification_badges,
+            action = R.string.notification_access,
+            message = R.string.notification_badges_message,
+            onAction = { openNotificationAccessSettings() },
+        ).showRespectingStatusBar()
+    }
+
+    private fun openNotificationAccessSettings() {
+        runCatching { startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) }
+            .onFailure {
+                requireContext().showToast(getString(R.string.unable_to_open_notification_settings))
+            }
+    }
+
+    private fun toggleNotificationBadges() {
+        val context = requireContext()
+        // Turning it on without the system grant shows the disclosure and does NOT flip the pref;
+        // the same shape as toggleLockMode. A pref that says On while access is denied is a lie.
+        if (!prefs.showNotificationBadges && !context.notificationAccessGranted()) {
+            showNotificationDialog()
+            return
+        }
+        prefs.showNotificationBadges = !prefs.showNotificationBadges
+        if (prefs.showNotificationBadges) {
+            runCatching {
+                NotificationListenerService.requestRebind(context.notificationListenerComponent())
+            }
+        } else {
+            // Off has to mean off: stop counting and drop what was counted, rather than leaving
+            // the listener bound and quietly still reading every notification.
+            NotificationCounts.clear()
+            runCatching {
+                NotificationListenerService.requestUnbind(context.notificationListenerComponent())
+            }
+        }
+        populateNotificationBadges()
     }
 
     private fun openAccessibilityService() {

@@ -88,6 +88,23 @@
             </intent-filter>
         </receiver>
 
+        <!--
+            Hosted in the launcher's own process on purpose, with no android:process. The system
+            binds notification listeners with BIND_FOREGROUND_SERVICE, which raises the whole
+            process out of the band the low-memory killer reaps first. On a 4GB phone that keeps
+            the launcher warm; a second process would cost RAM and gain nothing, since the count
+            map would then need IPC to reach the home screen.
+        -->
+        <service
+            android:name=".helper.NotificationService"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
         <service
             android:name=".helper.MyAccessibilityService"
             android:exported="false"

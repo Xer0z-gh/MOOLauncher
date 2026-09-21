@@ -96,6 +96,16 @@
         <item name="android:textSize">@dimen/text_small</item>
     </style>
 
+    <!--
+        Home screen notification badge. Inherits TextDefault's colour state list, hint colour and
+        text shadow, so it tracks whatever theme and wallpaper the user has chosen without any
+        colour code, and stays legible over a light or dark background for the same reason the app
+        names do. Sized in sp so it follows the text size setting.
+    -->
+    <style name="TextBadge" parent="TextSmall">
+        <item name="android:fontFamily">?attr/mainFontFamily</item>
+    </style>
+
     <style name="TextSmallBold" parent="TextSmall">
         <item name="android:textStyle">bold</item>
     </style>

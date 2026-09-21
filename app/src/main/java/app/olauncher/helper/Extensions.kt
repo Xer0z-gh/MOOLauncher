@@ -21,6 +21,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationManagerCompat
 import app.olauncher.BuildConfig
 import app.olauncher.R
 import app.olauncher.data.Constants
@@ -185,6 +186,20 @@ fun Context.appUsagePermissionGranted(): Boolean {
         packageName
     ) == AppOpsManager.MODE_ALLOWED
 }
+
+fun Context.notificationListenerComponent(): ComponentName =
+    ComponentName(this, NotificationService::class.java)
+
+/**
+ * Whether the user has granted notification access in system Settings.
+ *
+ * ponytail: package-level check. A stale entry for a renamed or deleted listener class would read
+ * as granted, which cannot happen while this app has exactly one listener class that never gets
+ * renamed. If a second listener is ever added, switch to the component-level
+ * NotificationManager.isNotificationListenerAccessGranted(component) behind an API 27 gate.
+ */
+fun Context.notificationAccessGranted(): Boolean =
+    NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)
 
 fun Context.formattedTimeSpent(timeSpent: Long): String {
     val seconds = timeSpent / 1000

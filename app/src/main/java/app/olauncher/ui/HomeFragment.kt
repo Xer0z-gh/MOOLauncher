@@ -8,6 +8,8 @@ import android.content.res.Configuration
 import android.os.BatteryManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Process
+import android.service.notification.NotificationListenerService
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -30,12 +32,16 @@ import app.olauncher.data.AppModel
 import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.FragmentHomeBinding
+import app.olauncher.helper.NotificationCounts
 import app.olauncher.helper.appUsagePermissionGranted
+import app.olauncher.helper.createDialog
 import app.olauncher.helper.dpToPx
 import app.olauncher.helper.expandNotificationDrawer
 import app.olauncher.helper.getChangedAppTheme
 import app.olauncher.helper.getUserHandleFromString
 import app.olauncher.helper.isPackageInstalled
+import app.olauncher.helper.notificationAccessGranted
+import app.olauncher.helper.notificationListenerComponent
 import app.olauncher.helper.openAlarmApp
 import app.olauncher.helper.openCalendar
 import app.olauncher.helper.openCameraApp
@@ -79,6 +85,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     override fun onResume() {
         super.onResume()
+        syncNotificationListener()
         populateHomeScreen(false)
         viewModel.isOlauncherDefault()
         if (prefs.showStatusBar) showStatusBar()
@@ -203,6 +210,11 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         viewModel.screenTimeValue.observe(viewLifecycleOwner) {
             it?.let { binding.tvScreenTime.text = it }
         }
+        // Push channel: notifications land while the home screen is already in front, so onResume
+        // alone would leave the badges stale until the user left and came back.
+        NotificationCounts.counts.observe(viewLifecycleOwner) {
+            refreshBadges(it)
+        }
         // Home button for recents feature disabled
         // viewModel.showRecentApps.observe(viewLifecycleOwner) {
         //     binding.recents.performClick()
@@ -212,6 +224,15 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     private fun initSwipeTouchListener() {
         val context = requireContext()
         binding.mainLayout.setOnTouchListener(getSwipeGestureListener(context))
+        // Badges get the same per-row swipe listener as their app name, anchored to the NAME view,
+        // so a swipe that happens to start on the badge behaves identically to one on the label.
+        val names = homeAppNameViews()
+        homeAppBadgeViews().forEachIndexed { index, badge ->
+            val name = names[index]
+            badge.setOnTouchListener(getViewSwipeTouchListener(context, name))
+            badge.setOnClickListener { showBadgeDetails(index + 1) }
+            badge.setOnLongClickListener { name.performLongClick() }
+        }
         binding.homeApp1.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp1))
         binding.homeApp2.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp2))
         binding.homeApp3.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp3))
@@ -314,6 +335,14 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     private fun populateHomeScreen(appCountUpdated: Boolean) {
+        populateHomeRows(appCountUpdated)
+        // Must run after the rows, and outside populateHomeRows: that function returns early at
+        // every one of the eight app-count checks, so anything appended to its body would be
+        // skipped for all but a full eight-app home screen.
+        refreshBadges()
+    }
+
+    private fun populateHomeRows(appCountUpdated: Boolean) {
         if (appCountUpdated) hideHomeApps()
         populateDateTime()
 
@@ -425,6 +454,85 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         return false
     }
 
+    private fun homeAppNameViews(): List<TextView> = listOf(
+        binding.homeApp1, binding.homeApp2, binding.homeApp3, binding.homeApp4,
+        binding.homeApp5, binding.homeApp6, binding.homeApp7, binding.homeApp8
+    )
+
+    private fun homeAppBadgeViews(): List<TextView> = listOf(
+        binding.homeAppBadge1, binding.homeAppBadge2, binding.homeAppBadge3, binding.homeAppBadge4,
+        binding.homeAppBadge5, binding.homeAppBadge6, binding.homeAppBadge7, binding.homeAppBadge8
+    )
+
+    /**
+     * The identity a notification is matched against. A blank stored user means the slot was saved
+     * before per-profile home apps existed, and those are always the personal profile, which is
+     * what StatusBarNotification.user stringifies to for a normal app.
+     */
+    private fun badgeKeyFor(location: Int): String = NotificationCounts.key(
+        prefs.getAppPackage(location),
+        prefs.getAppUser(location).ifBlank { Process.myUserHandle().toString() }
+    )
+
+    private fun refreshBadges(counts: Map<String, Int> = NotificationCounts.counts.value.orEmpty()) {
+        val names = homeAppNameViews()
+        val badges = homeAppBadgeViews()
+        val enabled = prefs.showNotificationBadges
+        val homeAppsNum = prefs.homeAppsNum
+
+        names.forEachIndexed { index, name ->
+            val location = index + 1
+            val badge = badges[index]
+
+            // A shortcut is not an app and has no notifications of its own; a row past the app
+            // count, hidden, or showing the empty hint has nothing to badge either.
+            val badgeable = enabled &&
+                location <= homeAppsNum &&
+                name.isVisible &&
+                !name.text.isNullOrEmpty() &&
+                !prefs.getIsShortcut(location) &&
+                prefs.getAppPackage(location).isNotEmpty()
+
+            val count = if (badgeable) counts[badgeKeyFor(location)] ?: 0 else 0
+
+            if (count <= 0) {
+                if (badge.isVisible) badge.isVisible = false
+                name.contentDescription = null
+                return@forEachIndexed
+            }
+
+            val label = if (count > 99) getString(R.string.badge_count_overflow) else count.toString()
+            // Guard the write: setting identical text still costs a measure pass on a TextView.
+            if (badge.text?.toString() != label) badge.text = label
+            val spoken = getString(R.string.missed_notifications, prefs.getAppName(location), count)
+            badge.contentDescription = spoken
+            name.contentDescription = prefs.getAppName(location)
+            if (!badge.isVisible) badge.isVisible = true
+        }
+    }
+
+    /**
+     * Tapping a badge says what was missed. Deliberately a small peek and not a notification
+     * panel: it shows the few most recent lines, newest first, and cannot act on them.
+     */
+    private fun showBadgeDetails(location: Int) {
+        val lines = NotificationCounts.linesFor(badgeKeyFor(location))
+        val appName = prefs.getAppName(location)
+        val body = if (lines.isEmpty()) getString(R.string.no_notification_details)
+        else lines.asReversed().joinToString("\n\n")
+
+        requireContext().createDialog(
+            title = R.string.notification_badges,
+            action = R.string.close,
+            content = { container ->
+                TextView(container.context, null, 0, R.style.TextSmall).apply {
+                    text = if (lines.isEmpty()) body else "$appName\n\n$body"
+                    setTextIsSelectable(false)
+                }
+            }
+        ).showRespectingStatusBar()
+    }
+
     private fun hideHomeApps() {
         binding.homeApp1.visibility = View.GONE
         binding.homeApp2.visibility = View.GONE
@@ -496,7 +604,27 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         )
     }
 
+    /**
+     * Keeps the badge state honest across the things Android does behind the app's back: access
+     * revoked in Settings without onListenerDisconnected ever firing, and the binding dropped
+     * after an app update. Pressing Home is the user's most frequent action, so it is also the
+     * cheapest place to recover. Rebinding only when disconnected matters because Android 12+
+     * rate-limits repeated requestRebind calls.
+     */
+    private fun syncNotificationListener() {
+        val context = requireContext()
+        if (!prefs.showNotificationBadges || !context.notificationAccessGranted()) {
+            NotificationCounts.clear()
+            return
+        }
+        if (!NotificationCounts.connected) runCatching {
+            NotificationListenerService.requestRebind(context.notificationListenerComponent())
+        }
+    }
+
     private fun homeAppClicked(location: Int) {
+        // Opening the app is the reset. This is the only place a badge count goes back to zero.
+        NotificationCounts.clearApp(badgeKeyFor(location))
         launchAppOrShortcut(
             appName = prefs.getAppName(location),
             packageName = prefs.getAppPackage(location),

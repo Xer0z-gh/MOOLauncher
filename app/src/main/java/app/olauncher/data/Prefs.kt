@@ -38,6 +38,7 @@ class Prefs(context: Context) {
     private val TEXT_SIZE_SCALE = "TEXT_SIZE_SCALE"
     private val BOLD_FONT = "BOLD_FONT"
     private val PRO_MESSAGE_SHOWN = "PRO_MESSAGE_SHOWN"
+    private val SHOW_NOTIFICATION_BADGES = "SHOW_NOTIFICATION_BADGES"
     private val HIDE_SET_DEFAULT_LAUNCHER = "HIDE_SET_DEFAULT_LAUNCHER"
     private val SCREEN_TIME_LAST_UPDATED = "SCREEN_TIME_LAST_UPDATED"
     private val LAUNCHER_RESTART_TIMESTAMP = "LAUNCHER_RECREATE_TIMESTAMP"
@@ -207,6 +208,11 @@ class Prefs(context: Context) {
     var proMessageShown: Boolean
         get() = prefs.getBoolean(PRO_MESSAGE_SHOWN, false)
         set(value) = prefs.edit { putBoolean(PRO_MESSAGE_SHOWN, value).apply() }
+
+    // Off by default: reading notifications requires an explicit opt-in plus a system grant.
+    var showNotificationBadges: Boolean
+        get() = prefs.getBoolean(SHOW_NOTIFICATION_BADGES, false)
+        set(value) = prefs.edit { putBoolean(SHOW_NOTIFICATION_BADGES, value) }
 
     var hideSetDefaultLauncher: Boolean
         get() = prefs.getBoolean(HIDE_SET_DEFAULT_LAUNCHER, false)

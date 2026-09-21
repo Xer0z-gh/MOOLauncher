@@ -151,6 +151,13 @@
     <string name="are_you_using_your_phone_or_is_your_phone_using_you">Are you using your phone, or is your phone using you?</string>
     <string name="about_olauncher">About and FAQs</string>
     <string name="screen_time">Screen time</string>
+    <string name="notification_badges">Notification badges</string>
+    <string name="notification_badges_message">Moo Launcher will count the notifications you miss and show the number next to each home screen app. The count clears when you open that app. Notifications are only ever counted on this device, never stored and never sent anywhere.\n\nAndroid asks you to grant notification access on the next screen.</string>
+    <string name="notification_access">Notification access</string>
+    <string name="unable_to_open_notification_settings">Unable to open notification access settings</string>
+    <string name="badge_count_overflow">99+</string>
+    <string name="no_notification_details">Nothing to show for this app yet</string>
+    <string name="missed_notifications">%1$s · %2$d missed</string>
     <string name="learn_more">Learn more</string>
     <string name="did_you_know">Did you know?</string>
     <string name="leave_a_review">Leave a review</string>
