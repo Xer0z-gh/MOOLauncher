@@ -26,7 +26,6 @@ import app.olauncher.data.Prefs
 import app.olauncher.databinding.ActivityMainBinding
 import app.olauncher.helper.IconCache
 import app.olauncher.helper.getColorFromAttr
-import app.olauncher.helper.hasBeenDays
 import app.olauncher.helper.hasBeenHours
 import app.olauncher.helper.hasBeenMinutes
 import app.olauncher.helper.isDarkThemeOn

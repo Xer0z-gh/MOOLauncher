@@ -35,7 +35,6 @@ class Prefs(context: Context) {
     private val WALLPAPER_MSG_SHOWN = "WALLPAPER_MSG_SHOWN"
     private val TEXT_SIZE_SCALE = "TEXT_SIZE_SCALE"
     private val BOLD_FONT = "BOLD_FONT"
-    private val PRO_MESSAGE_SHOWN = "PRO_MESSAGE_SHOWN"
     private val SHOW_NOTIFICATION_BADGES = "SHOW_NOTIFICATION_BADGES"
     private val BADGE_STYLE = "BADGE_STYLE"
     private val COLOR_THEME_ID = "COLOR_THEME_ID"
@@ -224,10 +223,6 @@ class Prefs(context: Context) {
     var boldFont: Boolean
         get() = prefs.getBoolean(BOLD_FONT, false)
         set(value) = prefs.edit { putBoolean(BOLD_FONT, value) }
-
-    var proMessageShown: Boolean
-        get() = prefs.getBoolean(PRO_MESSAGE_SHOWN, false)
-        set(value) = prefs.edit { putBoolean(PRO_MESSAGE_SHOWN, value) }
 
     // Off by default: reading notifications requires an explicit opt-in plus a system grant.
     var showNotificationBadges: Boolean
