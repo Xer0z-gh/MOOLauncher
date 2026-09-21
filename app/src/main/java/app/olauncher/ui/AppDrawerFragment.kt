@@ -189,14 +189,21 @@ class AppDrawerFragment : BaseFragment() {
      * opens most.
      */
     private fun applySearchFieldHeight() {
-        // minimumHeight on the text view alone does nothing: AppCompat lays it out inside
-        // search_plate, so the plate is what decides how tall the target is.
         val target = 48.dpToPx()
         listOf(
             androidx.appcompat.R.id.search_plate,
             androidx.appcompat.R.id.search_edit_frame,
-            androidx.appcompat.R.id.search_src_text,
         ).forEach { id -> binding.search.findViewById<View>(id)?.minimumHeight = target }
+
+        // The field the user actually touches is search_src_text, and it stayed 36dp inside a
+        // 48dp plate through three attempts: minimumHeight, then minHeight, then dropping the
+        // plate's padding. Measuring after each one said the same thing, so this stops
+        // negotiating with AppCompat's measurement and states the height outright.
+        binding.search.findViewById<View>(androidx.appcompat.R.id.search_src_text)?.let { field ->
+            field.minimumHeight = target
+            (field as? TextView)?.minHeight = target
+            field.layoutParams = field.layoutParams?.also { it.height = target }
+        }
     }
 
     /**

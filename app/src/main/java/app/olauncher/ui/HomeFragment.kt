@@ -458,16 +458,13 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                 params.gravity = horizontalGravity or Gravity.CENTER_VERTICAL
                 name.layoutParams = params
             }
+            // CENTER_VERTICAL matters now that a row has a 48dp floor: gravity REPLACES, so
+            // assigning the horizontal part alone would drop the vertical centring the layout
+            // sets and leave a short name sitting at the top of its box while a taller one
+            // filled it. This also used to be eight hardcoded bindings below the loop.
+            name.gravity = horizontalGravity or Gravity.CENTER_VERTICAL
             positionBadge(name, badges[index])
         }
-        binding.homeApp1.gravity = horizontalGravity
-        binding.homeApp2.gravity = horizontalGravity
-        binding.homeApp3.gravity = horizontalGravity
-        binding.homeApp4.gravity = horizontalGravity
-        binding.homeApp5.gravity = horizontalGravity
-        binding.homeApp6.gravity = horizontalGravity
-        binding.homeApp7.gravity = horizontalGravity
-        binding.homeApp8.gravity = horizontalGravity
     }
 
     private fun populateDateTime() {

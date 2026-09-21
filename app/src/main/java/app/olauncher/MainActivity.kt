@@ -127,6 +127,7 @@ class MainActivity : AppCompatActivity() {
         setupOrientation()
 
         window.addFlags(FLAG_LAYOUT_NO_LIMITS)
+        applyRotationPolicy()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             profileReceiver = object : BroadcastReceiver() {
@@ -396,5 +397,34 @@ class MainActivity : AppCompatActivity() {
                     resetLauncherViaFakeActivity()
             }
         }
+    }
+
+    /**
+     * Lets the launcher turn with the device, but only on a screen big enough for it to be an
+     * improvement.
+     *
+     * Android pins a home activity to the device's natural orientation unless it asks for
+     * something else. Measured: with Settings in front the display reported ROTATION_90, and
+     * the instant this launcher came forward it went back to ROTATION_0 - so the whole of
+     * res/layout-land was unreachable rather than untested.
+     *
+     * On a phone that default is right, and nothing here changes it: a text launcher in
+     * landscape on a 6-inch screen is a worse version of itself. At sw600dp - a tablet, an
+     * unfolded foldable, a desktop window - a launcher that will not turn with the device is
+     * just broken, so there it follows rotation.
+     *
+     * FULL_USER, not FULL_SENSOR: it obeys the system auto-rotate switch, so someone who has
+     * deliberately locked their screen is not overridden by their launcher.
+     */
+    private fun applyRotationPolicy() {
+        // 600dp, not the isTablet() helper next door: that measures physical diagonal inches
+        // through a deprecated API, and the question here is whether a landscape LAYOUT is
+        // worth showing. smallestScreenWidthDp is the same number Android uses to pick
+        // sw600dp resources, so the gate and the layouts agree by construction.
+        val smallestWidthDp = resources.configuration.smallestScreenWidthDp
+        requestedOrientation = if (smallestWidthDp >= 600)
+            ActivityInfo.SCREEN_ORIENTATION_FULL_USER
+        else
+            ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
     }
 }

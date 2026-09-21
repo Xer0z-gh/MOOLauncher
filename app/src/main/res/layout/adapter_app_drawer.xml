@@ -6,12 +6,20 @@
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true">
 
+    <!--
+        minHeight rather than taller padding: a row is padding plus one line of text at whatever
+        size the user picked, and at 420dpi and below that came to 46.5dp - close enough to look
+        right and still under the 48dp minimum. A floor holds at every text size; padding would
+        have to be retuned for each one.
+    -->
     <TextView
         android:id="@+id/appTitle"
         style="@style/TextLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:maxLines="1"
+        android:minHeight="48dp"
         android:paddingHorizontal="24dp"
         android:paddingVertical="@dimen/app_padding_vertical"
         android:text="@string/app" />

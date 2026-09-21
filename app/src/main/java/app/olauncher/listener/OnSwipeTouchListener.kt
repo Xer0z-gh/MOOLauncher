@@ -26,6 +26,9 @@ internal open class OnSwipeTouchListener(c: Context?) : OnTouchListener {
     //    private var doubleTapOn = false
     private val gestureDetector: GestureDetector
 
+    /** Screen density, so the swipe thresholds below can be expressed in dp. */
+    private val density: Float = c?.resources?.displayMetrics?.density ?: 1f
+
     override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
         if (motionEvent.action == MotionEvent.ACTION_UP)
             longPressOn = false
@@ -33,8 +36,19 @@ internal open class OnSwipeTouchListener(c: Context?) : OnTouchListener {
     }
 
     private inner class GestureListener : SimpleOnGestureListener() {
-        private val SWIPE_THRESHOLD: Int = 100
-        private val SWIPE_VELOCITY_THRESHOLD: Int = 100
+        /**
+         * How far a gesture has to travel, in dp, before it counts as a swipe.
+         *
+         * This was 100 raw pixels, which is 35dp on a 450dpi phone and 100dp on a 160dpi one -
+         * so the same flick meant "swipe" on one device and "nothing happened" on another, and
+         * the cheap, low-density phones this launcher is for were the ones that had to work
+         * hardest. 36dp is what 100px already was on the screen it was developed against, so
+         * that device behaves exactly as before.
+         */
+        private val swipeThresholdPx = (36 * density).toInt()
+
+        /** Velocity is px/second, so it needs the same conversion for the same reason. */
+        private val swipeVelocityPx = (36 * density).toInt()
 
         override fun onDown(e: MotionEvent): Boolean {
             return true
@@ -83,11 +97,11 @@ internal open class OnSwipeTouchListener(c: Context?) : OnTouchListener {
                 val diffY = event2.y - (event1?.y ?: 0F)
                 val diffX = event2.x - (event1?.x ?: 0F)
                 if (abs(diffX) > abs(diffY)) {
-                    if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (abs(diffX) > swipeThresholdPx && abs(velocityX) > swipeVelocityPx) {
                         if (diffX > 0) onSwipeRight() else onSwipeLeft()
                     }
                 } else {
-                    if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (abs(diffY) > swipeThresholdPx && abs(velocityY) > swipeVelocityPx) {
                         if (diffY < 0) onSwipeUp() else onSwipeDown()
                     }
                 }
