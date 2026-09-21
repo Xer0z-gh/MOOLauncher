@@ -461,9 +461,18 @@ fun getBackupWallpaper(wallType: String): String {
     else Constants.URL_DEFAULT_DARK_WALLPAPER
 }
 
+/**
+ * Opens the notification shade.
+ *
+ * The accessibility service first, because it is the only supported route.
+ * StatusBarManager.expandNotificationsPanel is a blocklisted non-SDK interface: on Android
+ * 9+ the reflection throws, the catch below swallows it, and the gesture does nothing at
+ * all - no error, no toast, just a swipe that appears to be ignored. It is kept only for
+ * devices where the accessibility grant has not been given, where it may still work.
+ */
 @SuppressLint("WrongConstant", "PrivateApi")
 fun expandNotificationDrawer(context: Context) {
-    // Source: https://stackoverflow.com/a/51132142
+    if (MyAccessibilityService.expandNotifications()) return
     try {
         val statusBarService = context.getSystemService("statusbar")
         val statusBarManager = Class.forName("android.app.StatusBarManager")

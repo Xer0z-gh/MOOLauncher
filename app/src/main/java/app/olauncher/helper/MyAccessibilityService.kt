@@ -22,6 +22,19 @@ class MyAccessibilityService : AccessibilityService() {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return false
             return service.performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
         }
+
+        /**
+         * Pulls down the notification shade. Returns false when the service is not
+         * connected, which is when the caller has to fall back.
+         *
+         * This is the only supported way to do it. The usual trick - reflecting on
+         * StatusBarManager.expandNotificationsPanel - is a blocklisted non-SDK interface
+         * and fails silently on recent Android, leaving a gesture that does nothing.
+         */
+        fun expandNotifications(): Boolean {
+            val service = instance ?: return false
+            return service.performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
