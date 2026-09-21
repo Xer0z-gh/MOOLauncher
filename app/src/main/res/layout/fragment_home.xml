@@ -83,12 +83,10 @@
         android:paddingTop="112dp"
         android:paddingBottom="48dp">
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/homeAppRow1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/homeApp1"
                 style="@style/TextLarge"
@@ -106,7 +104,7 @@
                 style="@style/TextBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_gravity="start|center_vertical"
                 android:focusable="true"
                 android:fontFeatureSettings="tnum"
                 android:gravity="center"
@@ -116,14 +114,12 @@
                 android:visibility="gone"
                 tools:text="3"
                 tools:visibility="visible" />
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/homeAppRow2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/homeApp2"
                 style="@style/TextLarge"
@@ -141,7 +137,7 @@
                 style="@style/TextBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_gravity="start|center_vertical"
                 android:focusable="true"
                 android:fontFeatureSettings="tnum"
                 android:gravity="center"
@@ -151,14 +147,12 @@
                 android:visibility="gone"
                 tools:text="3"
                 tools:visibility="visible" />
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/homeAppRow3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/homeApp3"
                 style="@style/TextLarge"
@@ -176,7 +170,7 @@
                 style="@style/TextBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_gravity="start|center_vertical"
                 android:focusable="true"
                 android:fontFeatureSettings="tnum"
                 android:gravity="center"
@@ -186,14 +180,12 @@
                 android:visibility="gone"
                 tools:text="3"
                 tools:visibility="visible" />
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/homeAppRow4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/homeApp4"
                 style="@style/TextLarge"
@@ -211,7 +203,7 @@
                 style="@style/TextBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_gravity="start|center_vertical"
                 android:focusable="true"
                 android:fontFeatureSettings="tnum"
                 android:gravity="center"
@@ -221,14 +213,12 @@
                 android:visibility="gone"
                 tools:text="3"
                 tools:visibility="visible" />
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/homeAppRow5"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/homeApp5"
                 style="@style/TextLarge"
@@ -246,7 +236,7 @@
                 style="@style/TextBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_gravity="start|center_vertical"
                 android:focusable="true"
                 android:fontFeatureSettings="tnum"
                 android:gravity="center"
@@ -256,14 +246,12 @@
                 android:visibility="gone"
                 tools:text="3"
                 tools:visibility="visible" />
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/homeAppRow6"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/homeApp6"
                 style="@style/TextLarge"
@@ -281,7 +269,7 @@
                 style="@style/TextBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_gravity="start|center_vertical"
                 android:focusable="true"
                 android:fontFeatureSettings="tnum"
                 android:gravity="center"
@@ -291,14 +279,12 @@
                 android:visibility="gone"
                 tools:text="3"
                 tools:visibility="visible" />
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/homeAppRow7"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/homeApp7"
                 style="@style/TextLarge"
@@ -316,7 +302,7 @@
                 style="@style/TextBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_gravity="start|center_vertical"
                 android:focusable="true"
                 android:fontFeatureSettings="tnum"
                 android:gravity="center"
@@ -326,14 +312,12 @@
                 android:visibility="gone"
                 tools:text="3"
                 tools:visibility="visible" />
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/homeAppRow8"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/homeApp8"
                 style="@style/TextLarge"
@@ -351,7 +335,7 @@
                 style="@style/TextBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_gravity="start|center_vertical"
                 android:focusable="true"
                 android:fontFeatureSettings="tnum"
                 android:gravity="center"
@@ -361,7 +345,7 @@
                 android:visibility="gone"
                 tools:text="3"
                 tools:visibility="visible" />
-        </LinearLayout>
+        </FrameLayout>
 
     </LinearLayout>
 

@@ -15,7 +15,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
-import android.widget.LinearLayout
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -57,6 +56,11 @@ import java.util.Locale
 
 class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListener {
 
+    private companion object {
+        /** Space between the end of an app name and its badge. */
+        const val BADGE_GAP_DP = 10
+    }
+
     private lateinit var prefs: Prefs
     private lateinit var viewModel: MainViewModel
     private lateinit var deviceManager: DevicePolicyManager
@@ -82,6 +86,22 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         setHomeAlignment(prefs.homeAlignment)
         initSwipeTouchListener()
         initClickListeners()
+        initBadgeFollowers()
+    }
+
+    /**
+     * Keeps each badge glued to the end of its app name. The name's position changes for reasons
+     * the badge code does not own - alignment, text size, bold font, a rename, a longer label
+     * wrapping to two lines - and every one of them is a layout pass on the name.
+     */
+    private fun initBadgeFollowers() {
+        val badges = homeAppBadgeViews()
+        homeAppNameViews().forEachIndexed { index, name ->
+            val badge = badges[index]
+            name.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+                positionBadge(name, badge)
+            }
+        }
     }
 
     override fun onResume() {
@@ -280,10 +300,17 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         val verticalGravity = if (prefs.homeBottomAlignment) Gravity.BOTTOM else Gravity.CENTER_VERTICAL
         binding.homeAppsLayout.gravity = horizontalGravity or verticalGravity
         binding.dateTimeLayout.gravity = horizontalGravity
-        // Each row is a full-width horizontal container, so the row's gravity is what actually
-        // positions the name and its badge. They move as one group, keeping the badge beside the
-        // name under left, centre and right alignment.
-        homeAppRows().forEach { it.gravity = horizontalGravity or Gravity.CENTER_VERTICAL }
+        // The name carries the alignment itself, so it lands where it would with no badge at all.
+        // positionBadge then follows it; the badge never influences where the name sits.
+        val names = homeAppNameViews()
+        val badges = homeAppBadgeViews()
+        names.forEachIndexed { index, name ->
+            (name.layoutParams as? FrameLayout.LayoutParams)?.let { params ->
+                params.gravity = horizontalGravity or Gravity.CENTER_VERTICAL
+                name.layoutParams = params
+            }
+            positionBadge(name, badges[index])
+        }
         binding.homeApp1.gravity = horizontalGravity
         binding.homeApp2.gravity = horizontalGravity
         binding.homeApp3.gravity = horizontalGravity
@@ -464,7 +491,24 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.homeApp5, binding.homeApp6, binding.homeApp7, binding.homeApp8
     )
 
-    private fun homeAppRows(): List<LinearLayout> = listOf(
+    /**
+     * Puts the badge just past the end of the app name WITHOUT taking part in layout.
+     *
+     * The name is positioned by its own layout_gravity, exactly as it would be with no badge, so
+     * a badge appearing or disappearing never shifts it. The badge is parked at the row's start
+     * edge and moved by translationX, which is applied at draw time and cannot affect the name's
+     * measured position or the row's centring.
+     */
+    private fun positionBadge(name: TextView, badge: TextView) {
+        if (!badge.isVisible) return
+        val gap = BADGE_GAP_DP.dpToPx()
+        badge.translationX = if (badge.layoutDirection == View.LAYOUT_DIRECTION_RTL)
+            (name.left - badge.width - gap).toFloat()
+        else
+            (name.right + gap).toFloat()
+    }
+
+    private fun homeAppRows(): List<FrameLayout> = listOf(
         binding.homeAppRow1, binding.homeAppRow2, binding.homeAppRow3, binding.homeAppRow4,
         binding.homeAppRow5, binding.homeAppRow6, binding.homeAppRow7, binding.homeAppRow8
     )
@@ -518,6 +562,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             badge.contentDescription = spoken
             name.contentDescription = prefs.getAppName(location)
             if (!badge.isVisible) badge.isVisible = true
+            positionBadge(name, badge)
         }
     }
 
