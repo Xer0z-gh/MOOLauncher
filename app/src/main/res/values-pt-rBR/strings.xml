@@ -13,11 +13,6 @@
     <string name="black">Preto</string>
     <string name="white">Branco</string>
     <string name="change_default_launcher">Alterar launcher padrão</string>
-    <string name="privacy">Privacidade</string>
-    <string name="share">Compartilhar</string>
-    <string name="share_now">Compartilhar agora</string>
-    <string name="rate">Avaliar</string>
-    <string name="rate_now">Avaliar agora</string>
     <string name="follow">Seguir</string>
     <string name="email">E-mail</string>
 
@@ -54,10 +49,7 @@
     <string name="system_default">Sistema</string>
     <string name="dark">Escuro</string>
     <string name="light">Claro</string>
-    <string name="welcome_to_olauncher_settings">Bem-vindo às configurações!
-        \n\nLembre-se, se você tiver alguma dúvida, nossa página Sobre tem a resposta.</string>
-    <string name="rate_us_message">Oi, você não verá esta mensagem novamente.\n\nSe o Moo Launcher está sendo útil para você, poderia deixar uma avaliação de 5 estrelas? Isso significaria muito para nós. Obrigado!</string>
-    <string name="share_message">Precisamos da sua ajuda! Acreditamos que todos deveriam conhecer o Moo Launcher e seus benefícios, mas não podemos fazer isso sozinhos.\n\nVocê poderia compartilhar o Moo Launcher com seus amigos, familiares e seguidores? Obrigado pelo seu apoio! ❤</string>
+    <string name="welcome_to_olauncher_settings">Bem-vindo às configurações!</string>
     <string name="keyboard_message">Olá, o teclado é a maneira mais rápida de encontrar e iniciar aplicativos no Moo Launcher. Podemos pedir-lhe que mantenha isto ligado por mais alguns dias para depois decidir?
         \n\nA escolha é sempre sua!</string>
     <string name="digital_wellbeing_message">Se você deseja definir limites de tempo para determinados aplicativos, o recurso Bem-estar digital do Android pode ajudá-lo a fazer isso.
@@ -78,7 +70,7 @@
     <string name="please_set_olauncher_as_default_first">Por favor, defina o Moo Launcher como seu launcher padrão primeiro</string>
     <string name="affiliate">Afiliado</string>
     <string name="tip_start_typing_for_rename">Dica: comece a digitar para ver a opção de RENOMEAR o aplicativo</string>
-    <string name="hidden_apps_message">Nota: Toque em \'Moo Launcher\' na parte superior desta página de Configurações para encontrar seus aplicativos ocultos.\n\nMais detalhes disponíveis em nossa página Sobre.</string>
+    <string name="hidden_apps_message">Nota: Toque em \'Moo Launcher\' na parte superior desta página de Configurações para encontrar seus aplicativos ocultos.</string>
     <string name="accessibility_disclosure">Ative o serviço de acessibilidade do Moo Launcher nas configurações do seu dispositivo para ativar o gesto de toque duplo para bloquear.\n\nObserve que este serviço é usado apenas para esse recurso específico. Nosso serviço de acessibilidade não coleta nem compartilha nenhum dado.</string>
     <string name="accept">Aceitar</string>
     <string name="permission">Permissão</string>
@@ -113,13 +105,9 @@
     <string name="hidden_apps">Aplicativos ocultos</string>
     <string name="adapter_show">Mostrar</string>
     <string name="adapter_hide">Ocultar</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Você está usando seu telefone, ou seu telefone está usando você?</string>
-    <string name="about_olauncher">Sobre e perguntas frequentes</string>
     <string name="learn_more">Saber mais</string>
     <string name="screen_time">Tempo de tela</string>
     <string name="did_you_know">Você sabia?</string>
-    <string name="leave_a_review">Deixe uma avaliação</string>
-    <string name="review_message">O Moo Launcher é gratuito e sempre será. Não tem anúncios, não coleta dados e reduz seu tempo de tela, resultando em uma vida mais saudável.\n\nEsperamos que você goste. Diga-nos o que achou.</string>
     <string name="alignment_changed">Alinhamento alterado ✅</string>
     <string name="home_screen">Tela inicial</string>
     <string name="hey">Oi</string>

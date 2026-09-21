@@ -13,11 +13,6 @@
     <string name="black">Чорний</string>
     <string name="white">Білий</string>
     <string name="change_default_launcher">Змінити лаунчер за замовчуванням</string>
-    <string name="privacy">Конфіденційність</string>
-    <string name="share">Поділитися</string>
-    <string name="share_now">Поділитися</string>
-    <string name="rate">Оцінити</string>
-    <string name="rate_now">Оцінити</string>
     <string name="follow">Перейти</string>
     <string name="email">Електронна пошта</string>
 
@@ -54,9 +49,7 @@
     <string name="system_default">Системна</string>
     <string name="dark">Темна</string>
     <string name="light">Світла</string>
-    <string name="welcome_to_olauncher_settings">Ласкаво просимо до налаштувань!\n\nПам\'ятайте: якщо у вас є питання, відповідь є на нашій сторінці «Про додаток».</string>
-    <string name="rate_us_message">Вітаємо, ви більше не побачите це повідомлення.\n\nЯкщо Moo Launcher вам корисний, чи не могли б ви залишити відгук із 5 зірками? Для нас це дуже багато значить. Дякуємо!</string>
-    <string name="share_message">Нам потрібна ваша допомога! Ми вважаємо, що кожен має знати про Moo Launcher та його переваги, але самотужки нам не впоратися.\n\nЧи не могли б ви поділитися Moo Launcher із друзями, родиною та підписниками? Дякуємо за підтримку! ❤</string>
+    <string name="welcome_to_olauncher_settings">Ласкаво просимо до налаштувань!</string>
     <string name="keyboard_message">Привіт, клавіатура - це найшвидший спосіб знайти та запустити програми в Moo Launcher. Чи можемо ми попросити вас залишити це увімкненим ще на кілька днів, а потім прийняти рішення?
         \n\nВибір завжди за вами.</string>
     <string name="digital_wellbeing_message">Якщо ви хочете встановити часові обмеження для певних програм, функція цифрового добробуту Android може допомогти вам це зробити.
@@ -77,7 +70,7 @@
     <string name="please_set_olauncher_as_default_first">Спочатку встановіть Moo Launcher як стандартний лаунчер.</string>
     <string name="affiliate">Партнер</string>
     <string name="tip_start_typing_for_rename">Порада: почніть вводити текст, щоб перейменувати програму.</string>
-    <string name="hidden_apps_message">Примітка: натисніть «Moo Launcher» у верхній частині сторінки налаштувань, щоб знайти приховані додатки.\n\nДокладніша інформація доступна на нашій сторінці «Про додаток».</string>
+    <string name="hidden_apps_message">Примітка: натисніть «Moo Launcher» у верхній частині сторінки налаштувань, щоб знайти приховані додатки.</string>
     <string name="accessibility_disclosure">Увімкніть службу спеціальних можливостей Moo Launcher у налаштуваннях вашого пристрою, щоб увімкнути жест подвійного торкання для блокування.\n\nЗверніть увагу, що ця служба використовується лише для цієї функції. Наша служба спеціальних можливостей не збирає та не поширює жодних даних.</string>
     <string name="accept">Прийняти</string>
     <string name="permission">Дозвіл</string>
@@ -112,13 +105,9 @@
     <string name="hidden_apps">Приховані додатки</string>
     <string name="adapter_show">Показати</string>
     <string name="adapter_hide">Приховати</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Ви користуєтеся своїм телефоном, чи ваш телефон використовує вас?</string>
-    <string name="about_olauncher">Про додаток і FAQ</string>
     <string name="learn_more">Дізнатися більше</string>
     <string name="screen_time">Час екрану</string>
     <string name="did_you_know">Чи знали ви?</string>
-    <string name="leave_a_review">Залиште відгук</string>
-    <string name="review_message">Moo Launcher безкоштовний і завжди таким буде. У ньому немає реклами, він не збирає дані та скорочує ваш час перед екраном, що веде до здоровішого життя.\n\nСподіваємося, вам сподобається. Розкажіть нам, що ви думаєте.</string>
     <string name="alignment_changed">Вирівнювання змінено ✅</string>
     <string name="home_screen">Головний екран</string>
     <string name="hey">Привіт</string>

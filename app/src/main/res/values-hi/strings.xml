@@ -13,11 +13,6 @@
     <string name="black">काला</string>
     <string name="white">सफ़ेद</string>
     <string name="change_default_launcher">डिफ़ॉल्ट लॉन्चर बदलें</string>
-    <string name="privacy">गोपनीयता</string>
-    <string name="share">शेयर करें</string>
-    <string name="share_now">अभी शेयर करें</string>
-    <string name="rate">रेटिंग दें</string>
-    <string name="rate_now">अभी रेटिंग दें</string>
     <string name="follow">फ़ॉलो करें</string>
     <string name="email">ईमेल</string>
     <string name="donate">डोनेट करें</string>
@@ -53,12 +48,7 @@
     <string name="system_default">सिस्टम</string>
     <string name="dark">डार्क</string>
     <string name="light">लाइट</string>
-    <string name="welcome_to_olauncher_settings">सेटिंग्स में आपका स्वागत है!
-        \n\nयाद रखें, अगर आपके कोई सवाल हैं, तो हमारे About पेज पर जवाब मिलेगा।</string>
-    <string name="rate_us_message">नमस्ते, आपको यह मैसेज दोबारा नहीं दिखेगा।
-        \n\nअगर आपको Moo Launcher उपयोगी लग रहा है, तो कृपया 5-स्टार रिव्यू दें? इसका हमारे लिए बहुत मतलब होगा। धन्यवाद!</string>
-    <string name="share_message">हमें आपकी मदद चाहिए! हमारा मानना है कि सभी को Moo Launcher और इसके फ़ायदों के बारे में पता होना चाहिए, लेकिन हम अकेले यह नहीं कर सकते।
-        \n\nकृपया Moo Launcher को अपने दोस्तों, परिवार और फॉलोअर्स के साथ शेयर करें? आपके सहयोग के लिए धन्यवाद! ❤</string>
+    <string name="welcome_to_olauncher_settings">सेटिंग्स में आपका स्वागत है!</string>
     <string name="keyboard_message">नमस्ते, Moo Launcher में ऐप्स ढूंढने और खोलने का सबसे तेज़ तरीका कीबोर्ड है। क्या हम आपसे अनुरोध कर सकते हैं कि इसे कुछ और दिनों के लिए ऑन रखें और फिर फ़ैसला करें?
         \n\nचुनाव हमेशा आपका है।</string>
     <string name="digital_wellbeing_message">अगर आप कुछ ऐप्स के लिए समय सीमा तय करना चाहते हैं, तो Android की Digital Wellbeing फ़ीचर आपकी मदद कर सकती है। कृपया अपने फ़ोन की सेटिंग्स में Digital Wellbeing खोजें और उसे चालू करें।</string>
@@ -78,7 +68,7 @@
     <string name="please_set_olauncher_as_default_first">कृपया पहले Moo Launcher को डिफ़ॉल्ट सेट करें</string>
     <string name="affiliate">अफिलिएट</string>
     <string name="tip_start_typing_for_rename">टिप: ऐप का नाम बदलने के विकल्प के लिए टाइप करना शुरू करें</string>
-    <string name="hidden_apps_message">नोट: अपनी छिपी हुई ऐप्स ढूंढने के लिए इस Settings पेज के ऊपर \'Moo Launcher\' पर टैप करें।\n\nअधिक जानकारी हमारे About पेज पर उपलब्ध है।</string>
+    <string name="hidden_apps_message">नोट: अपनी छिपी हुई ऐप्स ढूंढने के लिए इस Settings पेज के ऊपर \'Moo Launcher\' पर टैप करें।</string>
     <string name="accessibility_disclosure">डबल टैप टू लॉक जेस्चर चालू करने के लिए कृपया अपनी डिवाइस की सेटिंग्स में Moo Launcher की एक्सेसिबिलिटी सर्विस चालू करें।
     \n\nकृपया ध्यान दें कि यह सर्विस केवल इसी विशेष फीचर के लिए उपयोग की जाती है। हमारी एक्सेसिबिलिटी सर्विस कोई डेटा एकत्र या साझा नहीं करती।</string>
     <string name="accept">स्वीकार करें</string>
@@ -114,14 +104,9 @@
     <string name="hidden_apps">छिपी हुई ऐप्स</string>
     <string name="adapter_show">दिखाएं</string>
     <string name="adapter_hide">छुपाएं</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">क्या आप अपना फ़ोन इस्तेमाल कर रहे हैं, या फ़ोन आपको इस्तेमाल कर रहा है?</string>
-    <string name="about_olauncher">जानकारी और सामान्य प्रश्न</string>
     <string name="screen_time">स्क्रीन टाइम</string>
     <string name="learn_more">और जानें</string>
     <string name="did_you_know">क्या आप जानते हैं?</string>
-    <string name="leave_a_review">रिव्यू दें</string>
-    <string name="review_message">Moo Launcher मुफ़्त है और हमेशा मुफ़्त रहेगा। इसमें कोई विज्ञापन नहीं है, यह कोई डेटा एकत्र नहीं करता, और आपके स्क्रीन टाइम को कम करके एक स्वस्थ जीवन देता है।
-        \n\nहमें उम्मीद है कि आपको यह पसंद आएगा। हमें बताएं आप क्या सोचते हैं।</string>
     <string name="alignment_changed">अलाइनमेंट बदल गया ✅</string>
     <string name="home_screen">होम स्क्रीन</string>
     <string name="hey">नमस्ते</string>

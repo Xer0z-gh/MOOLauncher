@@ -51,7 +51,7 @@
         android:textColor="?attr/primaryColor"
         android:visibility="gone"
         tools:ignore="RtlSymmetry"
-        tools:text="@string/rate_us_message"
+        tools:text="@string/welcome_to_olauncher_settings"
         tools:visibility="visible" />
 
     <!-- Custom content supplies its own margins, see dialog_text_size.xml -->

@@ -13,11 +13,6 @@
     <string name="black">สีดำ</string>
     <string name="white">สีขาว</string>
     <string name="change_default_launcher">เปลี่ยนตัวเปิดใช้งานเริ่มต้น</string>
-    <string name="privacy">ความเป็นส่วนตัว</string>
-    <string name="share">แชร์</string>
-    <string name="share_now">แชร์ตอนนี้</string>
-    <string name="rate">ให้คะแนน</string>
-    <string name="rate_now">ให้คะแนนตอนนี้</string>
     <string name="follow">ติดตาม</string>
     <string name="email">อีเมล</string>
     <string name="donate">บริจาค</string>
@@ -53,12 +48,7 @@
     <string name="system_default">ระบบ</string>
     <string name="dark">มืด</string>
     <string name="light">สว่าง</string>
-    <string name="welcome_to_olauncher_settings">ยินดีต้อนรับสู่การตั้งค่า!
-        \n\nโปรดจำไว้ว่าหากคุณมีคำถามใดๆ หน้าเกี่ยวกับเรามีคำตอบให้คุณ</string>
-    <string name="rate_us_message">สวัสดี คุณจะไม่เห็นข้อความนี้อีก
-        \n\nหากคุณพบว่า Moo Launcher มีประโยชน์ คุณช่วยให้คะแนนรีวิว 5 ดาวได้ไหม มันจะมีความหมายมากสำหรับเรา ขอบคุณ!</string>
-    <string name="share_message">เราต้องการความช่วยเหลือจากคุณ! เราเชื่อว่าทุกคนควรรู้จัก Moo Launcher และประโยชน์ของมัน แต่เราทำเพียงลำพังไม่ได้
-        \n\nคุณช่วยแชร์ Moo Launcher ให้เพื่อน ครอบครัว และผู้ติดตามของคุณได้ไหม ขอบคุณสำหรับการสนับสนุนของคุณ! ❤</string>
+    <string name="welcome_to_olauncher_settings">ยินดีต้อนรับสู่การตั้งค่า!</string>
     <string name="keyboard_message">สวัสดี แป้นพิมพ์เป็นวิธีที่เร็วที่สุดในการค้นหาและเปิดแอปใน Moo Launcher เราขอให้คุณเปิดฟีเจอร์นี้ไว้อีกสองสามวันแล้วค่อยตัดสินใจได้ไหม
         \n\nทางเลือกเป็นของคุณเสมอ</string>
     <string name="digital_wellbeing_message">หากคุณต้องการตั้งเวลาจำกัดสำหรับแอปบางตัว ฟีเจอร์ Digital Wellbeing ของ Android สามารถช่วยคุณได้ โปรดค้นหา Digital Wellbeing ในการตั้งค่าโทรศัพท์ของคุณและเปิดใช้งาน</string>
@@ -78,7 +68,7 @@
     <string name="please_set_olauncher_as_default_first">โปรดตั้งค่า Moo Launcher เป็นค่าเริ่มต้นก่อน</string>
     <string name="affiliate">พันธมิตร</string>
     <string name="tip_start_typing_for_rename">เคล็ดลับ: เริ่มพิมพ์เพื่อดูตัวเลือกเปลี่ยนชื่อแอป</string>
-    <string name="hidden_apps_message">หมายเหตุ: แตะที่ \'Moo Launcher\' ที่ด้านบนของหน้าการตั้งค่านี้เพื่อค้นหาแอปที่ซ่อนอยู่\n\nดูรายละเอียดเพิ่มเติมได้ที่หน้าเกี่ยวกับเรา</string>
+    <string name="hidden_apps_message">หมายเหตุ: แตะที่ \'Moo Launcher\' ที่ด้านบนของหน้าการตั้งค่านี้เพื่อค้นหาแอปที่ซ่อนอยู่</string>
     <string name="accessibility_disclosure">โปรดเปิดบริการการเข้าถึงของ Moo Launcher ในการตั้งค่าอุปกรณ์ของคุณเพื่อเปิดใช้งานท่าทางแตะสองครั้งเพื่อล็อก
     \n\nโปรดทราบว่าบริการนี้ใช้สำหรับฟีเจอร์นี้เท่านั้น บริการการเข้าถึงของเราไม่เก็บรวบรวมหรือแชร์ข้อมูลใดๆ</string>
     <string name="accept">ยอมรับ</string>
@@ -114,14 +104,9 @@
     <string name="hidden_apps">แอปที่ซ่อนอยู่</string>
     <string name="adapter_show">แสดง</string>
     <string name="adapter_hide">ซ่อน</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">คุณกำลังใช้โทรศัพท์ของคุณ หรือโทรศัพท์กำลังใช้คุณ?</string>
-    <string name="about_olauncher">เกี่ยวกับเราและคำถามที่พบบ่อย</string>
     <string name="screen_time">เวลาหน้าจอ</string>
     <string name="learn_more">เรียนรู้เพิ่มเติม</string>
     <string name="did_you_know">คุณรู้หรือไม่?</string>
-    <string name="leave_a_review">เขียนรีวิว</string>
-    <string name="review_message">Moo Launcher ฟรีและจะฟรีตลอดไป ไม่มีโฆษณา ไม่เก็บรวบรวมข้อมูลใดๆ และช่วยลดเวลาหน้าจอของคุณ ส่งผลให้มีชีวิตที่มีสุขภาพดีขึ้น
-        \n\nเราหวังว่าคุณจะชอบมัน บอกเราว่าคุณคิดอย่างไร</string>
     <string name="alignment_changed">เปลี่ยนการจัดวางแล้ว ✅</string>
     <string name="home_screen">หน้าจอหลัก</string>
     <string name="hey">สวัสดี</string>

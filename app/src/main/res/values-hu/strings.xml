@@ -13,11 +13,6 @@
     <string name="black">Fekete</string>
     <string name="white">Fehér</string>
     <string name="change_default_launcher">Alapértelmezett indító módosítása</string>
-    <string name="privacy">Adatvédelem</string>
-    <string name="share">Megosztás</string>
-    <string name="share_now">Megosztás most</string>
-    <string name="rate">Értékelés</string>
-    <string name="rate_now">Értékelés most</string>
     <string name="follow">Követés</string>
     <string name="email">E-mail</string>
     <string name="donate">Adományozás</string>
@@ -53,10 +48,7 @@
     <string name="system_default">Rendszer</string>
     <string name="dark">Sötét</string>
     <string name="light">Világos</string>
-    <string name="welcome_to_olauncher_settings">Üdvözöljük a beállításokban!
-        \n\nNe feledje, ha bármilyen kérdése van, az „Rólunk” oldalunk tartalmazza a választ.</string>
-    <string name="rate_us_message">Üdv, ezt az üzenetet nem fogja újra látni.\n\nHa hasznosnak találja az Moo Launcher-t, kérjük, hagyjon nekünk 5 csillagos értékelést! Ez nagyon sokat jelentene nekünk. Köszönjük!</string>
-    <string name="share_message">Szükségünk van a segítségére! Úgy gondoljuk, mindenkinek tudnia kellene az Moo Launcher-ről és előnyeiről, de egyedül nem tudjuk elérni.\n\nMegosztaná az Moo Launcher-t barátaival, családjával és követőivel? Köszönjük a támogatását! ❤</string>
+    <string name="welcome_to_olauncher_settings">Üdvözöljük a beállításokban!</string>
     <!--        \n\nHa van egy kis ideje, kérjük, ossza meg másokkal is az Olauncher-t. Az Olauncher-nek szüksége van emberekre. De ami még fontosabb, az embereknek szüksége van az Olauncher-re..</string>-->
     <string name="keyboard_message">Üdvözöljük! A billentyűzet a leggyorsabb módja az alkalmazások megtalálásához és elindításához az Moo Launcherben. Megkérhetjük, hogy hagyja bekapcsolva még néhány napig, és utána döntsön?
         \n\nA választás mindig az Öné.</string>
@@ -78,7 +70,7 @@
     <string name="please_set_olauncher_as_default_first">Kérjük, először állítsa be az Moo Launcher-t alapértelmezettként</string>
     <string name="affiliate">Affiliate</string>
     <string name="tip_start_typing_for_rename">Tipp: Kezdjen el gépelni az alkalmazás ÁTNEVEZÉSE opcióhoz</string>
-    <string name="hidden_apps_message">Megjegyzés: A rejtett alkalmazások megtalálásához érintse meg az \"Moo Launcher\" elemet ennek a beállítás oldalnak a tetején.\n\nTöbb részlet elérhető a Névjegy oldalon.</string>
+    <string name="hidden_apps_message">Megjegyzés: A rejtett alkalmazások megtalálásához érintse meg az \"Moo Launcher\" elemet ennek a beállítás oldalnak a tetején.</string>
     <string name="accessibility_disclosure">Kérjük, kapcsolja be az Moo Launcher kisegítő lehetőségek szolgáltatását az eszköz beállításaiban a dupla koppintás a lezáráshoz mozdulat engedélyezéséhez.\n\nKérjük, vegye figyelembe, hogy ez a szolgáltatás csak ehhez az egy funkcióhoz használatos. Kisegítő lehetőségek szolgáltatásunk nem gyűjt és nem oszt meg semmilyen adatot.</string>
     <string name="accept">Elfogad</string>
     <string name="permission">Engedély</string>
@@ -113,13 +105,9 @@
     <string name="hidden_apps">Rejtett alkalmazások</string>
     <string name="adapter_show">Megjelenítés</string>
     <string name="adapter_hide">Elrejtés</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Ön használja a telefonját, vagy a telefonja használja Önt?</string>
-    <string name="about_olauncher">Névjegy és GYIK</string>
     <string name="screen_time">Képernyőidő</string>
     <string name="learn_more">Tudjon meg többet</string>
     <string name="did_you_know">Tudta?</string>
-    <string name="leave_a_review">Hagyjon véleményt</string>
-    <string name="review_message">Az Moo Launcher ingyenes és mindig az is marad. Nincsenek benne hirdetések, nem gyűjt adatokat, és csökkenti a képernyőidőt, ami egészségesebb élethez vezet.\n\nReméljük, tetszeni fog. Mondja el, mit gondol.</string>
     <string name="alignment_changed">Az igazítás megváltozott ✅</string>
     <string name="home_screen">Kezdőképernyő</string>
     <string name="hey">Üdvözöljük!</string>

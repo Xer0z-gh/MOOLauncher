@@ -13,11 +13,6 @@
     <string name="black">Μαύρο</string>
     <string name="white">Λευκό</string>
     <string name="change_default_launcher">Αλλαγή προεπιλεγμένου launcher</string>
-    <string name="privacy">Απόρρητο</string>
-    <string name="share">Κοινοποίηση</string>
-    <string name="share_now">Κοινοποίηση τώρα</string>
-    <string name="rate">Αξιολόγηση</string>
-    <string name="rate_now">Αξιολόγηση τώρα</string>
     <string name="follow">Ακολούθηση</string>
     <string name="email">Email</string>
     <string name="donate">Δωρεά</string>
@@ -53,12 +48,7 @@
     <string name="system_default">Σύστημα</string>
     <string name="dark">Σκούρο</string>
     <string name="light">Ανοιχτόχρωμο</string>
-    <string name="welcome_to_olauncher_settings">Καλώς ήρθατε στις ρυθμίσεις!
-        \n\nΘυμηθείτε, αν έχετε οποιεσδήποτε ερωτήσεις, η σελίδα Σχετικά έχει την απάντηση.</string>
-    <string name="rate_us_message">Γεια σας, δεν θα ξαναδείτε αυτό το μήνυμα.
-        \n\nΑν βρίσκετε το Moo Launcher χρήσιμο, θα μπορούσατε να αφήσετε μια αξιολόγηση 5 αστέρων; Θα σημαίνει πολλά για εμάς. Ευχαριστούμε!</string>
-    <string name="share_message">Χρειαζόμαστε τη βοήθειά σας! Πιστεύουμε ότι όλοι πρέπει να γνωρίζουν για το Moo Launcher και τα οφέλη του, αλλά δεν μπορούμε να το κάνουμε μόνοι μας.
-        \n\nΘα μπορούσατε να μοιραστείτε το Moo Launcher με τους φίλους, την οικογένεια και τους ακολούθους σας; Ευχαριστούμε για την υποστήριξή σας! ❤</string>
+    <string name="welcome_to_olauncher_settings">Καλώς ήρθατε στις ρυθμίσεις!</string>
     <string name="keyboard_message">Γεια σας, το πληκτρολόγιο είναι ο ταχύτερος τρόπος για να βρείτε και να ανοίξετε εφαρμογές στο Moo Launcher. Μπορούμε να σας ζητήσουμε να το αφήσετε ενεργό για λίγες ακόμη ημέρες και μετά να αποφασίσετε;
         \n\nΗ επιλογή είναι πάντα δική σας.</string>
     <string name="digital_wellbeing_message">Αν θέλετε να ορίσετε χρονικά όρια για συγκεκριμένες εφαρμογές, η λειτουργία Ψηφιακή Ευεξία του Android μπορεί να σας βοηθήσει. Αναζητήστε το Ψηφιακή Ευεξία στις ρυθμίσεις του τηλεφώνου σας και ενεργοποιήστε το.</string>
@@ -78,7 +68,7 @@
     <string name="please_set_olauncher_as_default_first">Ορίστε πρώτα το Moo Launcher ως προεπιλογή</string>
     <string name="affiliate">Συνεργάτης</string>
     <string name="tip_start_typing_for_rename">Συμβουλή: Ξεκινήστε να πληκτρολογείτε για επιλογή ΜΕΤΟΝΟΜΑΣΙΑΣ εφαρμογής</string>
-    <string name="hidden_apps_message">Σημείωση: Πατήστε στο \'Moo Launcher\' στην κορυφή αυτής της σελίδας Ρυθμίσεων για να βρείτε τις κρυφές εφαρμογές σας.\n\nΠερισσότερες λεπτομέρειες διαθέσιμες στη σελίδα Σχετικά.</string>
+    <string name="hidden_apps_message">Σημείωση: Πατήστε στο \'Moo Launcher\' στην κορυφή αυτής της σελίδας Ρυθμίσεων για να βρείτε τις κρυφές εφαρμογές σας.</string>
     <string name="accessibility_disclosure">Ενεργοποιήστε την υπηρεσία προσβασιμότητας του Moo Launcher στις ρυθμίσεις της συσκευής σας για να ενεργοποιήσετε τη χειρονομία Διπλό πάτημα για κλείδωμα.
     \n\nΣημειώστε ότι αυτή η υπηρεσία χρησιμοποιείται μόνο για αυτή τη συγκεκριμένη λειτουργία. Η υπηρεσία προσβασιμότητάς μας δεν συλλέγει ούτε μοιράζεται δεδομένα.</string>
     <string name="accept">Αποδοχή</string>
@@ -114,14 +104,9 @@
     <string name="hidden_apps">Κρυφές εφαρμογές</string>
     <string name="adapter_show">Εμφάνιση</string>
     <string name="adapter_hide">Απόκρυψη</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Χρησιμοποιείτε το τηλέφωνό σας ή το τηλέφωνο χρησιμοποιεί εσάς;</string>
-    <string name="about_olauncher">Σχετικά και Συχνές Ερωτήσεις</string>
     <string name="screen_time">Χρόνος οθόνης</string>
     <string name="learn_more">Μάθετε περισσότερα</string>
     <string name="did_you_know">Το γνωρίζατε;</string>
-    <string name="leave_a_review">Αφήστε μια αξιολόγηση</string>
-    <string name="review_message">Το Moo Launcher είναι δωρεάν και θα παραμείνει πάντα. Δεν έχει διαφημίσεις, δεν συλλέγει δεδομένα και μειώνει τον χρόνο οθόνης σας, οδηγώντας σε μια πιο υγιή ζωή.
-        \n\nΕλπίζουμε να το απολαύσετε. Πείτε μας τη γνώμη σας.</string>
     <string name="alignment_changed">Η στοίχιση άλλαξε ✅</string>
     <string name="home_screen">Αρχική οθόνη</string>
     <string name="hey">Γεια</string>

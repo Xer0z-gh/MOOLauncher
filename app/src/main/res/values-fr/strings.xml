@@ -13,11 +13,6 @@
     <string name="black">Noir</string>
     <string name="white">Blanc</string>
     <string name="change_default_launcher">Changer le lanceur par défaut</string>
-    <string name="privacy">Confidentialité</string>
-    <string name="share">Partager</string>
-    <string name="share_now">Partager maintenant</string>
-    <string name="rate">Évaluer</string>
-    <string name="rate_now">Évaluer maintenant</string>
     <string name="follow">Suivre</string>
     <string name="email">E-mail</string>
 
@@ -54,10 +49,7 @@
     <string name="system_default">Système</string>
     <string name="dark">Sombre</string>
     <string name="light">Clair</string>
-    <string name="welcome_to_olauncher_settings">Bienvenue dans les paramètres !
-        \n\nN\'oubliez pas, si vous avez des questions, notre page À propos a la réponse.</string>
-    <string name="rate_us_message">Bonjour, vous ne verrez plus ce message.\n\nSi vous trouvez Moo Launcher utile, pourriez-vous laisser un avis 5 étoiles ? Cela compterait énormément pour nous. Merci !</string>
-    <string name="share_message">Nous avons besoin de votre aide ! Nous pensons que tout le monde devrait connaître Moo Launcher et ses avantages, mais nous ne pouvons pas y arriver seuls.\n\nPourriez-vous partager Moo Launcher avec vos amis, votre famille et vos abonnés ? Merci pour votre soutien ! ❤</string>
+    <string name="welcome_to_olauncher_settings">Bienvenue dans les paramètres !</string>
     <string name="keyboard_message">Bonjour, le clavier est le moyen le plus rapide de trouver et de lancer des applications dans Moo Launcher. Pouvons-nous vous demander de le laisser activé quelques jours de plus avant de décider ?\n\nLe choix vous appartient toujours.</string>
     <string name="digital_wellbeing_message">Si vous souhaitez définir des limites de temps pour certaines applications, la fonctionnalité Digital Wellbeing d\'Android peut vous aider à le faire.
         \n\nVeuillez rechercher Digital Wellbeing dans les paramètres de votre téléphone et l\'activer.</string>
@@ -76,7 +68,7 @@
     <string name="please_set_olauncher_as_default_first">Veuillez d\'abord définir Moo Launcher comme lanceur par défaut.</string>
     <string name="affiliate">Affiliation</string>
     <string name="tip_start_typing_for_rename">Conseil : Commencez à écrire pour faire apparaitre l\'option RENOMMER.</string>
-    <string name="hidden_apps_message">Remarque : Appuyez sur \'Moo Launcher\' en haut de cette page Paramètres pour trouver vos applications cachées.\n\nPlus de détails sont disponibles sur notre page À propos.</string>
+    <string name="hidden_apps_message">Remarque : Appuyez sur \'Moo Launcher\' en haut de cette page Paramètres pour trouver vos applications cachées.</string>
     <string name="accessibility_disclosure">Veuillez activer le service d\'accessibilité d\'Moo Launcher dans les paramètres de votre appareil pour utiliser le geste Double appui pour verrouiller.\n\nVeuillez noter que ce service est utilisé uniquement pour cette fonctionnalité. Notre service d\'accessibilité ne collecte ni ne partage aucune donnée.</string>
     <string name="accept">Accepter</string>
     <string name="permission">Autorisation</string>
@@ -111,13 +103,9 @@
     <string name="hidden_apps">Applications cachées</string>
     <string name="adapter_show">Afficher</string>
     <string name="adapter_hide">Masquer</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Utilisez-vous votre téléphone, ou votre téléphone vous utilise-t-il?</string>
-    <string name="about_olauncher">À propos et FAQ</string>
     <string name="learn_more">En savoir plus</string>
     <string name="screen_time">Temps d\'écran</string>
     <string name="did_you_know">Le saviez-vous ?</string>
-    <string name="leave_a_review">Laisser un avis</string>
-    <string name="review_message">Moo Launcher est gratuit et le restera toujours. Il n\'a pas de publicité, ne collecte aucune donnée et réduit votre temps d\'écran, pour une vie plus saine.\n\nNous espérons qu\'il vous plaira. Dites-nous ce que vous en pensez.</string>
     <string name="alignment_changed">Alignement changé ✅</string>
     <string name="home_screen">Écran d\'accueil</string>
     <string name="hey">Salut</string>

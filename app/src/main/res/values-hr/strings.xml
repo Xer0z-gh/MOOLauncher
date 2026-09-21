@@ -13,11 +13,6 @@
     <string name="black">Crno</string>
     <string name="white">Bijelo</string>
     <string name="change_default_launcher">Promijeni zadani pokretač</string>
-    <string name="privacy">Privatnost</string>
-    <string name="share">Podijeli</string>
-    <string name="share_now">Podijeli sada</string>
-    <string name="rate">Ocijeni</string>
-    <string name="rate_now">Ocijeni sada</string>
     <string name="follow">Prati</string>
     <string name="email">E-pošta</string>
     <string name="donate">Doniraj</string>
@@ -53,10 +48,7 @@
     <string name="system_default">Sustav</string>
     <string name="dark">Tamna</string>
     <string name="light">Svijetla</string>
-    <string name="welcome_to_olauncher_settings">Dobrodošli u postavke!
-        \n\nZapamtite, ako imate bilo kakvih pitanja, naša stranica O nama ima odgovor.</string>
-    <string name="rate_us_message">Bok, ovu poruku više nećete vidjeti.\n\nAko vam je Moo Launcher koristan, možete li nam ostaviti recenziju s 5 zvjezdica? To bi nam jako puno značilo. Hvala!</string>
-    <string name="share_message">Trebamo vašu pomoć! Vjerujemo da bi svi trebali znati za Moo Launcher i njegove prednosti, ali ne možemo to sami.\n\nMožete li podijeliti Moo Launcher sa svojim prijateljima, obitelji i pratiteljima? Hvala na podršci! ❤</string>
+    <string name="welcome_to_olauncher_settings">Dobrodošli u postavke!</string>
     <string name="keyboard_message">Bok, tipkovnica je najbrži način za pronalaženje i pokretanje aplikacija u Moo Launcheru. Možemo li vas zamoliti da to zadržite uključeno još nekoliko dana, a zatim odlučite?
         \n\nIzbor je uvijek vaš.</string>
     <string name="digital_wellbeing_message">Ako želite postaviti vremenska ograničenja za određene aplikacije, značajka Digital Wellbeing na Androidu može vam pomoći u tome.
@@ -77,12 +69,10 @@
     <string name="please_set_olauncher_as_default_first">Prvo postavite Moo Launcher kao zadani pokretač</string>
     <string name="affiliate">Sponzorstvo</string>
     <string name="tip_start_typing_for_rename">Savjet: počni pisati za opciju preimenovanja aplikacija</string>
-    <string name="hidden_apps_message">Napomena: Dodirnite \'Moo Launcher\' na vrhu ove stranice postavki da biste pronašli svoje skrivene aplikacije.\n\nViše detalja dostupno je na našoj stranici Informacije.</string>
+    <string name="hidden_apps_message">Napomena: Dodirnite \'Moo Launcher\' na vrhu ove stranice postavki da biste pronašli svoje skrivene aplikacije.</string>
     <string name="learn_more">Saznajte više</string>
     <string name="did_you_know">Jeste li znali?</string>
     <string name="screen_time">Vrijeme na ekranu</string>
-    <string name="leave_a_review">Ostavite recenziju</string>
-    <string name="review_message">Moo Launcher je besplatan i uvijek će biti. Nema reklama, ne prikuplja podatke i smanjuje vaše vrijeme pred ekranom, što vodi zdravijem životu.\n\nNadamo se da će vam se svidjeti. Recite nam što mislite.</string>
 
     <string name="accessibility_disclosure">Molimo uključite Moo Launcherovu uslugu pristupačnosti u postavkama uređaja kako biste omogućili gestu dvostrukog dodira za zaključavanje.\n\nImajte na umu da se ova usluga koristi samo za tu značajku. Naša usluga pristupačnosti ne prikuplja niti dijeli nikakve podatke.</string>
     <string name="accept">Prihvati</string>
@@ -118,8 +108,6 @@
     <string name="hidden_apps">Skrivene aplikacije</string>
     <string name="adapter_show">Prikaži</string>
     <string name="adapter_hide">Sakrij</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Koristite li svoj telefon ili vaš telefon koristi vas?</string>
-    <string name="about_olauncher">O Olauncher-u i ČPP</string>
     <string name="alignment_changed">Poravnanje promijenjeno ✅</string>
     <string name="home_screen">Početni ekran</string>
     <string name="hey">Bok</string>

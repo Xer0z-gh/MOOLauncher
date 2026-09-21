@@ -13,11 +13,6 @@
     <string name="black">Hitam</string>
     <string name="white">Putih</string>
     <string name="change_default_launcher">Ubah peluncur default</string>
-    <string name="privacy">Privasi</string>
-    <string name="share">Bagikan</string>
-    <string name="share_now">Bagikan sekarang</string>
-    <string name="rate">Beri peringkat</string>
-    <string name="rate_now">Beri peringkat sekarang</string>
     <string name="follow">Ikuti</string>
     <string name="email">Surel</string>
 
@@ -54,10 +49,7 @@
     <string name="system_default">Sistem</string>
     <string name="dark">Gelap</string>
     <string name="light">Terang</string>
-    <string name="welcome_to_olauncher_settings">Selamat datang di pengaturan!
-        \n\nIngat, jika Anda memiliki pertanyaan, halaman Tentang kami memiliki jawabannya.</string>
-    <string name="rate_us_message">Hai, Anda tidak akan melihat pesan ini lagi.\n\nJika Moo Launcher bermanfaat bagi Anda, bisakah Anda memberikan ulasan bintang 5? Itu sangat berarti bagi kami. Terima kasih!</string>
-    <string name="share_message">Kami membutuhkan bantuan Anda! Kami percaya semua orang harus tahu tentang Moo Launcher dan manfaatnya, tetapi kami tidak dapat melakukannya sendiri.\n\nBisakah Anda membagikan Moo Launcher kepada teman, keluarga, dan pengikut Anda? Terima kasih atas dukungan Anda! ❤</string>
+    <string name="welcome_to_olauncher_settings">Selamat datang di pengaturan!</string>
     <string name="keyboard_message">Hai, keyboard adalah cara tercepat untuk menemukan dan membuka aplikasi di Moo Launcher. Bisakah kami meminta Anda untuk tetap mengaktifkannya selama beberapa hari lagi lalu memutuskan?\n\nPilihan selalu ada di tangan Anda.</string>
     <string name="digital_wellbeing_message">Jika Anda ingin menetapkan batas waktu untuk aplikasi tertentu, fitur Digital Wellbeing Android dapat membantu Anda melakukannya.
         \n\nSilakan cari Digital Wellbeing di pengaturan ponsel Anda dan aktifkan.</string>
@@ -77,7 +69,7 @@
     <string name="please_set_olauncher_as_default_first">Silakan atur Moo Launcher sebagai peluncur default Anda terlebih dahulu</string>
     <string name="affiliate">Afiliasi</string>
     <string name="tip_start_typing_for_rename">Tip: Mulailah mengetik untuk opsi RENAME aplikasi</string>
-    <string name="hidden_apps_message">Catatan: Ketuk \'Moo Launcher\' di bagian atas halaman Pengaturan ini untuk menemukan aplikasi tersembunyi Anda.\n\nRincian lebih lanjut tersedia di halaman Tentang kami.</string>
+    <string name="hidden_apps_message">Catatan: Ketuk \'Moo Launcher\' di bagian atas halaman Pengaturan ini untuk menemukan aplikasi tersembunyi Anda.</string>
     <string name="accessibility_disclosure">Harap aktifkan layanan aksesibilitas Moo Launcher di pengaturan perangkat Anda untuk mengaktifkan gerakan ketuk dua kali untuk mengunci.\n\nHarap perhatikan bahwa layanan ini hanya digunakan untuk fitur ini saja. Layanan aksesibilitas kami tidak mengumpulkan atau membagikan data apa pun.</string>
     <string name="accept">Terima</string>
     <string name="permission">Izin</string>
@@ -112,13 +104,9 @@
     <string name="hidden_apps">Aplikasi tersembunyi</string>
     <string name="adapter_show">Tampilkan</string>
     <string name="adapter_hide">Sembunyikan</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Apakah Anda menggunakan ponsel Anda, atau ponsel Anda menggunakan Anda?</string>
-    <string name="about_olauncher">Tentang dan FAQ</string>
     <string name="learn_more">Pelajari lebih lanjut</string>
     <string name="screen_time">Waktu layar</string>
     <string name="did_you_know">Tahukah Anda?</string>
-    <string name="leave_a_review">Tinggalkan ulasan</string>
-    <string name="review_message">Moo Launcher gratis dan akan selalu gratis. Tidak ada iklan, tidak mengumpulkan data, dan mengurangi waktu layar Anda, sehingga hidup lebih sehat.\n\nKami harap Anda menyukainya. Beri tahu kami pendapat Anda.</string>
     <string name="alignment_changed">Penyelarasan diubah ✅</string>
     <string name="home_screen">Layar beranda</string>
     <string name="hey">Hai</string>

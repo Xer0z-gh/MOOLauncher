@@ -13,11 +13,6 @@
     <string name="black">Musta</string>
     <string name="white">Valkoinen</string>
     <string name="change_default_launcher">Vaihda oletuskäynnistintä</string>
-    <string name="privacy">Yksityisyys</string>
-    <string name="share">Jaa</string>
-    <string name="share_now">Jaa nyt</string>
-    <string name="rate">Arvostele</string>
-    <string name="rate_now">Arvostele nyt</string>
     <string name="follow">Seuraa</string>
     <string name="email">Sähköposti</string>
     <string name="donate">Lahjoita</string>
@@ -53,12 +48,7 @@
     <string name="system_default">Järjestelmä</string>
     <string name="dark">Tumma</string>
     <string name="light">Vaalea</string>
-    <string name="welcome_to_olauncher_settings">Tervetuloa asetuksiin!
-        \n\nMuista, että jos sinulla on kysyttävää, Tietoja-sivulta löytyy vastaus.</string>
-    <string name="rate_us_message">Hei, et näe tätä viestiä enää uudelleen.
-        \n\nJos Moo Launcher on ollut sinulle hyödyllinen, voisitko jättää 5 tähden arvostelun? Se merkitsisi meille paljon. Kiitos!</string>
-    <string name="share_message">Tarvitsemme apuasi! Uskomme, että kaikkien pitäisi tietää Moo Launcherista ja sen hyödyistä, mutta emme voi tehdä sitä yksin.
-        \n\nVoisitko jakaa Moo Launcherin ystävillesi, perheellesi ja seuraajillesi? Kiitos tuestasi! ❤</string>
+    <string name="welcome_to_olauncher_settings">Tervetuloa asetuksiin!</string>
     <string name="keyboard_message">Hei, näppäimistö on nopein tapa löytää ja avata sovelluksia Moo Launcherissa. Voisitko pitää sen päällä vielä muutaman päivän ja päättää sitten?
         \n\nValinta on aina sinun.</string>
     <string name="digital_wellbeing_message">Jos haluat asettaa aikarajoja tietyille sovelluksille, Androidin Digitaalinen hyvinvointi -toiminto voi auttaa sinua siinä. Etsi Digitaalinen hyvinvointi puhelimesi asetuksista ja ota se käyttöön.</string>
@@ -78,7 +68,7 @@
     <string name="please_set_olauncher_as_default_first">Aseta ensin Moo Launcher oletukseksi</string>
     <string name="affiliate">Kumppanuus</string>
     <string name="tip_start_typing_for_rename">Vinkki: Aloita kirjoittaminen saadaksesi sovelluksen NIMEÄ UUDELLEEN -vaihtoehdon</string>
-    <string name="hidden_apps_message">Huomio: Napauta \'Moo Launcher\' tämän asetussivun yläreunassa löytääksesi piilotetut sovelluksesi.\n\nLisätietoja Tietoja-sivulla.</string>
+    <string name="hidden_apps_message">Huomio: Napauta \'Moo Launcher\' tämän asetussivun yläreunassa löytääksesi piilotetut sovelluksesi.</string>
     <string name="accessibility_disclosure">Ota Moo Launcherin esteettömyyspalvelu käyttöön laitteesi asetuksista, jotta voit ottaa käyttöön Lukitse kaksoisnapautuksella -eleen.\n\nHuomaa, että tätä palvelua käytetään vain tähän tiettyyn ominaisuuteen. Esteettömyyspalvelumme ei kerää tai jaa mitään tietoja.</string>
     <string name="accept">Hyväksy</string>
     <string name="permission">Käyttöoikeus</string>
@@ -113,14 +103,9 @@
     <string name="hidden_apps">Piilotetut sovellukset</string>
     <string name="adapter_show">Näytä</string>
     <string name="adapter_hide">Piilota</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Käytätkö puhelintasi vai käyttääkö puhelin sinua?</string>
-    <string name="about_olauncher">Tietoja ja usein kysytyt kysymykset</string>
     <string name="screen_time">Ruutuaika</string>
     <string name="learn_more">Lue lisää</string>
     <string name="did_you_know">Tiesitkö?</string>
-    <string name="leave_a_review">Jätä arvostelu</string>
-    <string name="review_message">Moo Launcher on ilmainen ja tulee aina olemaan. Siinä ei ole mainoksia, se ei kerää tietoja ja se vähentää ruutuaikaa, mikä johtaa terveellisempään elämään.
-        \n\nToivottavasti pidät siitä. Kerro meille mielipiteesi.</string>
     <string name="alignment_changed">Tasaus muutettu ✅</string>
     <string name="home_screen">Aloitusnäyttö</string>
     <string name="hey">Hei</string>

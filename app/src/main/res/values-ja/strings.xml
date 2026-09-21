@@ -23,7 +23,7 @@
     <string name="long_press_to_enable">長押しして有効にします</string>
     <string name="no_hidden_apps">非表示のアプリはありません</string>
     <string name="hidden_apps">非表示のアプリ</string>
-    <string name="hidden_apps_message">注: この設定ページの上部にある「Moo Launcher」をタップすると、非表示のアプリを確認できます。\n\n詳細については「アプリについて」ページをご覧ください。</string>
+    <string name="hidden_apps_message">注: この設定ページの上部にある「Moo Launcher」をタップすると、非表示のアプリを確認できます。</string>
     <string name="accessibility_disclosure">ダブルタップでロックのジェスチャーを有効にするには、デバイスの設定で Moo Launcher のユーザー補助サービスをオンにしてください。\n\nこのサービスはこの機能にのみ使用されます。当社のユーザー補助サービスはデータを収集したり共有したりすることはありません。</string>
     <string name="accept">同意する</string>
     <string name="permission">許可</string>
@@ -55,11 +55,6 @@
     <string name="black">黒</string>
     <string name="white">白</string>
     <string name="change_default_launcher">デフォルトのランチャーを変更する</string>
-    <string name="privacy">プライバシー</string>
-    <string name="share">共有</string>
-    <string name="share_now">今すぐ共有</string>
-    <string name="rate">評価</string>
-    <string name="rate_now">今すぐ評価</string>
     <string name="follow">フォロー</string>
     <string name="email">Eメール</string>
 
@@ -84,9 +79,7 @@
     <string name="system_default">システム</string>
     <string name="dark">ダーク</string>
     <string name="light">ライト</string>
-    <string name="welcome_to_olauncher_settings">設定へようこそ！\n\n質問がある場合は、「アプリについて」ページに答えがあります。</string>
-    <string name="rate_us_message">こんにちは、このメッセージは二度と表示されません。\n\nMoo Launcher が役に立っているなら、5 つ星のレビューを残していただけませんか？ 私たちにとって大きな励みになります。ありがとうございます！</string>
-    <string name="share_message">皆さんの助けが必要です！ Moo Launcher とその良さを誰もが知るべきだと考えていますが、私たちだけでは実現できません。\n\nMoo Launcher を友人、家族、フォロワーと共有していただけませんか？ ご支援ありがとうございます！ ❤</string>
+    <string name="welcome_to_olauncher_settings">設定へようこそ！</string>
     <string name="keyboard_message">こんにちは、キーボードは Moo Launcher でアプリを見つけて起動する最も速い方法です。あと数日間オンにしたままにして、それから判断していただけませんか？\n\n選択は常にあなた次第です。</string>
     <string name="digital_wellbeing_message">特定のアプリに時間制限を設定したい場合は、Android の Digital Wellbeing 機能を使用すると便利です。
         \n\n携帯電話の設定で Digital Wellbeing を検索し、有効にしてください。</string>
@@ -113,12 +106,8 @@
     <string name="swipe_left_app_disabled">左スワイプアプリを無効にしました</string>
     <string name="screen_time">スクリーンタイム</string>
     <string name="swipe_right_app_disabled">右スワイプアプリを無効にしました</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">あなたは電話を使っていますか、それともあなたの電話があなたを使っていますか？</string>
-    <string name="about_olauncher">アプリについてと FAQ</string>
     <string name="learn_more">もっと詳しく知る</string>
     <string name="did_you_know">知っていましたか？</string>
-    <string name="leave_a_review">レビューを残す</string>
-    <string name="review_message">Moo Launcher は無料で、これからもずっと無料です。広告はなく、データも収集せず、スクリーンタイムを減らして、より健康的な生活につながります。\n\n気に入っていただければ幸いです。ご意見をお聞かせください。</string>
     <string name="alignment_changed">配置を変更しました ✅</string>
     <string name="home_screen">ホーム画面</string>
     <string name="hey">やあ</string>

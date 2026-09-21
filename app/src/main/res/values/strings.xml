@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Moo Launcher</string>
-    <string name="github" translatable="false">Github</string>
+    <string name="github" translatable="false">GitHub</string>
     <string name="lock_layout_description" translatable="false">lock layout description to be used a unique id to lock screen</string>
     <!-- Home button for recents feature disabled -->
     <!-- <string name="recents_layout_description" translatable="false">recents layout description to be used a unique id to show recent apps</string> -->
@@ -18,7 +18,6 @@
     <string name="time_spent_min" translatable="false"><b>%1$sm</b></string>
     <string name="time_spent_hour" translatable="false">%1$sh %2$sm</string>
 
-    <string name="x_twitter" translatable="false">X/Twitter</string>
     <string name="instagram" translatable="false">Instagram</string>
 
     <string name="app">App</string>
@@ -35,11 +34,6 @@
     <string name="black">Black</string>
     <string name="white">White</string>
     <string name="change_default_launcher">Change default launcher</string>
-    <string name="privacy">Privacy</string>
-    <string name="share">Share</string>
-    <string name="share_now">Share now</string>
-    <string name="rate">Rate</string>
-    <string name="rate_now">Rate now</string>
     <string name="follow">Follow</string>
     <string name="email">Email</string>
     <string name="donate">Donate</string>
@@ -75,12 +69,7 @@
     <string name="system_default">System</string>
     <string name="dark">Dark</string>
     <string name="light">Light</string>
-    <string name="welcome_to_olauncher_settings">Welcome to the settings!
-        \n\nRemember, if you have any questions, our About page has the answer.</string>
-    <string name="rate_us_message">Hi, you won\'t see this message again.
-        \n\nIf you\'re finding Moo Launcher useful, could you please leave a 5-star review? It\'ll mean the world to us. Thank you!</string>
-    <string name="share_message">We need your help! We believe everyone should know about Moo Launcher and its benefits, but we can\'t do it alone.
-        \n\nCould you please share Moo Launcher with your friends, family, and followers? Thank you for your support! ❤</string>
+    <string name="welcome_to_olauncher_settings">Welcome to the settings!</string>
     <!--    <string name="share_message">Your monthly reminder - you should use your phone, not the other way round. Stay strong. You\'re doing great!-->
     <!--         \n\nIf you have a moment to spare, could you please share Moo Launcher with others? Moo Launcher needs people. More importantly, people need Moo Launcher.</string>-->
     <string name="keyboard_message">Hi, keyboard is the fastest way to find and launch apps in Moo Launcher. Can we request you to keep this On for a few more days and then decide?
@@ -102,7 +91,7 @@
     <string name="please_set_olauncher_as_default_first">Please set Moo Launcher as default first</string>
     <string name="affiliate">Affiliate</string>
     <string name="tip_start_typing_for_rename">Tip: Start typing for app RENAME option</string>
-    <string name="hidden_apps_message">Note: Tap on \'Moo Launcher\' at the top of this Settings page to find your hidden apps.\n\nMore details available in our About page.</string>
+    <string name="hidden_apps_message">Note: Your hidden apps are in Settings &gt; Apps &gt; Hidden apps. Tapping \'Moo Launcher\' at the top of this Settings page opens them too.</string>
     <string name="accessibility_disclosure">Please turn on Moo Launcher\'s accessibility service in your device\'s settings to enable Double tap to lock gesture.
     \n\nPlease note that this service is only used for this particular feature. Our accessibility service does not collect or share any data.</string>
     <string name="accept">Accept</string>
@@ -139,8 +128,6 @@
     <string name="hidden_apps">Hidden apps</string>
     <string name="adapter_show">Show</string>
     <string name="adapter_hide">Hide</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Are you using your phone, or is your phone using you?</string>
-    <string name="about_olauncher">About and FAQs</string>
     <string name="screen_time">Screen time</string>
     <string name="notification_badges">Notification badges</string>
     <string name="notification_badges_message">Moo Launcher will count the notifications you miss and show the number next to each home screen app. The count clears when you open that app. Notifications are only ever counted on this device, never stored and never sent anywhere.\n\nAndroid asks you to grant notification access on the next screen.</string>
@@ -241,9 +228,6 @@
     <string name="action_missed_notifications">Show missed notifications</string>
     <string name="learn_more">Learn more</string>
     <string name="did_you_know">Did you know?</string>
-    <string name="leave_a_review">Leave a review</string>
-    <string name="review_message">Moo Launcher is free and always will be. It has no ads, collects no data, and reduces your screen time, resulting in a healthier life.
-        \n\nWe hope you enjoy it. Tell us what you think.</string>
     <string name="alignment_changed">Alignment changed ✅</string>
     <string name="home_screen">Home screen</string>
     <string name="hey">Hey</string>

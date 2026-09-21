@@ -24,7 +24,7 @@
     <string name="hidden_apps">تطبيقات مخفية</string>
     <string name="swipe_left_app_disabled">التمرير لليسار معطّل</string>
     <string name="swipe_right_app_disabled">التمرير لليمين معطّل</string>
-    <string name="hidden_apps_message">ملاحظة: اضغط على \'Moo Launcher\' أعلى صفحة الإعدادات هذه للعثور على تطبيقاتك المخفية.\n\nالمزيد من التفاصيل متوفرة في صفحة \"حول\".</string>
+    <string name="hidden_apps_message">ملاحظة: اضغط على \'Moo Launcher\' أعلى صفحة الإعدادات هذه للعثور على تطبيقاتك المخفية.</string>
     <string name="accessibility_disclosure">يرجى تشغيل خدمة إمكانية الوصول الخاصة بـ Moo Launcher في إعدادات جهازك لتفعيل إيماءة النقر المزدوج للقفل.\n\nيرجى ملاحظة أن هذه الخدمة تُستخدم فقط لهذه الميزة بالذات. خدمة إمكانية الوصول لدينا لا تجمع أو تشارك أي بيانات.</string>
     <string name="accept">قبول</string>
     <string name="permission">إذن</string>
@@ -56,11 +56,6 @@
     <string name="black">أسود</string>
     <string name="white">أبيض</string>
     <string name="change_default_launcher">تغيير المشغل الافتراضي</string>
-    <string name="privacy">خصوصية</string>
-    <string name="share">شارك</string>
-    <string name="share_now">شارك الآن</string>
-    <string name="rate">قيّم</string>
-    <string name="rate_now">قيّم الآن</string>
     <string name="follow">تابع</string>
     <string name="email">البريد الإلكتروني</string>
     <string name="donate">تبرّع</string>
@@ -84,9 +79,7 @@
     <string name="system_default">نظام</string>
     <string name="dark">داكن</string>
     <string name="light">فاتح</string>
-    <string name="welcome_to_olauncher_settings">مرحبًا بك في الإعدادات!\n\nتذكر، إذا كان لديك أي سؤال، فإن صفحة \"حول\" لدينا تحتوي على الإجابة.</string>
-    <string name="rate_us_message">مرحبًا، لن ترى هذه الرسالة مرة أخرى.\n\nإذا كان Moo Launcher مفيدًا لك، فهل يمكنك ترك تقييم 5 نجوم؟ سيعني ذلك الكثير لنا. شكرًا لك!</string>
-    <string name="share_message">نحتاج إلى مساعدتك! نؤمن بأن الجميع يجب أن يعرفوا Moo Launcher وفوائده، لكننا لا نستطيع فعل ذلك بمفردنا.\n\nهل يمكنك مشاركة Moo Launcher مع أصدقائك وعائلتك ومتابعيك؟ شكرًا لدعمك! ❤</string>
+    <string name="welcome_to_olauncher_settings">مرحبًا بك في الإعدادات!</string>
     <string name="keyboard_message">مرحبًا، لوحة المفاتيح هي أسرع طريقة للعثور على التطبيقات وتشغيلها في Moo Launcher. هل يمكننا أن نطلب منك إبقاء هذا الخيار مفعّلًا لبضعة أيام أخرى ثم اتخاذ القرار؟\n\nالاختيار دائمًا لك.</string>
     <string name="digital_wellbeing_message">إذا كنت تريد تعيين حدود زمنية لتطبيقات معينة، فيمكن أن تساعدك ميزة الرفاهية الرقمية في Android على القيام بذلك.
         \n\nيرجى البحث عن الرفاهية الرقمية في إعدادات هاتفك وتمكينها.</string>
@@ -110,12 +103,8 @@
     <string name="search_for_Launcher_or_home_app">ابحث عن Launcher أو Home app</string>
     <string name="swipe_left_app_enabled">التمرير لليسار مفعّل</string>
     <string name="swipe_right_app_enabled">التمرير لليمين مفعّل</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">هل تستخدم هاتفك أم أن هاتفك يستخدمك؟</string>
-    <string name="about_olauncher">حول والأسئلة الشائعة</string>
     <string name="learn_more">اعرف المزيد</string>
     <string name="did_you_know">هل كنت تعلم؟</string>
-    <string name="leave_a_review">اترك تقييمًا</string>
-    <string name="review_message">Moo Launcher مجاني وسيظل كذلك دائمًا. لا يحتوي على إعلانات، ولا يجمع أي بيانات، ويقلل من وقت استخدامك للشاشة، مما يؤدي إلى حياة أكثر صحة.\n\nنأمل أن يعجبك. أخبرنا برأيك.</string>
     <string name="screen_time">وقت الشاشة</string>
     <string name="alignment_changed">تم تغيير المحاذاة ✅</string>
     <string name="home_screen">الشاشة الرئيسية</string>

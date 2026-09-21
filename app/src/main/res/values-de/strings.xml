@@ -22,7 +22,7 @@
     <string name="long_press_to_enable">Zum Aktivieren lange drücken</string>
     <string name="no_hidden_apps">Keine versteckten Apps</string>
     <string name="hidden_apps">Versteckte Apps</string>
-    <string name="hidden_apps_message">Hinweis: Tippen Sie oben auf dieser Einstellungsseite auf „Moo Launcher“, um Ihre versteckten Apps zu finden.\n\nWeitere Einzelheiten finden Sie auf unserer Seite „Über“.</string>
+    <string name="hidden_apps_message">Hinweis: Tippen Sie oben auf dieser Einstellungsseite auf „Moo Launcher“, um Ihre versteckten Apps zu finden.</string>
     <string name="accessibility_disclosure">Bitte aktivieren Sie den Bedienungshilfen-Dienst von Moo Launcher in den Einstellungen Ihres Geräts, um die Geste „Doppeltippen zum Sperren“ zu aktivieren.\n\nBitte beachten Sie, dass dieser Dienst nur für diese eine Funktion verwendet wird. Unser Bedienungshilfen-Dienst sammelt oder teilt keine Daten.</string>
     <string name="accept">Akzeptieren</string>
     <string name="permission">Erlaubnis</string>
@@ -54,11 +54,6 @@
     <string name="black">Schwarz</string>
     <string name="white">Weiß</string>
     <string name="change_default_launcher">Standard-Launcher ändern</string>
-    <string name="privacy">Privatsphäre</string>
-    <string name="share">Teilen</string>
-    <string name="share_now">Jetzt teilen</string>
-    <string name="rate">Bewerten</string>
-    <string name="rate_now">Jetzt bewerten</string>
     <string name="follow">Folgen</string>
     <string name="email">E-Mail</string>
 
@@ -83,10 +78,7 @@
     <string name="system_default">System</string>
     <string name="dark">Dunkel</string>
     <string name="light">Hell</string>
-    <string name="welcome_to_olauncher_settings">Willkommen in den Einstellungen!
-        \n\nDenken Sie daran, wenn Sie Fragen haben, unsere Seite „Über“ hat die Antwort.</string>
-    <string name="rate_us_message">Hallo, diese Nachricht wird Ihnen nicht mehr angezeigt.\n\nWenn Sie Moo Launcher nützlich finden, könnten Sie uns bitte eine 5-Sterne-Bewertung hinterlassen? Es würde uns sehr viel bedeuten. Danke!</string>
-    <string name="share_message">Wir brauchen Ihre Hilfe! Wir glauben, dass jeder Moo Launcher und seine Vorteile kennen sollte, aber alleine schaffen wir das nicht.\n\nKönnten Sie Moo Launcher bitte mit Ihren Freunden, Ihrer Familie und Ihren Followern teilen? Vielen Dank für Ihre Unterstützung! ❤</string>
+    <string name="welcome_to_olauncher_settings">Willkommen in den Einstellungen!</string>
     <string name="keyboard_message">Hallo, die Tastatur ist der schnellste Weg, Apps in Moo Launcher zu finden und zu starten. Können wir Sie bitten, die Funktion noch ein paar Tage eingeschaltet zu lassen und dann zu entscheiden?
         \n\nDie Wahl liegt immer bei Ihnen.</string>
     <string name="digital_wellbeing_message">Wenn Sie Zeitlimits für bestimmte Apps festlegen möchten, kann Ihnen die Digital Wellbeing-Funktion von Android dabei helfen.
@@ -112,13 +104,9 @@
     <string name="swipe_right_app_enabled">App nach rechts wischen aktiviert</string>
     <string name="swipe_left_app_disabled">App nach links wischen deaktiviert</string>
     <string name="swipe_right_app_disabled">App nach rechts wischen deaktiviert</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Benutzen Sie Ihr Telefon, oder nutzt Ihr Telefon Sie?</string>
     <string name="screen_time">Bildschirmzeit</string>
-    <string name="about_olauncher">Über und FAQ</string>
     <string name="learn_more">Erfahren Sie mehr</string>
     <string name="did_you_know">Wussten Sie?</string>
-    <string name="leave_a_review">Bewertung schreiben</string>
-    <string name="review_message">Moo Launcher ist kostenlos und wird es immer bleiben. Es hat keine Werbung, sammelt keine Daten und reduziert Ihre Bildschirmzeit, was zu einem gesünderen Leben führt.\n\nWir hoffen, es gefällt Ihnen. Sagen Sie uns, was Sie denken.</string>
     <string name="alignment_changed">Ausrichtung geändert ✅</string>
     <string name="home_screen">Startbildschirm</string>
     <string name="hey">Hey</string>

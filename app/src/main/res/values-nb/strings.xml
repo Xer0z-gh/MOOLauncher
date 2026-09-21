@@ -13,11 +13,6 @@
     <string name="black">Svart</string>
     <string name="white">Hvit</string>
     <string name="change_default_launcher">Endre standard launcher</string>
-    <string name="privacy">Personvern</string>
-    <string name="share">Del</string>
-    <string name="share_now">Del nå</string>
-    <string name="rate">Vurder</string>
-    <string name="rate_now">Vurder nå</string>
     <string name="follow">Følg</string>
     <string name="email">E-post</string>
     <string name="donate">Doner</string>
@@ -53,12 +48,7 @@
     <string name="system_default">System</string>
     <string name="dark">Mørk</string>
     <string name="light">Lys</string>
-    <string name="welcome_to_olauncher_settings">Velkommen til innstillingene!
-        \n\nHusk at hvis du har spørsmål, finner du svar på vår Om-side.</string>
-    <string name="rate_us_message">Hei, du vil ikke se denne meldingen igjen.
-        \n\nHvis du synes Moo Launcher er nyttig, kan du legge igjen en 5-stjerners vurdering? Det vil bety mye for oss. Takk!</string>
-    <string name="share_message">Vi trenger din hjelp! Vi mener alle bør vite om Moo Launcher og fordelene ved det, men vi klarer det ikke alene.
-        \n\nKan du dele Moo Launcher med venner, familie og følgere? Takk for støtten din! ❤</string>
+    <string name="welcome_to_olauncher_settings">Velkommen til innstillingene!</string>
     <string name="keyboard_message">Hei, tastaturet er den raskeste måten å finne og åpne apper på i Moo Launcher. Kan vi be deg la det stå på i noen dager til før du bestemmer deg?
         \n\nValget er alltid ditt.</string>
     <string name="digital_wellbeing_message">Hvis du vil angi tidsbegrensninger for bestemte apper, kan Androids Digital velvære-funksjon hjelpe deg med det. Søk etter Digital velvære i telefoninnstillingene og aktiver den.</string>
@@ -78,7 +68,7 @@
     <string name="please_set_olauncher_as_default_first">Angi først Moo Launcher som standard</string>
     <string name="affiliate">Partner</string>
     <string name="tip_start_typing_for_rename">Tips: Begynn å skrive for å få opp alternativet for å endre navn på appen</string>
-    <string name="hidden_apps_message">Merk: Trykk på \'Moo Launcher\' øverst på denne innstillingssiden for å finne de skjulte appene dine.\n\nFlere detaljer finnes på vår Om-side.</string>
+    <string name="hidden_apps_message">Merk: Trykk på \'Moo Launcher\' øverst på denne innstillingssiden for å finne de skjulte appene dine.</string>
     <string name="accessibility_disclosure">Slå på Moo Launchers tilgjengelighetstjeneste i enhetens innstillinger for å aktivere bevegelsen Dobbelttrykk for å låse.\n\nMerk at denne tjenesten kun brukes til denne bestemte funksjonen. Tilgjengelighetstjenesten vår samler ikke inn eller deler noen data.</string>
     <string name="accept">Godta</string>
     <string name="permission">Tillatelse</string>
@@ -113,14 +103,9 @@
     <string name="hidden_apps">Skjulte apper</string>
     <string name="adapter_show">Vis</string>
     <string name="adapter_hide">Skjul</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Bruker du telefonen din, eller bruker telefonen deg?</string>
-    <string name="about_olauncher">Om og ofte stilte spørsmål</string>
     <string name="screen_time">Skjermtid</string>
     <string name="learn_more">Les mer</string>
     <string name="did_you_know">Visste du det?</string>
-    <string name="leave_a_review">Legg igjen en vurdering</string>
-    <string name="review_message">Moo Launcher er gratis og vil alltid være det. Den har ingen reklame, samler ikke inn data og reduserer skjermtiden din, noe som gir et sunnere liv.
-        \n\nVi håper du liker den. Fortell oss hva du synes.</string>
     <string name="alignment_changed">Justering endret ✅</string>
     <string name="home_screen">Startskjerm</string>
     <string name="hey">Hei</string>

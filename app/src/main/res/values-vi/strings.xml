@@ -13,11 +13,6 @@
     <string name="black">Đen</string>
     <string name="white">Trắng</string>
     <string name="change_default_launcher">Đổi trình khởi chạy mặc định</string>
-    <string name="privacy">Quyền riêng tư</string>
-    <string name="share">Chia sẻ</string>
-    <string name="share_now">Chia sẻ ngay</string>
-    <string name="rate">Đánh giá</string>
-    <string name="rate_now">Đánh giá ngay</string>
     <string name="follow">Theo dõi</string>
     <string name="email">Email</string>
     <string name="donate">Ủng hộ</string>
@@ -53,12 +48,7 @@
     <string name="system_default">Hệ thống</string>
     <string name="dark">Tối</string>
     <string name="light">Sáng</string>
-    <string name="welcome_to_olauncher_settings">Chào mừng bạn đến với phần cài đặt!
-        \n\nHãy nhớ rằng, nếu bạn có bất kỳ câu hỏi nào, trang Giới thiệu sẽ có câu trả lời.</string>
-    <string name="rate_us_message">Xin chào, bạn sẽ không thấy lại thông báo này nữa.
-        \n\nNếu bạn thấy Moo Launcher hữu ích, bạn có thể để lại đánh giá 5 sao không? Điều đó thực sự có ý nghĩa rất lớn với chúng tôi. Cảm ơn bạn!</string>
-    <string name="share_message">Chúng tôi cần sự giúp đỡ của bạn! Chúng tôi tin rằng mọi người nên biết về Moo Launcher và những lợi ích của nó, nhưng chúng tôi không thể tự làm một mình.
-        \n\nBạn có thể chia sẻ Moo Launcher với bạn bè, gia đình và người theo dõi của bạn không? Cảm ơn bạn đã ủng hộ! ❤</string>
+    <string name="welcome_to_olauncher_settings">Chào mừng bạn đến với phần cài đặt!</string>
     <string name="keyboard_message">Xin chào, bàn phím là cách nhanh nhất để tìm và mở ứng dụng trong Moo Launcher. Chúng tôi có thể xin bạn giữ tính năng này bật thêm vài ngày rồi quyết định sau không?
         \n\nLựa chọn luôn là của bạn.</string>
     <string name="digital_wellbeing_message">Nếu bạn muốn đặt giới hạn thời gian cho một số ứng dụng nhất định, tính năng Digital Wellbeing của Android có thể giúp bạn. Vui lòng tìm Digital Wellbeing trong cài đặt điện thoại của bạn và bật tính năng này.</string>
@@ -78,7 +68,7 @@
     <string name="please_set_olauncher_as_default_first">Vui lòng đặt Moo Launcher làm mặc định trước</string>
     <string name="affiliate">Tiếp thị liên kết</string>
     <string name="tip_start_typing_for_rename">Mẹo: Bắt đầu gõ để có tùy chọn ĐỔI TÊN ứng dụng</string>
-    <string name="hidden_apps_message">Lưu ý: Nhấn vào \'Moo Launcher\' ở đầu trang Cài đặt này để tìm các ứng dụng ẩn của bạn.\n\nCó thêm chi tiết trên trang Giới thiệu của chúng tôi.</string>
+    <string name="hidden_apps_message">Lưu ý: Nhấn vào \'Moo Launcher\' ở đầu trang Cài đặt này để tìm các ứng dụng ẩn của bạn.</string>
     <string name="accessibility_disclosure">Vui lòng bật dịch vụ trợ năng của Moo Launcher trong cài đặt thiết bị của bạn để bật cử chỉ Chạm hai lần để khóa.
     \n\nXin lưu ý rằng dịch vụ này chỉ được sử dụng cho tính năng cụ thể này. Dịch vụ trợ năng của chúng tôi không thu thập hoặc chia sẻ bất kỳ dữ liệu nào.</string>
     <string name="accept">Đồng ý</string>
@@ -114,14 +104,9 @@
     <string name="hidden_apps">Ứng dụng ẩn</string>
     <string name="adapter_show">Hiện</string>
     <string name="adapter_hide">Ẩn</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Bạn đang sử dụng điện thoại của mình, hay điện thoại đang sử dụng bạn?</string>
-    <string name="about_olauncher">Giới thiệu và câu hỏi thường gặp</string>
     <string name="screen_time">Thời gian sử dụng màn hình</string>
     <string name="learn_more">Tìm hiểu thêm</string>
     <string name="did_you_know">Bạn có biết?</string>
-    <string name="leave_a_review">Để lại đánh giá</string>
-    <string name="review_message">Moo Launcher miễn phí và sẽ luôn miễn phí. Ứng dụng không có quảng cáo, không thu thập dữ liệu và giúp giảm thời gian sử dụng màn hình, mang lại cuộc sống lành mạnh hơn.
-        \n\nChúng tôi hy vọng bạn thích nó. Hãy cho chúng tôi biết bạn nghĩ gì.</string>
     <string name="alignment_changed">Đã thay đổi căn chỉnh ✅</string>
     <string name="home_screen">Màn hình chính</string>
     <string name="hey">Này</string>

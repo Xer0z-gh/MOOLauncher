@@ -22,7 +22,7 @@
     <string name="long_press_to_enable">Naciśnij długo, aby włączyć</string>
     <string name="no_hidden_apps">Brak ukrytych aplikacji</string>
     <string name="hidden_apps">Ukryte aplikacje</string>
-    <string name="hidden_apps_message">Uwaga: Stuknij w „Moo Launcher” u góry tej strony ustawień, aby znaleźć ukryte aplikacje.\n\nWięcej informacji znajdziesz na naszej stronie Informacje.</string>
+    <string name="hidden_apps_message">Uwaga: Stuknij w „Moo Launcher” u góry tej strony ustawień, aby znaleźć ukryte aplikacje.</string>
     <string name="accessibility_disclosure">Włącz usługę ułatwień dostępu Moo Launcher w ustawieniach urządzenia, aby włączyć gest podwójnego dotknięcia do zablokowania.\n\nPamiętaj, że ta usługa jest używana wyłącznie do tej jednej funkcji. Nasza usługa ułatwień dostępu nie zbiera ani nie udostępnia żadnych danych.</string>
     <string name="accept">Akceptuj</string>
     <string name="permission">Uprawnienie</string>
@@ -54,11 +54,6 @@
     <string name="black">Czarny</string>
     <string name="white">Biały</string>
     <string name="change_default_launcher">Zmień domyślny program uruchamiający</string>
-    <string name="privacy">Prywatność</string>
-    <string name="share">Udostępnij</string>
-    <string name="share_now">Udostępnij teraz</string>
-    <string name="rate">Oceń</string>
-    <string name="rate_now">Oceń teraz</string>
     <string name="follow">Śledź</string>
     <string name="email">E-mail</string>
 
@@ -83,10 +78,7 @@
     <string name="system_default">System</string>
     <string name="dark">Ciemny</string>
     <string name="light">Jasny</string>
-    <string name="welcome_to_olauncher_settings">Witamy w ustawieniach!
-        \n\nPamiętaj, jeśli masz jakiekolwiek pytania, nasza strona „O nas” ma odpowiedź.</string>
-    <string name="rate_us_message">Cześć, nie zobaczysz już tej wiadomości.\n\nJeśli Moo Launcher jest dla Ciebie przydatny, czy możesz zostawić ocenę 5 gwiazdek? Będzie to dla nas bardzo wiele znaczyć. Dziękujemy!</string>
-    <string name="share_message">Potrzebujemy Twojej pomocy! Uważamy, że każdy powinien wiedzieć o Moo Launcher i jego zaletach, ale sami nie damy rady.\n\nCzy możesz udostępnić Moo Launcher swoim znajomym, rodzinie i obserwującym? Dziękujemy za wsparcie! ❤</string>
+    <string name="welcome_to_olauncher_settings">Witamy w ustawieniach!</string>
     <string name="keyboard_message">Cześć, klawiatura to najszybszy sposób znajdowania i uruchamiania aplikacji w Moo Launcher. Czy możemy poprosić o pozostawienie tego włączonego jeszcze przez kilka dni, a następnie podjęcie decyzji?\n\nWybór zawsze należy do Ciebie.</string>
     <string name="digital_wellbeing_message">Jeśli chcesz ustawić limity czasowe dla niektórych aplikacji, funkcja Cyfrowa równowaga w systemie Android może Ci w tym pomóc.
         \n\nWyszukaj opcję Cyfrowa równowaga w ustawieniach telefonu i włącz ją.</string>
@@ -112,13 +104,9 @@
     <string name="swipe_right_app_enabled">Gest Przesuń w prawo jest włączony</string>
     <string name="swipe_left_app_disabled">Gest Przesuń w lewo wyłączony</string>
     <string name="swipe_right_app_disabled">Gest Przesuń w prawo jest wyłączony</string>
-    <string name="are_you_using_your_phone_or_is_your_phone_using_you">Czy używasz telefonu, czy telefon używa ciebie?</string>
-    <string name="about_olauncher">O aplikacji i FAQ</string>
     <string name="screen_time">Czas ekranowy</string>
     <string name="learn_more">Dowiedz się więcej</string>
     <string name="did_you_know">Czy wiesz?</string>
-    <string name="leave_a_review">Zostaw opinię</string>
-    <string name="review_message">Moo Launcher jest darmowy i zawsze taki będzie. Nie ma reklam, nie zbiera danych i skraca czas spędzany przed ekranem, co przekłada się na zdrowsze życie.\n\nMamy nadzieję, że Ci się spodoba. Powiedz nam, co myślisz.</string>
     <string name="alignment_changed">Wyrównanie zmienione ✅</string>
     <string name="home_screen">Ekran główny</string>
     <string name="hey">Hej</string>
