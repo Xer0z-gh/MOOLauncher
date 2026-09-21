@@ -332,6 +332,13 @@ class AppDrawerAdapter(
             }
             appTitle.gravity = appLabelGravity
             otherProfileIndicator.isVisible = appModel.user != myUserHandle
+            // The dot is the only thing distinguishing a work-profile app from a personal
+            // one with the same name, and it was invisible to a screen reader.
+            otherProfileIndicator.importantForAccessibility =
+                View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            appTitle.contentDescription = if (appModel.user != myUserHandle)
+                root.context.getString(R.string.a11y_work_profile, appModel.appLabel)
+            else null
 
             appTitle.setOnClickListener { clickListener(appModel) }
 

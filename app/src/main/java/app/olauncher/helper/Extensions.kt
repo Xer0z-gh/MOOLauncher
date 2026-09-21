@@ -231,6 +231,19 @@ fun View.tintTextTree(@ColorInt color: Int, @ColorInt hintColor: Int) {
  * palette already guarantees, and it follows a custom theme rather than a theme attribute
  * that can disagree with the painted background.
  */
+/**
+ * Clears every LayoutTransition in a view tree.
+ *
+ * animateLayoutChanges is declarative, so a layout that sets it animates whatever the
+ * system animation scale says - there is no per-view opt-out in XML. The only way to honour
+ * "Remove animations" for those is to null the transition the flag created.
+ */
+fun View.clearLayoutTransitions() {
+    if (this !is ViewGroup) return
+    layoutTransition = null
+    for (i in 0 until childCount) getChildAt(i).clearLayoutTransitions()
+}
+
 fun View.applyFocusOutline(@ColorInt color: Int) {
     val ring = GradientDrawable().apply {
         shape = GradientDrawable.RECTANGLE

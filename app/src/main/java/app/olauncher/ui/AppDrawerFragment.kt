@@ -30,6 +30,7 @@ import app.olauncher.helper.deletePinnedShortcut
 import app.olauncher.helper.dpToPx
 import app.olauncher.helper.hideKeyboard
 import app.olauncher.helper.isEinkDisplay
+import app.olauncher.helper.clearLayoutTransitions
 import app.olauncher.helper.isSystemAnimationsDisabled
 import app.olauncher.helper.isSystemApp
 import app.olauncher.helper.openAppInfo
@@ -160,6 +161,33 @@ class AppDrawerFragment : BaseFragment() {
         }
         cachedIsCjkKeyboard = result
         return result
+    }
+
+    /**
+     * The field you type into is AppCompat's, inside the SearchView, and padding on the
+     * SearchView does not reach it - raising that padding made the inner field shorter, not
+     * taller. It measured 36dp, under Android's 48dp minimum, on the screen this launcher
+     * opens most.
+     */
+    private fun applySearchFieldHeight() {
+        // minimumHeight on the text view alone does nothing: AppCompat lays it out inside
+        // search_plate, so the plate is what decides how tall the target is.
+        val target = 48.dpToPx()
+        listOf(
+            androidx.appcompat.R.id.search_plate,
+            androidx.appcompat.R.id.search_edit_frame,
+            androidx.appcompat.R.id.search_src_text,
+        ).forEach { id -> binding.search.findViewById<View>(id)?.minimumHeight = target }
+    }
+
+    /**
+     * animateLayoutChanges is set in the drawer's XML, and nothing was clearing the
+     * LayoutTransition it creates - so the long-press action menu and the rename row kept
+     * animating with "Remove animations" on. The home screen's copy was already gated.
+     */
+    private fun applyMotionPreference() {
+        if (!requireContext().isSystemAnimationsDisabled()) return
+        binding.root.clearLayoutTransitions()
     }
 
     /**
@@ -314,6 +342,8 @@ class AppDrawerFragment : BaseFragment() {
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = adapter
         applyColorTheme()
+        applyMotionPreference()
+        applySearchFieldHeight()
         applyIconSettings()
         binding.recyclerView.addOnScrollListener(getRecyclerViewOnScrollListener())
         binding.recyclerView.itemAnimator = null

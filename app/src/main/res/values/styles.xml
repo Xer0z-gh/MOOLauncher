@@ -143,8 +143,16 @@
         <item name="android:fontFamily">?attr/mainFontFamily</item>
     </style>
 
+    <!--
+        Every tappable value in Settings uses this, so the 48dp minimum lives here rather
+        than on thirty-five TextViews that a new row would not inherit. They measured about
+        42 x 40dp, which is a small target for a launcher used one-handed and walking.
+    -->
     <style name="TextSmallBold" parent="TextSmall">
         <item name="android:textStyle">bold</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="TextSmallLight" parent="TextSmall">

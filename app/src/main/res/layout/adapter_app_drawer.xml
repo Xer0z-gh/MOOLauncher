@@ -50,13 +50,17 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
+            android:minHeight="48dp"
             android:paddingHorizontal="8dp"
+            android:paddingVertical="12dp"
             android:text="@string/delete"
             android:textSize="12sp"
             app:drawableTopCompat="@drawable/ic_delete" />
 
         <TextView
             android:id="@+id/appRename"
+            android:minHeight="48dp"
+            android:paddingVertical="12dp"
             style="@style/TextSmall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -72,6 +76,8 @@
 
         <TextView
             android:id="@+id/appHide"
+            android:minHeight="48dp"
+            android:paddingVertical="12dp"
             style="@style/TextSmall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -87,6 +93,8 @@
 
         <TextView
             android:id="@+id/appInfo"
+            android:minHeight="48dp"
+            android:paddingVertical="12dp"
             style="@style/TextSmall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -102,6 +110,8 @@
 
         <TextView
             android:id="@+id/appMenuClose"
+            android:minHeight="48dp"
+            android:paddingVertical="12dp"
             style="@style/TextSmall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -162,6 +172,8 @@
 
         <TextView
             android:id="@+id/appRenameClose"
+            android:minHeight="48dp"
+            android:paddingVertical="12dp"
             style="@style/TextSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

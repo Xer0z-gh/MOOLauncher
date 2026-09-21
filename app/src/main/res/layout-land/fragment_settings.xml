@@ -61,8 +61,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:minHeight="48dp"
+                    android:paddingVertical="12dp"
                     android:text="@string/set_as_default_launcher" />
 
             </LinearLayout>
@@ -1042,7 +1044,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
-                    android:padding="10dp"
+                    android:gravity="center"
+                    android:minHeight="48dp"
+                    android:minWidth="48dp"
+                    android:padding="12dp"
                     android:text="@string/github" />
 
             </LinearLayout>

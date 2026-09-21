@@ -35,6 +35,7 @@ import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.FragmentHomeBinding
 import app.olauncher.helper.IconCache
+import app.olauncher.helper.MyAccessibilityService
 import app.olauncher.helper.NotificationCounts
 import app.olauncher.helper.applyFocusOutline
 import app.olauncher.helper.appUsagePermissionGranted
@@ -120,6 +121,9 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             base.isEmpty() -> weather
             else -> getString(R.string.line_with_weather, base, weather)
         }
+        // Spoken as "3h 31m" with no idea what the number is, otherwise.
+        binding.tvScreenTime.contentDescription =
+            getString(R.string.a11y_screen_time, binding.tvScreenTime.text)
         binding.tvScreenTime.isVisible = binding.tvScreenTime.text.isNotEmpty()
     }
 
@@ -203,7 +207,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.lock -> {}
             // Home button for recents feature disabled
             // R.id.recents -> {}
             R.id.clock -> openClockApp()
@@ -360,7 +363,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     private fun initClickListeners() {
-        binding.lock.setOnClickListener(this)
         // Home button for recents feature disabled
         // binding.recents.setOnClickListener(this)
         binding.clock.setOnClickListener(this)
@@ -1147,8 +1149,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     private fun lockPhoneByGesture() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) binding.lock.performClick()
-        else lockPhone()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
+            MyAccessibilityService.lockScreen()
+        ) return
+        lockPhone()
     }
 
     private fun showLongPressToast() = requireContext().showToast(getString(R.string.long_press_to_select_app))

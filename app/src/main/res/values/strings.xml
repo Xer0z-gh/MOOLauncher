@@ -132,6 +132,9 @@
         <item quantity="other">%1$s · %2$d missed notifications</item>
     </plurals>
     <string name="a11y_pair" translatable="false">%1$s, %2$s</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="a11y_work_profile">%1$s, work profile</string>
+    <string name="a11y_screen_time">Screen time, %1$s</string>
     <string name="empty_home_slot">Empty slot, double tap to choose an app</string>
     <string name="search_apps">Search apps</string>
     <string name="please_select_an_app">Please select an app</string>
