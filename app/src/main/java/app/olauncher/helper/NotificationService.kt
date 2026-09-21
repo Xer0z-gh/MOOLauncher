@@ -48,7 +48,11 @@ class NotificationService : NotificationListenerService() {
 
     private fun count(sbn: StatusBarNotification) {
         if (!badgeWorthy(sbn)) return
-        val appKey = NotificationCounts.key(sbn.packageName, sbn.user.toString())
+        val user = sbn.user.toString()
+        // Per-app filter. Read fresh rather than cached: the set changes from the settings screen
+        // while this service stays bound, and a stale copy would quietly ignore the user's choice.
+        if ("${sbn.packageName}|$user" in prefs.badgeMutedApps) return
+        val appKey = NotificationCounts.key(sbn.packageName, user)
         NotificationCounts.onPosted(sbn.key, appKey, lineFor(sbn))
     }
 

@@ -42,8 +42,11 @@ class Prefs(context: Context) {
     private val BADGE_STYLE = "BADGE_STYLE"
     private val COLOR_THEME_ID = "COLOR_THEME_ID"
     private val SHOW_APP_ICONS = "SHOW_APP_ICONS"
+    private val SHOW_HOME_ICONS = "SHOW_HOME_ICONS"
+    private val SHOW_DRAWER_ICONS = "SHOW_DRAWER_ICONS"
     private val ICON_STYLE = "ICON_STYLE"
     private val ICON_PACK_PACKAGE = "ICON_PACK_PACKAGE"
+    private val BADGE_MUTED_APPS = "BADGE_MUTED_APPS"
     private val BADGE_TAP_DETAILS = "BADGE_TAP_DETAILS"
     private val HIDE_SET_DEFAULT_LAUNCHER = "HIDE_SET_DEFAULT_LAUNCHER"
     private val SCREEN_TIME_LAST_UPDATED = "SCREEN_TIME_LAST_UPDATED"
@@ -221,12 +224,23 @@ class Prefs(context: Context) {
         set(value) = prefs.edit { putBoolean(SHOW_NOTIFICATION_BADGES, value) }
 
     /**
-     * Off by default. Olauncher is a text launcher and staying one is the point; icons are here
-     * because Before has them and some people want them, not because they are the better default.
+     * Icons are per-surface, not one global switch.
+     *
+     * Wanting icons while browsing every installed app but not on a deliberately spare home
+     * screen is a coherent preference, and Before's single "icons enabled" cannot express it.
+     * Both default to the old combined setting, so anyone who had icons on keeps them.
      */
-    var showAppIcons: Boolean
-        get() = prefs.getBoolean(SHOW_APP_ICONS, false)
-        set(value) = prefs.edit { putBoolean(SHOW_APP_ICONS, value) }
+    var showHomeIcons: Boolean
+        get() = prefs.getBoolean(SHOW_HOME_ICONS, prefs.getBoolean(SHOW_APP_ICONS, false))
+        set(value) = prefs.edit { putBoolean(SHOW_HOME_ICONS, value) }
+
+    var showDrawerIcons: Boolean
+        get() = prefs.getBoolean(SHOW_DRAWER_ICONS, prefs.getBoolean(SHOW_APP_ICONS, false))
+        set(value) = prefs.edit { putBoolean(SHOW_DRAWER_ICONS, value) }
+
+    /** True when icons are shown anywhere; gates the icon style and pack settings. */
+    val showAppIcons: Boolean
+        get() = showHomeIcons || showDrawerIcons
 
     /** Package name of the chosen icon pack, or empty for each app's own icon. */
     var iconPackPackage: String
@@ -277,6 +291,18 @@ class Prefs(context: Context) {
     var hiddenApps: MutableSet<String>
         get() = prefs.getStringSet(HIDDEN_APPS, mutableSetOf()) as MutableSet<String>
         set(value) = prefs.edit { putStringSet(HIDDEN_APPS, value) }
+
+    /**
+     * Apps excluded from notification badges, keyed "package|user" like [hiddenApps].
+     *
+     * Before Launcher's notification filter silences the apps you do not care about and takes
+     * them out of the shade. This does the quieter half: those apps simply stop producing a
+     * badge. Nothing is cancelled or hidden from the system shade - a launcher deleting your
+     * notifications is a bigger promise than a launcher counting them.
+     */
+    var badgeMutedApps: MutableSet<String>
+        get() = prefs.getStringSet(BADGE_MUTED_APPS, mutableSetOf()) as MutableSet<String>
+        set(value) = prefs.edit { putStringSet(BADGE_MUTED_APPS, value) }
 
     var hiddenAppsUpdated: Boolean
         get() = prefs.getBoolean(HIDDEN_APPS_UPDATED, false)

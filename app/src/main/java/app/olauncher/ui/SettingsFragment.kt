@@ -174,13 +174,14 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.dateTime -> showDateTimeMenu(view)
             R.id.appThemeText -> showAppThemeMenu(view, showSystem = false)
             R.id.colorTheme -> showColorThemeDialog()
-            R.id.appIcons -> toggleAppIcons()
+            R.id.appIcons -> showIconPlacesMenu(view)
             R.id.iconStyle -> showIconStyleMenu(view)
             R.id.iconPack -> showIconPackDialog()
             R.id.textSizeValue -> showTextSizeDialog()
             R.id.boldFont -> toggleBoldFont()
             R.id.notificationBadges -> toggleNotificationBadges()
             R.id.badgeStyle -> showBadgeStyleMenu(view)
+            R.id.badgeFilter -> showBadgeFilter()
             R.id.badgeTapDetails -> {
                 prefs.badgeTapShowsDetails = !prefs.badgeTapShowsDetails
                 populateBadgeOptions()
@@ -276,6 +277,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.iconStyle.setOnClickListener(this)
         binding.iconPack.setOnClickListener(this)
         binding.badgeStyle.setOnClickListener(this)
+        binding.badgeFilter.setOnClickListener(this)
         binding.badgeTapDetails.setOnClickListener(this)
         binding.gestureSwipeUp.setOnClickListener(this)
         binding.gestureSwipeDown.setOnClickListener(this)
@@ -720,10 +722,37 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         requireActivity().recreate()
     }
 
-    private fun toggleAppIcons() {
-        prefs.showAppIcons = !prefs.showAppIcons
-        populateIconSettings()
-        viewModel.refreshHome(false)
+    /**
+     * Icons are chosen per surface rather than toggled globally: wanting them while browsing
+     * every installed app but not on a deliberately spare home screen is a coherent preference,
+     * and one on/off switch cannot express it.
+     */
+    private fun showIconPlacesMenu(anchor: View) {
+        anchor.showPopupMenu(R.menu.icon_places) { item ->
+            when (item.itemId) {
+                R.id.iconsHomeOnly -> {
+                    prefs.showHomeIcons = true
+                    prefs.showDrawerIcons = false
+                }
+
+                R.id.iconsDrawerOnly -> {
+                    prefs.showHomeIcons = false
+                    prefs.showDrawerIcons = true
+                }
+
+                R.id.iconsEverywhere -> {
+                    prefs.showHomeIcons = true
+                    prefs.showDrawerIcons = true
+                }
+
+                else -> {
+                    prefs.showHomeIcons = false
+                    prefs.showDrawerIcons = false
+                }
+            }
+            populateIconSettings()
+            viewModel.refreshHome(false)
+        }
     }
 
     private fun showIconStyleMenu(anchor: View) {
@@ -800,7 +829,14 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
     }
 
     private fun populateIconSettings() {
-        binding.appIcons.text = getString(if (prefs.showAppIcons) R.string.on else R.string.off)
+        binding.appIcons.text = getString(
+            when {
+                prefs.showHomeIcons && prefs.showDrawerIcons -> R.string.icons_everywhere
+                prefs.showHomeIcons -> R.string.icons_home_only
+                prefs.showDrawerIcons -> R.string.icons_drawer_only
+                else -> R.string.off
+            }
+        )
         binding.iconStyle.text = getString(
             if (prefs.iconStyle == Constants.IconStyle.GRAYSCALE) R.string.icon_style_grayscale
             else R.string.icon_style_full_color
@@ -817,6 +853,23 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.colorTheme.text = getString(ColorTheme.byId(prefs.colorThemeId).nameRes)
     }
 
+    private fun showBadgeFilter() {
+        if (!prefs.showNotificationBadges) {
+            requireContext().showToast(getString(R.string.notification_badges_are_off))
+            return
+        }
+        viewModel.getAppList(true)
+        runCatching {
+            findNavController().navigate(
+                R.id.action_settingsFragment_to_appListFragment,
+                bundleOf(
+                    Constants.Key.FLAG to Constants.FLAG_BADGE_FILTER,
+                    Constants.Key.KEYBOARD_MODE to Constants.KeyboardMode.HIDE
+                )
+            )
+        }.onFailure { it.printStackTrace() }
+    }
+
     private fun populateBadgeOptions() {
         binding.badgeStyle.text = getString(
             if (prefs.badgeStyle == Constants.BadgeStyle.DOT) R.string.badge_style_dot
@@ -824,6 +877,10 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         )
         binding.badgeTapDetails.text =
             getString(if (prefs.badgeTapShowsDetails) R.string.on else R.string.off)
+        val muted = prefs.badgeMutedApps.size
+        binding.badgeFilter.text =
+            if (muted == 0) getString(R.string.all)
+            else getString(R.string.badge_muted_count, muted)
     }
 
     private fun populateNotificationBadges() {

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/iconsOff"
+        android:title="@string/off" />
+    <item
+        android:id="@+id/iconsHomeOnly"
+        android:title="@string/icons_home_only" />
+    <item
+        android:id="@+id/iconsDrawerOnly"
+        android:title="@string/icons_drawer_only" />
+    <item
+        android:id="@+id/iconsEverywhere"
+        android:title="@string/icons_everywhere" />
+</menu>

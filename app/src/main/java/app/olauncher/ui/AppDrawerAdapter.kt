@@ -76,6 +76,13 @@ class AppDrawerAdapter(
     var themeTextColor: Int = 0
 
     /**
+     * Apps muted for notification badges, keyed "package|user". Only consulted in the badge
+     * filter screen, where the label carries the state so the whole list is readable at a glance
+     * rather than needing a tap to find out.
+     */
+    var mutedKeys: Set<String> = emptySet()
+
+    /**
      * Icon settings for the drawer. [iconSizePx] of 0 means icons are off.
      *
      * Loads are tagged with the row's own package so a slow load landing after the row has been
@@ -152,11 +159,27 @@ class AppDrawerAdapter(
                     if (themeTextColor != 0)
                         holder.itemView.tintTextTree(themeTextColor, themeTextColor.withAlpha(0x80))
                     bindIcon(holder, appModel)
+                    bindMutedState(holder, appModel)
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    /**
+     * In the badge filter screen, dims muted apps and marks them, so the list reads as two groups
+     * without a checkbox per row. Rows are recycled, so full alpha has to be restored every bind.
+     */
+    private fun bindMutedState(holder: ViewHolder, appModel: AppModel) {
+        val title = holder.itemView.findViewById<android.widget.TextView>(R.id.appTitle)
+        if (flag != Constants.FLAG_BADGE_FILTER) {
+            title.alpha = 1f
+            return
+        }
+        val muted = "${appModel.appPackage}|${appModel.user}" in mutedKeys
+        title.alpha = if (muted) 0.45f else 1f
+        if (muted) title.text = holder.itemView.context.getString(R.string.badge_muted_app, appModel.appLabel)
     }
 
     private fun bindIcon(holder: ViewHolder, appModel: AppModel) {

@@ -397,7 +397,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      */
     private fun refreshHomeIcons() {
         val names = homeAppNameViews()
-        if (!prefs.showAppIcons) {
+        if (!prefs.showHomeIcons) {
             names.forEach { it.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null) }
             return
         }

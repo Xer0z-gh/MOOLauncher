@@ -96,6 +96,8 @@ class AppDrawerFragment : BaseFragment() {
     private fun initViews() {
         if (flag == Constants.FLAG_HIDDEN_APPS)
             binding.search.queryHint = getString(R.string.hidden_apps)
+        else if (flag == Constants.FLAG_BADGE_FILTER)
+            binding.search.queryHint = getString(R.string.badge_filter_hint)
         else if (flag in Constants.FLAG_SET_HOME_APP_1..Constants.FLAG_SET_CALENDAR_APP)
             binding.search.queryHint = "Please select an app"
         try {
@@ -177,9 +179,23 @@ class AppDrawerFragment : BaseFragment() {
      * in-flight icon load is cancelled when the drawer closes rather than outliving it.
      */
     private fun applyIconSettings() {
-        adapter.iconSizePx = if (prefs.showAppIcons) ICON_SIZE_DP.dpToPx() else 0
+        adapter.iconSizePx = if (prefs.showDrawerIcons) ICON_SIZE_DP.dpToPx() else 0
         adapter.iconGrayscale = prefs.iconStyle == Constants.IconStyle.GRAYSCALE
         adapter.iconScope = viewLifecycleOwner.lifecycleScope
+        if (flag == Constants.FLAG_BADGE_FILTER) adapter.mutedKeys = prefs.badgeMutedApps
+    }
+
+    /** Mutes or unmutes an app for notification badges and repaints just that row. */
+    private fun toggleBadgeMuted(appModel: AppModel) {
+        if (appModel.appPackage.isEmpty()) return
+        val key = "${appModel.appPackage}|${appModel.user}"
+        val updated = prefs.badgeMutedApps.toMutableSet()
+        if (!updated.remove(key)) updated.add(key)
+        prefs.badgeMutedApps = updated
+        adapter.mutedKeys = updated
+
+        val position = adapter.appFilteredList.indexOf(appModel)
+        if (position >= 0) adapter.notifyItemChanged(position)
     }
 
     private fun initAdapter() {
@@ -187,11 +203,17 @@ class AppDrawerFragment : BaseFragment() {
             flag,
             prefs.appLabelAlignment,
             appClickListener = { appModel ->
-                viewModel.selectedApp(appModel, flag)
-                if (flag == Constants.FLAG_LAUNCH_APP || flag == Constants.FLAG_HIDDEN_APPS)
-                    findNavController().popBackStack(R.id.mainFragment, false)
-                else
-                    findNavController().popBackStack()
+                if (flag == Constants.FLAG_BADGE_FILTER) {
+                    // Toggling stays on the screen: muting apps is something you do to several in
+                    // a row, and bouncing back to settings after each one would be miserable.
+                    toggleBadgeMuted(appModel)
+                } else {
+                    viewModel.selectedApp(appModel, flag)
+                    if (flag == Constants.FLAG_LAUNCH_APP || flag == Constants.FLAG_HIDDEN_APPS)
+                        findNavController().popBackStack(R.id.mainFragment, false)
+                    else
+                        findNavController().popBackStack()
+                }
             },
             appInfoListener = {
                 openAppInfo(

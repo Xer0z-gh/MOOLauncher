@@ -161,6 +161,9 @@
     <string name="badge_dot">•</string>
     <string name="color_theme">Colour theme</string>
     <string name="app_icons">App icons</string>
+    <string name="icons_home_only">Home only</string>
+    <string name="icons_drawer_only">App list only</string>
+    <string name="icons_everywhere">Home and app list</string>
     <string name="icon_style">Icon style</string>
     <string name="icon_style_full_color">Full colour</string>
     <string name="icon_style_grayscale">Grayscale</string>
@@ -187,6 +190,11 @@
     <string name="preview_app_three">Music</string>
     <string name="theme_selected">%1$s, selected</string>
     <string name="theme_not_selected">%1$s</string>
+    <string name="badge_filter">Apps to badge</string>
+    <string name="all">All</string>
+    <string name="badge_muted_count">%1$d muted</string>
+    <string name="badge_filter_hint">Tap an app to mute its badge</string>
+    <string name="badge_muted_app">%1$s · muted</string>
     <string name="badge_style">Badge style</string>
     <string name="badge_style_count">Number</string>
     <string name="badge_style_dot">Dot</string>
