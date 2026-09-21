@@ -849,63 +849,57 @@
                     android:text="@string/gestures"
                     android:textColor="?attr/primaryColor" />
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="12dp">
 
                     <TextView
                         style="@style/TextSmall"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginEnd="24dp"
-                        android:layout_weight="1"
-                        android:lines="1"
+                        android:layout_marginEnd="80dp"
                         android:paddingVertical="8dp"
-                        android:text="@string/swipe_left_app"
+                        android:text="@string/gestures_swipe_left"
                         android:textColor="?attr/primaryColor" />
 
                     <TextView
-                        android:id="@+id/swipeLeftApp"
+                        android:id="@+id/gestureSwipeLeft"
                         style="@style/TextSmallBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|bottom"
                         android:layout_marginEnd="4dp"
-                        android:lines="1"
-                        android:padding="8dp" />
-                </LinearLayout>
+                        android:padding="8dp"
+                        android:text="@string/action_launch_app" />
+                </FrameLayout>
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="12dp">
 
                     <TextView
                         style="@style/TextSmall"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginEnd="24dp"
-                        android:layout_weight="1"
-                        android:lines="1"
+                        android:layout_marginEnd="80dp"
                         android:paddingVertical="8dp"
-                        android:text="@string/swipe_right_app"
+                        android:text="@string/gestures_swipe_right"
                         android:textColor="?attr/primaryColor" />
 
                     <TextView
-                        android:id="@+id/swipeRightApp"
+                        android:id="@+id/gestureSwipeRight"
                         style="@style/TextSmallBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|bottom"
                         android:layout_marginEnd="4dp"
-                        android:lines="1"
-                        android:padding="8dp" />
-                </LinearLayout>
+                        android:padding="8dp"
+                        android:text="@string/action_launch_app" />
+                </FrameLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"

@@ -24,16 +24,14 @@ class MyAccessibilityService : AccessibilityService() {
             val source: AccessibilityNodeInfo = event.source ?: return
             if (source.className != "android.widget.FrameLayout") return
 
-            when (source.contentDescription) {
-                getString(R.string.lock_layout_description) -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                        performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
-                }
-                // Home button for recents feature disabled
-                // getString(R.string.recents_layout_description) -> {
-                //     performGlobalAction(GLOBAL_ACTION_RECENTS)
-                // }
-            }
+            // Matched on contentDescription until now, which meant a 1dp internal view had to
+            // carry "lock layout description to be used a unique id to lock screen" as its
+            // accessible name - developer text sitting in the layer a screen reader reads out.
+            // The view id is the identity that was always meant here. endsWith, because the
+            // debug build is app.olauncher.debug and the release build is app.olauncher.
+            if (source.viewIdResourceName?.endsWith(":id/lock") == true &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+            ) performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
         } catch (e: Exception) {
             return
         }

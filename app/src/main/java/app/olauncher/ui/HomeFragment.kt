@@ -36,7 +36,9 @@ import app.olauncher.data.Prefs
 import app.olauncher.databinding.FragmentHomeBinding
 import app.olauncher.helper.IconCache
 import app.olauncher.helper.NotificationCounts
+import app.olauncher.helper.applyFocusOutline
 import app.olauncher.helper.appUsagePermissionGranted
+import app.olauncher.helper.getColorFromAttr
 import app.olauncher.helper.createDialog
 import app.olauncher.helper.dpToPx
 import app.olauncher.helper.expandNotificationDrawer
@@ -501,6 +503,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      * the stock light/dark behaviour and any wallpaper the user set are left completely alone.
      */
     private fun applyColorTheme() {
+        applyFocusOutlines()
         if (!ColorTheme.isCustom(prefs.colorThemeId)) {
             binding.mainLayout.setBackgroundColor(android.graphics.Color.TRANSPARENT)
             return
@@ -511,7 +514,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         // anywhere else, or the daily wallpaper worker running - and dark theme text on whatever
         // was behind it is unreadable, which is exactly what Cream looked like when it happened.
         binding.mainLayout.setBackgroundColor(theme.background)
-        binding.mainLayout.tintTextTree(theme.text, theme.text.withAlpha(0x80))
+        binding.mainLayout.tintTextTree(theme.text, theme.text.withAlpha(0xB3))
     }
 
     /**
@@ -733,6 +736,23 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         else (name.left - badge.width - gap).toFloat()
     }
 
+    /**
+     * Android's default focus highlight is #292929, which is 1.44:1 on a black launcher -
+     * well under the 3:1 a focus indicator owes, and the text itself does not change colour
+     * when focused either, so d-pad and switch-access users had no cue at all. The ring is
+     * drawn in the text colour, which the palette already guarantees at 9.9:1 or better.
+     */
+    private fun applyFocusOutlines() {
+        val ring = if (ColorTheme.isCustom(prefs.colorThemeId))
+            ColorTheme.byId(prefs.colorThemeId).text
+        else requireContext().getColorFromAttr(R.attr.primaryColor)
+        homeAppNameViews().forEach { it.applyFocusOutline(ring) }
+        homeAppBadgeViews().forEach { it.applyFocusOutline(ring) }
+        binding.clock.applyFocusOutline(ring)
+        binding.date.applyFocusOutline(ring)
+        binding.tvScreenTime.applyFocusOutline(ring)
+    }
+
     private fun homeAppRows(): List<FrameLayout> = listOf(
         binding.homeAppRow1, binding.homeAppRow2, binding.homeAppRow3, binding.homeAppRow4,
         binding.homeAppRow5, binding.homeAppRow6, binding.homeAppRow7, binding.homeAppRow8
@@ -928,31 +948,18 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         )
     }
 
-    private fun openSwipeRightApp() {
-        if (!prefs.swipeRightEnabled) return
-        launchAppOrShortcut(
-            appName = prefs.appNameSwipeRight,
-            packageName = prefs.appPackageSwipeRight,
-            activityClassName = prefs.appActivityClassNameRight,
-            shortcutId = prefs.shortcutIdSwipeRight,
-            isShortcut = prefs.isShortcutSwipeRight,
-            userString = prefs.appUserSwipeRight,
-            fallback = { openDialerApp(requireContext()) }
-        )
-    }
+    // Swipe left and right are ordinary gestures now, same eight actions as the rest. The
+    // fallbacks keep Olauncher's out-of-the-box behaviour for a fresh install, where the
+    // gesture defaults to Launch app with nothing chosen yet.
+    private fun openSwipeRightApp() =
+        runGesture(Constants.Gesture.SWIPE_RIGHT, Constants.GestureAction.LAUNCH_APP) {
+            openDialerApp(requireContext())
+        }
 
-    private fun openSwipeLeftApp() {
-        if (!prefs.swipeLeftEnabled) return
-        launchAppOrShortcut(
-            appName = prefs.appNameSwipeLeft,
-            packageName = prefs.appPackageSwipeLeft,
-            activityClassName = prefs.appActivityClassNameSwipeLeft,
-            shortcutId = prefs.shortcutIdSwipeLeft,
-            isShortcut = prefs.isShortcutSwipeLeft,
-            userString = prefs.appUserSwipeLeft,
-            fallback = { openCameraApp(requireContext()) }
-        )
-    }
+    private fun openSwipeLeftApp() =
+        runGesture(Constants.Gesture.SWIPE_LEFT, Constants.GestureAction.LAUNCH_APP) {
+            openCameraApp(requireContext())
+        }
 
     private fun showAppList(
         flag: Int,
@@ -1092,7 +1099,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      * Runs whatever the user bound to a gesture. Every home gesture routes through here, so the
      * set of possible actions lives in exactly one place.
      */
-    private fun runGesture(gesture: String, defaultAction: Int) {
+    private fun runGesture(gesture: String, defaultAction: Int, fallback: (() -> Unit)? = null) {
         when (prefs.getGestureAction(gesture, defaultAction)) {
             Constants.GestureAction.NOTHING -> Unit
             // Browse the list with the keyboard out of the way...
@@ -1113,14 +1120,18 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             Constants.GestureAction.LAUNCH_APP -> {
                 val packageName = prefs.getGestureAppPackage(gesture)
                 if (packageName.isEmpty()) {
-                    requireContext().showToast(getString(R.string.no_app_selected_for_gesture))
+                    if (fallback != null) fallback()
+                    else requireContext().showToast(getString(R.string.no_app_selected_for_gesture))
                     return
                 }
-                launchApp(
-                    prefs.getGestureAppName(gesture),
-                    packageName,
-                    prefs.getGestureAppClassName(gesture),
-                    prefs.getGestureAppUser(gesture)
+                launchAppOrShortcut(
+                    appName = prefs.getGestureAppName(gesture),
+                    packageName = packageName,
+                    activityClassName = prefs.getGestureAppClassName(gesture),
+                    shortcutId = prefs.getGestureShortcutId(gesture),
+                    isShortcut = prefs.getGestureIsShortcut(gesture),
+                    userString = prefs.getGestureAppUser(gesture),
+                    fallback = fallback
                 )
             }
         }

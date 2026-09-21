@@ -157,7 +157,7 @@ class AppDrawerAdapter(
                         appRenameListener
                     )
                     if (themeTextColor != 0)
-                        holder.itemView.tintTextTree(themeTextColor, themeTextColor.withAlpha(0x80))
+                        holder.itemView.tintTextTree(themeTextColor, themeTextColor.withAlpha(0xB3))
                     bindIcon(holder, appModel)
                     bindMutedState(holder, appModel)
                 }
@@ -353,6 +353,20 @@ class AppDrawerAdapter(
                         false -> 1.0f
                     }
                     appHideLayout.visibility = View.VISIBLE
+                    // The menu replaces the row in place, so the app's name is covered and
+                    // drops out of the accessibility tree - "Uninstall, button" with no
+                    // target. Name the app on every action, and say the menu opened at all.
+                    val ctx = root.context
+                    appDelete.contentDescription =
+                        ctx.getString(R.string.a11y_pair, appDelete.text, appModel.appLabel)
+                    appRename.contentDescription =
+                        ctx.getString(R.string.a11y_pair, appRename.text, appModel.appLabel)
+                    appHide.contentDescription =
+                        ctx.getString(R.string.a11y_pair, appHide.text, appModel.appLabel)
+                    appInfo.contentDescription =
+                        ctx.getString(R.string.a11y_pair, appInfo.text, appModel.appLabel)
+                    appHideLayout.contentDescription = appModel.appLabel
+                    appHideLayout.announceForAccessibility(appModel.appLabel)
                     // Only allow renaming non hidden apps
                     appRename.isVisible = flag != Constants.FLAG_HIDDEN_APPS
                 }

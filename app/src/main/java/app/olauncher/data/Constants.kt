@@ -91,6 +91,8 @@ object Constants {
         const val SWIPE_DOWN = "SWIPE_DOWN"
         const val DOUBLE_TAP = "DOUBLE_TAP"
         const val LONG_PRESS = "LONG_PRESS"
+        const val SWIPE_LEFT = "SWIPE_LEFT"
+        const val SWIPE_RIGHT = "SWIPE_RIGHT"
     }
 
     /**
@@ -128,12 +130,16 @@ object Constants {
     const val FLAG_SET_GESTURE_APP_SWIPE_DOWN = 22
     const val FLAG_SET_GESTURE_APP_DOUBLE_TAP = 23
     const val FLAG_SET_GESTURE_APP_LONG_PRESS = 24
+    const val FLAG_SET_GESTURE_APP_SWIPE_LEFT = 25
+    const val FLAG_SET_GESTURE_APP_SWIPE_RIGHT = 26
 
     fun gestureForFlag(flag: Int): String? = when (flag) {
         FLAG_SET_GESTURE_APP_SWIPE_UP -> Gesture.SWIPE_UP
         FLAG_SET_GESTURE_APP_SWIPE_DOWN -> Gesture.SWIPE_DOWN
         FLAG_SET_GESTURE_APP_DOUBLE_TAP -> Gesture.DOUBLE_TAP
         FLAG_SET_GESTURE_APP_LONG_PRESS -> Gesture.LONG_PRESS
+        FLAG_SET_GESTURE_APP_SWIPE_LEFT -> Gesture.SWIPE_LEFT
+        FLAG_SET_GESTURE_APP_SWIPE_RIGHT -> Gesture.SWIPE_RIGHT
         else -> null
     }
 
@@ -164,8 +170,6 @@ object Constants {
     const val FLAG_SET_HOME_APP_7 = 7
     const val FLAG_SET_HOME_APP_8 = 8
 
-    const val FLAG_SET_SWIPE_LEFT_APP = 11
-    const val FLAG_SET_SWIPE_RIGHT_APP = 12
     const val FLAG_SET_CLOCK_APP = 13
     const val FLAG_SET_CALENDAR_APP = 14
     const val FLAG_SET_SCREEN_TIME_APP = 15

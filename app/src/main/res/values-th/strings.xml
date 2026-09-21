@@ -23,8 +23,6 @@
     <string name="right">ขวา</string>
     <string name="center">กึ่งกลาง</string>
     <string name="home_layout_alignment">การจัดวางแอป</string>
-    <string name="swipe_left_app">แอปเมื่อปัดซ้าย</string>
-    <string name="swipe_right_app">แอปเมื่อปัดขวา</string>
     <string name="_0">0</string>
     <string name="_1">1</string>
     <string name="_2">2</string>
@@ -92,13 +90,8 @@
     <string name="app_not_found">ไม่พบแอป</string>
     <string name="unable_to_launch_app">ไม่สามารถเริ่มแอปได้</string>
     <string name="search_for_Launcher_or_home_app">ค้นหาแอป Launcher หรือ Home</string>
-    <string name="swipe_left_app_enabled">เปิดใช้งานแอปเมื่อปัดซ้ายแล้ว</string>
-    <string name="swipe_right_app_enabled">เปิดใช้งานแอปเมื่อปัดขวาแล้ว</string>
-    <string name="swipe_left_app_disabled">ปิดใช้งานแอปเมื่อปัดซ้ายแล้ว</string>
-    <string name="swipe_right_app_disabled">ปิดใช้งานแอปเมื่อปัดขวาแล้ว</string>
     <string name="your_wallpaper_will_update_shortly">วอลเปเปอร์ของคุณจะอัปเดตในไม่ช้า</string>
     <string name="olauncher_is_not_default_launcher">Moo Launcher ไม่ใช่ตัวเปิดใช้งานเริ่มต้น การอัปเดตวอลเปเปอร์จะล้มเหลว</string>
-    <string name="long_press_to_enable">กดค้างเพื่อเปิดใช้งาน</string>
     <string name="no_hidden_apps">ไม่มีแอปที่ซ่อนอยู่</string>
     <string name="hidden_apps">แอปที่ซ่อนอยู่</string>
     <string name="adapter_show">แสดง</string>

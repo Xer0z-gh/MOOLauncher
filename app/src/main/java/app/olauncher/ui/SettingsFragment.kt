@@ -15,6 +15,7 @@ import android.view.Menu
 import android.view.View
 import android.graphics.drawable.GradientDrawable
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.GridLayout
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -32,6 +33,7 @@ import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.DialogTextSizeBinding
 import app.olauncher.databinding.FragmentSettingsBinding
+import app.olauncher.helper.applyFocusOutline
 import app.olauncher.helper.appUsagePermissionGranted
 import app.olauncher.helper.createDialog
 import app.olauncher.helper.dpToPx
@@ -74,6 +76,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
     private var dialog: OlDialog? = null
+    private var rowLabeller: ViewTreeObserver.OnGlobalLayoutListener? = null
 
     private companion object {
         /** App names drawn inside each theme preview tile. */
@@ -145,10 +148,52 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         populateStatusBar()
         populateDateTime()
         populateHomeLayoutOptions()
-        populateSwipeApps()
         initClickListeners()
         initObservers()
+        // Values change from clicks, popup menus and dialogs alike, and every one of them
+        // re-measures the TextView it wrote to. Hanging off the layout pass therefore covers
+        // all of them, where hand-written calls at 25 call sites would drift the first time
+        // a row was added.
+        //
+        // Kept and removed by hand: a ViewTreeObserver outlives onDestroyView, and the first
+        // version of this crashed the launcher on the way out of Settings by dereferencing a
+        // binding that was already null.
+        rowLabeller = ViewTreeObserver.OnGlobalLayoutListener { labelSettingsRows() }
+        binding.scrollLayout.viewTreeObserver.addOnGlobalLayoutListener(rowLabeller)
     }
+
+    /**
+     * Gives every settings control an accessible name, and a focus ring you can see.
+     *
+     * A row is a label the user cannot touch plus a value they can, and only the value holds
+     * the click listener - so a screen reader announced "On, double tap to activate" with no
+     * idea what it toggles, and Voice Access offered a dozen identical "On" targets. Two of
+     * them, App theme "Dark" and Font "Light", were impossible to tell apart by ear.
+     */
+    private fun labelSettingsRows(root: ViewGroup? = null) {
+        if (_binding == null || !isAdded) return
+        @Suppress("NAME_SHADOWING") val root = root ?: binding.scrollLayout
+        val ring = focusRingColor()
+        for (i in 0 until root.childCount) {
+            val child = root.getChildAt(i) as? ViewGroup ?: continue
+            val texts = (0 until child.childCount)
+                .map { child.getChildAt(it) }
+                .filterIsInstance<TextView>()
+            val value = texts.firstOrNull { it.isClickable }
+            val label = texts.firstOrNull { !it.isClickable && it.text.isNotBlank() }
+            if (value != null && label != null) {
+                value.contentDescription = getString(R.string.a11y_pair, label.text, value.text)
+                label.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            }
+            value?.applyFocusOutline(ring)
+            labelSettingsRows(child)
+        }
+    }
+
+    /** The colour a focus ring has to be visible against, which a custom theme owns. */
+    private fun focusRingColor(): Int =
+        if (ColorTheme.isCustom(prefs.colorThemeId)) ColorTheme.byId(prefs.colorThemeId).text
+        else requireContext().getColorFromAttr(R.attr.primaryColor)
 
     override fun onClick(view: View) {
         when (view.id) {
@@ -204,11 +249,9 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
                 populateBadgeOptions()
             }
 
-            R.id.gestureSwipeUp, R.id.gestureSwipeDown,
-            R.id.gestureDoubleTap, R.id.gestureLongPress -> showGestureMenu(view)
-
-            R.id.swipeLeftApp -> showAppListIfEnabled(Constants.FLAG_SET_SWIPE_LEFT_APP)
-            R.id.swipeRightApp -> showAppListIfEnabled(Constants.FLAG_SET_SWIPE_RIGHT_APP)
+            R.id.gestureSwipeUp, R.id.gestureSwipeDown, R.id.gestureDoubleTap,
+            R.id.gestureLongPress, R.id.gestureSwipeLeft,
+            R.id.gestureSwipeRight -> showGestureMenu(view)
 
             R.id.github -> requireContext().openUrl(Constants.URL_MOO_GITHUB)
         }
@@ -224,8 +267,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
 
             R.id.dailyWallpaper -> removeWallpaper()
             R.id.appThemeText -> showAppThemeMenu(view, showSystem = true)
-            R.id.swipeLeftApp -> toggleSwipeLeft()
-            R.id.swipeRightApp -> toggleSwipeRight()
             // Long press jumps straight to the system screen, mirroring toggleLock above. This is
             // the way back in when access was revoked outside the app.
             R.id.notificationBadges -> openNotificationAccessSettings()
@@ -298,8 +339,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.alignment.setOnClickListener(this)
         binding.statusBar.setOnClickListener(this)
         binding.dateTime.setOnClickListener(this)
-        binding.swipeLeftApp.setOnClickListener(this)
-        binding.swipeRightApp.setOnClickListener(this)
+        binding.gestureSwipeLeft.setOnClickListener(this)
+        binding.gestureSwipeRight.setOnClickListener(this)
         binding.appThemeText.setOnClickListener(this)
         binding.textSizeValue.setOnClickListener(this)
         binding.fontChoice.setOnClickListener(this)
@@ -309,8 +350,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.dailyWallpaper.setOnLongClickListener(this)
         binding.alignment.setOnLongClickListener(this)
         binding.appThemeText.setOnLongClickListener(this)
-        binding.swipeLeftApp.setOnLongClickListener(this)
-        binding.swipeRightApp.setOnLongClickListener(this)
+        binding.gestureSwipeLeft.setOnLongClickListener(this)
+        binding.gestureSwipeRight.setOnLongClickListener(this)
     }
 
     private fun initObservers() {
@@ -327,7 +368,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             populateAlignment()
         }
         viewModel.updateSwipeApps.observe(viewLifecycleOwner) {
-            populateSwipeApps()
+            populateGestures()
         }
     }
 
@@ -420,28 +461,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         )
     }
 
-    private fun toggleSwipeLeft() {
-        prefs.swipeLeftEnabled = !prefs.swipeLeftEnabled
-        if (prefs.swipeLeftEnabled) {
-            binding.swipeLeftApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColor))
-            requireContext().showToast(getString(R.string.swipe_left_app_enabled))
-        } else {
-            binding.swipeLeftApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColorTrans50))
-            requireContext().showToast(getString(R.string.swipe_left_app_disabled))
-        }
-    }
-
-    private fun toggleSwipeRight() {
-        prefs.swipeRightEnabled = !prefs.swipeRightEnabled
-        if (prefs.swipeRightEnabled) {
-            binding.swipeRightApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColor))
-            requireContext().showToast(getString(R.string.swipe_right_app_enabled))
-        } else {
-            binding.swipeRightApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColorTrans50))
-            requireContext().showToast(getString(R.string.swipe_right_app_disabled))
-        }
-    }
-
     private fun toggleStatusBar() {
         prefs.showStatusBar = !prefs.showStatusBar
         populateStatusBar()
@@ -521,6 +540,16 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             Constants.FLAG_SET_GESTURE_APP_LONG_PRESS
         )
 
+        R.id.gestureSwipeLeft -> GestureRow(
+            Constants.Gesture.SWIPE_LEFT, Constants.GestureAction.LAUNCH_APP,
+            Constants.FLAG_SET_GESTURE_APP_SWIPE_LEFT
+        )
+
+        R.id.gestureSwipeRight -> GestureRow(
+            Constants.Gesture.SWIPE_RIGHT, Constants.GestureAction.LAUNCH_APP,
+            Constants.FLAG_SET_GESTURE_APP_SWIPE_RIGHT
+        )
+
         else -> null
     }
 
@@ -548,6 +577,10 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             actionLabel(Constants.Gesture.DOUBLE_TAP, Constants.GestureAction.LOCK_SCREEN)
         binding.gestureLongPress.text =
             actionLabel(Constants.Gesture.LONG_PRESS, Constants.GestureAction.LAUNCHER_SETTINGS)
+        binding.gestureSwipeLeft.text =
+            actionLabel(Constants.Gesture.SWIPE_LEFT, Constants.GestureAction.LAUNCH_APP)
+        binding.gestureSwipeRight.text =
+            actionLabel(Constants.Gesture.SWIPE_RIGHT, Constants.GestureAction.LAUNCH_APP)
     }
 
     private fun showGestureMenu(anchor: View) {
@@ -663,7 +696,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
                     // and System. The outline is the tile's own text colour, so it reads on a
                     // near-black and a near-white tile alike.
                     if (selected) setStroke(3.dpToPx(), foreground)
-                    else setStroke(1.dpToPx(), foreground.withAlpha(0x55))
+                    else setStroke(1.dpToPx(), foreground.withAlpha(0x80))
                 }
                 labels.forEach { label ->
                     addView(TextView(context).apply {
@@ -1249,15 +1282,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
     //     )
     // }
 
-    private fun populateSwipeApps() {
-        binding.swipeLeftApp.text = prefs.appNameSwipeLeft
-        binding.swipeRightApp.text = prefs.appNameSwipeRight
-        if (!prefs.swipeLeftEnabled)
-            binding.swipeLeftApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColorTrans50))
-        if (!prefs.swipeRightEnabled)
-            binding.swipeRightApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColorTrans50))
-    }
-
 //    private fun populateDigitalWellbeing() {
 //        binding.digitalWellbeing.isVisible = requireContext().isPackageInstalled(Constants.DIGITAL_WELLBEING_PACKAGE_NAME).not()
 //                && requireContext().isPackageInstalled(Constants.DIGITAL_WELLBEING_SAMSUNG_PACKAGE_NAME).not()
@@ -1265,14 +1289,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
 //    }
 
     private fun showAppListIfEnabled(flag: Int) {
-        if ((flag == Constants.FLAG_SET_SWIPE_LEFT_APP) and !prefs.swipeLeftEnabled) {
-            requireContext().showToast(getString(R.string.long_press_to_enable))
-            return
-        }
-        if ((flag == Constants.FLAG_SET_SWIPE_RIGHT_APP) and !prefs.swipeRightEnabled) {
-            requireContext().showToast(getString(R.string.long_press_to_enable))
-            return
-        }
         viewModel.getAppList(true)
         findNavController().navigate(
             R.id.action_settingsFragment_to_appListFragment,
@@ -1285,6 +1301,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         dialog?.dismiss()
         dialog = null
         applyTextSizeScale()
+        rowLabeller?.let { binding.scrollLayout.viewTreeObserver.removeOnGlobalLayoutListener(it) }
+        rowLabeller = null
         super.onDestroyView()
         _binding = null
     }

@@ -104,10 +104,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             Constants.FLAG_SET_GESTURE_APP_SWIPE_DOWN,
             Constants.FLAG_SET_GESTURE_APP_DOUBLE_TAP,
             Constants.FLAG_SET_GESTURE_APP_LONG_PRESS,
+            Constants.FLAG_SET_GESTURE_APP_SWIPE_LEFT,
+            Constants.FLAG_SET_GESTURE_APP_SWIPE_RIGHT,
                 -> Constants.gestureForFlag(flag)?.let { saveGestureApp(appModel, it) }
-
-            Constants.FLAG_SET_SWIPE_LEFT_APP -> saveSwipeApp(appModel, isLeft = true)
-            Constants.FLAG_SET_SWIPE_RIGHT_APP -> saveSwipeApp(appModel, isLeft = false)
             Constants.FLAG_SET_CLOCK_APP -> saveClockApp(appModel)
             Constants.FLAG_SET_CALENDAR_APP -> saveCalendarApp(appModel)
             Constants.FLAG_SET_SCREEN_TIME_APP -> saveScreenTimeApp(appModel)
@@ -297,56 +296,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * accepting one here would save a binding that silently does nothing.
      */
     private fun saveGestureApp(appModel: AppModel, gesture: String) {
-        val app = appModel as? AppModel.App ?: return
-        prefs.setGestureApp(
-            gesture = gesture,
-            name = app.appLabel,
-            appPackage = app.appPackage,
-            className = app.activityClassName.orEmpty(),
-            user = app.user.toString()
-        )
-    }
-
-    private fun saveSwipeApp(appModel: AppModel, isLeft: Boolean) {
         when (appModel) {
             is AppModel.PrivateSpaceHeader -> return
-            is AppModel.App -> {
-                if (isLeft) {
-                    prefs.appNameSwipeLeft = appModel.appLabel
-                    prefs.appPackageSwipeLeft = appModel.appPackage
-                    prefs.appUserSwipeLeft = appModel.user.toString()
-                    prefs.appActivityClassNameSwipeLeft = appModel.activityClassName
-                    prefs.isShortcutSwipeLeft = false
-                    prefs.shortcutIdSwipeLeft = ""
-                } else {
-                    prefs.appNameSwipeRight = appModel.appLabel
-                    prefs.appPackageSwipeRight = appModel.appPackage
-                    prefs.appUserSwipeRight = appModel.user.toString()
-                    prefs.appActivityClassNameRight = appModel.activityClassName
-                    prefs.isShortcutSwipeRight = false
-                    prefs.shortcutIdSwipeRight = ""
-                }
-            }
-
-            is AppModel.PinnedShortcut -> {
-                if (isLeft) {
-                    prefs.appNameSwipeLeft = appModel.appLabel
-                    prefs.appPackageSwipeLeft = appModel.appPackage
-                    prefs.appUserSwipeLeft = appModel.user.toString()
-                    prefs.appActivityClassNameSwipeLeft = null
-                    prefs.isShortcutSwipeLeft = true
-                    prefs.shortcutIdSwipeLeft = appModel.shortcutId
-                } else {
-                    prefs.appNameSwipeRight = appModel.appLabel
-                    prefs.appPackageSwipeRight = appModel.appPackage
-                    prefs.appUserSwipeRight = appModel.user.toString()
-                    prefs.appActivityClassNameRight = null
-                    prefs.isShortcutSwipeRight = true
-                    prefs.shortcutIdSwipeRight = appModel.shortcutId
-                }
-            }
+            is AppModel.App -> prefs.setGestureApp(
+                gesture = gesture,
+                name = appModel.appLabel,
+                appPackage = appModel.appPackage,
+                className = appModel.activityClassName.orEmpty(),
+                user = appModel.user.toString()
+            )
+            // Shortcuts were droppable before, because only the old swipe-left and
+            // swipe-right settings could hold one. Now every gesture can.
+            is AppModel.PinnedShortcut -> prefs.setGestureApp(
+                gesture = gesture,
+                name = appModel.appLabel,
+                appPackage = appModel.appPackage,
+                className = "",
+                user = appModel.user.toString(),
+                isShortcut = true,
+                shortcutId = appModel.shortcutId
+            )
         }
-        updateSwipeApps()
     }
 
     private fun saveClockApp(appModel: AppModel) {

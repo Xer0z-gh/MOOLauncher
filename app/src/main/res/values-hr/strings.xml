@@ -23,8 +23,6 @@
     <string name="right">Desno</string>
     <string name="center">Sredina</string>
     <string name="home_layout_alignment">Poravnanje aplikacija</string>
-    <string name="swipe_left_app">Aplikacija za lijevi potez</string>
-    <string name="swipe_right_app">Aplikacija za desni potez</string>
     <string name="_0">0</string>
     <string name="_1">1</string>
     <string name="_2">2</string>
@@ -96,13 +94,8 @@
     <string name="app_not_found">Aplikacija nije pronađena</string>
     <string name="unable_to_launch_app">Nije moguće pokrenuti aplikaciju</string>
     <string name="search_for_Launcher_or_home_app">Pretraži Launcher ili Home aplikaciju</string>
-    <string name="swipe_left_app_enabled">Aplikacija za lijevi potez omogućena</string>
-    <string name="swipe_right_app_enabled">Aplikacija za desni potez omogućena</string>
-    <string name="swipe_left_app_disabled">Aplikacija za lijevi potez onemogućena</string>
-    <string name="swipe_right_app_disabled">Aplikacija za desni potez onemogućena</string>
     <string name="your_wallpaper_will_update_shortly">Vaša pozadina će se uskoro ažurirati</string>
     <string name="olauncher_is_not_default_launcher">Moo Launcher nije zadani. Ažuriranje pozadine neće uspjeti.</string>
-    <string name="long_press_to_enable">Dugo pritisnite za omogućavanje</string>
     <string name="no_hidden_apps">Nema skrivenih aplikacija</string>
     <string name="hidden_apps">Skrivene aplikacije</string>
     <string name="adapter_show">Prikaži</string>

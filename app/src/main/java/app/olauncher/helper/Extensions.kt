@@ -6,6 +6,11 @@ import android.app.SearchManager
 import android.app.role.RoleManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.StateListDrawable
 import android.content.Intent
 import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
@@ -201,12 +206,43 @@ fun Context.appUsagePermissionGranted(): Boolean {
 fun View.tintTextTree(@ColorInt color: Int, @ColorInt hintColor: Int) {
     when (this) {
         is TextView -> {
-            setTextColor(color)
+            // A flat int REPLACES the ColorStateList from text_colors_default.xml, which is
+            // where the pressed-state dim lives - so every custom theme silently lost press
+            // feedback on home apps and drawer rows. Rebuild the states instead.
+            setTextColor(
+                ColorStateList(
+                    arrayOf(intArrayOf(android.R.attr.state_pressed), intArrayOf()),
+                    intArrayOf(color.withAlpha(0x80), color)
+                )
+            )
             setHintTextColor(hintColor)
         }
 
         is ViewGroup -> for (i in 0 until childCount) getChildAt(i).tintTextTree(color, hintColor)
     }
+}
+
+/**
+ * A visible focus ring for d-pad, keyboard and switch access.
+ *
+ * Android's default highlight is #292929, which is 1.44:1 against a black launcher - well
+ * under the 3:1 that WCAG 2.4.11 asks of a focus indicator, and worse on the light themes.
+ * The ring is drawn in the same colour as the text, so it inherits the >= 9.9:1 contrast the
+ * palette already guarantees, and it follows a custom theme rather than a theme attribute
+ * that can disagree with the painted background.
+ */
+fun View.applyFocusOutline(@ColorInt color: Int) {
+    val ring = GradientDrawable().apply {
+        shape = GradientDrawable.RECTANGLE
+        cornerRadius = 4f * resources.displayMetrics.density
+        setStroke((2f * resources.displayMetrics.density).toInt(), color)
+        setColor(Color.TRANSPARENT)
+    }
+    foreground = StateListDrawable().apply {
+        addState(intArrayOf(android.R.attr.state_focused), ring)
+        addState(intArrayOf(), ColorDrawable(Color.TRANSPARENT))
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) defaultFocusHighlightEnabled = false
 }
 
 /** Half-transparent version of a colour, for hints and secondary text. */

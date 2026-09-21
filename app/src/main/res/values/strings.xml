@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Moo Launcher</string>
     <string name="github" translatable="false">GitHub</string>
-    <string name="lock_layout_description" translatable="false">lock layout description to be used a unique id to lock screen</string>
     <!-- Home button for recents feature disabled -->
     <!-- <string name="recents_layout_description" translatable="false">recents layout description to be used a unique id to show recent apps</string> -->
     <string name="digital_minimalism" translatable="false"><u>Digital Minimalism</u></string>
@@ -44,8 +43,6 @@
     <string name="right">Right</string>
     <string name="center">Center</string>
     <string name="home_layout_alignment">App alignment</string>
-    <string name="swipe_left_app">Swipe left app</string>
-    <string name="swipe_right_app">Swipe right app</string>
     <string name="_0">0</string>
     <string name="_1">1</string>
     <string name="_2">2</string>
@@ -117,13 +114,8 @@
     <string name="app_not_found">App not found</string>
     <string name="unable_to_launch_app">Unable to launch app</string>
     <string name="search_for_Launcher_or_home_app">Search for Launcher or Home app</string>
-    <string name="swipe_left_app_enabled">Swipe left app enabled</string>
-    <string name="swipe_right_app_enabled">Swipe right app enabled</string>
-    <string name="swipe_left_app_disabled">Swipe left app disabled</string>
-    <string name="swipe_right_app_disabled">Swipe right app disabled</string>
     <string name="your_wallpaper_will_update_shortly">Your wallpaper will update shortly</string>
     <string name="olauncher_is_not_default_launcher">Moo Launcher is not default. Wallpaper update will fail.</string>
-    <string name="long_press_to_enable">Long press to enable</string>
     <string name="no_hidden_apps">No hidden apps</string>
     <string name="hidden_apps">Hidden apps</string>
     <string name="adapter_show">Show</string>
@@ -139,6 +131,7 @@
         <item quantity="one">%1$s · %2$d missed notification</item>
         <item quantity="other">%1$s · %2$d missed notifications</item>
     </plurals>
+    <string name="a11y_pair" translatable="false">%1$s, %2$s</string>
     <string name="empty_home_slot">Empty slot, double tap to choose an app</string>
     <string name="search_apps">Search apps</string>
     <string name="please_select_an_app">Please select an app</string>
@@ -221,6 +214,8 @@
     <string name="nothing_missed">Nothing missed</string>
     <string name="notification_badges_are_off">Turn on notification badges first</string>
     <string name="no_app_selected_for_gesture">Long press this gesture to pick an app</string>
+    <string name="gestures_swipe_left">Swipe left</string>
+    <string name="gestures_swipe_right">Swipe right</string>
     <string name="gestures_swipe_up">Swipe up</string>
     <string name="gestures_swipe_down">Swipe down</string>
     <string name="gestures_double_tap">Double tap</string>

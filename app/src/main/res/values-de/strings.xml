@@ -19,7 +19,6 @@
     <string name="tip_start_typing_for_rename">Tipp: Tippen Sie los, um die Option zum Umbenennen der App zu erhalten</string>
     <string name="your_wallpaper_will_update_shortly">Ihr Hintergrundbild wird in Kürze aktualisiert</string>
     <string name="olauncher_is_not_default_launcher">Moo Launcher ist kein Standard-Launcher. Die tägliche Aktualisierung des Hintergrundbilds schlägt möglicherweise fehl.</string>
-    <string name="long_press_to_enable">Zum Aktivieren lange drücken</string>
     <string name="no_hidden_apps">Keine versteckten Apps</string>
     <string name="hidden_apps">Versteckte Apps</string>
     <string name="hidden_apps_message">Hinweis: Tippen Sie oben auf dieser Einstellungsseite auf „Moo Launcher“, um Ihre versteckten Apps zu finden.</string>
@@ -64,8 +63,6 @@
     <string name="right">Rechts</string>
     <string name="center">Mitte</string>
     <string name="home_layout_alignment">App-Ausrichtung</string>
-    <string name="swipe_left_app">App bei Wischen nach links</string>
-    <string name="swipe_right_app">App bei Wischen nach rechts</string>
     <string name="auto_show_keyboard">Tastatur automatisch anzeigen</string>
     <string name="hide">Ausblenden</string>
     <string name="status_bar">Statusleiste oben</string>
@@ -99,10 +96,6 @@
     <string name="app_not_found">App nicht gefunden</string>
     <string name="unable_to_launch_app">App kann nicht gestartet werden</string>
     <string name="search_for_Launcher_or_home_app">Suchen Sie nach Launcher oder Home-App</string>
-    <string name="swipe_left_app_enabled">App nach links wischen aktiviert</string>
-    <string name="swipe_right_app_enabled">App nach rechts wischen aktiviert</string>
-    <string name="swipe_left_app_disabled">App nach links wischen deaktiviert</string>
-    <string name="swipe_right_app_disabled">App nach rechts wischen deaktiviert</string>
     <string name="screen_time">Bildschirmzeit</string>
     <string name="learn_more">Erfahren Sie mehr</string>
     <string name="did_you_know">Wussten Sie?</string>

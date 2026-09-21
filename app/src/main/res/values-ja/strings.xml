@@ -20,7 +20,6 @@
     <string name="tip_start_typing_for_rename">ヒント: 入力を開始するとアプリの名前変更オプションが表示されます</string>
     <string name="your_wallpaper_will_update_shortly">壁紙は間もなく更新されます</string>
     <string name="olauncher_is_not_default_launcher">Moo Launcher はデフォルトのランチャーではありません。壁紙の更新は失敗します。</string>
-    <string name="long_press_to_enable">長押しして有効にします</string>
     <string name="no_hidden_apps">非表示のアプリはありません</string>
     <string name="hidden_apps">非表示のアプリ</string>
     <string name="hidden_apps_message">注: この設定ページの上部にある「Moo Launcher」をタップすると、非表示のアプリを確認できます。</string>
@@ -65,8 +64,6 @@
     <string name="right">右</string>
     <string name="center">中心</string>
     <string name="home_layout_alignment">アプリの配置</string>
-    <string name="swipe_left_app">左スワイプで開くアプリ</string>
-    <string name="swipe_right_app">右スワイプで開くアプリ</string>
     <string name="auto_show_keyboard">キーボードの自動表示</string>
     <string name="hide">非表示</string>
     <string name="status_bar">上部にステータスバー</string>
@@ -100,11 +97,7 @@
     <string name="app_not_found">アプリが見つかりません</string>
     <string name="unable_to_launch_app">アプリを起動できません</string>
     <string name="search_for_Launcher_or_home_app">ランチャーまたはホームアプリを検索する</string>
-    <string name="swipe_left_app_enabled">左スワイプアプリを有効にしました</string>
-    <string name="swipe_right_app_enabled">右スワイプアプリを有効にしました</string>
-    <string name="swipe_left_app_disabled">左スワイプアプリを無効にしました</string>
     <string name="screen_time">スクリーンタイム</string>
-    <string name="swipe_right_app_disabled">右スワイプアプリを無効にしました</string>
     <string name="learn_more">もっと詳しく知る</string>
     <string name="did_you_know">知っていましたか？</string>
     <string name="alignment_changed">配置を変更しました ✅</string>

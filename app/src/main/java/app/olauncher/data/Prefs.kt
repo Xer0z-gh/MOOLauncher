@@ -26,6 +26,7 @@ class Prefs(context: Context) {
     private val APP_LABEL_ALIGNMENT = "APP_LABEL_ALIGNMENT"
     private val STATUS_BAR = "STATUS_BAR"
     private val DATE_TIME_VISIBILITY = "DATE_TIME_VISIBILITY"
+    private val SWIPE_GESTURES_MIGRATED = "SWIPE_GESTURES_MIGRATED"
     private val SWIPE_LEFT_ENABLED = "SWIPE_LEFT_ENABLED"
     private val SWIPE_RIGHT_ENABLED = "SWIPE_RIGHT_ENABLED"
     private val HIDDEN_APPS = "HIDDEN_APPS"
@@ -792,13 +793,70 @@ class Prefs(context: Context) {
     fun getGestureAppUser(gesture: String): String =
         prefs.getString(gestureKey(gesture, "APP_USER"), "").toString()
 
-    fun setGestureApp(gesture: String, name: String, appPackage: String, className: String, user: String) =
-        prefs.edit {
-            putString(gestureKey(gesture, "APP_NAME"), name)
-            putString(gestureKey(gesture, "APP_PACKAGE"), appPackage)
-            putString(gestureKey(gesture, "APP_CLASS"), className)
-            putString(gestureKey(gesture, "APP_USER"), user)
+    fun getGestureIsShortcut(gesture: String): Boolean =
+        prefs.getBoolean(gestureKey(gesture, "IS_SHORTCUT"), false)
+
+    fun getGestureShortcutId(gesture: String): String =
+        prefs.getString(gestureKey(gesture, "SHORTCUT_ID"), "").toString()
+
+    fun setGestureApp(
+        gesture: String,
+        name: String,
+        appPackage: String,
+        className: String,
+        user: String,
+        isShortcut: Boolean = false,
+        shortcutId: String = "",
+    ) = prefs.edit {
+        putString(gestureKey(gesture, "APP_NAME"), name)
+        putString(gestureKey(gesture, "APP_PACKAGE"), appPackage)
+        putString(gestureKey(gesture, "APP_CLASS"), className)
+        putString(gestureKey(gesture, "APP_USER"), user)
+        putBoolean(gestureKey(gesture, "IS_SHORTCUT"), isShortcut)
+        putString(gestureKey(gesture, "SHORTCUT_ID"), shortcutId)
+    }
+
+    /**
+     * Moves the old swipe-left and swipe-right settings into the gesture system, once.
+     *
+     * Those two used to be "pick an app" plus a hidden long-press on/off, while the other
+     * four gestures took any of eight actions. Anyone who had switched one off gets Do
+     * nothing rather than a gesture that suddenly does something; anyone who had chosen an
+     * app keeps it, shortcut and all.
+     */
+    fun migrateSwipeGestures() {
+        if (prefs.getBoolean(SWIPE_GESTURES_MIGRATED, false)) return
+        migrateOneSwipe(
+            Constants.Gesture.SWIPE_LEFT, swipeLeftEnabled, appNameSwipeLeft,
+            appPackageSwipeLeft, appActivityClassNameSwipeLeft.orEmpty(), appUserSwipeLeft,
+            isShortcutSwipeLeft, shortcutIdSwipeLeft.orEmpty()
+        )
+        migrateOneSwipe(
+            Constants.Gesture.SWIPE_RIGHT, swipeRightEnabled, appNameSwipeRight,
+            appPackageSwipeRight, appActivityClassNameRight.orEmpty(), appUserSwipeRight,
+            isShortcutSwipeRight, shortcutIdSwipeRight.orEmpty()
+        )
+        prefs.edit { putBoolean(SWIPE_GESTURES_MIGRATED, true) }
+    }
+
+    private fun migrateOneSwipe(
+        gesture: String,
+        enabled: Boolean,
+        name: String,
+        appPackage: String,
+        className: String,
+        user: String,
+        isShortcut: Boolean,
+        shortcutId: String,
+    ) {
+        if (!enabled) {
+            setGestureAction(gesture, Constants.GestureAction.NOTHING)
+            return
         }
+        if (appPackage.isEmpty()) return
+        setGestureAction(gesture, Constants.GestureAction.LAUNCH_APP)
+        setGestureApp(gesture, name, appPackage, className, user, isShortcut, shortcutId)
+    }
 
     fun getAppRenameLabel(appPackage: String): String = prefs.getString(appPackage, "").toString()
 

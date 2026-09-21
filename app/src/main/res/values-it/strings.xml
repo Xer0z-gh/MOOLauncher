@@ -24,8 +24,6 @@
     <string name="right">Destra</string>
     <string name="center">Centrato</string>
     <string name="home_layout_alignment">Allineamento app in Home screen</string>
-    <string name="swipe_left_app">App scorrimento a sinistra</string>
-    <string name="swipe_right_app">App scorrimento a destra</string>
     <string name="_0">0</string>
     <string name="_1">1</string>
     <string name="_2">2</string>
@@ -91,13 +89,8 @@
     <string name="app_not_found">App non trovata</string>
     <string name="unable_to_launch_app">Impossibile avviare l\'app</string>
     <string name="search_for_Launcher_or_home_app">Cerca Launcher o l\'app Home</string>
-    <string name="swipe_left_app_enabled">App scorrimento a sinistra abilitata</string>
-    <string name="swipe_right_app_enabled">App scorrimento a destra abilitata</string>
-    <string name="swipe_left_app_disabled">App scorrimento a sinistra disabilitata</string>
-    <string name="swipe_right_app_disabled">App scorrimento a destra disabilitata</string>
     <string name="your_wallpaper_will_update_shortly">Lo sfondo verrà aggiornato a breve</string>
     <string name="olauncher_is_not_default_launcher">Moo Launcher non è il programma di avvio predefinito.\nL\'aggiornamento giornaliero dello sfondo potrebbe non riuscire.</string>
-    <string name="long_press_to_enable">Premere a lungo per abilitare</string>
     <string name="no_hidden_apps">Nessuna app nascosta</string>
     <string name="hidden_apps">App nascoste</string>
     <string name="adapter_show">Mostra</string>

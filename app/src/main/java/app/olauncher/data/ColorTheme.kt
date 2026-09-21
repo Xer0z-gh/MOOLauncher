@@ -42,8 +42,8 @@ data class ColorTheme(
             ColorTheme(8, R.string.theme_plum, 0xFF1C1222.toInt(), 0xFFE6DAF0.toInt()),
             ColorTheme(9, R.string.theme_clay, 0xFF2A1113.toInt(), 0xFFF0D9DB.toInt()),
             ColorTheme(10, R.string.theme_cream, 0xFFF5F1E6.toInt(), 0xFF2A2620.toInt()),
-            ColorTheme(11, R.string.theme_sand, 0xFFE8DFCF.toInt(), 0xFF33302A.toInt()),
-            ColorTheme(12, R.string.theme_mist, 0xFFDDE3E8.toInt(), 0xFF23292E.toInt()),
+            ColorTheme(11, R.string.theme_sand, 0xFFE8DFCF.toInt(), 0xFF2A2721.toInt()),
+            ColorTheme(12, R.string.theme_mist, 0xFFDDE3E8.toInt(), 0xFF1B2024.toInt()),
         )
 
         fun byId(id: Int): ColorTheme = ALL.firstOrNull { it.id == id } ?: SYSTEM

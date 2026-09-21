@@ -173,7 +173,7 @@ class AppDrawerFragment : BaseFragment() {
         // Opaque, same as the home screen: the drawer's own shade colour over an out-of-sync
         // wallpaper is the same unreadable-text problem in a different place.
         binding.root.setBackgroundColor(theme.background)
-        binding.root.tintTextTree(theme.text, theme.text.withAlpha(0x80))
+        binding.root.tintTextTree(theme.text, theme.text.withAlpha(0xB3))
         adapter.themeTextColor = theme.text
     }
 

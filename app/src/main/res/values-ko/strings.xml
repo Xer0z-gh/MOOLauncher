@@ -23,8 +23,6 @@
     <string name="right">오른쪽</string>
     <string name="center">가운데</string>
     <string name="home_layout_alignment">앱 정렬</string>
-    <string name="swipe_left_app">왼쪽으로 넘길 앱</string>
-    <string name="swipe_right_app">오른쪽으로 넘길 앱</string>
     <string name="_0">0</string>
     <string name="_1">1</string>
     <string name="_2">2</string>
@@ -88,13 +86,8 @@
     <string name="app_not_found">앱을 찾을 수 없음</string>
     <string name="unable_to_launch_app">앱을 실행할 수 없음</string>
     <string name="search_for_Launcher_or_home_app">런처 또는 홈 앱 검색</string>
-    <string name="swipe_left_app_enabled">왼쪽으로 넘길 앱 활성화됨</string>
-    <string name="swipe_right_app_enabled">오른쪽으로 넘길 앱 활성화됨</string>
-    <string name="swipe_left_app_disabled">왼쪽으로 넘길 앱 비활성화됨</string>
-    <string name="swipe_right_app_disabled">오른쪽으로 넘길 앱 비활성화됨</string>
     <string name="your_wallpaper_will_update_shortly">곧 배경화면이 업데이트됩니다</string>
     <string name="olauncher_is_not_default_launcher">Moo Launcher가 기본 런처가 아닙니다. 배경화면 업데이트가 실패할 수 있습니다.</string>
-    <string name="long_press_to_enable">활성화하려면 길게 누르세요</string>
     <string name="no_hidden_apps">숨긴 앱 없음</string>
     <string name="hidden_apps">숨긴 앱</string>
     <string name="adapter_show">보이기</string>

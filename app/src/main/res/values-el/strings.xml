@@ -23,8 +23,6 @@
     <string name="right">Δεξιά</string>
     <string name="center">Κέντρο</string>
     <string name="home_layout_alignment">Στοίχιση εφαρμογών</string>
-    <string name="swipe_left_app">Εφαρμογή σε σύρσιμο αριστερά</string>
-    <string name="swipe_right_app">Εφαρμογή σε σύρσιμο δεξιά</string>
     <string name="_0">0</string>
     <string name="_1">1</string>
     <string name="_2">2</string>
@@ -92,13 +90,8 @@
     <string name="app_not_found">Η εφαρμογή δεν βρέθηκε</string>
     <string name="unable_to_launch_app">Αδύνατη η εκκίνηση της εφαρμογής</string>
     <string name="search_for_Launcher_or_home_app">Αναζητήστε εφαρμογή Launcher ή Αρχικής</string>
-    <string name="swipe_left_app_enabled">Ενεργοποιήθηκε η εφαρμογή σε σύρσιμο αριστερά</string>
-    <string name="swipe_right_app_enabled">Ενεργοποιήθηκε η εφαρμογή σε σύρσιμο δεξιά</string>
-    <string name="swipe_left_app_disabled">Απενεργοποιήθηκε η εφαρμογή σε σύρσιμο αριστερά</string>
-    <string name="swipe_right_app_disabled">Απενεργοποιήθηκε η εφαρμογή σε σύρσιμο δεξιά</string>
     <string name="your_wallpaper_will_update_shortly">Η ταπετσαρία σας θα ενημερωθεί σύντομα</string>
     <string name="olauncher_is_not_default_launcher">Το Moo Launcher δεν είναι προεπιλεγμένο. Η ενημέρωση ταπετσαρίας θα αποτύχει.</string>
-    <string name="long_press_to_enable">Παρατεταμένο πάτημα για ενεργοποίηση</string>
     <string name="no_hidden_apps">Καμία κρυφή εφαρμογή</string>
     <string name="hidden_apps">Κρυφές εφαρμογές</string>
     <string name="adapter_show">Εμφάνιση</string>
