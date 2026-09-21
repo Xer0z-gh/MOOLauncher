@@ -3,10 +3,10 @@
     <string name="app">Додаток</string>
     <string name="set_as_default_launcher">Зробити лаунчером за замовчуванням</string>
     <string name="set_as_default_launcher_u"><u>Зробити лаунчером за замовчуванням</u></string>
-    <string name="set_as_default_launcher_first">Спочатку зробіть Olauncher лаунчером за замовчуванням</string>
+    <string name="set_as_default_launcher_first">Спочатку зробіть Moo Launcher лаунчером за замовчуванням</string>
     <string name="app_text_color">Колір тексту</string>
     <string name="double_tap_to_lock_screen">Блокування подвійним тапом</string>
-    <string name="admin_permission_message">Olauncher обіцяє відповідально використовувати дозвіл спеціальних можливостей. Olauncher не збирає і не передає жодних даних.</string>
+    <string name="admin_permission_message">Moo Launcher обіцяє відповідально використовувати дозвіл спеціальних можливостей. Moo Launcher не збирає і не передає жодних даних.</string>
     <string name="about">Про додаток</string>
     <string name="off">Вимк.</string>
     <string name="on">Увімк.</string>
@@ -55,9 +55,9 @@
     <string name="dark">Темна</string>
     <string name="light">Світла</string>
     <string name="welcome_to_olauncher_settings">Ласкаво просимо до налаштувань!\n\nПам\'ятайте: якщо у вас є питання, відповідь є на нашій сторінці «Про додаток».</string>
-    <string name="rate_us_message">Вітаємо, ви більше не побачите це повідомлення.\n\nЯкщо Olauncher вам корисний, чи не могли б ви залишити відгук із 5 зірками? Для нас це дуже багато значить. Дякуємо!</string>
-    <string name="share_message">Нам потрібна ваша допомога! Ми вважаємо, що кожен має знати про Olauncher та його переваги, але самотужки нам не впоратися.\n\nЧи не могли б ви поділитися Olauncher із друзями, родиною та підписниками? Дякуємо за підтримку! ❤</string>
-    <string name="keyboard_message">Привіт, клавіатура - це найшвидший спосіб знайти та запустити програми в Olauncher. Чи можемо ми попросити вас залишити це увімкненим ще на кілька днів, а потім прийняти рішення?
+    <string name="rate_us_message">Вітаємо, ви більше не побачите це повідомлення.\n\nЯкщо Moo Launcher вам корисний, чи не могли б ви залишити відгук із 5 зірками? Для нас це дуже багато значить. Дякуємо!</string>
+    <string name="share_message">Нам потрібна ваша допомога! Ми вважаємо, що кожен має знати про Moo Launcher та його переваги, але самотужки нам не впоратися.\n\nЧи не могли б ви поділитися Moo Launcher із друзями, родиною та підписниками? Дякуємо за підтримку! ❤</string>
+    <string name="keyboard_message">Привіт, клавіатура - це найшвидший спосіб знайти та запустити програми в Moo Launcher. Чи можемо ми попросити вас залишити це увімкненим ще на кілька днів, а потім прийняти рішення?
         \n\nВибір завжди за вами.</string>
     <string name="digital_wellbeing_message">Якщо ви хочете встановити часові обмеження для певних програм, функція цифрового добробуту Android може допомогти вам це зробити.
         \n\nЗнайдіть Digital Wellbeing у налаштуваннях телефону та ввімкніть його.</string>
@@ -65,9 +65,9 @@
         \n\nПримітка: Не збираються дані про використання програми. Все обробляється на вашому пристрої.</string>
     <string name="pro_message">Olauncher також має професійну версію під назвою Pro Launcher. Вона має додаткові функції, такі як погода, віджети, шрифти, папки, фони AMOLED тощо.
         \n\nЦе також найкращий спосіб підтримати розробників Olauncher. Ознайомтеся!</string>
-    <string name="wallpaper_message">Olauncher пропонує красиві нові шпалери щодня. Дайте вашому головному екрану новий вигляд кожного дня, безкоштовно!
+    <string name="wallpaper_message">Moo Launcher пропонує красиві нові шпалери щодня. Дайте вашому головному екрану новий вигляд кожного дня, безкоштовно!
         \n\nХочете спробувати?</string>
-    <string name="accessibility_service_description">Дозвіл спеціальних можливостей потрібен, щоб увімкнути жест подвійного торкання для блокування. Будь-які дані, отримані Olauncher через цей сервіс, не залишать ваш пристрій.</string>
+    <string name="accessibility_service_description">Дозвіл спеціальних можливостей потрібен, щоб увімкнути жест подвійного торкання для блокування. Будь-які дані, отримані Moo Launcher через цей сервіс, не залишать ваш пристрій.</string>
     <string name="support_olauncher_for_free">Підтримайте Olauncher безкоштовно, використовуючи наше партнерське посилання Amazon.</string>
     <string name="support_olauncher_message">Щоразу, коли ви купуєте щось за нашим посиланням, ми отримуємо невелику комісію. Будь ласка, збережіть посилання та використовуйте його для здійснення покупок в Інтернеті.\nСпасибі!</string>
     <string name="open">Відкрити посилання</string>
@@ -80,11 +80,11 @@
     <string name="date_only">Тільки дата</string>
     <string name="bottom_on">Внизу: Увімк.</string>
     <string name="bottom_off">Внизу: Вимк.</string>
-    <string name="please_set_olauncher_as_default_first">Спочатку встановіть Olauncher як стандартний лаунчер.</string>
+    <string name="please_set_olauncher_as_default_first">Спочатку встановіть Moo Launcher як стандартний лаунчер.</string>
     <string name="affiliate">Партнер</string>
     <string name="tip_start_typing_for_rename">Порада: почніть вводити текст, щоб перейменувати програму.</string>
-    <string name="hidden_apps_message">Примітка: натисніть «Olauncher» у верхній частині сторінки налаштувань, щоб знайти приховані додатки.\n\nДокладніша інформація доступна на нашій сторінці «Про додаток».</string>
-    <string name="accessibility_disclosure">Увімкніть службу спеціальних можливостей Olauncher у налаштуваннях вашого пристрою, щоб увімкнути жест подвійного торкання для блокування.\n\nЗверніть увагу, що ця служба використовується лише для цієї функції. Наша служба спеціальних можливостей не збирає та не поширює жодних даних.</string>
+    <string name="hidden_apps_message">Примітка: натисніть «Moo Launcher» у верхній частині сторінки налаштувань, щоб знайти приховані додатки.\n\nДокладніша інформація доступна на нашій сторінці «Про додаток».</string>
+    <string name="accessibility_disclosure">Увімкніть службу спеціальних можливостей Moo Launcher у налаштуваннях вашого пристрою, щоб увімкнути жест подвійного торкання для блокування.\n\nЗверніть увагу, що ця служба використовується лише для цієї функції. Наша служба спеціальних можливостей не збирає та не поширює жодних даних.</string>
     <string name="accept">Прийняти</string>
     <string name="permission">Дозвіл</string>
     <string name="double_tap_lock">Блокування подвійним дотиком</string>
@@ -98,7 +98,7 @@
     <string name="enabled">Увімкнено</string>
     <string name="disabled">Вимкнено</string>
     <string name="please_turn_on_double_tap_to_unlock">Будь ласка, увімкніть подвійний дотик для блокування</string>
-    <string name="launcher_failed_to_lock_device">Olauncher не вдалося заблокувати пристрій.\nБудь ласка, перевірте налаштування вашої програми.</string>
+    <string name="launcher_failed_to_lock_device">Moo Launcher не вдалося заблокувати пристрій.\nБудь ласка, перевірте налаштування вашої програми.</string>
     <string name="long_press_to_select_app">Тривале натискання для вибору програми</string>
     <string name="unable_to_open_app">Неможливо відкрити додаток</string>
     <string name="copied">Скопійовано</string>
@@ -112,7 +112,7 @@
     <string name="swipe_left_app_disabled">Додаток для свайпу вліво вимкнено</string>
     <string name="swipe_right_app_disabled">Додаток для свайпу вправо вимкнено</string>
     <string name="your_wallpaper_will_update_shortly">Ваші шпалери незабаром оновляться</string>
-    <string name="olauncher_is_not_default_launcher">Olauncher не є стандартним лаунчером.\nЩоденне оновлення шпалер може завершитися помилкою.</string>
+    <string name="olauncher_is_not_default_launcher">Moo Launcher не є стандартним лаунчером.\nЩоденне оновлення шпалер може завершитися помилкою.</string>
     <string name="long_press_to_enable">Натисніть та утримуйте, щоб увімкнути</string>
     <string name="no_hidden_apps">Немає прихованих додатків</string>
     <string name="hidden_apps">Приховані додатки</string>
@@ -124,7 +124,7 @@
     <string name="screen_time">Час екрану</string>
     <string name="did_you_know">Чи знали ви?</string>
     <string name="leave_a_review">Залиште відгук</string>
-    <string name="review_message">Olauncher безкоштовний і завжди таким буде. У ньому немає реклами, він не збирає дані та скорочує ваш час перед екраном, що веде до здоровішого життя.\n\nСподіваємося, вам сподобається. Розкажіть нам, що ви думаєте.</string>
+    <string name="review_message">Moo Launcher безкоштовний і завжди таким буде. У ньому немає реклами, він не збирає дані та скорочує ваш час перед екраном, що веде до здоровішого життя.\n\nСподіваємося, вам сподобається. Розкажіть нам, що ви думаєте.</string>
     <string name="alignment_changed">Вирівнювання змінено ✅</string>
     <string name="home_screen">Головний екран</string>
     <string name="hey">Привіт</string>

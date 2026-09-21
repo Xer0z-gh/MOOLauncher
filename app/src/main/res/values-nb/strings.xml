@@ -2,11 +2,11 @@
     <string name="app">App</string>
     <string name="set_as_default_launcher">Angi som standard launcher</string>
     <string name="set_as_default_launcher_u"><u>Angi som standard launcher</u></string>
-    <string name="set_as_default_launcher_first">Angi først Olauncher som standard</string>
+    <string name="set_as_default_launcher_first">Angi først Moo Launcher som standard</string>
     <string name="app_text_color">Tekstfarge</string>
     <string name="double_tap_to_lock_screen">Dobbelttrykk for å låse</string>
     <string name="home_button_show_recents">Hjem-knapp for nylige apper</string>
-    <string name="admin_permission_message">Olauncher lover å bruke tilgjengelighetstillatelsen ansvarlig. Olauncher samler ikke inn eller deler noen data.</string>
+    <string name="admin_permission_message">Moo Launcher lover å bruke tilgjengelighetstillatelsen ansvarlig. Moo Launcher samler ikke inn eller deler noen data.</string>
     <string name="about">Om</string>
     <string name="off">Av</string>
     <string name="on">På</string>
@@ -56,19 +56,19 @@
     <string name="welcome_to_olauncher_settings">Velkommen til innstillingene!
         \n\nHusk at hvis du har spørsmål, finner du svar på vår Om-side.</string>
     <string name="rate_us_message">Hei, du vil ikke se denne meldingen igjen.
-        \n\nHvis du synes Olauncher er nyttig, kan du legge igjen en 5-stjerners vurdering? Det vil bety mye for oss. Takk!</string>
-    <string name="share_message">Vi trenger din hjelp! Vi mener alle bør vite om Olauncher og fordelene ved det, men vi klarer det ikke alene.
-        \n\nKan du dele Olauncher med venner, familie og følgere? Takk for støtten din! ❤</string>
-    <string name="keyboard_message">Hei, tastaturet er den raskeste måten å finne og åpne apper på i Olauncher. Kan vi be deg la det stå på i noen dager til før du bestemmer deg?
+        \n\nHvis du synes Moo Launcher er nyttig, kan du legge igjen en 5-stjerners vurdering? Det vil bety mye for oss. Takk!</string>
+    <string name="share_message">Vi trenger din hjelp! Vi mener alle bør vite om Moo Launcher og fordelene ved det, men vi klarer det ikke alene.
+        \n\nKan du dele Moo Launcher med venner, familie og følgere? Takk for støtten din! ❤</string>
+    <string name="keyboard_message">Hei, tastaturet er den raskeste måten å finne og åpne apper på i Moo Launcher. Kan vi be deg la det stå på i noen dager til før du bestemmer deg?
         \n\nValget er alltid ditt.</string>
     <string name="digital_wellbeing_message">Hvis du vil angi tidsbegrensninger for bestemte apper, kan Androids Digital velvære-funksjon hjelpe deg med det. Søk etter Digital velvære i telefoninnstillingene og aktiver den.</string>
     <string name="app_usage_message">For å vise/skjule skjermtiden din på startskjermen må du tillate eller avslå tillatelsen for appbruk.
         \n\nMerk: Ingen data om appbruk samles inn. Alt behandles på enheten din.</string>
     <string name="pro_message">Olauncher har også en pro-versjon som heter Pro Launcher. Den har ekstra funksjoner som vær, widgeter, skrifttyper, mapper, AMOLED-bakgrunner og mer.
         \n\nDet er også den beste måten å støtte utviklerne av Olauncher på. Sjekk den ut!</string>
-    <string name="wallpaper_message">Olauncher tilbyr vakre nye bakgrunnsbilder daglig. Gi startskjermen din et nytt utseende hver dag, helt gratis!
+    <string name="wallpaper_message">Moo Launcher tilbyr vakre nye bakgrunnsbilder daglig. Gi startskjermen din et nytt utseende hver dag, helt gratis!
         \n\nVil du prøve det?</string>
-    <string name="accessibility_service_description">Tilgjengelighetstillatelsen kreves for å aktivere bevegelsen - dobbelttrykk for å låse. Ingen data hentet av Olauncher via denne tjenesten forlater enheten din.</string>
+    <string name="accessibility_service_description">Tilgjengelighetstillatelsen kreves for å aktivere bevegelsen - dobbelttrykk for å låse. Ingen data hentet av Moo Launcher via denne tjenesten forlater enheten din.</string>
     <string name="support_olauncher_for_free">Støtt Olauncher gratis ved å bruke vår Amazon-partnerlenke.</string>
     <string name="support_olauncher_message">Hver gang du kjøper noe via lenken vår, får vi en liten provisjon. Lagre lenken og bruk den når du handler på nett.\nTakk!</string>
     <string name="open">Åpne lenke</string>
@@ -81,11 +81,11 @@
     <string name="date_only">Kun dato</string>
     <string name="bottom_on">Nederst: På</string>
     <string name="bottom_off">Nederst: Av</string>
-    <string name="please_set_olauncher_as_default_first">Angi først Olauncher som standard</string>
+    <string name="please_set_olauncher_as_default_first">Angi først Moo Launcher som standard</string>
     <string name="affiliate">Partner</string>
     <string name="tip_start_typing_for_rename">Tips: Begynn å skrive for å få opp alternativet for å endre navn på appen</string>
-    <string name="hidden_apps_message">Merk: Trykk på \'Olauncher\' øverst på denne innstillingssiden for å finne de skjulte appene dine.\n\nFlere detaljer finnes på vår Om-side.</string>
-    <string name="accessibility_disclosure">Slå på Olaunchers tilgjengelighetstjeneste i enhetens innstillinger for å aktivere bevegelsen Dobbelttrykk for å låse.\n\nMerk at denne tjenesten kun brukes til denne bestemte funksjonen. Tilgjengelighetstjenesten vår samler ikke inn eller deler noen data.</string>
+    <string name="hidden_apps_message">Merk: Trykk på \'Moo Launcher\' øverst på denne innstillingssiden for å finne de skjulte appene dine.\n\nFlere detaljer finnes på vår Om-side.</string>
+    <string name="accessibility_disclosure">Slå på Moo Launchers tilgjengelighetstjeneste i enhetens innstillinger for å aktivere bevegelsen Dobbelttrykk for å låse.\n\nMerk at denne tjenesten kun brukes til denne bestemte funksjonen. Tilgjengelighetstjenesten vår samler ikke inn eller deler noen data.</string>
     <string name="accept">Godta</string>
     <string name="permission">Tillatelse</string>
     <string name="double_tap_lock">Dobbelttrykk for å låse</string>
@@ -98,7 +98,7 @@
     <string name="enabled">Aktivert</string>
     <string name="disabled">Deaktivert</string>
     <string name="please_turn_on_double_tap_to_unlock">Slå på dobbelttrykk for å låse</string>
-    <string name="launcher_failed_to_lock_device">Olauncher klarte ikke å låse enheten.\nSjekk appinnstillingene dine.</string>
+    <string name="launcher_failed_to_lock_device">Moo Launcher klarte ikke å låse enheten.\nSjekk appinnstillingene dine.</string>
     <string name="long_press_to_select_app">Langt trykk for å velge app</string>
     <string name="unable_to_open_app">Kan ikke åpne app</string>
     <string name="unable_to_open_app_info">Kan ikke åpne appinformasjon</string>
@@ -113,7 +113,7 @@
     <string name="swipe_left_app_disabled">App ved sveip til venstre deaktivert</string>
     <string name="swipe_right_app_disabled">App ved sveip til høyre deaktivert</string>
     <string name="your_wallpaper_will_update_shortly">Bakgrunnsbildet ditt oppdateres snart</string>
-    <string name="olauncher_is_not_default_launcher">Olauncher er ikke standard. Oppdatering av bakgrunnsbilde vil mislykkes.</string>
+    <string name="olauncher_is_not_default_launcher">Moo Launcher er ikke standard. Oppdatering av bakgrunnsbilde vil mislykkes.</string>
     <string name="long_press_to_enable">Langt trykk for å aktivere</string>
     <string name="no_hidden_apps">Ingen skjulte apper</string>
     <string name="hidden_apps">Skjulte apper</string>
@@ -125,7 +125,7 @@
     <string name="learn_more">Les mer</string>
     <string name="did_you_know">Visste du det?</string>
     <string name="leave_a_review">Legg igjen en vurdering</string>
-    <string name="review_message">Olauncher er gratis og vil alltid være det. Den har ingen reklame, samler ikke inn data og reduserer skjermtiden din, noe som gir et sunnere liv.
+    <string name="review_message">Moo Launcher er gratis og vil alltid være det. Den har ingen reklame, samler ikke inn data og reduserer skjermtiden din, noe som gir et sunnere liv.
         \n\nVi håper du liker den. Fortell oss hva du synes.</string>
     <string name="alignment_changed">Justering endret ✅</string>
     <string name="home_screen">Startskjerm</string>

@@ -2,11 +2,11 @@
     <string name="app">Ứng dụng</string>
     <string name="set_as_default_launcher">Đặt làm trình khởi chạy mặc định</string>
     <string name="set_as_default_launcher_u"><u>Đặt làm trình khởi chạy mặc định</u></string>
-    <string name="set_as_default_launcher_first">Vui lòng đặt Olauncher làm mặc định trước</string>
+    <string name="set_as_default_launcher_first">Vui lòng đặt Moo Launcher làm mặc định trước</string>
     <string name="app_text_color">Màu chữ</string>
     <string name="double_tap_to_lock_screen">Chạm hai lần để khóa</string>
     <string name="home_button_show_recents">Nút Home cho ứng dụng gần đây</string>
-    <string name="admin_permission_message">Olauncher cam kết sử dụng quyền trợ năng một cách có trách nhiệm. Olauncher không thu thập hoặc chia sẻ bất kỳ dữ liệu nào.</string>
+    <string name="admin_permission_message">Moo Launcher cam kết sử dụng quyền trợ năng một cách có trách nhiệm. Moo Launcher không thu thập hoặc chia sẻ bất kỳ dữ liệu nào.</string>
     <string name="about">Giới thiệu</string>
     <string name="off">Tắt</string>
     <string name="on">Bật</string>
@@ -56,19 +56,19 @@
     <string name="welcome_to_olauncher_settings">Chào mừng bạn đến với phần cài đặt!
         \n\nHãy nhớ rằng, nếu bạn có bất kỳ câu hỏi nào, trang Giới thiệu sẽ có câu trả lời.</string>
     <string name="rate_us_message">Xin chào, bạn sẽ không thấy lại thông báo này nữa.
-        \n\nNếu bạn thấy Olauncher hữu ích, bạn có thể để lại đánh giá 5 sao không? Điều đó thực sự có ý nghĩa rất lớn với chúng tôi. Cảm ơn bạn!</string>
-    <string name="share_message">Chúng tôi cần sự giúp đỡ của bạn! Chúng tôi tin rằng mọi người nên biết về Olauncher và những lợi ích của nó, nhưng chúng tôi không thể tự làm một mình.
-        \n\nBạn có thể chia sẻ Olauncher với bạn bè, gia đình và người theo dõi của bạn không? Cảm ơn bạn đã ủng hộ! ❤</string>
-    <string name="keyboard_message">Xin chào, bàn phím là cách nhanh nhất để tìm và mở ứng dụng trong Olauncher. Chúng tôi có thể xin bạn giữ tính năng này bật thêm vài ngày rồi quyết định sau không?
+        \n\nNếu bạn thấy Moo Launcher hữu ích, bạn có thể để lại đánh giá 5 sao không? Điều đó thực sự có ý nghĩa rất lớn với chúng tôi. Cảm ơn bạn!</string>
+    <string name="share_message">Chúng tôi cần sự giúp đỡ của bạn! Chúng tôi tin rằng mọi người nên biết về Moo Launcher và những lợi ích của nó, nhưng chúng tôi không thể tự làm một mình.
+        \n\nBạn có thể chia sẻ Moo Launcher với bạn bè, gia đình và người theo dõi của bạn không? Cảm ơn bạn đã ủng hộ! ❤</string>
+    <string name="keyboard_message">Xin chào, bàn phím là cách nhanh nhất để tìm và mở ứng dụng trong Moo Launcher. Chúng tôi có thể xin bạn giữ tính năng này bật thêm vài ngày rồi quyết định sau không?
         \n\nLựa chọn luôn là của bạn.</string>
     <string name="digital_wellbeing_message">Nếu bạn muốn đặt giới hạn thời gian cho một số ứng dụng nhất định, tính năng Digital Wellbeing của Android có thể giúp bạn. Vui lòng tìm Digital Wellbeing trong cài đặt điện thoại của bạn và bật tính năng này.</string>
     <string name="app_usage_message">Để hiện/ẩn thời gian sử dụng màn hình trên màn hình chính, vui lòng cho phép hoặc từ chối quyền sử dụng ứng dụng.
         \n\nLưu ý: Không có dữ liệu sử dụng ứng dụng nào được thu thập. Mọi thứ đều được xử lý trên thiết bị của bạn.</string>
     <string name="pro_message">Olauncher cũng có phiên bản pro gọi là Pro Launcher. Nó có thêm các tính năng như thời tiết, widget, phông chữ, thư mục, hình nền AMOLED, v.v.
         \n\nĐây cũng là cách tốt nhất để hỗ trợ các nhà phát triển của Olauncher. Hãy xem thử!</string>
-    <string name="wallpaper_message">Olauncher cung cấp những hình nền mới đẹp mắt mỗi ngày, hoàn toàn miễn phí. Hãy cho màn hình chính của bạn một diện mạo mới mỗi ngày, miễn phí!
+    <string name="wallpaper_message">Moo Launcher cung cấp những hình nền mới đẹp mắt mỗi ngày, hoàn toàn miễn phí. Hãy cho màn hình chính của bạn một diện mạo mới mỗi ngày, miễn phí!
         \n\nBạn có muốn thử không?</string>
-    <string name="accessibility_service_description">Quyền trợ năng là bắt buộc để bật cử chỉ - chạm hai lần để khóa. Không có bất kỳ dữ liệu nào mà Olauncher thu được qua dịch vụ này rời khỏi thiết bị của bạn.</string>
+    <string name="accessibility_service_description">Quyền trợ năng là bắt buộc để bật cử chỉ - chạm hai lần để khóa. Không có bất kỳ dữ liệu nào mà Moo Launcher thu được qua dịch vụ này rời khỏi thiết bị của bạn.</string>
     <string name="support_olauncher_for_free">Hỗ trợ Olauncher miễn phí bằng cách sử dụng liên kết tiếp thị liên kết Amazon của chúng tôi.</string>
     <string name="support_olauncher_message">Mỗi khi bạn mua thứ gì đó bằng liên kết của chúng tôi, chúng tôi sẽ nhận được một khoản hoa hồng nhỏ. Vui lòng lưu liên kết này và sử dụng bất cứ khi nào bạn mua sắm trực tuyến.\nCảm ơn bạn!</string>
     <string name="open">Mở liên kết</string>
@@ -81,11 +81,11 @@
     <string name="date_only">Chỉ ngày</string>
     <string name="bottom_on">Dưới cùng: Bật</string>
     <string name="bottom_off">Dưới cùng: Tắt</string>
-    <string name="please_set_olauncher_as_default_first">Vui lòng đặt Olauncher làm mặc định trước</string>
+    <string name="please_set_olauncher_as_default_first">Vui lòng đặt Moo Launcher làm mặc định trước</string>
     <string name="affiliate">Tiếp thị liên kết</string>
     <string name="tip_start_typing_for_rename">Mẹo: Bắt đầu gõ để có tùy chọn ĐỔI TÊN ứng dụng</string>
-    <string name="hidden_apps_message">Lưu ý: Nhấn vào \'Olauncher\' ở đầu trang Cài đặt này để tìm các ứng dụng ẩn của bạn.\n\nCó thêm chi tiết trên trang Giới thiệu của chúng tôi.</string>
-    <string name="accessibility_disclosure">Vui lòng bật dịch vụ trợ năng của Olauncher trong cài đặt thiết bị của bạn để bật cử chỉ Chạm hai lần để khóa.
+    <string name="hidden_apps_message">Lưu ý: Nhấn vào \'Moo Launcher\' ở đầu trang Cài đặt này để tìm các ứng dụng ẩn của bạn.\n\nCó thêm chi tiết trên trang Giới thiệu của chúng tôi.</string>
+    <string name="accessibility_disclosure">Vui lòng bật dịch vụ trợ năng của Moo Launcher trong cài đặt thiết bị của bạn để bật cử chỉ Chạm hai lần để khóa.
     \n\nXin lưu ý rằng dịch vụ này chỉ được sử dụng cho tính năng cụ thể này. Dịch vụ trợ năng của chúng tôi không thu thập hoặc chia sẻ bất kỳ dữ liệu nào.</string>
     <string name="accept">Đồng ý</string>
     <string name="permission">Quyền</string>
@@ -99,7 +99,7 @@
     <string name="enabled">Đã bật</string>
     <string name="disabled">Đã tắt</string>
     <string name="please_turn_on_double_tap_to_unlock">Vui lòng bật chạm hai lần để khóa</string>
-    <string name="launcher_failed_to_lock_device">Olauncher không thể khóa thiết bị.\nVui lòng kiểm tra cài đặt ứng dụng của bạn.</string>
+    <string name="launcher_failed_to_lock_device">Moo Launcher không thể khóa thiết bị.\nVui lòng kiểm tra cài đặt ứng dụng của bạn.</string>
     <string name="long_press_to_select_app">Nhấn giữ để chọn ứng dụng</string>
     <string name="unable_to_open_app">Không thể mở ứng dụng</string>
     <string name="unable_to_open_app_info">Không thể mở thông tin ứng dụng</string>
@@ -114,7 +114,7 @@
     <string name="swipe_left_app_disabled">Đã tắt ứng dụng khi vuốt trái</string>
     <string name="swipe_right_app_disabled">Đã tắt ứng dụng khi vuốt phải</string>
     <string name="your_wallpaper_will_update_shortly">Hình nền của bạn sẽ sớm được cập nhật</string>
-    <string name="olauncher_is_not_default_launcher">Olauncher không phải là mặc định. Việc cập nhật hình nền sẽ thất bại.</string>
+    <string name="olauncher_is_not_default_launcher">Moo Launcher không phải là mặc định. Việc cập nhật hình nền sẽ thất bại.</string>
     <string name="long_press_to_enable">Nhấn giữ để bật</string>
     <string name="no_hidden_apps">Không có ứng dụng ẩn</string>
     <string name="hidden_apps">Ứng dụng ẩn</string>
@@ -126,7 +126,7 @@
     <string name="learn_more">Tìm hiểu thêm</string>
     <string name="did_you_know">Bạn có biết?</string>
     <string name="leave_a_review">Để lại đánh giá</string>
-    <string name="review_message">Olauncher miễn phí và sẽ luôn miễn phí. Ứng dụng không có quảng cáo, không thu thập dữ liệu và giúp giảm thời gian sử dụng màn hình, mang lại cuộc sống lành mạnh hơn.
+    <string name="review_message">Moo Launcher miễn phí và sẽ luôn miễn phí. Ứng dụng không có quảng cáo, không thu thập dữ liệu và giúp giảm thời gian sử dụng màn hình, mang lại cuộc sống lành mạnh hơn.
         \n\nChúng tôi hy vọng bạn thích nó. Hãy cho chúng tôi biết bạn nghĩ gì.</string>
     <string name="alignment_changed">Đã thay đổi căn chỉnh ✅</string>
     <string name="home_screen">Màn hình chính</string>

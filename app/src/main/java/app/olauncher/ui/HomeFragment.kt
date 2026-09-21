@@ -797,24 +797,22 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         )
     }
 
-    private fun showAppList(flag: Int, rename: Boolean = false, includeHiddenApps: Boolean = false) {
+    private fun showAppList(
+        flag: Int,
+        rename: Boolean = false,
+        includeHiddenApps: Boolean = false,
+        keyboardMode: Int = Constants.KeyboardMode.AUTO,
+    ) {
         viewModel.getAppList(includeHiddenApps)
+        val args = bundleOf(
+            Constants.Key.FLAG to flag,
+            Constants.Key.RENAME to rename,
+            Constants.Key.KEYBOARD_MODE to keyboardMode
+        )
         try {
-            findNavController().navigate(
-                R.id.action_mainFragment_to_appListFragment,
-                bundleOf(
-                    Constants.Key.FLAG to flag,
-                    Constants.Key.RENAME to rename
-                )
-            )
+            findNavController().navigate(R.id.action_mainFragment_to_appListFragment, args)
         } catch (e: Exception) {
-            findNavController().navigate(
-                R.id.appListFragment,
-                bundleOf(
-                    Constants.Key.FLAG to flag,
-                    Constants.Key.RENAME to rename
-                )
-            )
+            findNavController().navigate(R.id.appListFragment, args)
             e.printStackTrace()
         }
     }
@@ -938,8 +936,17 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     private fun runGesture(gesture: String, defaultAction: Int) {
         when (prefs.getGestureAction(gesture, defaultAction)) {
             Constants.GestureAction.NOTHING -> Unit
-            Constants.GestureAction.APP_LIST -> showAppList(Constants.FLAG_LAUNCH_APP)
-            Constants.GestureAction.APP_SEARCH -> showAppList(Constants.FLAG_LAUNCH_APP)
+            // Browse the list with the keyboard out of the way...
+            Constants.GestureAction.APP_LIST -> showAppList(
+                Constants.FLAG_LAUNCH_APP,
+                keyboardMode = Constants.KeyboardMode.HIDE
+            )
+            // ...versus land in it ready to type. These were the same call until now, which made
+            // two of the gesture options indistinguishable.
+            Constants.GestureAction.APP_SEARCH -> showAppList(
+                Constants.FLAG_LAUNCH_APP,
+                keyboardMode = Constants.KeyboardMode.SHOW
+            )
             Constants.GestureAction.NOTIFICATION_SHADE -> expandNotificationDrawer(requireContext())
             Constants.GestureAction.LAUNCHER_SETTINGS -> openLauncherSettings()
             Constants.GestureAction.LOCK_SCREEN -> lockPhoneByGesture()

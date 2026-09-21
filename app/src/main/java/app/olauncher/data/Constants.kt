@@ -5,6 +5,21 @@ object Constants {
     object Key {
         const val FLAG = "flag"
         const val RENAME = "rename"
+        const val KEYBOARD_MODE = "keyboard_mode"
+    }
+
+    /**
+     * Whether the app drawer opens ready to type or ready to browse.
+     *
+     * Before Launcher treats "open app list" and "open app search" as two different gestures, and
+     * they are only different if one of them suppresses the keyboard: a keyboard covering half the
+     * screen is the difference between scanning a list and searching it. AUTO defers to the user's
+     * own auto-show-keyboard setting, which is what every other entry point into the drawer wants.
+     */
+    object KeyboardMode {
+        const val AUTO = 0
+        const val HIDE = 1
+        const val SHOW = 2
     }
 
     object Dialog {

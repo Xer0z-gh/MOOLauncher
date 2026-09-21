@@ -3,10 +3,10 @@
     <string name="app">Alkalmazás</string>
     <string name="set_as_default_launcher">Beállítás alapért. indítóként</string>
     <string name="set_as_default_launcher_u"><u>Beállítás alapért. indítóként</u></string>
-    <string name="set_as_default_launcher_first">Először állítsa be az Olauncher-t alapértelmezettként</string>
+    <string name="set_as_default_launcher_first">Először állítsa be az Moo Launcher-t alapértelmezettként</string>
     <string name="app_text_color">Szövegszín</string>
     <string name="double_tap_to_lock_screen">Dupla koppintás a képernyő lezárásához</string>
-    <string name="admin_permission_message">Az Olauncher vállalja, hogy felelősségteljesen használja a kisegítő lehetőségek engedélyét. Az Olauncher nem gyűjt és nem oszt meg semmilyen adatot.</string>
+    <string name="admin_permission_message">Az Moo Launcher vállalja, hogy felelősségteljesen használja a kisegítő lehetőségek engedélyét. Az Moo Launcher nem gyűjt és nem oszt meg semmilyen adatot.</string>
     <string name="about">Névjegy</string>
     <string name="off">Ki</string>
     <string name="on">Be</string>
@@ -55,10 +55,10 @@
     <string name="light">Világos</string>
     <string name="welcome_to_olauncher_settings">Üdvözöljük a beállításokban!
         \n\nNe feledje, ha bármilyen kérdése van, az „Rólunk” oldalunk tartalmazza a választ.</string>
-    <string name="rate_us_message">Üdv, ezt az üzenetet nem fogja újra látni.\n\nHa hasznosnak találja az Olauncher-t, kérjük, hagyjon nekünk 5 csillagos értékelést! Ez nagyon sokat jelentene nekünk. Köszönjük!</string>
-    <string name="share_message">Szükségünk van a segítségére! Úgy gondoljuk, mindenkinek tudnia kellene az Olauncher-ről és előnyeiről, de egyedül nem tudjuk elérni.\n\nMegosztaná az Olauncher-t barátaival, családjával és követőivel? Köszönjük a támogatását! ❤</string>
+    <string name="rate_us_message">Üdv, ezt az üzenetet nem fogja újra látni.\n\nHa hasznosnak találja az Moo Launcher-t, kérjük, hagyjon nekünk 5 csillagos értékelést! Ez nagyon sokat jelentene nekünk. Köszönjük!</string>
+    <string name="share_message">Szükségünk van a segítségére! Úgy gondoljuk, mindenkinek tudnia kellene az Moo Launcher-ről és előnyeiről, de egyedül nem tudjuk elérni.\n\nMegosztaná az Moo Launcher-t barátaival, családjával és követőivel? Köszönjük a támogatását! ❤</string>
     <!--        \n\nHa van egy kis ideje, kérjük, ossza meg másokkal is az Olauncher-t. Az Olauncher-nek szüksége van emberekre. De ami még fontosabb, az embereknek szüksége van az Olauncher-re..</string>-->
-    <string name="keyboard_message">Üdvözöljük! A billentyűzet a leggyorsabb módja az alkalmazások megtalálásához és elindításához az Olauncherben. Megkérhetjük, hogy hagyja bekapcsolva még néhány napig, és utána döntsön?
+    <string name="keyboard_message">Üdvözöljük! A billentyűzet a leggyorsabb módja az alkalmazások megtalálásához és elindításához az Moo Launcherben. Megkérhetjük, hogy hagyja bekapcsolva még néhány napig, és utána döntsön?
         \n\nA választás mindig az Öné.</string>
     <string name="digital_wellbeing_message">Ha időkorlátokat szeretne beállítani bizonyos alkalmazásokhoz, az Android Digital Wellbeing funkciója segíthet ebben.
         \n\nKeresse meg a Digitális jólét elemet a telefon beállításai között, és engedélyezze.</string>
@@ -66,9 +66,9 @@
         \n\nMegjegyzés: Nem gyűjtünk alkalmazás-használati adatokat. Minden az Ön eszközén kerül feldolgozásra.</string>
     <string name="pro_message">Az Olauncher-nek van egy pro verziója is, amely Pro Launcher néven ismert. További funkciókat kínál, mint például időjárás, widgetek, betűtípusok, mappák, AMOLED háttérképek stb.
         \n\nEz a legjobb módja annak, hogy támogassa az Olauncher fejlesztőit. Tekintse meg őket!</string>
-    <string name="wallpaper_message">Az Olauncher minden nap gyönyörű, új háttérképeket kínál, amelyekkel frissen tarthatja kezdőképernyőjét, ingyen!
+    <string name="wallpaper_message">Az Moo Launcher minden nap gyönyörű, új háttérképeket kínál, amelyekkel frissen tarthatja kezdőképernyőjét, ingyen!
         \n\nSzeretné kipróbálni?</string>
-    <string name="accessibility_service_description">A kisegítő lehetőségek engedélye szükséges a dupla koppintás a lezáráshoz mozdulat engedélyezéséhez. Az Olauncher által ezen a szolgáltatáson keresztül megszerzett adatok nem hagyják el a készüléket.</string>
+    <string name="accessibility_service_description">A kisegítő lehetőségek engedélye szükséges a dupla koppintás a lezáráshoz mozdulat engedélyezéséhez. Az Moo Launcher által ezen a szolgáltatáson keresztül megszerzett adatok nem hagyják el a készüléket.</string>
     <string name="support_olauncher_for_free">Támogasson minket ingyenesen az Amazon affiliate linkünk használatával.</string>
     <string name="support_olauncher_message">Minden alkalommal, amikor vásárol valamit a linkünket használva, egy kis jutalékot kapunk. Kérjük, mentse el a linket, és használja fel, amikor csak online vásárol.
         \n\nKöszönjük!</string>
@@ -82,11 +82,11 @@
     <string name="date_only">Csak dátum</string>
     <string name="bottom_on">Alsó: Be</string>
     <string name="bottom_off">Alsó: Ki</string>
-    <string name="please_set_olauncher_as_default_first">Kérjük, először állítsa be az Olauncher-t alapértelmezettként</string>
+    <string name="please_set_olauncher_as_default_first">Kérjük, először állítsa be az Moo Launcher-t alapértelmezettként</string>
     <string name="affiliate">Affiliate</string>
     <string name="tip_start_typing_for_rename">Tipp: Kezdjen el gépelni az alkalmazás ÁTNEVEZÉSE opcióhoz</string>
-    <string name="hidden_apps_message">Megjegyzés: A rejtett alkalmazások megtalálásához érintse meg az \"Olauncher\" elemet ennek a beállítás oldalnak a tetején.\n\nTöbb részlet elérhető a Névjegy oldalon.</string>
-    <string name="accessibility_disclosure">Kérjük, kapcsolja be az Olauncher kisegítő lehetőségek szolgáltatását az eszköz beállításaiban a dupla koppintás a lezáráshoz mozdulat engedélyezéséhez.\n\nKérjük, vegye figyelembe, hogy ez a szolgáltatás csak ehhez az egy funkcióhoz használatos. Kisegítő lehetőségek szolgáltatásunk nem gyűjt és nem oszt meg semmilyen adatot.</string>
+    <string name="hidden_apps_message">Megjegyzés: A rejtett alkalmazások megtalálásához érintse meg az \"Moo Launcher\" elemet ennek a beállítás oldalnak a tetején.\n\nTöbb részlet elérhető a Névjegy oldalon.</string>
+    <string name="accessibility_disclosure">Kérjük, kapcsolja be az Moo Launcher kisegítő lehetőségek szolgáltatását az eszköz beállításaiban a dupla koppintás a lezáráshoz mozdulat engedélyezéséhez.\n\nKérjük, vegye figyelembe, hogy ez a szolgáltatás csak ehhez az egy funkcióhoz használatos. Kisegítő lehetőségek szolgáltatásunk nem gyűjt és nem oszt meg semmilyen adatot.</string>
     <string name="accept">Elfogad</string>
     <string name="permission">Engedély</string>
     <string name="double_tap_lock">Dupla koppintás a lezáráshoz</string>
@@ -100,7 +100,7 @@
     <string name="enabled">Engedélyezve</string>
     <string name="disabled">Letiltva</string>
     <string name="please_turn_on_double_tap_to_unlock">Kérjük, kapcsolja be a dupla koppintást a lezáráshoz</string>
-    <string name="launcher_failed_to_lock_device">Az Olauncher nem tudta lezárni az eszközt.\nKérjük, ellenőrizze az alkalmazás beállításait.</string>
+    <string name="launcher_failed_to_lock_device">Az Moo Launcher nem tudta lezárni az eszközt.\nKérjük, ellenőrizze az alkalmazás beállításait.</string>
     <string name="long_press_to_select_app">Hosszan nyomva tartás az alkalmazás kiválasztásához</string>
     <string name="unable_to_open_app">Nem lehet megnyitni az alkalmazást</string>
     <string name="copied">Másolva</string>
@@ -114,7 +114,7 @@
     <string name="swipe_left_app_disabled">Balra simítva indítható alkalmazás letiltva</string>
     <string name="swipe_right_app_disabled">Jobbra simítva indítható alkalmazás letiltva</string>
     <string name="your_wallpaper_will_update_shortly">A háttérkép hamarosan frissülni fog</string>
-    <string name="olauncher_is_not_default_launcher">Az Olauncher nem az alapértelmezett indító.\nA napi háttérkép frissítés sikertelen lehet.</string>
+    <string name="olauncher_is_not_default_launcher">Az Moo Launcher nem az alapértelmezett indító.\nA napi háttérkép frissítés sikertelen lehet.</string>
     <string name="long_press_to_enable">Hosszan nyomva tartás az engedélyezéshez</string>
     <string name="no_hidden_apps">Nincsenek rejtett alkalmazások</string>
     <string name="hidden_apps">Rejtett alkalmazások</string>
@@ -126,7 +126,7 @@
     <string name="learn_more">Tudjon meg többet</string>
     <string name="did_you_know">Tudta?</string>
     <string name="leave_a_review">Hagyjon véleményt</string>
-    <string name="review_message">Az Olauncher ingyenes és mindig az is marad. Nincsenek benne hirdetések, nem gyűjt adatokat, és csökkenti a képernyőidőt, ami egészségesebb élethez vezet.\n\nReméljük, tetszeni fog. Mondja el, mit gondol.</string>
+    <string name="review_message">Az Moo Launcher ingyenes és mindig az is marad. Nincsenek benne hirdetések, nem gyűjt adatokat, és csökkenti a képernyőidőt, ami egészségesebb élethez vezet.\n\nReméljük, tetszeni fog. Mondja el, mit gondol.</string>
     <string name="alignment_changed">Az igazítás megváltozott ✅</string>
     <string name="home_screen">Kezdőképernyő</string>
     <string name="hey">Üdvözöljük!</string>

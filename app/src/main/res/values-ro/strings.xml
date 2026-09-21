@@ -2,11 +2,11 @@
     <string name="app">Aplicație</string>
     <string name="set_as_default_launcher">Setează ca launcher implicit</string>
     <string name="set_as_default_launcher_u"><u>Setează ca launcher implicit</u></string>
-    <string name="set_as_default_launcher_first">Setează mai întâi Olauncher ca implicit</string>
+    <string name="set_as_default_launcher_first">Setează mai întâi Moo Launcher ca implicit</string>
     <string name="app_text_color">Culoare text</string>
     <string name="double_tap_to_lock_screen">Atinge dublu pentru blocare</string>
     <string name="home_button_show_recents">Buton Acasă pentru aplicații recente</string>
-    <string name="admin_permission_message">Olauncher promite să folosească responsabil permisiunea de accesibilitate. Olauncher nu colectează și nu partajează date.</string>
+    <string name="admin_permission_message">Moo Launcher promite să folosească responsabil permisiunea de accesibilitate. Moo Launcher nu colectează și nu partajează date.</string>
     <string name="about">Despre</string>
     <string name="off">Dezactivat</string>
     <string name="on">Activat</string>
@@ -56,19 +56,19 @@
     <string name="welcome_to_olauncher_settings">Bine ai venit în setări!
         \n\nȚine minte, dacă ai întrebări, pagina Despre are răspunsul.</string>
     <string name="rate_us_message">Salut, nu vei mai vedea acest mesaj din nou.
-        \n\nDacă găsești Olauncher util, ai putea să ne lași o recenzie de 5 stele? Ar însemna enorm pentru noi. Mulțumim!</string>
-    <string name="share_message">Avem nevoie de ajutorul tău! Credem că toată lumea ar trebui să știe despre Olauncher și beneficiile sale, dar nu putem face asta singuri.
-        \n\nAi putea distribui Olauncher prietenilor, familiei și urmăritorilor tăi? Îți mulțumim pentru sprijin! ❤</string>
-    <string name="keyboard_message">Salut, tastatura este cea mai rapidă modalitate de a găsi și lansa aplicații în Olauncher. Te putem ruga să o lași activată câteva zile în plus și apoi să decizi?
+        \n\nDacă găsești Moo Launcher util, ai putea să ne lași o recenzie de 5 stele? Ar însemna enorm pentru noi. Mulțumim!</string>
+    <string name="share_message">Avem nevoie de ajutorul tău! Credem că toată lumea ar trebui să știe despre Moo Launcher și beneficiile sale, dar nu putem face asta singuri.
+        \n\nAi putea distribui Moo Launcher prietenilor, familiei și urmăritorilor tăi? Îți mulțumim pentru sprijin! ❤</string>
+    <string name="keyboard_message">Salut, tastatura este cea mai rapidă modalitate de a găsi și lansa aplicații în Moo Launcher. Te putem ruga să o lași activată câteva zile în plus și apoi să decizi?
         \n\nAlegerea îți aparține întotdeauna.</string>
     <string name="digital_wellbeing_message">Dacă vrei să setezi limite de timp pentru anumite aplicații, funcția Bunăstare digitală din Android te poate ajuta. Caută Bunăstare digitală în setările telefonului și activeaz-o.</string>
     <string name="app_usage_message">Pentru a afișa/ascunde timpul petrecut pe ecran de pe ecranul de start, permite sau refuză permisiunea de utilizare a aplicațiilor.
         \n\nNotă: Nu se colectează date privind utilizarea aplicațiilor. Totul este procesat pe dispozitivul tău.</string>
     <string name="pro_message">Olauncher are și o versiune pro numită Pro Launcher. Aceasta are funcții suplimentare precum vremea, widgeturi, fonturi, foldere, fundaluri AMOLED și altele.
         \n\nEste, de asemenea, cea mai bună modalitate de a sprijini dezvoltatorii Olauncher. Aruncă o privire!</string>
-    <string name="wallpaper_message">Olauncher oferă fundaluri noi și frumoase zilnic, gratuit. Dă ecranului tău de start un aspect nou în fiecare zi, gratis!
+    <string name="wallpaper_message">Moo Launcher oferă fundaluri noi și frumoase zilnic, gratuit. Dă ecranului tău de start un aspect nou în fiecare zi, gratis!
         \n\nVrei să încerci?</string>
-    <string name="accessibility_service_description">Permisiunea de accesibilitate este necesară pentru a activa gestul - atinge dublu pentru blocare. Niciun fel de date obținute de Olauncher prin acest serviciu nu părăsesc dispozitivul tău.</string>
+    <string name="accessibility_service_description">Permisiunea de accesibilitate este necesară pentru a activa gestul - atinge dublu pentru blocare. Niciun fel de date obținute de Moo Launcher prin acest serviciu nu părăsesc dispozitivul tău.</string>
     <string name="support_olauncher_for_free">Sprijină Olauncher gratuit folosind linkul nostru afiliat Amazon.</string>
     <string name="support_olauncher_message">De fiecare dată când cumperi ceva folosind linkul nostru, primim un mic comision. Te rugăm să salvezi linkul și să îl folosești ori de câte ori faci cumpărături online.\nMulțumim!</string>
     <string name="open">Deschide linkul</string>
@@ -81,11 +81,11 @@
     <string name="date_only">Doar data</string>
     <string name="bottom_on">Jos: Activat</string>
     <string name="bottom_off">Jos: Dezactivat</string>
-    <string name="please_set_olauncher_as_default_first">Te rugăm să setezi mai întâi Olauncher ca implicit</string>
+    <string name="please_set_olauncher_as_default_first">Te rugăm să setezi mai întâi Moo Launcher ca implicit</string>
     <string name="affiliate">Afiliat</string>
     <string name="tip_start_typing_for_rename">Sfat: Începe să tastezi pentru opțiunea de REDENUMIRE aplicație</string>
-    <string name="hidden_apps_message">Notă: Atinge \'Olauncher\' în partea de sus a acestei pagini de setări pentru a găsi aplicațiile tale ascunse.\n\nMai multe detalii sunt disponibile pe pagina noastră Despre.</string>
-    <string name="accessibility_disclosure">Te rugăm să activezi serviciul de accesibilitate Olauncher din setările dispozitivului pentru a activa gestul Atinge dublu pentru blocare.
+    <string name="hidden_apps_message">Notă: Atinge \'Moo Launcher\' în partea de sus a acestei pagini de setări pentru a găsi aplicațiile tale ascunse.\n\nMai multe detalii sunt disponibile pe pagina noastră Despre.</string>
+    <string name="accessibility_disclosure">Te rugăm să activezi serviciul de accesibilitate Moo Launcher din setările dispozitivului pentru a activa gestul Atinge dublu pentru blocare.
     \n\nTe rugăm să reții că acest serviciu este utilizat doar pentru această funcție specifică. Serviciul nostru de accesibilitate nu colectează și nu partajează date.</string>
     <string name="accept">Acceptă</string>
     <string name="permission">Permisiune</string>
@@ -99,7 +99,7 @@
     <string name="enabled">Activat</string>
     <string name="disabled">Dezactivat</string>
     <string name="please_turn_on_double_tap_to_unlock">Te rugăm să activezi atinge dublu pentru blocare</string>
-    <string name="launcher_failed_to_lock_device">Olauncher nu a reușit să blocheze dispozitivul.\nTe rugăm să verifici setările aplicației.</string>
+    <string name="launcher_failed_to_lock_device">Moo Launcher nu a reușit să blocheze dispozitivul.\nTe rugăm să verifici setările aplicației.</string>
     <string name="long_press_to_select_app">Apasă lung pentru a selecta aplicația</string>
     <string name="unable_to_open_app">Nu se poate deschide aplicația</string>
     <string name="unable_to_open_app_info">Nu se pot deschide informațiile aplicației</string>
@@ -114,7 +114,7 @@
     <string name="swipe_left_app_disabled">Aplicație la glisare stânga dezactivată</string>
     <string name="swipe_right_app_disabled">Aplicație la glisare dreapta dezactivată</string>
     <string name="your_wallpaper_will_update_shortly">Fundalul tău se va actualiza în curând</string>
-    <string name="olauncher_is_not_default_launcher">Olauncher nu este implicit. Actualizarea fundalului va eșua.</string>
+    <string name="olauncher_is_not_default_launcher">Moo Launcher nu este implicit. Actualizarea fundalului va eșua.</string>
     <string name="long_press_to_enable">Apasă lung pentru a activa</string>
     <string name="no_hidden_apps">Nicio aplicație ascunsă</string>
     <string name="hidden_apps">Aplicații ascunse</string>
@@ -126,7 +126,7 @@
     <string name="learn_more">Află mai multe</string>
     <string name="did_you_know">Știai că?</string>
     <string name="leave_a_review">Lasă o recenzie</string>
-    <string name="review_message">Olauncher este gratuit și va rămâne mereu așa. Nu are reclame, nu colectează date și îți reduce timpul petrecut pe ecran, ducând la o viață mai sănătoasă.
+    <string name="review_message">Moo Launcher este gratuit și va rămâne mereu așa. Nu are reclame, nu colectează date și îți reduce timpul petrecut pe ecran, ducând la o viață mai sănătoasă.
         \n\nSperăm că îl vei aprecia. Spune-ne ce părere ai.</string>
     <string name="alignment_changed">Aliniere schimbată ✅</string>
     <string name="home_screen">Ecran de start</string>

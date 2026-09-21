@@ -3,7 +3,7 @@
     <string name="app">アプリ</string>
     <string name="set_as_default_launcher">デフォルトのランチャーとして設定</string>
     <string name="set_as_default_launcher_u"><u>デフォルトのランチャーとして設定</u></string>
-    <string name="set_as_default_launcher_first">まず Olauncher をデフォルトに設定してください</string>
+    <string name="set_as_default_launcher_first">まず Moo Launcher をデフォルトに設定してください</string>
     <string name="_0">0</string>
     <string name="_1">1</string>
     <string name="_2">2</string>
@@ -19,12 +19,12 @@
 
     <string name="tip_start_typing_for_rename">ヒント: 入力を開始するとアプリの名前変更オプションが表示されます</string>
     <string name="your_wallpaper_will_update_shortly">壁紙は間もなく更新されます</string>
-    <string name="olauncher_is_not_default_launcher">Olauncher はデフォルトのランチャーではありません。壁紙の更新は失敗します。</string>
+    <string name="olauncher_is_not_default_launcher">Moo Launcher はデフォルトのランチャーではありません。壁紙の更新は失敗します。</string>
     <string name="long_press_to_enable">長押しして有効にします</string>
     <string name="no_hidden_apps">非表示のアプリはありません</string>
     <string name="hidden_apps">非表示のアプリ</string>
-    <string name="hidden_apps_message">注: この設定ページの上部にある「Olauncher」をタップすると、非表示のアプリを確認できます。\n\n詳細については「アプリについて」ページをご覧ください。</string>
-    <string name="accessibility_disclosure">ダブルタップでロックのジェスチャーを有効にするには、デバイスの設定で Olauncher のユーザー補助サービスをオンにしてください。\n\nこのサービスはこの機能にのみ使用されます。当社のユーザー補助サービスはデータを収集したり共有したりすることはありません。</string>
+    <string name="hidden_apps_message">注: この設定ページの上部にある「Moo Launcher」をタップすると、非表示のアプリを確認できます。\n\n詳細については「アプリについて」ページをご覧ください。</string>
+    <string name="accessibility_disclosure">ダブルタップでロックのジェスチャーを有効にするには、デバイスの設定で Moo Launcher のユーザー補助サービスをオンにしてください。\n\nこのサービスはこの機能にのみ使用されます。当社のユーザー補助サービスはデータを収集したり共有したりすることはありません。</string>
     <string name="accept">同意する</string>
     <string name="permission">許可</string>
     <string name="double_tap_lock">ダブルタップでロック</string>
@@ -38,7 +38,7 @@
     <string name="enabled">有効</string>
     <string name="disabled">無効</string>
     <string name="please_turn_on_double_tap_to_unlock">ダブルタップでロックをオンにしてください</string>
-    <string name="launcher_failed_to_lock_device">Olauncher がデバイスをロックできませんでした。\nアプリの設定を確認してください。</string>
+    <string name="launcher_failed_to_lock_device">Moo Launcher がデバイスをロックできませんでした。\nアプリの設定を確認してください。</string>
     <string name="long_press_to_select_app">長押ししてアプリを選択します</string>
     <string name="unable_to_open_app">アプリを開けません</string>
     <string name="copied">コピーされました</string>
@@ -48,7 +48,7 @@
     <string name="adapter_hide">非表示</string>
     <string name="app_text_color">テキストの色</string>
     <string name="double_tap_to_lock_screen">ダブルタップしてロックします</string>
-    <string name="admin_permission_message">Olauncher は、ユーザー補助の権限を責任を持って使用することを約束します。Olauncher はデータを収集したり共有したりしません。</string>
+    <string name="admin_permission_message">Moo Launcher は、ユーザー補助の権限を責任を持って使用することを約束します。Moo Launcher はデータを収集したり共有したりしません。</string>
     <string name="about">アプリについて</string>
     <string name="off">オフ</string>
     <string name="on">オン</string>
@@ -85,18 +85,18 @@
     <string name="dark">ダーク</string>
     <string name="light">ライト</string>
     <string name="welcome_to_olauncher_settings">設定へようこそ！\n\n質問がある場合は、「アプリについて」ページに答えがあります。</string>
-    <string name="rate_us_message">こんにちは、このメッセージは二度と表示されません。\n\nOlauncher が役に立っているなら、5 つ星のレビューを残していただけませんか？ 私たちにとって大きな励みになります。ありがとうございます！</string>
-    <string name="share_message">皆さんの助けが必要です！ Olauncher とその良さを誰もが知るべきだと考えていますが、私たちだけでは実現できません。\n\nOlauncher を友人、家族、フォロワーと共有していただけませんか？ ご支援ありがとうございます！ ❤</string>
-    <string name="keyboard_message">こんにちは、キーボードは Olauncher でアプリを見つけて起動する最も速い方法です。あと数日間オンにしたままにして、それから判断していただけませんか？\n\n選択は常にあなた次第です。</string>
+    <string name="rate_us_message">こんにちは、このメッセージは二度と表示されません。\n\nMoo Launcher が役に立っているなら、5 つ星のレビューを残していただけませんか？ 私たちにとって大きな励みになります。ありがとうございます！</string>
+    <string name="share_message">皆さんの助けが必要です！ Moo Launcher とその良さを誰もが知るべきだと考えていますが、私たちだけでは実現できません。\n\nMoo Launcher を友人、家族、フォロワーと共有していただけませんか？ ご支援ありがとうございます！ ❤</string>
+    <string name="keyboard_message">こんにちは、キーボードは Moo Launcher でアプリを見つけて起動する最も速い方法です。あと数日間オンにしたままにして、それから判断していただけませんか？\n\n選択は常にあなた次第です。</string>
     <string name="digital_wellbeing_message">特定のアプリに時間制限を設定したい場合は、Android の Digital Wellbeing 機能を使用すると便利です。
         \n\n携帯電話の設定で Digital Wellbeing を検索し、有効にしてください。</string>
     <string name="app_usage_message">ホーム画面で画面時間を表示/非表示するには、アプリの使用権限を許可または拒否してください。
         \n\n注意: アプリの使用データは収集されません。すべての処理はあなたのデバイスで行われます。</string>
     <string name="pro_message">OlauncherにはPro Launcherというプロ版もあります。天気、ウィジェット、フォント、フォルダー、AMOLED壁紙などの追加機能があります。
         \n\nOlauncherの開発者をサポートするための最良の方法でもあります。チェックしてみてください！</string>
-    <string name="wallpaper_message">Olauncherは毎日美しい新しい壁紙を提供します。毎日ホーム画面に新しい外観を無料で提供！
+    <string name="wallpaper_message">Moo Launcherは毎日美しい新しい壁紙を提供します。毎日ホーム画面に新しい外観を無料で提供！
         \n\n試してみますか？</string>
-    <string name="accessibility_service_description">ダブルタップでロックのジェスチャーを有効にするには、ユーザー補助の権限が必要です。このサービスを通じて Olauncher が取得したデータがデバイスの外に出ることはありません。</string>
+    <string name="accessibility_service_description">ダブルタップでロックのジェスチャーを有効にするには、ユーザー補助の権限が必要です。このサービスを通じて Moo Launcher が取得したデータがデバイスの外に出ることはありません。</string>
     <string name="support_olauncher_for_free">Amazon アフィリエイト リンクを使用して、Olauncher を無料でサポートしてください。</string>
     <string name="support_olauncher_message">リンクを使って何かを購入していただくたびに、私たちは少額の手数料を受け取ります。リンクを保存して、オンラインショッピングの際にご利用ください。\nありがとうございます！</string>
     <string name="open">リンクを開く</string>
@@ -109,7 +109,7 @@
     <string name="date_only">日付のみ</string>
     <string name="bottom_on">下: オン</string>
     <string name="bottom_off">下: オフ</string>
-    <string name="please_set_olauncher_as_default_first">まず Olauncher をデフォルトのランチャーとして設定してください</string>
+    <string name="please_set_olauncher_as_default_first">まず Moo Launcher をデフォルトのランチャーとして設定してください</string>
     <string name="affiliate">アフィリエイト</string>
     <string name="app_not_found">アプリが見つかりません</string>
     <string name="unable_to_launch_app">アプリを起動できません</string>
@@ -124,7 +124,7 @@
     <string name="learn_more">もっと詳しく知る</string>
     <string name="did_you_know">知っていましたか？</string>
     <string name="leave_a_review">レビューを残す</string>
-    <string name="review_message">Olauncher は無料で、これからもずっと無料です。広告はなく、データも収集せず、スクリーンタイムを減らして、より健康的な生活につながります。\n\n気に入っていただければ幸いです。ご意見をお聞かせください。</string>
+    <string name="review_message">Moo Launcher は無料で、これからもずっと無料です。広告はなく、データも収集せず、スクリーンタイムを減らして、より健康的な生活につながります。\n\n気に入っていただければ幸いです。ご意見をお聞かせください。</string>
     <string name="alignment_changed">配置を変更しました ✅</string>
     <string name="home_screen">ホーム画面</string>
     <string name="hey">やあ</string>

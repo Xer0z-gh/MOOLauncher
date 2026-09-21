@@ -2,11 +2,11 @@
     <string name="app">ऐप</string>
     <string name="set_as_default_launcher">डिफ़ॉल्ट लॉन्चर के रूप में सेट करें</string>
     <string name="set_as_default_launcher_u"><u>डिफ़ॉल्ट लॉन्चर के रूप में सेट करें</u></string>
-    <string name="set_as_default_launcher_first">पहले Olauncher को डिफ़ॉल्ट सेट करें</string>
+    <string name="set_as_default_launcher_first">पहले Moo Launcher को डिफ़ॉल्ट सेट करें</string>
     <string name="app_text_color">टेक्स्ट का रंग</string>
     <string name="double_tap_to_lock_screen">लॉक करने के लिए डबल टैप करें</string>
     <string name="home_button_show_recents">हाल की ऐप्स के लिए होम बटन</string>
-    <string name="admin_permission_message">Olauncher एक्सेसिबिलिटी परमिशन का ज़िम्मेदारी से उपयोग करने का वादा करता है। Olauncher कोई डेटा एकत्र या साझा नहीं करता है।</string>
+    <string name="admin_permission_message">Moo Launcher एक्सेसिबिलिटी परमिशन का ज़िम्मेदारी से उपयोग करने का वादा करता है। Moo Launcher कोई डेटा एकत्र या साझा नहीं करता है।</string>
     <string name="about">जानकारी</string>
     <string name="off">बंद</string>
     <string name="on">चालू</string>
@@ -56,19 +56,19 @@
     <string name="welcome_to_olauncher_settings">सेटिंग्स में आपका स्वागत है!
         \n\nयाद रखें, अगर आपके कोई सवाल हैं, तो हमारे About पेज पर जवाब मिलेगा।</string>
     <string name="rate_us_message">नमस्ते, आपको यह मैसेज दोबारा नहीं दिखेगा।
-        \n\nअगर आपको Olauncher उपयोगी लग रहा है, तो कृपया 5-स्टार रिव्यू दें? इसका हमारे लिए बहुत मतलब होगा। धन्यवाद!</string>
-    <string name="share_message">हमें आपकी मदद चाहिए! हमारा मानना है कि सभी को Olauncher और इसके फ़ायदों के बारे में पता होना चाहिए, लेकिन हम अकेले यह नहीं कर सकते।
-        \n\nकृपया Olauncher को अपने दोस्तों, परिवार और फॉलोअर्स के साथ शेयर करें? आपके सहयोग के लिए धन्यवाद! ❤</string>
-    <string name="keyboard_message">नमस्ते, Olauncher में ऐप्स ढूंढने और खोलने का सबसे तेज़ तरीका कीबोर्ड है। क्या हम आपसे अनुरोध कर सकते हैं कि इसे कुछ और दिनों के लिए ऑन रखें और फिर फ़ैसला करें?
+        \n\nअगर आपको Moo Launcher उपयोगी लग रहा है, तो कृपया 5-स्टार रिव्यू दें? इसका हमारे लिए बहुत मतलब होगा। धन्यवाद!</string>
+    <string name="share_message">हमें आपकी मदद चाहिए! हमारा मानना है कि सभी को Moo Launcher और इसके फ़ायदों के बारे में पता होना चाहिए, लेकिन हम अकेले यह नहीं कर सकते।
+        \n\nकृपया Moo Launcher को अपने दोस्तों, परिवार और फॉलोअर्स के साथ शेयर करें? आपके सहयोग के लिए धन्यवाद! ❤</string>
+    <string name="keyboard_message">नमस्ते, Moo Launcher में ऐप्स ढूंढने और खोलने का सबसे तेज़ तरीका कीबोर्ड है। क्या हम आपसे अनुरोध कर सकते हैं कि इसे कुछ और दिनों के लिए ऑन रखें और फिर फ़ैसला करें?
         \n\nचुनाव हमेशा आपका है।</string>
     <string name="digital_wellbeing_message">अगर आप कुछ ऐप्स के लिए समय सीमा तय करना चाहते हैं, तो Android की Digital Wellbeing फ़ीचर आपकी मदद कर सकती है। कृपया अपने फ़ोन की सेटिंग्स में Digital Wellbeing खोजें और उसे चालू करें।</string>
     <string name="app_usage_message">होम स्क्रीन पर अपना स्क्रीन टाइम दिखाने/छिपाने के लिए, कृपया ऐप उपयोग की अनुमति दें या हटाएं।
         \n\nनोट: कोई ऐप उपयोग डेटा एकत्र नहीं किया जाता। सब कुछ आपकी डिवाइस पर ही प्रोसेस होता है।</string>
     <string name="pro_message">Olauncher का एक Pro वर्शन भी है जिसे Pro Launcher कहा जाता है। इसमें मौसम, विजेट्स, फॉन्ट्स, फ़ोल्डर्स, AMOLED वॉलपेपर जैसे अतिरिक्त फीचर्स हैं।
         \n\nयह Olauncher के डेवलपर्स को सपोर्ट करने का सबसे अच्छा तरीका भी है। इसे ज़रूर देखें!</string>
-    <string name="wallpaper_message">Olauncher हर रोज़ मुफ़्त में खूबसूरत नए वॉलपेपर देता है। अपनी होम स्क्रीन को हर दिन एक नया लुक दें, बिल्कुल मुफ़्त!
+    <string name="wallpaper_message">Moo Launcher हर रोज़ मुफ़्त में खूबसूरत नए वॉलपेपर देता है। अपनी होम स्क्रीन को हर दिन एक नया लुक दें, बिल्कुल मुफ़्त!
         \n\nक्या आप इसे आज़माना चाहेंगे?</string>
-    <string name="accessibility_service_description">डबल टैप से लॉक करने वाले जेस्चर को चालू करने के लिए एक्सेसिबिलिटी परमिशन ज़रूरी है। इस सर्विस के ज़रिए Olauncher द्वारा प्राप्त कोई भी डेटा आपकी डिवाइस से बाहर नहीं जाता।</string>
+    <string name="accessibility_service_description">डबल टैप से लॉक करने वाले जेस्चर को चालू करने के लिए एक्सेसिबिलिटी परमिशन ज़रूरी है। इस सर्विस के ज़रिए Moo Launcher द्वारा प्राप्त कोई भी डेटा आपकी डिवाइस से बाहर नहीं जाता।</string>
     <string name="support_olauncher_for_free">हमारे Amazon अफिलिएट लिंक का उपयोग करके मुफ़्त में Olauncher को सपोर्ट करें।</string>
     <string name="support_olauncher_message">जब भी आप हमारे लिंक से कुछ खरीदते हैं, हमें थोड़ा कमीशन मिलता है। कृपया लिंक सेव करें और जब भी ऑनलाइन शॉपिंग करें, इसका उपयोग करें।\nधन्यवाद!</string>
     <string name="open">लिंक खोलें</string>
@@ -81,11 +81,11 @@
     <string name="date_only">सिर्फ़ दिनांक</string>
     <string name="bottom_on">नीचे: चालू</string>
     <string name="bottom_off">नीचे: बंद</string>
-    <string name="please_set_olauncher_as_default_first">कृपया पहले Olauncher को डिफ़ॉल्ट सेट करें</string>
+    <string name="please_set_olauncher_as_default_first">कृपया पहले Moo Launcher को डिफ़ॉल्ट सेट करें</string>
     <string name="affiliate">अफिलिएट</string>
     <string name="tip_start_typing_for_rename">टिप: ऐप का नाम बदलने के विकल्प के लिए टाइप करना शुरू करें</string>
-    <string name="hidden_apps_message">नोट: अपनी छिपी हुई ऐप्स ढूंढने के लिए इस Settings पेज के ऊपर \'Olauncher\' पर टैप करें।\n\nअधिक जानकारी हमारे About पेज पर उपलब्ध है।</string>
-    <string name="accessibility_disclosure">डबल टैप टू लॉक जेस्चर चालू करने के लिए कृपया अपनी डिवाइस की सेटिंग्स में Olauncher की एक्सेसिबिलिटी सर्विस चालू करें।
+    <string name="hidden_apps_message">नोट: अपनी छिपी हुई ऐप्स ढूंढने के लिए इस Settings पेज के ऊपर \'Moo Launcher\' पर टैप करें।\n\nअधिक जानकारी हमारे About पेज पर उपलब्ध है।</string>
+    <string name="accessibility_disclosure">डबल टैप टू लॉक जेस्चर चालू करने के लिए कृपया अपनी डिवाइस की सेटिंग्स में Moo Launcher की एक्सेसिबिलिटी सर्विस चालू करें।
     \n\nकृपया ध्यान दें कि यह सर्विस केवल इसी विशेष फीचर के लिए उपयोग की जाती है। हमारी एक्सेसिबिलिटी सर्विस कोई डेटा एकत्र या साझा नहीं करती।</string>
     <string name="accept">स्वीकार करें</string>
     <string name="permission">परमिशन</string>
@@ -99,7 +99,7 @@
     <string name="enabled">चालू है</string>
     <string name="disabled">बंद है</string>
     <string name="please_turn_on_double_tap_to_unlock">कृपया डबल टैप टू लॉक चालू करें</string>
-    <string name="launcher_failed_to_lock_device">Olauncher डिवाइस को लॉक करने में विफल रहा।\nकृपया अपनी ऐप सेटिंग्स जांचें।</string>
+    <string name="launcher_failed_to_lock_device">Moo Launcher डिवाइस को लॉक करने में विफल रहा।\nकृपया अपनी ऐप सेटिंग्स जांचें।</string>
     <string name="long_press_to_select_app">ऐप चुनने के लिए लॉन्ग प्रेस करें</string>
     <string name="unable_to_open_app">ऐप खोलने में असमर्थ</string>
     <string name="unable_to_open_app_info">ऐप जानकारी खोलने में असमर्थ</string>
@@ -114,7 +114,7 @@
     <string name="swipe_left_app_disabled">बाएँ स्वाइप ऐप बंद किया गया</string>
     <string name="swipe_right_app_disabled">दाएँ स्वाइप ऐप बंद किया गया</string>
     <string name="your_wallpaper_will_update_shortly">आपका वॉलपेपर जल्द ही अपडेट होगा</string>
-    <string name="olauncher_is_not_default_launcher">Olauncher डिफ़ॉल्ट नहीं है। वॉलपेपर अपडेट विफल हो जाएगा।</string>
+    <string name="olauncher_is_not_default_launcher">Moo Launcher डिफ़ॉल्ट नहीं है। वॉलपेपर अपडेट विफल हो जाएगा।</string>
     <string name="long_press_to_enable">चालू करने के लिए लॉन्ग प्रेस करें</string>
     <string name="no_hidden_apps">कोई छिपी हुई ऐप्स नहीं</string>
     <string name="hidden_apps">छिपी हुई ऐप्स</string>
@@ -126,7 +126,7 @@
     <string name="learn_more">और जानें</string>
     <string name="did_you_know">क्या आप जानते हैं?</string>
     <string name="leave_a_review">रिव्यू दें</string>
-    <string name="review_message">Olauncher मुफ़्त है और हमेशा मुफ़्त रहेगा। इसमें कोई विज्ञापन नहीं है, यह कोई डेटा एकत्र नहीं करता, और आपके स्क्रीन टाइम को कम करके एक स्वस्थ जीवन देता है।
+    <string name="review_message">Moo Launcher मुफ़्त है और हमेशा मुफ़्त रहेगा। इसमें कोई विज्ञापन नहीं है, यह कोई डेटा एकत्र नहीं करता, और आपके स्क्रीन टाइम को कम करके एक स्वस्थ जीवन देता है।
         \n\nहमें उम्मीद है कि आपको यह पसंद आएगा। हमें बताएं आप क्या सोचते हैं।</string>
     <string name="alignment_changed">अलाइनमेंट बदल गया ✅</string>
     <string name="home_screen">होम स्क्रीन</string>

@@ -3,18 +3,18 @@
     <string name="app">应用程序</string>
     <string name="set_as_default_launcher">设置为默认启动器</string>
     <string name="set_as_default_launcher_u"><u>设置为默认启动器</u></string>
-    <string name="set_as_default_launcher_first">请先将 Olauncher 设为默认启动器</string>
+    <string name="set_as_default_launcher_first">请先将 Moo Launcher 设为默认启动器</string>
     <string name="app_drawer_tips">提示：输入应用程序名称以查找并启动它</string>
     <string name="okay">好的</string>
     <string name="cool">非常棒！</string>
     <string name="tip_start_typing_for_rename">提示：开始输入以显示应用重命名选项</string>
     <string name="your_wallpaper_will_update_shortly">您的壁纸即将更新</string>
-    <string name="olauncher_is_not_default_launcher">Olauncher 不是默认启动器。 每日壁纸更新可能会失败。</string>
+    <string name="olauncher_is_not_default_launcher">Moo Launcher 不是默认启动器。 每日壁纸更新可能会失败。</string>
     <string name="long_press_to_enable">长按即可启用</string>
     <string name="no_hidden_apps">没有隐藏的应用程序</string>
     <string name="hidden_apps">隐藏的应用程序</string>
-    <string name="hidden_apps_message">注意：点击此设置页面顶部的“Olauncher”即可找到隐藏的应用程序。\n\n更多详细信息请参阅“关于”页面。</string>
-    <string name="accessibility_disclosure">请在您设备的设置中打开 Olauncher 的无障碍服务，以启用双击锁屏手势。\n\n请注意，此服务仅用于该功能。我们的无障碍服务不会收集或共享任何数据。</string>
+    <string name="hidden_apps_message">注意：点击此设置页面顶部的“Moo Launcher”即可找到隐藏的应用程序。\n\n更多详细信息请参阅“关于”页面。</string>
+    <string name="accessibility_disclosure">请在您设备的设置中打开 Moo Launcher 的无障碍服务，以启用双击锁屏手势。\n\n请注意，此服务仅用于该功能。我们的无障碍服务不会收集或共享任何数据。</string>
     <string name="accept">接受</string>
     <string name="permission">权限</string>
     <string name="double_tap_lock">双击即可锁定</string>
@@ -28,7 +28,7 @@
     <string name="enabled">已启用</string>
     <string name="disabled">已禁用</string>
     <string name="please_turn_on_double_tap_to_unlock">请开启双击锁定</string>
-    <string name="launcher_failed_to_lock_device">Olauncher 无法锁定设备。\n请检查您的应用程序设置。</string>
+    <string name="launcher_failed_to_lock_device">Moo Launcher 无法锁定设备。\n请检查您的应用程序设置。</string>
     <string name="long_press_to_select_app">长按选择应用程序</string>
     <string name="unable_to_open_app">无法打开应用程序</string>
     <string name="copied">已复制</string>
@@ -38,7 +38,7 @@
     <string name="adapter_hide">隐藏</string>
     <string name="app_text_color">文字颜色</string>
     <string name="double_tap_to_lock_screen">双击即可锁定</string>
-    <string name="admin_permission_message">Olauncher 承诺负责任地使用无障碍权限。Olauncher 不收集或共享任何数据。</string>
+    <string name="admin_permission_message">Moo Launcher 承诺负责任地使用无障碍权限。Moo Launcher 不收集或共享任何数据。</string>
     <string name="about">关于</string>
     <string name="off">关</string>
     <string name="on">开</string>
@@ -85,18 +85,18 @@
     <string name="light">浅色</string>
     <string name="welcome_to_olauncher_settings">欢迎来到设置！
         \n\n请记住，如果您有任何问题，我们的“关于”页面有答案。</string>
-    <string name="rate_us_message">您好，您不会再看到此消息。\n\n如果您觉得 Olauncher 有用，能否留下 5 星评价？这对我们意义重大。谢谢！</string>
-    <string name="share_message">我们需要您的帮助！我们相信每个人都应该了解 Olauncher 及其好处，但我们无法独自做到。\n\n您能否与您的朋友、家人和关注者分享 Olauncher？感谢您的支持！ ❤</string>
-    <string name="keyboard_message">您好，键盘是在 Olauncher 中查找和启动应用程序的最快方式。我们能否请您再保持开启几天，然后再做决定？\n\n选择权永远在您手中。</string>
+    <string name="rate_us_message">您好，您不会再看到此消息。\n\n如果您觉得 Moo Launcher 有用，能否留下 5 星评价？这对我们意义重大。谢谢！</string>
+    <string name="share_message">我们需要您的帮助！我们相信每个人都应该了解 Moo Launcher 及其好处，但我们无法独自做到。\n\n您能否与您的朋友、家人和关注者分享 Moo Launcher？感谢您的支持！ ❤</string>
+    <string name="keyboard_message">您好，键盘是在 Moo Launcher 中查找和启动应用程序的最快方式。我们能否请您再保持开启几天，然后再做决定？\n\n选择权永远在您手中。</string>
     <string name="digital_wellbeing_message">如果您想为某些应用程序设置时间限制，Android 的数字健康功能可以帮助您做到这一点。
         \n\n请在手机设置中搜索数字健康并启用它。</string>
     <string name="app_usage_message">要在主屏幕上显示/隐藏您的屏幕时间，请允许或拒绝应用程序使用权限。
         \n\n注意：不收集应用程序使用数据。所有数据都在您的设备上处理。</string>
     <string name="pro_message">Olauncher 还有一个名为 Pro Launcher 的专业版。它具有额外的功能，如天气、部件、字体、文件夹、AMOLED 壁纸等。
         \n\n这也是支持 Olauncher 开发者的最佳方式。快来看看吧！</string>
-    <string name="wallpaper_message">Olauncher每天提供美丽的新壁纸。让你的主屏幕每天焕然一新，免费！
+    <string name="wallpaper_message">Moo Launcher每天提供美丽的新壁纸。让你的主屏幕每天焕然一新，免费！
         \n\n想试试吗？</string>
-    <string name="accessibility_service_description">需要无障碍权限才能启用双击锁屏手势。Olauncher 通过此服务获取的任何数据都不会离开您的设备。</string>
+    <string name="accessibility_service_description">需要无障碍权限才能启用双击锁屏手势。Moo Launcher 通过此服务获取的任何数据都不会离开您的设备。</string>
     <string name="support_olauncher_for_free">使用我们的亚马逊附属链接免费支持 Olauncher。</string>
     <string name="support_olauncher_message">每次您使用我们的链接购买商品时，我们都会获得少量佣金。请保存链接并在网上购物时使用它。\n谢谢！</string>
     <string name="open">打开链接</string>
@@ -109,7 +109,7 @@
     <string name="date_only">仅限日期</string>
     <string name="bottom_on">底部：开</string>
     <string name="bottom_off">底部：关</string>
-    <string name="please_set_olauncher_as_default_first">请先将 Olauncher 设置为默认启动器</string>
+    <string name="please_set_olauncher_as_default_first">请先将 Moo Launcher 设置为默认启动器</string>
     <string name="affiliate">联盟</string>
     <string name="app_not_found">找不到应用程序</string>
     <string name="unable_to_launch_app">无法启动应用程序</string>
@@ -124,7 +124,7 @@
     <string name="screen_time">屏幕时间</string>
     <string name="did_you_know">你知道吗？</string>
     <string name="leave_a_review">留下评价</string>
-    <string name="review_message">Olauncher 是免费的，并将永远免费。它没有广告，不收集数据，并能减少您的屏幕时间，让生活更健康。\n\n希望您喜欢。告诉我们您的想法。</string>
+    <string name="review_message">Moo Launcher 是免费的，并将永远免费。它没有广告，不收集数据，并能减少您的屏幕时间，让生活更健康。\n\n希望您喜欢。告诉我们您的想法。</string>
     <string name="alignment_changed">对齐已更改 ✅</string>
     <string name="home_screen">主屏幕</string>
     <string name="hey">嘿</string>

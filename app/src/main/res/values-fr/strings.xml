@@ -3,10 +3,10 @@
     <string name="app">App</string>
     <string name="set_as_default_launcher">Définir comme lanceur par défaut</string>
     <string name="set_as_default_launcher_u"><u>Définir comme lanceur par défaut</u></string>
-    <string name="set_as_default_launcher_first">Définissez d\'abord Olauncher par défaut</string>
+    <string name="set_as_default_launcher_first">Définissez d\'abord Moo Launcher par défaut</string>
     <string name="app_text_color">Couleur du texte</string>
     <string name="double_tap_to_lock_screen">Double appui pour verrouiller</string>
-    <string name="admin_permission_message">Olauncher promet d\'utiliser l\'autorisation d\'accessibilité de manière responsable. Olauncher ne collecte ni ne partage aucune donnée.</string>
+    <string name="admin_permission_message">Moo Launcher promet d\'utiliser l\'autorisation d\'accessibilité de manière responsable. Moo Launcher ne collecte ni ne partage aucune donnée.</string>
     <string name="about">À propos</string>
     <string name="off">Désactivé</string>
     <string name="on">Activé</string>
@@ -56,17 +56,17 @@
     <string name="light">Clair</string>
     <string name="welcome_to_olauncher_settings">Bienvenue dans les paramètres !
         \n\nN\'oubliez pas, si vous avez des questions, notre page À propos a la réponse.</string>
-    <string name="rate_us_message">Bonjour, vous ne verrez plus ce message.\n\nSi vous trouvez Olauncher utile, pourriez-vous laisser un avis 5 étoiles ? Cela compterait énormément pour nous. Merci !</string>
-    <string name="share_message">Nous avons besoin de votre aide ! Nous pensons que tout le monde devrait connaître Olauncher et ses avantages, mais nous ne pouvons pas y arriver seuls.\n\nPourriez-vous partager Olauncher avec vos amis, votre famille et vos abonnés ? Merci pour votre soutien ! ❤</string>
-    <string name="keyboard_message">Bonjour, le clavier est le moyen le plus rapide de trouver et de lancer des applications dans Olauncher. Pouvons-nous vous demander de le laisser activé quelques jours de plus avant de décider ?\n\nLe choix vous appartient toujours.</string>
+    <string name="rate_us_message">Bonjour, vous ne verrez plus ce message.\n\nSi vous trouvez Moo Launcher utile, pourriez-vous laisser un avis 5 étoiles ? Cela compterait énormément pour nous. Merci !</string>
+    <string name="share_message">Nous avons besoin de votre aide ! Nous pensons que tout le monde devrait connaître Moo Launcher et ses avantages, mais nous ne pouvons pas y arriver seuls.\n\nPourriez-vous partager Moo Launcher avec vos amis, votre famille et vos abonnés ? Merci pour votre soutien ! ❤</string>
+    <string name="keyboard_message">Bonjour, le clavier est le moyen le plus rapide de trouver et de lancer des applications dans Moo Launcher. Pouvons-nous vous demander de le laisser activé quelques jours de plus avant de décider ?\n\nLe choix vous appartient toujours.</string>
     <string name="digital_wellbeing_message">Si vous souhaitez définir des limites de temps pour certaines applications, la fonctionnalité Digital Wellbeing d\'Android peut vous aider à le faire.
         \n\nVeuillez rechercher Digital Wellbeing dans les paramètres de votre téléphone et l\'activer.</string>
     <string name="app_usage_message">Pour afficher/masquer le temps d\'écran sur l\'écran d\'accueil, autorisez ou refusez l\'autorisation d\'utilisation de l\'application.
         \n\nRemarque : Aucune donnée d\'utilisation de l\'application n\'est collectée. Tout est traité sur votre appareil.</string>
     <string name="pro_message">Olauncher a également une version pro appelée Pro Launcher. Elle dispose de fonctionnalités supplémentaires telles que la météo, les widgets, les polices, les dossiers, les fonds d\'écran AMOLED, etc.
         \n\nC\'est aussi le meilleur moyen de soutenir les développeurs d\'Olauncher. Jetez-y un œil !</string>
-    <string name="wallpaper_message">Olauncher propose chaque jour de superbes nouveaux fonds d\'écran. Donnez un nouveau look à votre écran d\'accueil chaque jour, gratuitement !\n\nVoulez-vous essayer ?</string>
-    <string name="accessibility_service_description">L\'autorisation d\'accessibilité est requise pour activer le geste Double appui pour verrouiller. Les données obtenues par Olauncher via ce service ne quitteront pas votre appareil.</string>
+    <string name="wallpaper_message">Moo Launcher propose chaque jour de superbes nouveaux fonds d\'écran. Donnez un nouveau look à votre écran d\'accueil chaque jour, gratuitement !\n\nVoulez-vous essayer ?</string>
+    <string name="accessibility_service_description">L\'autorisation d\'accessibilité est requise pour activer le geste Double appui pour verrouiller. Les données obtenues par Moo Launcher via ce service ne quitteront pas votre appareil.</string>
     <string name="support_olauncher_for_free">Soutenez Olauncher gratuitement en utilisant notre lien d\'affiliation Amazon.</string>
     <string name="support_olauncher_message">Chaque fois que vous achetez quelque chose en utilisant notre lien, nous recevons une petite commission. Enregistrez le lien et utilisez-le chaque fois que vous faites des achats en ligne.\nMerci !</string>
     <string name="open">Ouvrir le lien</string>
@@ -79,11 +79,11 @@
     <string name="date_only">Date uniquement</string>
     <string name="bottom_on">Bas : Activé</string>
     <string name="bottom_off">Bas : Désactivé</string>
-    <string name="please_set_olauncher_as_default_first">Veuillez d\'abord définir Olauncher comme lanceur par défaut.</string>
+    <string name="please_set_olauncher_as_default_first">Veuillez d\'abord définir Moo Launcher comme lanceur par défaut.</string>
     <string name="affiliate">Affiliation</string>
     <string name="tip_start_typing_for_rename">Conseil : Commencez à écrire pour faire apparaitre l\'option RENOMMER.</string>
-    <string name="hidden_apps_message">Remarque : Appuyez sur \'Olauncher\' en haut de cette page Paramètres pour trouver vos applications cachées.\n\nPlus de détails sont disponibles sur notre page À propos.</string>
-    <string name="accessibility_disclosure">Veuillez activer le service d\'accessibilité d\'Olauncher dans les paramètres de votre appareil pour utiliser le geste Double appui pour verrouiller.\n\nVeuillez noter que ce service est utilisé uniquement pour cette fonctionnalité. Notre service d\'accessibilité ne collecte ni ne partage aucune donnée.</string>
+    <string name="hidden_apps_message">Remarque : Appuyez sur \'Moo Launcher\' en haut de cette page Paramètres pour trouver vos applications cachées.\n\nPlus de détails sont disponibles sur notre page À propos.</string>
+    <string name="accessibility_disclosure">Veuillez activer le service d\'accessibilité d\'Moo Launcher dans les paramètres de votre appareil pour utiliser le geste Double appui pour verrouiller.\n\nVeuillez noter que ce service est utilisé uniquement pour cette fonctionnalité. Notre service d\'accessibilité ne collecte ni ne partage aucune donnée.</string>
     <string name="accept">Accepter</string>
     <string name="permission">Autorisation</string>
     <string name="double_tap_lock">Appuyer deux fois pour verrouiller</string>
@@ -97,7 +97,7 @@
     <string name="enabled">Activé</string>
     <string name="disabled">Désactivé</string>
     <string name="please_turn_on_double_tap_to_unlock">Veuillez appuyer deux fois pour verrouiller.</string>
-    <string name="launcher_failed_to_lock_device">Olauncher n\'a pas réussi à verrouiller l\'appareil.\nVeuillez vérifier les paramètres de votre application.</string>
+    <string name="launcher_failed_to_lock_device">Moo Launcher n\'a pas réussi à verrouiller l\'appareil.\nVeuillez vérifier les paramètres de votre application.</string>
     <string name="long_press_to_select_app">Appuyez longuement pour sélectionner une application.</string>
     <string name="unable_to_open_app">Impossible d\'ouvrir l\'application</string>
     <string name="copied">Copié</string>
@@ -111,7 +111,7 @@
     <string name="swipe_left_app_disabled">Balayage vers la gauche désactivé</string>
     <string name="swipe_right_app_disabled">Balayage vers la droite désactivé</string>
     <string name="your_wallpaper_will_update_shortly">Votre fond d\'écran sera bientôt mis à jour.</string>
-    <string name="olauncher_is_not_default_launcher">Olauncher n\'est pas le lanceur par défaut.\nLa mise à jour du fond d\'écran échouera.</string>
+    <string name="olauncher_is_not_default_launcher">Moo Launcher n\'est pas le lanceur par défaut.\nLa mise à jour du fond d\'écran échouera.</string>
     <string name="long_press_to_enable">Appuyez longuement pour activer.</string>
     <string name="no_hidden_apps">Aucune application cachée</string>
     <string name="hidden_apps">Applications cachées</string>
@@ -123,7 +123,7 @@
     <string name="screen_time">Temps d\'écran</string>
     <string name="did_you_know">Le saviez-vous ?</string>
     <string name="leave_a_review">Laisser un avis</string>
-    <string name="review_message">Olauncher est gratuit et le restera toujours. Il n\'a pas de publicité, ne collecte aucune donnée et réduit votre temps d\'écran, pour une vie plus saine.\n\nNous espérons qu\'il vous plaira. Dites-nous ce que vous en pensez.</string>
+    <string name="review_message">Moo Launcher est gratuit et le restera toujours. Il n\'a pas de publicité, ne collecte aucune donnée et réduit votre temps d\'écran, pour une vie plus saine.\n\nNous espérons qu\'il vous plaira. Dites-nous ce que vous en pensez.</string>
     <string name="alignment_changed">Alignement changé ✅</string>
     <string name="home_screen">Écran d\'accueil</string>
     <string name="hey">Salut</string>

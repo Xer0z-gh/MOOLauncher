@@ -56,6 +56,9 @@ class AppDrawerFragment : BaseFragment() {
 
     private var flag = Constants.FLAG_LAUNCH_APP
     private var canRename = false
+
+    /** Set by whoever opened the drawer; see Constants.KeyboardMode. */
+    private var keyboardMode = Constants.KeyboardMode.AUTO
     private var currentAppList: List<AppModel>? = null
     private var currentPrivateSpaceApps: List<AppModel>? = null
     private var currentPrivateSpaceLocked: Boolean = true
@@ -80,6 +83,7 @@ class AppDrawerFragment : BaseFragment() {
         arguments?.let {
             flag = it.getInt(Constants.Key.FLAG, Constants.FLAG_LAUNCH_APP)
             canRename = it.getBoolean(Constants.Key.RENAME, false)
+            keyboardMode = it.getInt(Constants.Key.KEYBOARD_MODE, Constants.KeyboardMode.AUTO)
         }
 
         initViews()
@@ -400,7 +404,13 @@ class AppDrawerFragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
         cachedIsCjkKeyboard = null
-        binding.search.showKeyboard(prefs.autoShowKeyboard)
+        binding.search.showKeyboard(
+            when (keyboardMode) {
+                Constants.KeyboardMode.SHOW -> true
+                Constants.KeyboardMode.HIDE -> false
+                else -> prefs.autoShowKeyboard
+            }
+        )
     }
 
     override fun onStop() {

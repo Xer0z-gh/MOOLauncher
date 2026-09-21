@@ -3,7 +3,7 @@
     <string name="app">App</string>
     <string name="set_as_default_launcher">Als Standard-Launcher festlegen</string>
     <string name="set_as_default_launcher_u"><u>Als Standard-Launcher festlegen</u></string>
-    <string name="set_as_default_launcher_first">Legen Sie zuerst Olauncher als Standard fest</string>
+    <string name="set_as_default_launcher_first">Legen Sie zuerst Moo Launcher als Standard fest</string>
     <string name="_0">0</string>
     <string name="_1">1</string>
     <string name="_2">2</string>
@@ -18,12 +18,12 @@
     <string name="cool">Cool!</string>
     <string name="tip_start_typing_for_rename">Tipp: Tippen Sie los, um die Option zum Umbenennen der App zu erhalten</string>
     <string name="your_wallpaper_will_update_shortly">Ihr Hintergrundbild wird in Kürze aktualisiert</string>
-    <string name="olauncher_is_not_default_launcher">Olauncher ist kein Standard-Launcher. Die tägliche Aktualisierung des Hintergrundbilds schlägt möglicherweise fehl.</string>
+    <string name="olauncher_is_not_default_launcher">Moo Launcher ist kein Standard-Launcher. Die tägliche Aktualisierung des Hintergrundbilds schlägt möglicherweise fehl.</string>
     <string name="long_press_to_enable">Zum Aktivieren lange drücken</string>
     <string name="no_hidden_apps">Keine versteckten Apps</string>
     <string name="hidden_apps">Versteckte Apps</string>
-    <string name="hidden_apps_message">Hinweis: Tippen Sie oben auf dieser Einstellungsseite auf „Olauncher“, um Ihre versteckten Apps zu finden.\n\nWeitere Einzelheiten finden Sie auf unserer Seite „Über“.</string>
-    <string name="accessibility_disclosure">Bitte aktivieren Sie den Bedienungshilfen-Dienst von Olauncher in den Einstellungen Ihres Geräts, um die Geste „Doppeltippen zum Sperren“ zu aktivieren.\n\nBitte beachten Sie, dass dieser Dienst nur für diese eine Funktion verwendet wird. Unser Bedienungshilfen-Dienst sammelt oder teilt keine Daten.</string>
+    <string name="hidden_apps_message">Hinweis: Tippen Sie oben auf dieser Einstellungsseite auf „Moo Launcher“, um Ihre versteckten Apps zu finden.\n\nWeitere Einzelheiten finden Sie auf unserer Seite „Über“.</string>
+    <string name="accessibility_disclosure">Bitte aktivieren Sie den Bedienungshilfen-Dienst von Moo Launcher in den Einstellungen Ihres Geräts, um die Geste „Doppeltippen zum Sperren“ zu aktivieren.\n\nBitte beachten Sie, dass dieser Dienst nur für diese eine Funktion verwendet wird. Unser Bedienungshilfen-Dienst sammelt oder teilt keine Daten.</string>
     <string name="accept">Akzeptieren</string>
     <string name="permission">Erlaubnis</string>
     <string name="double_tap_lock">Zum Sperren zweimal tippen</string>
@@ -37,7 +37,7 @@
     <string name="enabled">Aktiviert</string>
     <string name="disabled">Deaktiviert</string>
     <string name="please_turn_on_double_tap_to_unlock">Zum Sperren bitte Doppeltippen aktivieren</string>
-    <string name="launcher_failed_to_lock_device">Olauncher konnte das Gerät nicht sperren. Bitte überprüfen Sie Ihre App-Einstellungen.</string>
+    <string name="launcher_failed_to_lock_device">Moo Launcher konnte das Gerät nicht sperren. Bitte überprüfen Sie Ihre App-Einstellungen.</string>
     <string name="long_press_to_select_app">Lange drücken, um die App auszuwählen</string>
     <string name="unable_to_open_app">App kann nicht geöffnet werden</string>
     <string name="copied">Kopiert</string>
@@ -47,7 +47,7 @@
     <string name="adapter_hide">Ausblenden</string>
     <string name="app_text_color">Textfarbe</string>
     <string name="double_tap_to_lock_screen">Zum Sperren zweimal tippen</string>
-    <string name="admin_permission_message">Olauncher verspricht, verantwortungsvoll mit der Berechtigung für Bedienungshilfen umzugehen. Olauncher sammelt keine Daten und gibt keine weiter.</string>
+    <string name="admin_permission_message">Moo Launcher verspricht, verantwortungsvoll mit der Berechtigung für Bedienungshilfen umzugehen. Moo Launcher sammelt keine Daten und gibt keine weiter.</string>
     <string name="about">Über</string>
     <string name="off">Aus</string>
     <string name="on">Ein</string>
@@ -85,17 +85,17 @@
     <string name="light">Hell</string>
     <string name="welcome_to_olauncher_settings">Willkommen in den Einstellungen!
         \n\nDenken Sie daran, wenn Sie Fragen haben, unsere Seite „Über“ hat die Antwort.</string>
-    <string name="rate_us_message">Hallo, diese Nachricht wird Ihnen nicht mehr angezeigt.\n\nWenn Sie Olauncher nützlich finden, könnten Sie uns bitte eine 5-Sterne-Bewertung hinterlassen? Es würde uns sehr viel bedeuten. Danke!</string>
-    <string name="share_message">Wir brauchen Ihre Hilfe! Wir glauben, dass jeder Olauncher und seine Vorteile kennen sollte, aber alleine schaffen wir das nicht.\n\nKönnten Sie Olauncher bitte mit Ihren Freunden, Ihrer Familie und Ihren Followern teilen? Vielen Dank für Ihre Unterstützung! ❤</string>
-    <string name="keyboard_message">Hallo, die Tastatur ist der schnellste Weg, Apps in Olauncher zu finden und zu starten. Können wir Sie bitten, die Funktion noch ein paar Tage eingeschaltet zu lassen und dann zu entscheiden?
+    <string name="rate_us_message">Hallo, diese Nachricht wird Ihnen nicht mehr angezeigt.\n\nWenn Sie Moo Launcher nützlich finden, könnten Sie uns bitte eine 5-Sterne-Bewertung hinterlassen? Es würde uns sehr viel bedeuten. Danke!</string>
+    <string name="share_message">Wir brauchen Ihre Hilfe! Wir glauben, dass jeder Moo Launcher und seine Vorteile kennen sollte, aber alleine schaffen wir das nicht.\n\nKönnten Sie Moo Launcher bitte mit Ihren Freunden, Ihrer Familie und Ihren Followern teilen? Vielen Dank für Ihre Unterstützung! ❤</string>
+    <string name="keyboard_message">Hallo, die Tastatur ist der schnellste Weg, Apps in Moo Launcher zu finden und zu starten. Können wir Sie bitten, die Funktion noch ein paar Tage eingeschaltet zu lassen und dann zu entscheiden?
         \n\nDie Wahl liegt immer bei Ihnen.</string>
     <string name="digital_wellbeing_message">Wenn Sie Zeitlimits für bestimmte Apps festlegen möchten, kann Ihnen die Digital Wellbeing-Funktion von Android dabei helfen.
         \n\nBitte suchen Sie in Ihren Telefoneinstellungen nach Digital Wellbeing und aktivieren Sie es.</string>
     <string name="app_usage_message">Um die Bildschirmzeit auf dem Startbildschirm anzuzeigen oder zu verbergen, erteilen Sie bitte die Erlaubnis für die App-Nutzung oder verweigern Sie sie.
         \n\nHinweis: Es werden keine Daten zur App-Nutzung gesammelt. Alles wird auf Ihrem Gerät verarbeitet.</string>
     <string name="pro_message">Olauncher hat auch eine Pro-Version namens Pro Launcher. Sie bietet zusätzliche Funktionen wie Wetter, Widgets, Schriftarten, Ordner, AMOLED-Hintergründe usw.\n\nEs ist auch der beste Weg, die Entwickler von Olauncher zu unterstützen. Sehen Sie es sich an!</string>
-    <string name="wallpaper_message">Olauncher bietet täglich wunderschöne neue Hintergrundbilder. Verleihen Sie Ihrem Startbildschirm jeden Tag ein frisches Aussehen – kostenlos!\n\nMöchten Sie es ausprobieren?</string>
-    <string name="accessibility_service_description">Die Berechtigung für Bedienungshilfen ist erforderlich, um die Geste „Doppeltippen zum Sperren“ zu aktivieren. Daten, die Olauncher über diesen Dienst erhält, verlassen Ihr Gerät nicht.</string>
+    <string name="wallpaper_message">Moo Launcher bietet täglich wunderschöne neue Hintergrundbilder. Verleihen Sie Ihrem Startbildschirm jeden Tag ein frisches Aussehen – kostenlos!\n\nMöchten Sie es ausprobieren?</string>
+    <string name="accessibility_service_description">Die Berechtigung für Bedienungshilfen ist erforderlich, um die Geste „Doppeltippen zum Sperren“ zu aktivieren. Daten, die Moo Launcher über diesen Dienst erhält, verlassen Ihr Gerät nicht.</string>
     <string name="support_olauncher_for_free">Unterstützen Sie Olauncher kostenlos, indem Sie unseren Amazon-Partnerlink verwenden.</string>
     <string name="support_olauncher_message">Jedes Mal, wenn Sie über unseren Link etwas kaufen, erhalten wir eine kleine Provision. Bitte speichern Sie den Link und verwenden Sie ihn bei jedem Online-Einkauf.\nDanke!</string>
     <string name="open">Link öffnen</string>
@@ -108,7 +108,7 @@
     <string name="date_only">Nur Datum</string>
     <string name="bottom_on">Unten: Ein</string>
     <string name="bottom_off">Unten: Aus</string>
-    <string name="please_set_olauncher_as_default_first">Bitte legen Sie zunächst Olauncher als Ihren Standard-Launcher fest</string>
+    <string name="please_set_olauncher_as_default_first">Bitte legen Sie zunächst Moo Launcher als Ihren Standard-Launcher fest</string>
     <string name="affiliate">Affiliate</string>
     <string name="app_not_found">App nicht gefunden</string>
     <string name="unable_to_launch_app">App kann nicht gestartet werden</string>
@@ -123,7 +123,7 @@
     <string name="learn_more">Erfahren Sie mehr</string>
     <string name="did_you_know">Wussten Sie?</string>
     <string name="leave_a_review">Bewertung schreiben</string>
-    <string name="review_message">Olauncher ist kostenlos und wird es immer bleiben. Es hat keine Werbung, sammelt keine Daten und reduziert Ihre Bildschirmzeit, was zu einem gesünderen Leben führt.\n\nWir hoffen, es gefällt Ihnen. Sagen Sie uns, was Sie denken.</string>
+    <string name="review_message">Moo Launcher ist kostenlos und wird es immer bleiben. Es hat keine Werbung, sammelt keine Daten und reduziert Ihre Bildschirmzeit, was zu einem gesünderen Leben führt.\n\nWir hoffen, es gefällt Ihnen. Sagen Sie uns, was Sie denken.</string>
     <string name="alignment_changed">Ausrichtung geändert ✅</string>
     <string name="home_screen">Startbildschirm</string>
     <string name="hey">Hey</string>

@@ -3,10 +3,10 @@
     <string name="app">Aplikasi</string>
     <string name="set_as_default_launcher">Tetapkan sebagai peluncur default</string>
     <string name="set_as_default_launcher_u"><u>Tetapkan sebagai peluncur default</u></string>
-    <string name="set_as_default_launcher_first">Tetapkan Olauncher sebagai default terlebih dahulu</string>
+    <string name="set_as_default_launcher_first">Tetapkan Moo Launcher sebagai default terlebih dahulu</string>
     <string name="app_text_color">Warna teks</string>
     <string name="double_tap_to_lock_screen">Ketuk dua kali untuk mengunci</string>
-    <string name="admin_permission_message">Olauncher berjanji untuk menggunakan izin aksesibilitas secara bertanggung jawab. Olauncher tidak mengumpulkan atau membagikan data apa pun.</string>
+    <string name="admin_permission_message">Moo Launcher berjanji untuk menggunakan izin aksesibilitas secara bertanggung jawab. Moo Launcher tidak mengumpulkan atau membagikan data apa pun.</string>
     <string name="about">Tentang</string>
     <string name="off">Mati</string>
     <string name="on">Nyala</string>
@@ -56,17 +56,17 @@
     <string name="light">Terang</string>
     <string name="welcome_to_olauncher_settings">Selamat datang di pengaturan!
         \n\nIngat, jika Anda memiliki pertanyaan, halaman Tentang kami memiliki jawabannya.</string>
-    <string name="rate_us_message">Hai, Anda tidak akan melihat pesan ini lagi.\n\nJika Olauncher bermanfaat bagi Anda, bisakah Anda memberikan ulasan bintang 5? Itu sangat berarti bagi kami. Terima kasih!</string>
-    <string name="share_message">Kami membutuhkan bantuan Anda! Kami percaya semua orang harus tahu tentang Olauncher dan manfaatnya, tetapi kami tidak dapat melakukannya sendiri.\n\nBisakah Anda membagikan Olauncher kepada teman, keluarga, dan pengikut Anda? Terima kasih atas dukungan Anda! ❤</string>
-    <string name="keyboard_message">Hai, keyboard adalah cara tercepat untuk menemukan dan membuka aplikasi di Olauncher. Bisakah kami meminta Anda untuk tetap mengaktifkannya selama beberapa hari lagi lalu memutuskan?\n\nPilihan selalu ada di tangan Anda.</string>
+    <string name="rate_us_message">Hai, Anda tidak akan melihat pesan ini lagi.\n\nJika Moo Launcher bermanfaat bagi Anda, bisakah Anda memberikan ulasan bintang 5? Itu sangat berarti bagi kami. Terima kasih!</string>
+    <string name="share_message">Kami membutuhkan bantuan Anda! Kami percaya semua orang harus tahu tentang Moo Launcher dan manfaatnya, tetapi kami tidak dapat melakukannya sendiri.\n\nBisakah Anda membagikan Moo Launcher kepada teman, keluarga, dan pengikut Anda? Terima kasih atas dukungan Anda! ❤</string>
+    <string name="keyboard_message">Hai, keyboard adalah cara tercepat untuk menemukan dan membuka aplikasi di Moo Launcher. Bisakah kami meminta Anda untuk tetap mengaktifkannya selama beberapa hari lagi lalu memutuskan?\n\nPilihan selalu ada di tangan Anda.</string>
     <string name="digital_wellbeing_message">Jika Anda ingin menetapkan batas waktu untuk aplikasi tertentu, fitur Digital Wellbeing Android dapat membantu Anda melakukannya.
         \n\nSilakan cari Digital Wellbeing di pengaturan ponsel Anda dan aktifkan.</string>
     <string name="app_usage_message">Untuk menampilkan/menyembunyikan waktu layar di layar utama, izinkan atau tolak izin penggunaan aplikasi.
         \n\nCatatan: Tidak ada data penggunaan aplikasi yang dikumpulkan. Semua diproses di perangkat Anda.</string>
     <string name="pro_message">Olauncher juga memiliki versi pro yang disebut Pro Launcher. Versi ini memiliki fitur tambahan seperti cuaca, widget, font, folder, wallpaper AMOLED, dan lainnya.\n\nIni juga merupakan cara terbaik untuk mendukung pengembang Olauncher. Coba lihat!</string>
-    <string name="wallpaper_message">Olauncher menawarkan wallpaper baru yang indah setiap hari. Berikan tampilan baru pada layar utama Anda setiap hari, secara gratis!
+    <string name="wallpaper_message">Moo Launcher menawarkan wallpaper baru yang indah setiap hari. Berikan tampilan baru pada layar utama Anda setiap hari, secara gratis!
         \n\nIngin mencobanya?</string>
-    <string name="accessibility_service_description">Izin aksesibilitas diperlukan untuk mengaktifkan gerakan ketuk dua kali untuk mengunci. Data apa pun yang diperoleh Olauncher melalui layanan ini tidak akan meninggalkan perangkat Anda.</string>
+    <string name="accessibility_service_description">Izin aksesibilitas diperlukan untuk mengaktifkan gerakan ketuk dua kali untuk mengunci. Data apa pun yang diperoleh Moo Launcher melalui layanan ini tidak akan meninggalkan perangkat Anda.</string>
     <string name="support_olauncher_for_free">Dukung Olauncher secara gratis dengan menggunakan tautan afiliasi Amazon kami.</string>
     <string name="support_olauncher_message">Setiap kali Anda membeli sesuatu menggunakan tautan kami, kami mendapat komisi kecil. Harap simpan tautan dan gunakan setiap kali Anda berbelanja online.\nTerima kasih!</string>
     <string name="open">Buka tautan</string>
@@ -79,11 +79,11 @@
     <string name="date_only">Tanggal saja</string>
     <string name="bottom_on">Bawah: Nyala</string>
     <string name="bottom_off">Bawah: Mati</string>
-    <string name="please_set_olauncher_as_default_first">Silakan atur Olauncher sebagai peluncur default Anda terlebih dahulu</string>
+    <string name="please_set_olauncher_as_default_first">Silakan atur Moo Launcher sebagai peluncur default Anda terlebih dahulu</string>
     <string name="affiliate">Afiliasi</string>
     <string name="tip_start_typing_for_rename">Tip: Mulailah mengetik untuk opsi RENAME aplikasi</string>
-    <string name="hidden_apps_message">Catatan: Ketuk \'Olauncher\' di bagian atas halaman Pengaturan ini untuk menemukan aplikasi tersembunyi Anda.\n\nRincian lebih lanjut tersedia di halaman Tentang kami.</string>
-    <string name="accessibility_disclosure">Harap aktifkan layanan aksesibilitas Olauncher di pengaturan perangkat Anda untuk mengaktifkan gerakan ketuk dua kali untuk mengunci.\n\nHarap perhatikan bahwa layanan ini hanya digunakan untuk fitur ini saja. Layanan aksesibilitas kami tidak mengumpulkan atau membagikan data apa pun.</string>
+    <string name="hidden_apps_message">Catatan: Ketuk \'Moo Launcher\' di bagian atas halaman Pengaturan ini untuk menemukan aplikasi tersembunyi Anda.\n\nRincian lebih lanjut tersedia di halaman Tentang kami.</string>
+    <string name="accessibility_disclosure">Harap aktifkan layanan aksesibilitas Moo Launcher di pengaturan perangkat Anda untuk mengaktifkan gerakan ketuk dua kali untuk mengunci.\n\nHarap perhatikan bahwa layanan ini hanya digunakan untuk fitur ini saja. Layanan aksesibilitas kami tidak mengumpulkan atau membagikan data apa pun.</string>
     <string name="accept">Terima</string>
     <string name="permission">Izin</string>
     <string name="double_tap_lock">Ketuk dua kali untuk mengunci</string>
@@ -97,7 +97,7 @@
     <string name="enabled">Diaktifkan</string>
     <string name="disabled">Dinonaktifkan</string>
     <string name="please_turn_on_double_tap_to_unlock">Harap aktifkan ketuk dua kali untuk mengunci</string>
-    <string name="launcher_failed_to_lock_device">Olauncher gagal mengunci perangkat.\nSilakan periksa pengaturan aplikasi Anda.</string>
+    <string name="launcher_failed_to_lock_device">Moo Launcher gagal mengunci perangkat.\nSilakan periksa pengaturan aplikasi Anda.</string>
     <string name="long_press_to_select_app">Tekan lama untuk memilih aplikasi</string>
     <string name="unable_to_open_app">Tidak dapat membuka aplikasi</string>
     <string name="copied">Disalin</string>
@@ -111,7 +111,7 @@
     <string name="swipe_left_app_disabled">Aplikasi geser ke kiri dinonaktifkan</string>
     <string name="swipe_right_app_disabled">Aplikasi geser ke kanan dinonaktifkan</string>
     <string name="your_wallpaper_will_update_shortly">Wallpaper Anda akan segera diperbarui</string>
-    <string name="olauncher_is_not_default_launcher">Olauncher bukan peluncur default.\nPembaruan wallpaper harian mungkin gagal.</string>
+    <string name="olauncher_is_not_default_launcher">Moo Launcher bukan peluncur default.\nPembaruan wallpaper harian mungkin gagal.</string>
     <string name="long_press_to_enable">Tekan lama untuk mengaktifkan</string>
     <string name="no_hidden_apps">Aplikasi tersembunyi tidak ada</string>
     <string name="hidden_apps">Aplikasi tersembunyi</string>
@@ -123,7 +123,7 @@
     <string name="screen_time">Waktu layar</string>
     <string name="did_you_know">Tahukah Anda?</string>
     <string name="leave_a_review">Tinggalkan ulasan</string>
-    <string name="review_message">Olauncher gratis dan akan selalu gratis. Tidak ada iklan, tidak mengumpulkan data, dan mengurangi waktu layar Anda, sehingga hidup lebih sehat.\n\nKami harap Anda menyukainya. Beri tahu kami pendapat Anda.</string>
+    <string name="review_message">Moo Launcher gratis dan akan selalu gratis. Tidak ada iklan, tidak mengumpulkan data, dan mengurangi waktu layar Anda, sehingga hidup lebih sehat.\n\nKami harap Anda menyukainya. Beri tahu kami pendapat Anda.</string>
     <string name="alignment_changed">Penyelarasan diubah ✅</string>
     <string name="home_screen">Layar beranda</string>
     <string name="hey">Hai</string>
