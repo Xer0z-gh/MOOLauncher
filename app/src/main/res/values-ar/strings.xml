@@ -92,19 +92,13 @@
         \n\nيرجى البحث عن الرفاهية الرقمية في إعدادات هاتفك وتمكينها.</string>
     <string name="app_usage_message">لعرض/إخفاء وقت استخدام الشاشة على الشاشة الرئيسية، يرجى السماح أو منع إذن استخدام التطبيق.
         \n\nملاحظة: لا يتم جمع أي بيانات حول استخدام التطبيقات. يتم معالجة كل شيء على جهازك.</string>
-    <string name="pro_message">يحتوي Olauncher أيضًا على إصدار احترافي يسمى Pro Launcher. يحتوي على ميزات إضافية مثل الطقس، والأدوات، والخطوط، والمجلدات، وخلفيات AMOLED، وما إلى ذلك.
-        \n\nإنه أيضًا أفضل طريقة لدعم مطوري Olauncher. تحقق من ذلك!</string>
     <string name="wallpaper_message">يقدم Moo Launcher خلفيات جميلة جديدة يوميًا. امنح شاشتك الرئيسية مظهرًا جديدًا كل يوم، مجانًا!
         \n\nهل ترغب في تجربته؟</string>
     <string name="accessibility_service_description">إذن إمكانية الوصول مطلوب لتفعيل إيماءة النقر المزدوج للقفل. أي بيانات يحصل عليها Moo Launcher عبر هذه الخدمة لن تغادر جهازك.</string>
-    <string name="support_olauncher_for_free">ادعم Olauncher مجانًا باستخدام رابط الشراكة التابع لشركة Amazon.</string>
-    <string name="support_olauncher_message">في كل مرة تشتري فيها شيئًا باستخدام رابطنا، نحصل على عمولة صغيرة. يرجى حفظ الرابط واستخدامه كلما تسوقت عبر الإنترنت.\nشكرًا لك!</string>
     <string name="open">افتح الرابط</string>
     <string name="copy">نسخ</string>
     <string name="close">إغلاق</string>
     <string name="not_now">ليس الآن</string>
-    <string name="public_roadmap">خارطة طريق Olauncher العامة</string>
-    <string name="roadmap">خريطة الطريق</string>
     <string name="date">تاريخ</string>
     <string name="date_only">التاريخ فقط</string>
     <string name="bottom_on">المحاذاة لأسفل</string>

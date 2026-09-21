@@ -64,19 +64,13 @@
     <string name="digital_wellbeing_message">Jos haluat asettaa aikarajoja tietyille sovelluksille, Androidin Digitaalinen hyvinvointi -toiminto voi auttaa sinua siinä. Etsi Digitaalinen hyvinvointi puhelimesi asetuksista ja ota se käyttöön.</string>
     <string name="app_usage_message">Näyttääksesi/piilottaaksesi ruutuajan aloitusnäytöllä, salli tai kiellä sovellusten käyttöoikeus.
         \n\nHuomio: Sovellusten käyttötietoja ei kerätä. Kaikki käsitellään laitteellasi.</string>
-    <string name="pro_message">Olauncherista on olemassa myös pro-versio nimeltä Pro Launcher. Siinä on lisäominaisuuksia, kuten sää, widgetit, fontit, kansiot, AMOLED-taustakuvat ja muuta.
-        \n\nSe on myös paras tapa tukea Olauncherin kehittäjiä. Tutustu siihen!</string>
     <string name="wallpaper_message">Moo Launcher tarjoaa kauniita uusia taustakuvia päivittäin. Anna aloitusnäytöllesi uusi ilme joka päivä, ilmaiseksi!
         \n\nHaluatko kokeilla?</string>
     <string name="accessibility_service_description">Esteettömyysoikeus vaaditaan Lukitse kaksoisnapautuksella -eleen käyttöönottoon. Mitään Moo Launcherin tämän palvelun kautta hankkimaa tietoa ei lähetetä laitteestasi pois.</string>
-    <string name="support_olauncher_for_free">Tue Olauncheria ilmaiseksi käyttämällä Amazon-kumppanuuslinkkiämme.</string>
-    <string name="support_olauncher_message">Aina kun ostat jotain linkkimme kautta, saamme pienen palkkion. Tallenna linkki ja käytä sitä aina kun teet ostoksia verkossa.\nKiitos!</string>
     <string name="open">Avaa linkki</string>
     <string name="copy">Kopioi</string>
     <string name="close">Sulje</string>
     <string name="not_now">Ei nyt</string>
-    <string name="public_roadmap">Olauncherin julkinen etenemissuunnitelma</string>
-    <string name="roadmap">Etenemissuunnitelma</string>
     <string name="date">Päivämäärä</string>
     <string name="date_only">Vain päivämäärä</string>
     <string name="bottom_on">Alaosa: Päällä</string>

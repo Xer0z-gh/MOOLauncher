@@ -64,19 +64,13 @@
     <string name="digital_wellbeing_message">หากคุณต้องการตั้งเวลาจำกัดสำหรับแอปบางตัว ฟีเจอร์ Digital Wellbeing ของ Android สามารถช่วยคุณได้ โปรดค้นหา Digital Wellbeing ในการตั้งค่าโทรศัพท์ของคุณและเปิดใช้งาน</string>
     <string name="app_usage_message">หากต้องการแสดง/ซ่อนเวลาหน้าจอบนหน้าจอหลัก โปรดอนุญาตหรือปฏิเสธสิทธิ์การใช้งานแอป
         \n\nหมายเหตุ: ไม่มีการเก็บรวบรวมข้อมูลการใช้งานแอป ทุกอย่างได้รับการประมวลผลบนอุปกรณ์ของคุณเอง</string>
-    <string name="pro_message">Olauncher ยังมีเวอร์ชันโปรที่ชื่อว่า Pro Launcher ซึ่งมีฟีเจอร์เพิ่มเติม เช่น สภาพอากาศ วิดเจ็ต แบบอักษร โฟลเดอร์ วอลเปเปอร์ AMOLED และอื่นๆ
-        \n\nนี่ยังเป็นวิธีที่ดีที่สุดในการสนับสนุนนักพัฒนา Olauncher ด้วย ลองดูสิ!</string>
     <string name="wallpaper_message">Moo Launcher มอบวอลเปเปอร์ใหม่ที่สวยงามให้ทุกวัน ให้หน้าจอหลักของคุณมีลุคใหม่ทุกวันโดยไม่เสียค่าใช้จ่าย!
         \n\nอยากลองไหม</string>
     <string name="accessibility_service_description">จำเป็นต้องมีสิทธิ์การเข้าถึงเพื่อเปิดใช้งานท่าทาง - แตะสองครั้งเพื่อล็อก ข้อมูลใดๆ ที่ Moo Launcher ได้รับผ่านบริการนี้จะไม่ออกจากอุปกรณ์ของคุณ</string>
-    <string name="support_olauncher_for_free">สนับสนุน Olauncher ได้ฟรีโดยใช้ลิงก์พันธมิตร Amazon ของเรา</string>
-    <string name="support_olauncher_message">ทุกครั้งที่คุณซื้อสินค้าผ่านลิงก์ของเรา เราจะได้รับค่าคอมมิชชันเล็กน้อย โปรดบันทึกลิงก์นี้ไว้และใช้เมื่อคุณซื้อของออนไลน์\nขอบคุณ!</string>
     <string name="open">เปิดลิงก์</string>
     <string name="copy">คัดลอก</string>
     <string name="close">ปิด</string>
     <string name="not_now">ไว้ทีหลัง</string>
-    <string name="public_roadmap">แผนงานสาธารณะของ Olauncher</string>
-    <string name="roadmap">แผนงาน</string>
     <string name="date">วันที่</string>
     <string name="date_only">วันที่เท่านั้น</string>
     <string name="bottom_on">ด้านล่าง: เปิด</string>

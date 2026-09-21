@@ -92,19 +92,13 @@
         \n\nLütfen telefon ayarlarınızda Dijital Denge\'yi arayın ve etkinleştirin.</string>
     <string name="app_usage_message">Ana ekranınızda ekran sürenizi göstermek/gizlemek için lütfen uygulama kullanım iznini onaylayın veya reddedin.
         \n\nNot: Uygulama kullanım verileri toplanmaz. Her şey cihazınızda işlenir.</string>
-    <string name="pro_message">Olauncher\'ın Pro Launcher adında bir pro versiyonu da var. Hava durumu, widget\'lar, yazı tipleri, klasörler, AMOLED duvar kağıtları gibi ekstra özelliklere sahip.
-        \n\nAyrıca Olauncher geliştiricilerini desteklemenin en iyi yoludur. Mutlaka inceleyin!</string>
     <string name="wallpaper_message">Moo Launcher, ana ekranınıza taze bir görünüm kazandırmak için her gün yeni duvar kağıtları sunuyor. Hem de ücretsiz!
         \n\nDenemek ister misiniz?</string>
     <string name="accessibility_service_description">Kilitlemek için çift dokunma hareketini etkinleştirmek için erişilebilirlik izni gereklidir. Moo Launcher tarafından bu hizmet aracılığıyla elde edilen hiçbir veri cihazınızdan ayrılmaz.</string>
-    <string name="support_olauncher_for_free">Amazon ortaklık bağlantımızı kullanarak Olauncher\'ı ücretsiz olarak destekleyin.</string>
-    <string name="support_olauncher_message">Bağlantımızı kullanarak her bir şey satın aldığınızda, küçük bir komisyon alırız. Lütfen bağlantıyı kaydedin ve çevrimiçi alışveriş yaptığınızda kullanın. Teşekkür ederiz!</string>
     <string name="open">Linki aç</string>
     <string name="copy">Kopyala</string>
     <string name="close">Kapat</string>
     <string name="not_now">Şimdi değil</string>
-    <string name="public_roadmap">Olauncher Yol Çizelgesi</string>
-    <string name="roadmap">Yol Çizelgesi</string>
     <string name="date">Tarih</string>
     <string name="date_only">Sadece tarih</string>
     <string name="bottom_on">Alt: Açık</string>

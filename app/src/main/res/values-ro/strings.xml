@@ -64,19 +64,13 @@
     <string name="digital_wellbeing_message">Dacă vrei să setezi limite de timp pentru anumite aplicații, funcția Bunăstare digitală din Android te poate ajuta. Caută Bunăstare digitală în setările telefonului și activeaz-o.</string>
     <string name="app_usage_message">Pentru a afișa/ascunde timpul petrecut pe ecran de pe ecranul de start, permite sau refuză permisiunea de utilizare a aplicațiilor.
         \n\nNotă: Nu se colectează date privind utilizarea aplicațiilor. Totul este procesat pe dispozitivul tău.</string>
-    <string name="pro_message">Olauncher are și o versiune pro numită Pro Launcher. Aceasta are funcții suplimentare precum vremea, widgeturi, fonturi, foldere, fundaluri AMOLED și altele.
-        \n\nEste, de asemenea, cea mai bună modalitate de a sprijini dezvoltatorii Olauncher. Aruncă o privire!</string>
     <string name="wallpaper_message">Moo Launcher oferă fundaluri noi și frumoase zilnic, gratuit. Dă ecranului tău de start un aspect nou în fiecare zi, gratis!
         \n\nVrei să încerci?</string>
     <string name="accessibility_service_description">Permisiunea de accesibilitate este necesară pentru a activa gestul - atinge dublu pentru blocare. Niciun fel de date obținute de Moo Launcher prin acest serviciu nu părăsesc dispozitivul tău.</string>
-    <string name="support_olauncher_for_free">Sprijină Olauncher gratuit folosind linkul nostru afiliat Amazon.</string>
-    <string name="support_olauncher_message">De fiecare dată când cumperi ceva folosind linkul nostru, primim un mic comision. Te rugăm să salvezi linkul și să îl folosești ori de câte ori faci cumpărături online.\nMulțumim!</string>
     <string name="open">Deschide linkul</string>
     <string name="copy">Copiază</string>
     <string name="close">Închide</string>
     <string name="not_now">Nu acum</string>
-    <string name="public_roadmap">Foaia de parcurs publică Olauncher</string>
-    <string name="roadmap">Foaie de parcurs</string>
     <string name="date">Dată</string>
     <string name="date_only">Doar data</string>
     <string name="bottom_on">Jos: Activat</string>

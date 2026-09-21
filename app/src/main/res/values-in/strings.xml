@@ -63,18 +63,13 @@
         \n\nSilakan cari Digital Wellbeing di pengaturan ponsel Anda dan aktifkan.</string>
     <string name="app_usage_message">Untuk menampilkan/menyembunyikan waktu layar di layar utama, izinkan atau tolak izin penggunaan aplikasi.
         \n\nCatatan: Tidak ada data penggunaan aplikasi yang dikumpulkan. Semua diproses di perangkat Anda.</string>
-    <string name="pro_message">Olauncher juga memiliki versi pro yang disebut Pro Launcher. Versi ini memiliki fitur tambahan seperti cuaca, widget, font, folder, wallpaper AMOLED, dan lainnya.\n\nIni juga merupakan cara terbaik untuk mendukung pengembang Olauncher. Coba lihat!</string>
     <string name="wallpaper_message">Moo Launcher menawarkan wallpaper baru yang indah setiap hari. Berikan tampilan baru pada layar utama Anda setiap hari, secara gratis!
         \n\nIngin mencobanya?</string>
     <string name="accessibility_service_description">Izin aksesibilitas diperlukan untuk mengaktifkan gerakan ketuk dua kali untuk mengunci. Data apa pun yang diperoleh Moo Launcher melalui layanan ini tidak akan meninggalkan perangkat Anda.</string>
-    <string name="support_olauncher_for_free">Dukung Olauncher secara gratis dengan menggunakan tautan afiliasi Amazon kami.</string>
-    <string name="support_olauncher_message">Setiap kali Anda membeli sesuatu menggunakan tautan kami, kami mendapat komisi kecil. Harap simpan tautan dan gunakan setiap kali Anda berbelanja online.\nTerima kasih!</string>
     <string name="open">Buka tautan</string>
     <string name="copy">Salin</string>
     <string name="close">Tutup</string>
     <string name="not_now">Tidak sekarang</string>
-    <string name="public_roadmap">Peta jalan publik Olauncher</string>
-    <string name="roadmap">Peta jalan</string>
     <string name="date">Tanggal</string>
     <string name="date_only">Tanggal saja</string>
     <string name="bottom_on">Bawah: Nyala</string>

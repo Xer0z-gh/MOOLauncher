@@ -64,19 +64,13 @@
     <string name="digital_wellbeing_message">अगर आप कुछ ऐप्स के लिए समय सीमा तय करना चाहते हैं, तो Android की Digital Wellbeing फ़ीचर आपकी मदद कर सकती है। कृपया अपने फ़ोन की सेटिंग्स में Digital Wellbeing खोजें और उसे चालू करें।</string>
     <string name="app_usage_message">होम स्क्रीन पर अपना स्क्रीन टाइम दिखाने/छिपाने के लिए, कृपया ऐप उपयोग की अनुमति दें या हटाएं।
         \n\nनोट: कोई ऐप उपयोग डेटा एकत्र नहीं किया जाता। सब कुछ आपकी डिवाइस पर ही प्रोसेस होता है।</string>
-    <string name="pro_message">Olauncher का एक Pro वर्शन भी है जिसे Pro Launcher कहा जाता है। इसमें मौसम, विजेट्स, फॉन्ट्स, फ़ोल्डर्स, AMOLED वॉलपेपर जैसे अतिरिक्त फीचर्स हैं।
-        \n\nयह Olauncher के डेवलपर्स को सपोर्ट करने का सबसे अच्छा तरीका भी है। इसे ज़रूर देखें!</string>
     <string name="wallpaper_message">Moo Launcher हर रोज़ मुफ़्त में खूबसूरत नए वॉलपेपर देता है। अपनी होम स्क्रीन को हर दिन एक नया लुक दें, बिल्कुल मुफ़्त!
         \n\nक्या आप इसे आज़माना चाहेंगे?</string>
     <string name="accessibility_service_description">डबल टैप से लॉक करने वाले जेस्चर को चालू करने के लिए एक्सेसिबिलिटी परमिशन ज़रूरी है। इस सर्विस के ज़रिए Moo Launcher द्वारा प्राप्त कोई भी डेटा आपकी डिवाइस से बाहर नहीं जाता।</string>
-    <string name="support_olauncher_for_free">हमारे Amazon अफिलिएट लिंक का उपयोग करके मुफ़्त में Olauncher को सपोर्ट करें।</string>
-    <string name="support_olauncher_message">जब भी आप हमारे लिंक से कुछ खरीदते हैं, हमें थोड़ा कमीशन मिलता है। कृपया लिंक सेव करें और जब भी ऑनलाइन शॉपिंग करें, इसका उपयोग करें।\nधन्यवाद!</string>
     <string name="open">लिंक खोलें</string>
     <string name="copy">कॉपी करें</string>
     <string name="close">बंद करें</string>
     <string name="not_now">अभी नहीं</string>
-    <string name="public_roadmap">Olauncher का सार्वजनिक रोडमैप</string>
-    <string name="roadmap">रोडमैप</string>
     <string name="date">दिनांक</string>
     <string name="date_only">सिर्फ़ दिनांक</string>
     <string name="bottom_on">नीचे: चालू</string>

@@ -64,20 +64,13 @@
         \n\nKeresse meg a Digitális jólét elemet a telefon beállításai között, és engedélyezze.</string>
     <string name="app_usage_message">A képernyőidő megjelenítéséhez/elrejtéséhez a kezdőképernyőn engedélyezze vagy tagadja meg az alkalmazás használati engedélyét.
         \n\nMegjegyzés: Nem gyűjtünk alkalmazás-használati adatokat. Minden az Ön eszközén kerül feldolgozásra.</string>
-    <string name="pro_message">Az Olauncher-nek van egy pro verziója is, amely Pro Launcher néven ismert. További funkciókat kínál, mint például időjárás, widgetek, betűtípusok, mappák, AMOLED háttérképek stb.
-        \n\nEz a legjobb módja annak, hogy támogassa az Olauncher fejlesztőit. Tekintse meg őket!</string>
     <string name="wallpaper_message">Az Moo Launcher minden nap gyönyörű, új háttérképeket kínál, amelyekkel frissen tarthatja kezdőképernyőjét, ingyen!
         \n\nSzeretné kipróbálni?</string>
     <string name="accessibility_service_description">A kisegítő lehetőségek engedélye szükséges a dupla koppintás a lezáráshoz mozdulat engedélyezéséhez. Az Moo Launcher által ezen a szolgáltatáson keresztül megszerzett adatok nem hagyják el a készüléket.</string>
-    <string name="support_olauncher_for_free">Támogasson minket ingyenesen az Amazon affiliate linkünk használatával.</string>
-    <string name="support_olauncher_message">Minden alkalommal, amikor vásárol valamit a linkünket használva, egy kis jutalékot kapunk. Kérjük, mentse el a linket, és használja fel, amikor csak online vásárol.
-        \n\nKöszönjük!</string>
     <string name="open">Link megnyitása</string>
     <string name="copy">Másolás</string>
     <string name="close">Bezárás</string>
     <string name="not_now">Később</string>
-    <string name="public_roadmap">Olauncher nyilvános ütemterv</string>
-    <string name="roadmap">Ütemterv</string>
     <string name="date">Dátum</string>
     <string name="date_only">Csak dátum</string>
     <string name="bottom_on">Alsó: Be</string>

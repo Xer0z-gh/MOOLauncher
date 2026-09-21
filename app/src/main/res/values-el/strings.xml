@@ -64,19 +64,13 @@
     <string name="digital_wellbeing_message">Αν θέλετε να ορίσετε χρονικά όρια για συγκεκριμένες εφαρμογές, η λειτουργία Ψηφιακή Ευεξία του Android μπορεί να σας βοηθήσει. Αναζητήστε το Ψηφιακή Ευεξία στις ρυθμίσεις του τηλεφώνου σας και ενεργοποιήστε το.</string>
     <string name="app_usage_message">Για να εμφανίσετε/αποκρύψετε τον χρόνο οθόνης στην αρχική οθόνη, επιτρέψτε ή απορρίψτε την άδεια χρήσης εφαρμογών.
         \n\nΣημείωση: Δεν συλλέγονται δεδομένα χρήσης εφαρμογών. Όλα επεξεργάζονται στη συσκευή σας.</string>
-    <string name="pro_message">Το Olauncher διαθέτει επίσης μια έκδοση pro με το όνομα Pro Launcher. Έχει επιπλέον λειτουργίες όπως καιρός, widgets, γραμματοσειρές, φάκελοι, ταπετσαρίες AMOLED και άλλα.
-        \n\nΕίναι επίσης ο καλύτερος τρόπος να υποστηρίξετε τους προγραμματιστές του Olauncher. Ρίξτε μια ματιά!</string>
     <string name="wallpaper_message">Το Moo Launcher προσφέρει καθημερινά όμορφες νέες ταπετσαρίες. Δώστε στην αρχική σας οθόνη μια νέα εμφάνιση κάθε μέρα, δωρεάν!
         \n\nΘέλετε να το δοκιμάσετε;</string>
     <string name="accessibility_service_description">Η άδεια προσβασιμότητας απαιτείται για την ενεργοποίηση της χειρονομίας - διπλό πάτημα για κλείδωμα. Κανένα δεδομένο που αποκτάται από το Moo Launcher μέσω αυτής της υπηρεσίας δεν εγκαταλείπει τη συσκευή σας.</string>
-    <string name="support_olauncher_for_free">Υποστηρίξτε το Olauncher δωρεάν χρησιμοποιώντας τον σύνδεσμο συνεργάτη μας στο Amazon.</string>
-    <string name="support_olauncher_message">Κάθε φορά που αγοράζετε κάτι μέσω του συνδέσμου μας, λαμβάνουμε μια μικρή προμήθεια. Αποθηκεύστε τον σύνδεσμο και χρησιμοποιήστε τον όποτε κάνετε αγορές online.\nΕυχαριστούμε!</string>
     <string name="open">Άνοιγμα συνδέσμου</string>
     <string name="copy">Αντιγραφή</string>
     <string name="close">Κλείσιμο</string>
     <string name="not_now">Όχι τώρα</string>
-    <string name="public_roadmap">Δημόσιος οδικός χάρτης Olauncher</string>
-    <string name="roadmap">Οδικός χάρτης</string>
     <string name="date">Ημερομηνία</string>
     <string name="date_only">Μόνο ημερομηνία</string>
     <string name="bottom_on">Κάτω: Ενεργό</string>

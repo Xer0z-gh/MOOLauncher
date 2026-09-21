@@ -62,19 +62,13 @@
     <string name="digital_wellbeing_message">Se desideri impostare limiti di tempo per determinate app, la funzionalità Benessere digitale di Android può aiutarti a farlo.
         \n\nCerca Benessere digitale nelle impostazioni del telefono e attivalo.</string>
     <string name="app_usage_message">Per mostrare/nascondere il tempo di utilizzo dello schermo nella schermata iniziale, concedi o nega l\'autorizzazione all\'utilizzo delle app.\n\nNota: non vengono raccolti dati sull\'utilizzo delle app. Tutto viene elaborato sul tuo dispositivo.</string>
-    <string name="pro_message">Olauncher ha anche una versione pro chiamata Pro Launcher. Ha funzionalità extra come meteo, widget, font, cartelle, sfondi AMOLED, e così via.
-        \n\nÈ anche il modo migliore per supportare gli sviluppatori di Olauncher. Dai un\'occhiata!</string>
     <string name="wallpaper_message">Moo Launcher offre bellissimi sfondi nuovi ogni giorno. Dai un aspetto fresco alla tua schermata principale ogni giorno, gratuitamente!
         \n\nVuoi provarlo?</string>
     <string name="accessibility_service_description">L\'autorizzazione di accessibilità è necessaria per abilitare il gesto Doppio tocco per bloccare. Qualsiasi dato acquisito da Moo Launcher tramite questo servizio non lascerà il tuo dispositivo.</string>
-    <string name="support_olauncher_for_free">Supporta Olauncher gratuitamente utilizzando il nostro link di affiliazione su Amazon.</string>
-    <string name="support_olauncher_message">Ogni volta che acquisti qualcosa utilizzando il nostro link, riceviamo una piccola commissione. Salva il link e usalo ogni volta che fai acquisti online.\nGrazie!</string>
     <string name="open">Apri link</string>
     <string name="copy">Copia</string>
     <string name="close">Chiudi</string>
     <string name="not_now">Non ora</string>
-    <string name="public_roadmap">Roadmap pubblica di Olauncher</string>
-    <string name="roadmap">Roadmap</string>
     <string name="date">Data</string>
     <string name="date_only">Solo data</string>
     <string name="bottom_on">In basso: acceso</string>

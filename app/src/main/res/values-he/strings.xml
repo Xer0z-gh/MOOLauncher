@@ -58,14 +58,10 @@
     <string name="keyboard_message">היי, המקלדת היא הדרך המהירה ביותר למצוא ולפתוח יישומים ב־Moo Launcher. האם נוכל לבקש מכם להשאיר את ההגדרה הזאת פעילה עוד כמה ימים ואז להחליט?\n\nהבחירה תמיד שלכם.</string>
     <string name="wallpaper_message">Moo Launcher מציע טפטים חדשים ויפים מדי יום. תנו למסך הבית שלכם מראה חדש ורענן בכל יום, בחינם!\n\nרוצים לנסות?</string>
     <string name="accessibility_service_description">הרשאת הנגישות נחוצה להפעלת המחווה של נעילה בהקשה כפולה. כל הנתונים שייאספו על ידי Moo Launcher דרך שירות זה לא יעזבו את המכשיר שלכם.</string>
-    <string name="support_olauncher_for_free">אפשר לתמוך ב־Olauncher מבלי לשלם שקל, בעזרת שימוש בקישור ה־Amazon affiliate שלנו.</string>
-    <string name="support_olauncher_message">על כל רכישה שתבוצע דרך הקישור שלנו אנחנו נקבל עמלה קטנה. נשמח אם תשמרו את הקישור ותשתמשו בו בקניות מהאינטרנט.\nתודה רבה!</string>
     <string name="open">פתיחת קישור</string>
     <string name="copy">העתקה</string>
     <string name="close">סגירה</string>
     <string name="not_now">לא כעת</string>
-    <string name="public_roadmap">מפת הדרכים הציבורית של Olauncher</string>
-    <string name="roadmap">מפת דרכים</string>
     <string name="date">תאריך</string>
     <string name="date_only">תאריך בלבד</string>
     <string name="bottom_on">הצגה למטה: מופעל</string>
@@ -124,7 +120,6 @@
     <string name="home_screen">מסך הבית</string>
     <string name="digital_wellbeing_message">אם ברצונכם להגדיר מגבלות זמן ליישומים מסוימים, תכונת Digital Wellbeing של אנדרואיד יכולה לעזור בכך. חפשו את Digital Wellbeing בהגדרות הטלפון והפעילו אותה.</string>
     <string name="app_usage_message">כדי להציג/להסתיר את זמן המסך במסך הבית, נא לאפשר או לבטל את הרשאת השימוש ביישומים.\n\nהערה: לא נאספים נתוני שימוש ביישומים. הכל מעובד במכשיר שלכם.</string>
-    <string name="pro_message">ל־Olauncher יש גם גרסת Pro בשם Pro Launcher. יש בה תכונות נוספות כמו מזג אוויר, ווידג\'טים, גופנים, תיקיות, טפטים ל־AMOLED ועוד.\n\nזו גם הדרך הטובה ביותר לתמוך במפתחי Olauncher. כדאי לבדוק!</string>
     <string name="notification_bar">שורת ההתראות</string>
     <string name="private_space">מרחב פרטי</string>
     <string name="invalid_pin_request">בקשת הצמדה לא חוקית</string>

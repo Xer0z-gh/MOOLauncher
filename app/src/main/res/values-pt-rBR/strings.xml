@@ -64,19 +64,13 @@
         \n\nProcure Bem-estar Digital nas configurações do seu telefone e ative-o.</string>
     <string name="app_usage_message">Para exibir/ocultar o tempo de tela na tela inicial, permita ou negue a permissão de uso do aplicativo.
         \n\nNota: Não são coletados dados de uso do aplicativo. Tudo é processado no seu dispositivo.</string>
-    <string name="pro_message">Olauncher também tem uma versão pro chamada Pro Launcher. Tem recursos extras como clima, widgets, fontes, pastas, papéis de parede AMOLED, e assim por diante.
-        \n\nÉ também a melhor maneira de apoiar os desenvolvedores do Olauncher. Confira!</string>
     <string name="wallpaper_message">Moo Launcher oferece lindos papéis de parede novos todos os dias. Dê uma nova aparência à sua tela inicial todos os dias, gratuitamente!
         \n\nQuer tentar?</string>
     <string name="accessibility_service_description">A permissão de acessibilidade é necessária para ativar o gesto de toque duplo para bloquear. Nenhum dado obtido pelo Moo Launcher por meio deste serviço sairá do seu dispositivo.</string>
-    <string name="support_olauncher_for_free">Apoie o Olauncher gratuitamente usando nosso link de afiliado da Amazon.</string>
-    <string name="support_olauncher_message">Sempre que você comprar algo usando nosso link, receberemos uma pequena comissão. Salve o link e use-o sempre que fizer compras online.\nObrigado!</string>
     <string name="open">Abrir link</string>
     <string name="copy">Copiar</string>
     <string name="close">Fechar</string>
     <string name="not_now">Agora não</string>
-    <string name="public_roadmap">Roteiro público do Olauncher</string>
-    <string name="roadmap">Roteiro</string>
     <string name="date">Data</string>
     <string name="date_only">Apenas data</string>
     <string name="bottom_on">Fundo: Ativado</string>

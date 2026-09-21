@@ -64,19 +64,13 @@
     <string name="digital_wellbeing_message">Nếu bạn muốn đặt giới hạn thời gian cho một số ứng dụng nhất định, tính năng Digital Wellbeing của Android có thể giúp bạn. Vui lòng tìm Digital Wellbeing trong cài đặt điện thoại của bạn và bật tính năng này.</string>
     <string name="app_usage_message">Để hiện/ẩn thời gian sử dụng màn hình trên màn hình chính, vui lòng cho phép hoặc từ chối quyền sử dụng ứng dụng.
         \n\nLưu ý: Không có dữ liệu sử dụng ứng dụng nào được thu thập. Mọi thứ đều được xử lý trên thiết bị của bạn.</string>
-    <string name="pro_message">Olauncher cũng có phiên bản pro gọi là Pro Launcher. Nó có thêm các tính năng như thời tiết, widget, phông chữ, thư mục, hình nền AMOLED, v.v.
-        \n\nĐây cũng là cách tốt nhất để hỗ trợ các nhà phát triển của Olauncher. Hãy xem thử!</string>
     <string name="wallpaper_message">Moo Launcher cung cấp những hình nền mới đẹp mắt mỗi ngày, hoàn toàn miễn phí. Hãy cho màn hình chính của bạn một diện mạo mới mỗi ngày, miễn phí!
         \n\nBạn có muốn thử không?</string>
     <string name="accessibility_service_description">Quyền trợ năng là bắt buộc để bật cử chỉ - chạm hai lần để khóa. Không có bất kỳ dữ liệu nào mà Moo Launcher thu được qua dịch vụ này rời khỏi thiết bị của bạn.</string>
-    <string name="support_olauncher_for_free">Hỗ trợ Olauncher miễn phí bằng cách sử dụng liên kết tiếp thị liên kết Amazon của chúng tôi.</string>
-    <string name="support_olauncher_message">Mỗi khi bạn mua thứ gì đó bằng liên kết của chúng tôi, chúng tôi sẽ nhận được một khoản hoa hồng nhỏ. Vui lòng lưu liên kết này và sử dụng bất cứ khi nào bạn mua sắm trực tuyến.\nCảm ơn bạn!</string>
     <string name="open">Mở liên kết</string>
     <string name="copy">Sao chép</string>
     <string name="close">Đóng</string>
     <string name="not_now">Để sau</string>
-    <string name="public_roadmap">Lộ trình công khai của Olauncher</string>
-    <string name="roadmap">Lộ trình</string>
     <string name="date">Ngày</string>
     <string name="date_only">Chỉ ngày</string>
     <string name="bottom_on">Dưới cùng: Bật</string>

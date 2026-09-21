@@ -59,17 +59,12 @@
     <string name="keyboard_message">안내: 키보드는 Moo Launcher에서 앱을 빠르게 찾고 실행하는 가장 빠른 방법입니다. 며칠 동안 켜 두었다가 결정해 보시길 권합니다.\n\n선택은 항상 사용자에게 있습니다.</string>
     <string name="digital_wellbeing_message">특정 앱의 사용 시간을 제한하려면 Android의 Digital Wellbeing(디지털 웰빙) 기능을 사용해 보세요. 휴대폰 설정에서 Digital Wellbeing을 검색해 활성화하세요.</string>
     <string name="app_usage_message">홈 화면에 화면 사용 시간을 표시하거나 숨기려면 앱 사용 권한을 허용하거나 거부하세요.\n\n참고: 앱 사용 데이터는 수집되지 않으며 모든 처리는 기기 내에서 이루어집니다.</string>
-    <string name="pro_message">Olauncher는 Pro 버전도 제공합니다. 날씨, 위젯, 폰트, 폴더, AMOLED 배경화면 등 추가 기능이 포함되어 있습니다.\n\n개발자를 지원하는 가장 좋은 방법입니다. 확인해 보세요!</string>
     <string name="wallpaper_message">Moo Launcher는 매일 아름다운 새 배경화면을 제공합니다. 홈 화면을 매일 새롭게 꾸며보세요!\n\n시도해 보시겠어요?</string>
     <string name="accessibility_service_description">두 번 탭하여 잠금 제스처를 활성화하려면 접근성 권한이 필요합니다. 이 서비스를 통해 Moo Launcher가 획득한 데이터는 기기 밖으로 전송되지 않습니다.</string>
-    <string name="support_olauncher_for_free">Amazon 제휴 링크를 사용해 Olauncher를 무료로 지원할 수 있습니다.</string>
-    <string name="support_olauncher_message">링크를 통해 구매하실 때마다 소액의 수수료를 받습니다. 링크를 저장해 두고 쇼핑 시 사용해 주세요.\n감사합니다!</string>
     <string name="open">링크 열기</string>
     <string name="copy">복사</string>
     <string name="close">닫기</string>
     <string name="not_now">나중에</string>
-    <string name="public_roadmap">Olauncher 공개 로드맵</string>
-    <string name="roadmap">로드맵</string>
     <string name="date">날짜</string>
     <string name="date_only">날짜만</string>
     <string name="bottom_on">하단: 켬</string>

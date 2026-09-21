@@ -64,19 +64,13 @@
     <string name="digital_wellbeing_message">Hvis du vil angi tidsbegrensninger for bestemte apper, kan Androids Digital velvære-funksjon hjelpe deg med det. Søk etter Digital velvære i telefoninnstillingene og aktiver den.</string>
     <string name="app_usage_message">For å vise/skjule skjermtiden din på startskjermen må du tillate eller avslå tillatelsen for appbruk.
         \n\nMerk: Ingen data om appbruk samles inn. Alt behandles på enheten din.</string>
-    <string name="pro_message">Olauncher har også en pro-versjon som heter Pro Launcher. Den har ekstra funksjoner som vær, widgeter, skrifttyper, mapper, AMOLED-bakgrunner og mer.
-        \n\nDet er også den beste måten å støtte utviklerne av Olauncher på. Sjekk den ut!</string>
     <string name="wallpaper_message">Moo Launcher tilbyr vakre nye bakgrunnsbilder daglig. Gi startskjermen din et nytt utseende hver dag, helt gratis!
         \n\nVil du prøve det?</string>
     <string name="accessibility_service_description">Tilgjengelighetstillatelsen kreves for å aktivere bevegelsen - dobbelttrykk for å låse. Ingen data hentet av Moo Launcher via denne tjenesten forlater enheten din.</string>
-    <string name="support_olauncher_for_free">Støtt Olauncher gratis ved å bruke vår Amazon-partnerlenke.</string>
-    <string name="support_olauncher_message">Hver gang du kjøper noe via lenken vår, får vi en liten provisjon. Lagre lenken og bruk den når du handler på nett.\nTakk!</string>
     <string name="open">Åpne lenke</string>
     <string name="copy">Kopier</string>
     <string name="close">Lukk</string>
     <string name="not_now">Ikke nå</string>
-    <string name="public_roadmap">Olauncher offentlig veikart</string>
-    <string name="roadmap">Veikart</string>
     <string name="date">Dato</string>
     <string name="date_only">Kun dato</string>
     <string name="bottom_on">Nederst: På</string>

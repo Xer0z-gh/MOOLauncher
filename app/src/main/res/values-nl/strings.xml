@@ -65,19 +65,13 @@
         \n\nZoek in de instellingen van je telefoon naar Digital Wellbeing en schakel het in.</string>
     <string name="app_usage_message">Om je schermtijd op het startscherm te tonen of te verbergen, geef of weiger de toestemming voor app-gebruik.
         \n\nOpmerking: er worden geen app-gebruiksgegevens verzameld. Alles wordt op je apparaat verwerkt.</string>
-    <string name="pro_message">Olauncher heeft ook een pro-versie genaamd Pro Launcher. Deze heeft extra functies zoals weer, widgets, lettertypen, mappen, AMOLED-achtergronden enz.
-        \n\nHet is ook de beste manier om de ontwikkelaars van Olauncher te steunen. Bekijk het eens!</string>
     <string name="wallpaper_message">Moo Launcher biedt dagelijks mooie nieuwe achtergronden. Geef je startscherm iedere dag een frisse nieuwe look, gratis!
         \n\nWil je het proberen?</string>
     <string name="accessibility_service_description">De toegankelijkheidstoestemming is vereist om het gebaar dubbel tikken om te vergrendelen mogelijk te maken. Gegevens die Moo Launcher via deze service verkrijgt, verlaten je apparaat niet.</string>
-    <string name="support_olauncher_for_free">Steun Olauncher gratis door onze Amazon-affiliatelink te gebruiken.</string>
-    <string name="support_olauncher_message">Elke keer dat je iets koopt via onze link, ontvangen wij een kleine commissie. Bewaar de link en gebruik deze wanneer je online winkelt.\nDank je!</string>
     <string name="open">Link openen</string>
     <string name="copy">Kopiëren</string>
     <string name="close">Sluiten</string>
     <string name="not_now">Niet nu</string>
-    <string name="public_roadmap">Openbare roadmap van Olauncher</string>
-    <string name="roadmap">Routekaart</string>
     <string name="date">Datum</string>
     <string name="date_only">Alleen datum</string>
     <string name="bottom_on">Onder: Aan</string>

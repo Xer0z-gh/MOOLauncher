@@ -64,19 +64,13 @@
     <string name="digital_wellbeing_message">Pokud chcete nastavit časové limity pro určité aplikace, může vám pomoci funkce Digital Wellbeing v Androidu. Vyhledejte prosím Digital Wellbeing v nastavení telefonu a zapněte ji.</string>
     <string name="app_usage_message">Chcete-li zobrazit nebo skrýt dobu používání obrazovky na domovské obrazovce, povolte nebo zakažte prosím oprávnění k používání aplikací.
         \n\nPoznámka: Žádná data o používání aplikací se nesbírají. Vše se zpracovává přímo ve vašem zařízení.</string>
-    <string name="pro_message">Olauncher má také verzi Pro s názvem Pro Launcher. Obsahuje další funkce jako počasí, widgety, písma, složky, AMOLED tapety a další.
-        \n\nJe to také nejlepší způsob, jak podpořit vývojáře Olauncheru. Podívejte se na ni!</string>
     <string name="wallpaper_message">Moo Launcher nabízí denně nové krásné tapety zdarma. Dejte své domovské obrazovce každý den nový vzhled, zdarma!
         \n\nChcete to vyzkoušet?</string>
     <string name="accessibility_service_description">Oprávnění přístupnosti je vyžadováno pro povolení gesta - dvojité klepnutí pro zamknutí. Žádná data získaná Moo Launcherem prostřednictvím této služby neopustí vaše zařízení.</string>
-    <string name="support_olauncher_for_free">Podpořte Olauncher zdarma pomocí našeho affiliate odkazu na Amazon.</string>
-    <string name="support_olauncher_message">Pokaždé, když si přes náš odkaz něco koupíte, dostaneme malou provizi. Uložte si prosím odkaz a používejte ho, kdykoli nakupujete online.\nDěkujeme!</string>
     <string name="open">Otevřít odkaz</string>
     <string name="copy">Kopírovat</string>
     <string name="close">Zavřít</string>
     <string name="not_now">Teď ne</string>
-    <string name="public_roadmap">Veřejný plán vývoje Olauncher</string>
-    <string name="roadmap">Plán vývoje</string>
     <string name="date">Datum</string>
     <string name="date_only">Pouze datum</string>
     <string name="bottom_on">Dole: Zapnuto</string>

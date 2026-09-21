@@ -63,19 +63,13 @@
         \n\nНайдите параметр «Цифровое благополучие» в настройках телефона и включите его.</string>
     <string name="app_usage_message">Чтобы показать/скрыть время экрана на домашнем экране, разрешите или запретите разрешение на использование приложения.
         \n\nПримечание: Не собираются данные об использовании приложения. Все обрабатывается на вашем устройстве.</string>
-    <string name="pro_message">У Olauncher также есть профессиональная версия под названием Pro Launcher. Она имеет дополнительные функции, такие как погода, виджеты, шрифты, папки, обои AMOLED и так далее.
-        \n\nЭто также лучший способ поддержать разработчиков Olauncher. Ознакомьтесь!</string>
     <string name="wallpaper_message">Moo Launcher предлагает красивые новые обои каждый день. Обновите свой главный экран каждый день, бесплатно!
         \n\nХотите попробовать?</string>
     <string name="accessibility_service_description">Разрешение специальных возможностей требуется для включения жеста двойного касания для блокировки. Любые данные, полученные Moo Launcher через этот сервис, не покинут ваше устройство.</string>
-    <string name="support_olauncher_for_free">Поддержите Olauncher бесплатно, используя нашу партнерскую ссылку Amazon.</string>
-    <string name="support_olauncher_message">Каждый раз, когда вы покупаете что-то по нашей ссылке, мы получаем небольшую комиссию. Пожалуйста, сохраните ссылку и используйте ее при совершении покупок в Интернете.\nСпасибо!</string>
     <string name="open">Открыть ссылку</string>
     <string name="copy">Копировать</string>
     <string name="close">Закрыть</string>
     <string name="not_now">Не сейчас</string>
-    <string name="public_roadmap">Публичная дорожная карта Olauncher</string>
-    <string name="roadmap">Дорожная карта</string>
     <string name="date">Дата</string>
     <string name="date_only">Только дата</string>
     <string name="bottom_on">Внизу: Вкл</string>

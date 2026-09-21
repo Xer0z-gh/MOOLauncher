@@ -93,17 +93,12 @@
         \n\nBitte suchen Sie in Ihren Telefoneinstellungen nach Digital Wellbeing und aktivieren Sie es.</string>
     <string name="app_usage_message">Um die Bildschirmzeit auf dem Startbildschirm anzuzeigen oder zu verbergen, erteilen Sie bitte die Erlaubnis für die App-Nutzung oder verweigern Sie sie.
         \n\nHinweis: Es werden keine Daten zur App-Nutzung gesammelt. Alles wird auf Ihrem Gerät verarbeitet.</string>
-    <string name="pro_message">Olauncher hat auch eine Pro-Version namens Pro Launcher. Sie bietet zusätzliche Funktionen wie Wetter, Widgets, Schriftarten, Ordner, AMOLED-Hintergründe usw.\n\nEs ist auch der beste Weg, die Entwickler von Olauncher zu unterstützen. Sehen Sie es sich an!</string>
     <string name="wallpaper_message">Moo Launcher bietet täglich wunderschöne neue Hintergrundbilder. Verleihen Sie Ihrem Startbildschirm jeden Tag ein frisches Aussehen – kostenlos!\n\nMöchten Sie es ausprobieren?</string>
     <string name="accessibility_service_description">Die Berechtigung für Bedienungshilfen ist erforderlich, um die Geste „Doppeltippen zum Sperren“ zu aktivieren. Daten, die Moo Launcher über diesen Dienst erhält, verlassen Ihr Gerät nicht.</string>
-    <string name="support_olauncher_for_free">Unterstützen Sie Olauncher kostenlos, indem Sie unseren Amazon-Partnerlink verwenden.</string>
-    <string name="support_olauncher_message">Jedes Mal, wenn Sie über unseren Link etwas kaufen, erhalten wir eine kleine Provision. Bitte speichern Sie den Link und verwenden Sie ihn bei jedem Online-Einkauf.\nDanke!</string>
     <string name="open">Link öffnen</string>
     <string name="copy">Kopieren</string>
     <string name="close">Schließen</string>
     <string name="not_now">Nicht jetzt</string>
-    <string name="public_roadmap">Öffentliche Olauncher-Roadmap</string>
-    <string name="roadmap">Roadmap</string>
     <string name="date">Datum</string>
     <string name="date_only">Nur Datum</string>
     <string name="bottom_on">Unten: Ein</string>
