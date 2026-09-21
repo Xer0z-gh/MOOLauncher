@@ -29,6 +29,7 @@ import androidx.navigation.fragment.findNavController
 import app.olauncher.MainViewModel
 import app.olauncher.R
 import app.olauncher.data.AppModel
+import app.olauncher.data.ColorTheme
 import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.FragmentHomeBinding
@@ -48,6 +49,8 @@ import app.olauncher.helper.openCameraApp
 import app.olauncher.helper.openDialerApp
 import app.olauncher.helper.setPlainWallpaperByTheme
 import app.olauncher.helper.showToast
+import app.olauncher.helper.tintTextTree
+import app.olauncher.helper.withAlpha
 import app.olauncher.listener.OnSwipeTouchListener
 import app.olauncher.listener.ViewSwipeTouchListener
 import java.text.SimpleDateFormat
@@ -366,8 +369,19 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.tvScreenTime.setPadding(10.dpToPx())
     }
 
+    /**
+     * Repaints the home screen for the chosen colour theme. Does nothing on the System theme, so
+     * the stock light/dark behaviour and any wallpaper the user set are left completely alone.
+     */
+    private fun applyColorTheme() {
+        if (!ColorTheme.isCustom(prefs.colorThemeId)) return
+        val theme = ColorTheme.byId(prefs.colorThemeId)
+        binding.mainLayout.tintTextTree(theme.text, theme.text.withAlpha(0x80))
+    }
+
     private fun populateHomeScreen(appCountUpdated: Boolean) {
         populateHomeRows(appCountUpdated)
+        applyColorTheme()
         // Must run after the rows, and outside populateHomeRows: that function returns early at
         // every one of the eight app-count checks, so anything appended to its body would be
         // skipped for all but a full eight-app home screen.

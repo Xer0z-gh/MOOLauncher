@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView.Recycler
 import app.olauncher.MainViewModel
 import app.olauncher.R
 import app.olauncher.data.AppModel
+import app.olauncher.data.ColorTheme
 import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.FragmentAppDrawerBinding
@@ -30,6 +31,8 @@ import app.olauncher.helper.isEinkDisplay
 import app.olauncher.helper.isSystemAnimationsDisabled
 import app.olauncher.helper.isSystemApp
 import app.olauncher.helper.openAppInfo
+import app.olauncher.helper.tintTextTree
+import app.olauncher.helper.withAlpha
 import app.olauncher.helper.openSearch
 import app.olauncher.helper.openUrl
 import app.olauncher.helper.showKeyboard
@@ -146,6 +149,18 @@ class AppDrawerFragment : BaseFragment() {
         return result
     }
 
+    /**
+     * Tints the drawer chrome for the chosen colour theme. Rows are handled by the adapter,
+     * because RecyclerView recycles them and a one-off tree walk would miss every row scrolled
+     * into view afterwards.
+     */
+    private fun applyColorTheme() {
+        if (!ColorTheme.isCustom(prefs.colorThemeId)) return
+        val theme = ColorTheme.byId(prefs.colorThemeId)
+        binding.root.tintTextTree(theme.text, theme.text.withAlpha(0x80))
+        adapter.themeTextColor = theme.text
+    }
+
     private fun initAdapter() {
         adapter = AppDrawerAdapter(
             flag,
@@ -252,6 +267,7 @@ class AppDrawerFragment : BaseFragment() {
 
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = adapter
+        applyColorTheme()
         binding.recyclerView.addOnScrollListener(getRecyclerViewOnScrollListener())
         binding.recyclerView.itemAnimator = null
         if (requireContext().isEinkDisplay())

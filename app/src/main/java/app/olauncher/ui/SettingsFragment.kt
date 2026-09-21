@@ -13,7 +13,10 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.graphics.drawable.GradientDrawable
 import android.view.ViewGroup
+import android.widget.GridLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.bundleOf
@@ -22,12 +25,14 @@ import androidx.navigation.fragment.findNavController
 import app.olauncher.BuildConfig
 import app.olauncher.MainViewModel
 import app.olauncher.R
+import app.olauncher.data.ColorTheme
 import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.DialogTextSizeBinding
 import app.olauncher.databinding.FragmentSettingsBinding
 import app.olauncher.helper.appUsagePermissionGranted
 import app.olauncher.helper.createDialog
+import app.olauncher.helper.dpToPx
 import app.olauncher.helper.getColorFromAttr
 import app.olauncher.helper.hideStatusBar
 import app.olauncher.helper.isAccessServiceEnabled
@@ -41,12 +46,14 @@ import app.olauncher.helper.openAppInfo
 import app.olauncher.helper.openUrl
 import app.olauncher.helper.rateApp
 import app.olauncher.helper.setPlainWallpaper
+import app.olauncher.helper.setPlainWallpaperColor
 import app.olauncher.helper.shareApp
 import app.olauncher.helper.NotificationCounts
 import app.olauncher.helper.OlDialog
 import app.olauncher.helper.showPopupMenu
 import app.olauncher.helper.showStatusBar
 import app.olauncher.helper.showToast
+import app.olauncher.helper.withAlpha
 import app.olauncher.listener.DeviceAdmin
 
 class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListener {
@@ -84,6 +91,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         populateScreenTimeOnOff()
         populateNotificationBadges()
         populateBadgeOptions()
+        populateColorTheme()
         populateGestures()
         populateLockSettings()
         // Home button for recents feature disabled
@@ -122,6 +130,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.statusBar -> toggleStatusBar()
             R.id.dateTime -> showDateTimeMenu(view)
             R.id.appThemeText -> showAppThemeMenu(view, showSystem = false)
+            R.id.colorTheme -> showColorThemeDialog()
             R.id.textSizeValue -> showTextSizeDialog()
             R.id.boldFont -> toggleBoldFont()
             R.id.notificationBadges -> toggleNotificationBadges()
@@ -195,6 +204,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         super.onResume()
         populateNotificationBadges()
         populateBadgeOptions()
+        populateColorTheme()
         populateGestures()
         populateLockSettings()
         populateScreenTimeOnOff()
@@ -214,6 +224,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.screenTimeOnOff.setOnClickListener(this)
         binding.notificationBadges.setOnClickListener(this)
         binding.notificationBadges.setOnLongClickListener(this)
+        binding.colorTheme.setOnClickListener(this)
         binding.badgeStyle.setOnClickListener(this)
         binding.badgeTapDetails.setOnClickListener(this)
         binding.gestureSwipeUp.setOnClickListener(this)
@@ -516,6 +527,102 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             }
             populateBadgeOptions()
         }
+    }
+
+    /**
+     * A grid of live swatches rather than a list of colour names, because nobody can picture
+     * "Plum" and every one of these is a decision about how the phone will look all day.
+     * Each swatch paints its own background and shows the theme's text colour on it, so the
+     * pairing being chosen is the pairing on screen.
+     */
+    private fun showColorThemeDialog() {
+        dialog?.dismiss()
+        dialog = requireContext().createDialog(
+            title = R.string.color_theme,
+            action = R.string.close,
+            content = { container -> buildThemeGrid(container) }
+        ).also { it.showRespectingStatusBar() }
+    }
+
+    private fun buildThemeGrid(container: ViewGroup): View {
+        val context = container.context
+        val columns = 3
+        // Three 88dp cells plus margins overflowed the dialog and clipped the right column on a
+        // 1080p phone. Sized to fit the narrowest dialog the app shows rather than the widest.
+        val cell = 72.dpToPx()
+        val gap = 6.dpToPx()
+
+        val grid = GridLayout(context).apply {
+            columnCount = columns
+            setPadding(gap, gap, gap, gap)
+        }
+
+        ColorTheme.ALL.forEach { theme ->
+            val isSystem = theme.id == ColorTheme.SYSTEM_ID
+            val selected = prefs.colorThemeId == theme.id
+
+            val swatch = TextView(context).apply {
+                text = getString(theme.nameRes)
+                gravity = Gravity.CENTER
+                setTextColor(
+                    if (isSystem) requireContext().getColorFromAttr(R.attr.primaryColor)
+                    else theme.text
+                )
+                textSize = 13f
+                contentDescription = getString(
+                    if (selected) R.string.theme_selected else R.string.theme_not_selected,
+                    getString(theme.nameRes)
+                )
+                background = GradientDrawable().apply {
+                    cornerRadius = 10.dpToPx().toFloat()
+                    setColor(
+                        if (isSystem) requireContext().getColorFromAttr(R.attr.primaryShadeColor)
+                        else theme.background
+                    )
+                    // Every swatch is outlined, not just the selected one: a black tile on a
+                    // near-black dialog is otherwise invisible, which is exactly what happened
+                    // to Ink and System. The outline is in the swatch's own text colour, so it
+                    // stays legible on a near-black and a near-white tile alike; the selected
+                    // one is simply thicker and fully opaque.
+                    val outline =
+                        if (isSystem) requireContext().getColorFromAttr(R.attr.primaryColor)
+                        else theme.text
+                    if (selected) setStroke(3.dpToPx(), outline)
+                    else setStroke(1.dpToPx(), outline.withAlpha(0x55))
+                }
+                isFocusable = true
+                setOnClickListener { applyColorTheme(theme) }
+            }
+
+            grid.addView(swatch, GridLayout.LayoutParams().apply {
+                width = cell
+                height = cell
+                setMargins(gap / 2, gap / 2, gap / 2, gap / 2)
+            })
+        }
+
+        return grid
+    }
+
+    private fun applyColorTheme(theme: ColorTheme) {
+        prefs.colorThemeId = theme.id
+        if (ColorTheme.isCustom(theme.id)) {
+            // A flat colour theme and a rotating wallpaper cannot both win.
+            if (prefs.dailyWallpaper) {
+                prefs.dailyWallpaper = false
+                viewModel.cancelWallpaperWorker()
+            }
+            setPlainWallpaperColor(requireContext(), theme.background)
+        }
+        populateColorTheme()
+        dialog?.dismiss()
+        // Colours are read at inflate time in several places, so restart to repaint everything
+        // consistently rather than leaving half the launcher on the old scheme.
+        requireActivity().recreate()
+    }
+
+    private fun populateColorTheme() {
+        binding.colorTheme.text = getString(ColorTheme.byId(prefs.colorThemeId).nameRes)
     }
 
     private fun populateBadgeOptions() {

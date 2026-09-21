@@ -16,10 +16,13 @@ import android.os.UserHandle
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import app.olauncher.BuildConfig
@@ -186,6 +189,29 @@ fun Context.appUsagePermissionGranted(): Boolean {
         packageName
     ) == AppOpsManager.MODE_ALLOWED
 }
+
+/**
+ * Paints every TextView under this view in [color], including hint text.
+ *
+ * The launcher's colours normally come from theme attributes, which cannot be swapped at runtime
+ * without recreating the Activity. A colour theme is a user-visible choice that should apply the
+ * instant it is picked, so the home screen and app drawer tint their own text instead. It is a
+ * walk over a few dozen views on a screen that is not scrolling, which costs nothing measurable.
+ */
+fun View.tintTextTree(@ColorInt color: Int, @ColorInt hintColor: Int) {
+    when (this) {
+        is TextView -> {
+            setTextColor(color)
+            setHintTextColor(hintColor)
+        }
+
+        is ViewGroup -> for (i in 0 until childCount) getChildAt(i).tintTextTree(color, hintColor)
+    }
+}
+
+/** Half-transparent version of a colour, for hints and secondary text. */
+@ColorInt
+fun Int.withAlpha(alpha: Int): Int = (this and 0x00FFFFFF) or (alpha shl 24)
 
 fun Context.notificationListenerComponent(): ComponentName =
     ComponentName(this, NotificationService::class.java)

@@ -299,6 +299,25 @@ fun setPlainWallpaperByTheme(context: Context, appTheme: Int) {
     }
 }
 
+/**
+ * Paints the system wallpaper a flat colour for a home screen colour theme.
+ *
+ * Deliberately only FLAG_SYSTEM, unlike [setPlainWallpaper]: picking a launcher theme should not
+ * silently repaint the lock screen too. The bitmap is small and stretched by the framework, which
+ * is all a flat colour needs and avoids allocating a screen-sized bitmap on a 4GB phone.
+ */
+fun setPlainWallpaperColor(context: Context, argb: Int) {
+    try {
+        val bitmap = createBitmap(2, 4)
+        bitmap.eraseColor(argb)
+        WallpaperManager.getInstance(context)
+            .setBitmap(bitmap, null, false, WallpaperManager.FLAG_SYSTEM)
+        bitmap.recycle()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
 fun setPlainWallpaper(context: Context, color: Int) {
     try {
         val bitmap = createBitmap(1000, 2000)

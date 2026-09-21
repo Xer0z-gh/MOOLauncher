@@ -19,6 +19,8 @@ import app.olauncher.data.Constants
 import app.olauncher.databinding.AdapterAppDrawerBinding
 import app.olauncher.databinding.AdapterPrivateSpaceHeaderBinding
 import app.olauncher.helper.hideKeyboard
+import app.olauncher.helper.tintTextTree
+import app.olauncher.helper.withAlpha
 import app.olauncher.helper.isSystemApp
 import app.olauncher.helper.showKeyboard
 import java.text.Normalizer
@@ -56,6 +58,13 @@ class AppDrawerAdapter(
                 oldItem == newItem
         }
     }
+
+    /**
+     * Text colour for the active home screen colour theme, or 0 to leave the theme's own colours
+     * alone. Rows are recycled, so this has to be applied on every bind rather than once over the
+     * tree the way the home screen does it.
+     */
+    var themeTextColor: Int = 0
 
     private var autoLaunch = true
     private var isBangSearch = false
@@ -108,17 +117,21 @@ class AppDrawerAdapter(
                     )
                 }
 
-                is ViewHolder -> holder.bind(
-                    flag,
-                    appLabelGravity,
-                    myUserHandle,
-                    appModel,
-                    appClickListener,
-                    appDeleteListener,
-                    appInfoListener,
-                    appHideListener,
-                    appRenameListener
-                )
+                is ViewHolder -> {
+                    holder.bind(
+                        flag,
+                        appLabelGravity,
+                        myUserHandle,
+                        appModel,
+                        appClickListener,
+                        appDeleteListener,
+                        appInfoListener,
+                        appHideListener,
+                        appRenameListener
+                    )
+                    if (themeTextColor != 0)
+                        holder.itemView.tintTextTree(themeTextColor, themeTextColor.withAlpha(0x80))
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()

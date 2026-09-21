@@ -40,6 +40,7 @@ class Prefs(context: Context) {
     private val PRO_MESSAGE_SHOWN = "PRO_MESSAGE_SHOWN"
     private val SHOW_NOTIFICATION_BADGES = "SHOW_NOTIFICATION_BADGES"
     private val BADGE_STYLE = "BADGE_STYLE"
+    private val COLOR_THEME_ID = "COLOR_THEME_ID"
     private val BADGE_TAP_DETAILS = "BADGE_TAP_DETAILS"
     private val HIDE_SET_DEFAULT_LAUNCHER = "HIDE_SET_DEFAULT_LAUNCHER"
     private val SCREEN_TIME_LAST_UPDATED = "SCREEN_TIME_LAST_UPDATED"
@@ -215,6 +216,11 @@ class Prefs(context: Context) {
     var showNotificationBadges: Boolean
         get() = prefs.getBoolean(SHOW_NOTIFICATION_BADGES, false)
         set(value) = prefs.edit { putBoolean(SHOW_NOTIFICATION_BADGES, value) }
+
+    /** ColorTheme.id. SYSTEM means follow light/dark and leave the wallpaper alone. */
+    var colorThemeId: Int
+        get() = prefs.getInt(COLOR_THEME_ID, ColorTheme.SYSTEM_ID)
+        set(value) = prefs.edit { putInt(COLOR_THEME_ID, value) }
 
     /** Constants.BadgeStyle - a number, or a plain dot for people who only want the signal. */
     var badgeStyle: Int
