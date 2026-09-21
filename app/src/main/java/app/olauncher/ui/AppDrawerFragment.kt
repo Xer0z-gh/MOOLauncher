@@ -99,7 +99,7 @@ class AppDrawerFragment : BaseFragment() {
         else if (flag == Constants.FLAG_BADGE_FILTER)
             binding.search.queryHint = getString(R.string.badge_filter_hint)
         else if (flag in Constants.FLAG_SET_HOME_APP_1..Constants.FLAG_SET_CALENDAR_APP)
-            binding.search.queryHint = "Please select an app"
+            binding.search.queryHint = getString(R.string.please_select_an_app)
         try {
             searchTextView = binding.search.findViewById(R.id.search_src_text)
             searchTextView?.gravity = prefs.appLabelAlignment

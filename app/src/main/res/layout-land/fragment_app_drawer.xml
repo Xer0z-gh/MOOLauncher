@@ -33,7 +33,7 @@
             app:closeIcon="@null"
             app:iconifiedByDefault="false"
             app:queryBackground="@null"
-            app:queryHint="___"
+            app:queryHint="@string/search_apps"
             app:searchIcon="@null"
             app:theme="@style/AppSearchText" />
 

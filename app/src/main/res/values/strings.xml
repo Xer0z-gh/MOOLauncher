@@ -135,7 +135,14 @@
     <string name="unable_to_open_notification_settings">Unable to open notification access settings</string>
     <string name="badge_count_overflow">99+</string>
     <string name="no_notification_details">Nothing to show for this app yet</string>
-    <string name="missed_notifications">%1$s · %2$d missed</string>
+    <plurals name="missed_notifications">
+        <item quantity="one">%1$s · %2$d missed notification</item>
+        <item quantity="other">%1$s · %2$d missed notifications</item>
+    </plurals>
+    <string name="empty_home_slot">Empty slot, double tap to choose an app</string>
+    <string name="search_apps">Search apps</string>
+    <string name="please_select_an_app">Please select an app</string>
+    <string name="app_info">App info</string>
     <string name="badge_dot">•</string>
     <string name="apps_section">Apps</string>
     <string name="font">Font</string>

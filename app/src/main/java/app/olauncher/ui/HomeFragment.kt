@@ -379,6 +379,13 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.homeApp6.setOnClickListener(this)
         binding.homeApp7.setOnClickListener(this)
         binding.homeApp8.setOnClickListener(this)
+        // Badges need the same treatment as the names above: the touch listener is consumed
+        // by ViewSwipeTouchListener and never sets isClickable, so without these the badge
+        // exposes no ACTION_CLICK and the peek is reachable by finger only.
+        homeAppBadgeViews().forEachIndexed { index, badge ->
+            badge.setOnClickListener { showBadgeDetails(index + 1) }
+            badge.setOnLongClickListener { onLongClick(homeAppNameViews()[index]) }
+        }
         binding.homeApp1.setOnLongClickListener(this)
         binding.homeApp2.setOnLongClickListener(this)
         binding.homeApp3.setOnLongClickListener(this)
@@ -688,9 +695,11 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         // Regular app check
         if (isPackageInstalled(requireContext(), packageName, userString)) {
             textView.text = appName
+            textView.contentDescription = null
             return true
         }
         textView.text = ""
+        textView.contentDescription = getString(R.string.empty_home_slot)
         return false
     }
 
@@ -710,10 +719,18 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     private fun positionBadge(name: TextView, badge: TextView) {
         if (!badge.isVisible) return
         val gap = BADGE_GAP_DP.dpToPx()
-        badge.translationX = if (badge.layoutDirection == View.LAYOUT_DIRECTION_RTL)
-            (name.left - badge.width - gap).toFloat()
-        else
-            (name.right + gap).toFloat()
+        val row = badge.parent as? View
+        val rtl = badge.layoutDirection == View.LAYOUT_DIRECTION_RTL
+        val trailing = if (rtl) (name.left - badge.width - gap) else (name.right + gap)
+        // A right-aligned home screen ends the name flush with the row, so the trailing
+        // position lands outside it and the row clips the badge away completely - the count
+        // disappears for everyone, with no error. Fall back to the leading side when it
+        // does not fit, which is the only place left that is still inside the row.
+        val fits = row == null ||
+            (trailing >= 0 && trailing + badge.width <= row.width)
+        badge.translationX = if (fits) trailing.toFloat()
+        else if (rtl) (name.right + gap).toFloat()
+        else (name.left - badge.width - gap).toFloat()
     }
 
     private fun homeAppRows(): List<FrameLayout> = listOf(
@@ -759,7 +776,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
             if (count <= 0) {
                 if (badge.isVisible) badge.isVisible = false
-                name.contentDescription = null
+                // Leave the empty-slot description alone; only clear a count we wrote.
+                if (name.text.isNotEmpty()) name.contentDescription = null
                 return@forEachIndexed
             }
 
@@ -770,9 +788,13 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             }
             // Guard the write: setting identical text still costs a measure pass on a TextView.
             if (badge.text?.toString() != label) badge.text = label
-            val spoken = getString(R.string.missed_notifications, prefs.getAppName(location), count)
+            val spoken = resources.getQuantityString(
+                R.plurals.missed_notifications, count, prefs.getAppName(location), count
+            )
             badge.contentDescription = spoken
-            name.contentDescription = prefs.getAppName(location)
+            // The name is the node that launches the app, so the count belongs on it too -
+            // otherwise it is only heard by swiping onto a second node.
+            name.contentDescription = spoken
             if (!badge.isVisible) badge.isVisible = true
             positionBadge(name, badge)
         }
@@ -1048,7 +1070,9 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             val count = NotificationCounts.countFor(key)
             if (count <= 0) continue
             val lines = NotificationCounts.linesFor(key).asReversed()
-            val header = getString(R.string.missed_notifications, prefs.getAppName(location), count)
+            val header = resources.getQuantityString(
+                R.plurals.missed_notifications, count, prefs.getAppName(location), count
+            )
             sections += if (lines.isEmpty()) header else header + "\n" + lines.joinToString("\n")
         }
 

@@ -82,7 +82,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun attachBaseContext(context: Context) {
         val newConfig = Configuration(context.resources.configuration)
-        newConfig.fontScale = Prefs(context).textSizeScale
+        // Multiply, never assign. Assigning threw away the phone's own font size, so a
+        // launcher - the first screen after unlock - rendered at 1.0 however large the
+        // user had set their display. The slider here is a multiplier on top of it.
+        newConfig.fontScale = context.resources.configuration.fontScale * Prefs(context).textSizeScale
         applyOverrideConfiguration(newConfig)
         super.attachBaseContext(context)
     }
