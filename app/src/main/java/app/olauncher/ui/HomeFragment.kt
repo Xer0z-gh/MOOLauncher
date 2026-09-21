@@ -42,6 +42,7 @@ import app.olauncher.helper.dpToPx
 import app.olauncher.helper.expandNotificationDrawer
 import app.olauncher.helper.getChangedAppTheme
 import app.olauncher.helper.getUserHandleFromString
+import app.olauncher.helper.hasBeenMinutes
 import app.olauncher.helper.isPackageInstalled
 import app.olauncher.helper.notificationAccessGranted
 import app.olauncher.helper.notificationListenerComponent
@@ -52,6 +53,7 @@ import app.olauncher.helper.openDialerApp
 import app.olauncher.helper.setPlainWallpaperByTheme
 import app.olauncher.helper.showToast
 import app.olauncher.helper.tintTextTree
+import app.olauncher.helper.Weather
 import app.olauncher.helper.withAlpha
 import app.olauncher.listener.OnSwipeTouchListener
 import app.olauncher.listener.ViewSwipeTouchListener
@@ -74,6 +76,9 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
         /** Space between the date/time block and the screen time line under it. */
         const val SCREEN_TIME_GAP_DP = 4
+
+        /** Weather is refreshed at most this often; a launcher has no business polling. */
+        const val WEATHER_REFRESH_MINUTES = 60
     }
 
     private lateinit var prefs: Prefs
@@ -97,7 +102,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      */
     private fun renderScreenTimeLine() {
         val unlocks = latestUnlockCount
-        binding.tvScreenTime.text = when {
+        val base = when {
             !prefs.showUnlockCount || unlocks <= 0 -> latestScreenTime
             latestScreenTime.isEmpty() ->
                 resources.getQuantityString(R.plurals.unlocks_only, unlocks, unlocks)
@@ -105,6 +110,35 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             else -> resources.getQuantityString(
                 R.plurals.screen_time_and_unlocks, unlocks, unlocks, latestScreenTime
             )
+        }
+
+        val weather = if (prefs.showWeather) prefs.weatherCached else ""
+        binding.tvScreenTime.text = when {
+            weather.isEmpty() -> base
+            base.isEmpty() -> weather
+            else -> getString(R.string.line_with_weather, base, weather)
+        }
+        binding.tvScreenTime.isVisible = binding.tvScreenTime.text.isNotEmpty()
+    }
+
+    /**
+     * Refreshes the temperature at most hourly, on a background thread, and only when the user
+     * has switched it on and granted a location. The cached reading is what the home screen
+     * draws, so the line is never waiting on the network.
+     */
+    private fun refreshWeather() {
+        if (!prefs.showWeather) return
+        val context = requireContext().applicationContext
+        if (!Weather.hasLocationPermission(context)) return
+        if (!prefs.weatherUpdatedAt.hasBeenMinutes(WEATHER_REFRESH_MINUTES)) return
+
+        // Claimed before going async, so two quick resumes cannot both fire a request.
+        prefs.weatherUpdatedAt = System.currentTimeMillis()
+        val fahrenheit = prefs.weatherFahrenheit
+        viewLifecycleOwner.lifecycleScope.launch {
+            val reading = withContext(Dispatchers.IO) { Weather.fetch(context) } ?: return@launch
+            prefs.weatherCached = Weather.format(reading, fahrenheit)
+            renderScreenTimeLine()
         }
     }
 
@@ -158,6 +192,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     override fun onResume() {
         super.onResume()
         syncNotificationListener()
+        refreshWeather()
         populateHomeScreen(false)
         viewModel.isOlauncherDefault()
         if (prefs.showStatusBar) showStatusBar()
@@ -408,7 +443,9 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.tvScreenTime.visibility = View.VISIBLE
 
         val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val horizontalMargin = if (isLandscape) 64.dpToPx() else 10.dpToPx()
+        // The date block sits at 24dp + 3dp of its own padding; this view carries 10dp of padding,
+        // so 17dp of margin puts the two texts on exactly the same edge instead of near it.
+        val horizontalMargin = if (isLandscape) 64.dpToPx() else 17.dpToPx()
         val marginTop = if (isLandscape) {
             if (prefs.dateTimeVisibility == Constants.DateTime.DATE_ONLY) 36.dpToPx() else 56.dpToPx()
         } else {
@@ -421,7 +458,11 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             topMargin = marginTop
             marginStart = horizontalMargin
             marginEnd = horizontalMargin
-            gravity = if (prefs.homeAlignment == Gravity.END) Gravity.START else Gravity.END
+            // Follows the home alignment rather than opposing it. It used to flip to the other
+            // side, which reads as a mistake the moment the apps are centred: the line sat hard
+            // right under a centred column. Screen time, unlocks and weather are about the phone,
+            // same as the clock and date above them, so they line up with everything else.
+            gravity = prefs.homeAlignment or Gravity.TOP
         }
         binding.tvScreenTime.layoutParams = params
         binding.tvScreenTime.setPadding(10.dpToPx())

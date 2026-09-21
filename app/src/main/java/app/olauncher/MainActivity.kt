@@ -78,6 +78,7 @@ class MainActivity : AppCompatActivity() {
         Constants.Font.CONDENSED -> R.style.FontCondensed
         Constants.Font.SERIF -> R.style.FontSerif
         Constants.Font.MONOSPACE -> R.style.FontMonospace
+        Constants.Font.INTER -> R.style.FontInter
         else -> R.style.FontLight
     }
 

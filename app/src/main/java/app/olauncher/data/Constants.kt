@@ -114,6 +114,7 @@ object Constants {
         const val CONDENSED = 3
         const val SERIF = 4
         const val MONOSPACE = 5
+        const val INTER = 6
     }
 
     /** How app icons are rendered, when they are shown at all. */

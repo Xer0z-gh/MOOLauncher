@@ -52,6 +52,10 @@ class Prefs(context: Context) {
     private val SHOW_UNLOCK_COUNT = "SHOW_UNLOCK_COUNT"
     private val HOME_SPACING_EXTRA = "HOME_SPACING_EXTRA"
     private val FONT_INDEX = "FONT_INDEX"
+    private val SHOW_WEATHER = "SHOW_WEATHER"
+    private val WEATHER_FAHRENHEIT = "WEATHER_FAHRENHEIT"
+    private val WEATHER_CACHED = "WEATHER_CACHED"
+    private val WEATHER_UPDATED_AT = "WEATHER_UPDATED_AT"
     private val BADGE_TAP_DETAILS = "BADGE_TAP_DETAILS"
     private val HIDE_SET_DEFAULT_LAUNCHER = "HIDE_SET_DEFAULT_LAUNCHER"
     private val SCREEN_TIME_LAST_UPDATED = "SCREEN_TIME_LAST_UPDATED"
@@ -275,6 +279,25 @@ class Prefs(context: Context) {
     var homeAnimations: Boolean
         get() = prefs.getBoolean(HOME_ANIMATIONS, false)
         set(value) = prefs.edit { putBoolean(HOME_ANIMATIONS, value) }
+
+    /** Shows the current temperature on the home screen. Needs a location permission. */
+    var showWeather: Boolean
+        get() = prefs.getBoolean(SHOW_WEATHER, false)
+        set(value) = prefs.edit { putBoolean(SHOW_WEATHER, value) }
+
+    /** Fahrenheit rather than Celsius. */
+    var weatherFahrenheit: Boolean
+        get() = prefs.getBoolean(WEATHER_FAHRENHEIT, false)
+        set(value) = prefs.edit { putBoolean(WEATHER_FAHRENHEIT, value) }
+
+    /** Last reading and when it was taken, so the home screen has something to show instantly. */
+    var weatherCached: String
+        get() = prefs.getString(WEATHER_CACHED, "").toString()
+        set(value) = prefs.edit { putString(WEATHER_CACHED, value) }
+
+    var weatherUpdatedAt: Long
+        get() = prefs.getLong(WEATHER_UPDATED_AT, 0L)
+        set(value) = prefs.edit { putLong(WEATHER_UPDATED_AT, value) }
 
     /** Shows today's unlock count beside screen time. Needs the same usage-access permission. */
     var showUnlockCount: Boolean

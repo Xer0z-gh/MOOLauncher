@@ -84,6 +84,17 @@
         <item name="mainFontFamily">monospace</item>
     </style>
 
+    <!--
+        The one bundled face. Before Launcher uses Fakt Pro, which is a commercial typeface it
+        has licensed; copying it out of their APK would be redistributing someone else's licensed
+        software, so this is Inter instead - a screen-first neo-grotesque under the SIL Open Font
+        License, which is the closest thing that can be shipped honestly. Licence in
+        INTER-FONT-LICENSE.txt at the repo root.
+    -->
+    <style name="FontInter">
+        <item name="mainFontFamily">@font/inter</item>
+    </style>
+
     <style name="WindowAnimationTransition">
         <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>

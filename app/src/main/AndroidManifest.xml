@@ -8,8 +8,13 @@
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="PackageVisibilityPolicy,QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
-    <!--Used only for downloading wallpapers-->
+    <!--Used only for downloading wallpapers and the optional weather reading-->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--
+        Optional, for the weather widget only. Coarse is enough: the temperature is looked up for
+        the nearest town, and the launcher reads the last known fix rather than waking the GPS.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!--Used only for opening alarm app-->
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission

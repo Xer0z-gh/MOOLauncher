@@ -158,6 +158,13 @@
     <string name="font_condensed">Condensed</string>
     <string name="font_serif">Serif</string>
     <string name="font_monospace">Monospace</string>
+    <string name="font_inter">Inter</string>
+    <string name="weather">Weather</string>
+    <string name="temperature_unit">Temperature unit</string>
+    <string name="unit_celsius">Celsius</string>
+    <string name="unit_fahrenheit">Fahrenheit</string>
+    <string name="line_with_weather">%1$s · %2$s</string>
+    <string name="weather_needs_location">Weather needs location access</string>
     <string name="date_format">Date format</string>
     <string name="date_format_short">Sun, 21 Sep</string>
     <string name="date_format_long">Sunday, 21 September</string>

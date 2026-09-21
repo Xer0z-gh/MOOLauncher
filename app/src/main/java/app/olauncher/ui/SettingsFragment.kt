@@ -62,6 +62,9 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import android.Manifest
+import androidx.activity.result.contract.ActivityResultContracts
+import app.olauncher.helper.Weather
 import app.olauncher.listener.DeviceAdmin
 
 class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListener {
@@ -178,6 +181,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             }
 
             R.id.homeSpacing -> cycleHomeSpacing()
+            R.id.weatherRow -> toggleWeather()
+            R.id.temperatureUnit -> toggleTemperatureUnit()
             R.id.unlockCount -> {
                 prefs.showUnlockCount = !prefs.showUnlockCount
                 populateHomeLayoutOptions()
@@ -289,6 +294,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.homeAnimations.setOnClickListener(this)
         binding.homeSpacing.setOnClickListener(this)
         binding.unlockCount.setOnClickListener(this)
+        binding.weatherRow.setOnClickListener(this)
+        binding.temperatureUnit.setOnClickListener(this)
         binding.badgeTapDetails.setOnClickListener(this)
         binding.gestureSwipeUp.setOnClickListener(this)
         binding.gestureSwipeDown.setOnClickListener(this)
@@ -905,9 +912,54 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.unlockCount.text =
             getString(if (prefs.showUnlockCount) R.string.on else R.string.off)
         binding.hiddenAppsRow.text = prefs.hiddenApps.size.toString()
+        binding.weatherRow.text = getString(if (prefs.showWeather) R.string.on else R.string.off)
+        binding.temperatureUnit.text = getString(
+            if (prefs.weatherFahrenheit) R.string.unit_fahrenheit else R.string.unit_celsius
+        )
         binding.homeSpacing.text =
             if (prefs.homeSpacingExtra == 0) getString(R.string._0)
             else getString(R.string.home_spacing_value, prefs.homeSpacingExtra)
+    }
+
+    /**
+     * Weather needs a location, so turning it on asks for one rather than switching on a feature
+     * that would silently show nothing. Coarse only: the temperature is for the nearest town.
+     */
+    private val locationPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        prefs.showWeather = granted
+        if (!granted) requireContext().showToast(getString(R.string.weather_needs_location))
+        populateHomeLayoutOptions()
+        viewModel.refreshHome(false)
+    }
+
+    private fun toggleWeather() {
+        if (prefs.showWeather) {
+            prefs.showWeather = false
+            prefs.weatherCached = ""
+            populateHomeLayoutOptions()
+            viewModel.refreshHome(false)
+            return
+        }
+        if (Weather.hasLocationPermission(requireContext())) {
+            prefs.showWeather = true
+            // Force the next resume to fetch rather than wait out the hourly gate.
+            prefs.weatherUpdatedAt = 0L
+            populateHomeLayoutOptions()
+            viewModel.refreshHome(false)
+        } else {
+            locationPermission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+        }
+    }
+
+    private fun toggleTemperatureUnit() {
+        prefs.weatherFahrenheit = !prefs.weatherFahrenheit
+        // The cached reading is already formatted in the old unit, so it has to be re-fetched.
+        prefs.weatherCached = ""
+        prefs.weatherUpdatedAt = 0L
+        populateHomeLayoutOptions()
+        viewModel.refreshHome(false)
     }
 
     private fun showBadgeFilter() {
@@ -1131,6 +1183,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
                 R.id.fontCondensed -> Constants.Font.CONDENSED
                 R.id.fontSerif -> Constants.Font.SERIF
                 R.id.fontMonospace -> Constants.Font.MONOSPACE
+                R.id.fontInter -> Constants.Font.INTER
                 else -> Constants.Font.LIGHT
             }
             populateFont()
@@ -1147,6 +1200,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
                 Constants.Font.CONDENSED -> R.string.font_condensed
                 Constants.Font.SERIF -> R.string.font_serif
                 Constants.Font.MONOSPACE -> R.string.font_monospace
+                Constants.Font.INTER -> R.string.font_inter
                 else -> R.string.font_light
             }
         )
