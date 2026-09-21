@@ -84,6 +84,27 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      */
     private var basePaddingPx = 0
 
+    private var latestScreenTime: String = ""
+    private var latestUnlockCount: Int = -1
+
+    /**
+     * Screen time and unlock count share one line, because they are the same thought and the home
+     * screen has room for one number in that corner, not two. The unlock count is dropped when it
+     * is off, unavailable on this Android version, or genuinely zero.
+     */
+    private fun renderScreenTimeLine() {
+        val unlocks = latestUnlockCount
+        binding.tvScreenTime.text = when {
+            !prefs.showUnlockCount || unlocks <= 0 -> latestScreenTime
+            latestScreenTime.isEmpty() ->
+                resources.getQuantityString(R.plurals.unlocks_only, unlocks, unlocks)
+
+            else -> resources.getQuantityString(
+                R.plurals.screen_time_and_unlocks, unlocks, unlocks, latestScreenTime
+            )
+        }
+    }
+
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -250,7 +271,14 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             populateDateTime()
         }
         viewModel.screenTimeValue.observe(viewLifecycleOwner) {
-            it?.let { binding.tvScreenTime.text = it }
+            it?.let {
+                latestScreenTime = it
+                renderScreenTimeLine()
+            }
+        }
+        viewModel.unlockCountValue.observe(viewLifecycleOwner) {
+            latestUnlockCount = it ?: -1
+            renderScreenTimeLine()
         }
         // Push channel: notifications land while the home screen is already in front, so onResume
         // alone would leave the badges stale until the user left and came back.

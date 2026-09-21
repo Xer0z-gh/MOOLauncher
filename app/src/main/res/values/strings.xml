@@ -165,6 +165,15 @@
     <string name="date_format_with_year">21 Sep 2026</string>
     <string name="date_format_weekday">Sunday</string>
     <string name="date_format_numeric">21/9/2026</string>
+    <string name="unlock_count">Unlock count</string>
+    <plurals name="unlocks_only">
+        <item quantity="one">%1$d unlock</item>
+        <item quantity="other">%1$d unlocks</item>
+    </plurals>
+    <plurals name="screen_time_and_unlocks">
+        <item quantity="one">%2$s · %1$d unlock</item>
+        <item quantity="other">%2$s · %1$d unlocks</item>
+    </plurals>
     <string name="home_animations">Animations</string>
     <string name="home_spacing">Row spacing</string>
     <string name="home_spacing_value">+%1$d</string>

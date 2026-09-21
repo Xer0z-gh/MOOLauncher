@@ -49,6 +49,7 @@ class Prefs(context: Context) {
     private val BADGE_MUTED_APPS = "BADGE_MUTED_APPS"
     private val DATE_FORMAT_INDEX = "DATE_FORMAT_INDEX"
     private val HOME_ANIMATIONS = "HOME_ANIMATIONS"
+    private val SHOW_UNLOCK_COUNT = "SHOW_UNLOCK_COUNT"
     private val HOME_SPACING_EXTRA = "HOME_SPACING_EXTRA"
     private val BADGE_TAP_DETAILS = "BADGE_TAP_DETAILS"
     private val HIDE_SET_DEFAULT_LAUNCHER = "HIDE_SET_DEFAULT_LAUNCHER"
@@ -259,6 +260,11 @@ class Prefs(context: Context) {
     var homeAnimations: Boolean
         get() = prefs.getBoolean(HOME_ANIMATIONS, false)
         set(value) = prefs.edit { putBoolean(HOME_ANIMATIONS, value) }
+
+    /** Shows today's unlock count beside screen time. Needs the same usage-access permission. */
+    var showUnlockCount: Boolean
+        get() = prefs.getBoolean(SHOW_UNLOCK_COUNT, false)
+        set(value) = prefs.edit { putBoolean(SHOW_UNLOCK_COUNT, value) }
 
     /** Extra vertical padding per home row, in dp on top of the density default. 0 means default. */
     var homeSpacingExtra: Int

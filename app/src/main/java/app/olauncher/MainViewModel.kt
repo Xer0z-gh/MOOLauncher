@@ -1,6 +1,8 @@
 package app.olauncher
 
 import android.app.Application
+import android.app.usage.UsageEvents
+import android.app.usage.UsageStatsManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -53,6 +55,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val launcherResetFailed = MutableLiveData<Boolean>()
     val homeAppAlignment = MutableLiveData<Int>()
     val screenTimeValue = MutableLiveData<String>()
+
+    /** Today's unlock count, or -1 when it cannot be counted on this Android version. */
+    val unlockCountValue = MutableLiveData<Int>()
 
     val privateSpaceApps = MutableLiveData<List<AppModel>?>()
     val privateSpaceLocked = MutableLiveData<Boolean>()
@@ -499,7 +504,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 )
             )
             screenTimeValue.postValue(appContext.formattedTimeSpent(timeSpent))
+            // Counted in the same background pass rather than with a second query: the events
+            // are already being fetched, and this is one more cheap scan over today's window.
+            unlockCountValue.postValue(countUnlocksSince(startTime, endTime))
         }
+    }
+
+    /**
+     * How many times the phone was unlocked today. KEYGUARD_HIDDEN is the event that actually
+     * means "the user got in", as opposed to SCREEN_INTERACTIVE which also fires for a glance at
+     * the lock screen. It needs API 28; below that there is no honest way to count this, so the
+     * widget simply reports nothing rather than a number that means something else.
+     */
+    private fun countUnlocksSince(start: Long, end: Long): Int {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return -1
+        return runCatching {
+            val manager = appContext.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+            val events = manager.queryEvents(start, end)
+            val event = UsageEvents.Event()
+            var count = 0
+            while (events.hasNextEvent()) {
+                events.getNextEvent(event)
+                if (event.eventType == UsageEvents.Event.KEYGUARD_HIDDEN) count++
+            }
+            count
+        }.getOrDefault(-1)
     }
 
     fun getPrivateSpaceAppList() {

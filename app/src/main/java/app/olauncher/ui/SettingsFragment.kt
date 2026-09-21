@@ -181,6 +181,11 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             }
 
             R.id.homeSpacing -> cycleHomeSpacing()
+            R.id.unlockCount -> {
+                prefs.showUnlockCount = !prefs.showUnlockCount
+                populateHomeLayoutOptions()
+                viewModel.refreshHome(false)
+            }
             R.id.appThemeText -> showAppThemeMenu(view, showSystem = false)
             R.id.colorTheme -> showColorThemeDialog()
             R.id.appIcons -> showIconPlacesMenu(view)
@@ -290,6 +295,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.dateFormat.setOnClickListener(this)
         binding.homeAnimations.setOnClickListener(this)
         binding.homeSpacing.setOnClickListener(this)
+        binding.unlockCount.setOnClickListener(this)
         binding.badgeTapDetails.setOnClickListener(this)
         binding.gestureSwipeUp.setOnClickListener(this)
         binding.gestureSwipeDown.setOnClickListener(this)
@@ -904,6 +910,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         )
         binding.homeAnimations.text =
             getString(if (prefs.homeAnimations) R.string.on else R.string.off)
+        binding.unlockCount.text =
+            getString(if (prefs.showUnlockCount) R.string.on else R.string.off)
         binding.homeSpacing.text =
             if (prefs.homeSpacingExtra == 0) getString(R.string._0)
             else getString(R.string.home_spacing_value, prefs.homeSpacingExtra)
