@@ -6,7 +6,109 @@ import android.view.Gravity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 
+/** Focus tick lengths offered in Customize Home, in ms. */
+val FOCUS_TICK_CHOICES = listOf(30, 45, 60)
+
 class Prefs(context: Context) {
+    var homeScrollHaptics: Boolean
+        get() = prefs.getBoolean("HOME_SCROLL_HAPTICS", true)
+        set(value) = prefs.edit { putBoolean("HOME_SCROLL_HAPTICS", value) }
+    // 0 restores the original full-bleed Apps browser; 1 keeps the Settings-style card.
+    var appsBrowserLayout: Int
+        get() = prefs.getInt("APPS_BROWSER_LAYOUT", 0).coerceIn(0, 1)
+        set(value) = prefs.edit { putInt("APPS_BROWSER_LAYOUT", value.coerceIn(0, 1)) }
+    var drawerSort: Int
+        get() = prefs.getInt("DRAWER_SORT", if (drawerCategories) 0 else 1).coerceIn(0, 3)
+        set(value) = prefs.edit { putInt("DRAWER_SORT", value.coerceIn(0, 3)) }
+
+    var weatherSize: Int
+        get() = prefs.getInt("WEATHER_WIDGET_SIZE", 1).coerceIn(0, 2)
+        set(value) = prefs.edit { putInt("WEATHER_WIDGET_SIZE", value.coerceIn(0, 2)) }
+
+    var panelMode: Int
+        get() = prefs.getInt("NOTIFICATION_PANEL_MODE", 2).let { if (it == 1) 1 else 2 }
+        set(value) = prefs.edit { putInt("NOTIFICATION_PANEL_MODE", value.coerceIn(0, 2)) }
+
+    var panelFiltersBottom: Boolean
+        get() = prefs.getBoolean("PANEL_FILTERS_BOTTOM", false)
+        set(value) = prefs.edit { putBoolean("PANEL_FILTERS_BOTTOM", value) }
+
+    var panelAllFirst: Boolean
+        get() = prefs.getBoolean("PANEL_ALL_FIRST", false)
+        set(value) = prefs.edit { putBoolean("PANEL_ALL_FIRST", value) }
+
+    var panelShowIcons: Boolean
+        get() = prefs.getBoolean("PANEL_SHOW_ICONS", showDrawerIcons)
+        set(value) = prefs.edit { putBoolean("PANEL_SHOW_ICONS", value) }
+
+    var panelShowPreview: Boolean
+        get() = prefs.getBoolean("PANEL_SHOW_PREVIEW", true)
+        set(value) = prefs.edit { putBoolean("PANEL_SHOW_PREVIEW", value) }
+
+    var panelMediaArtwork: Boolean
+        get() = prefs.getBoolean("PANEL_MEDIA_ARTWORK", true)
+        set(value) = prefs.edit { putBoolean("PANEL_MEDIA_ARTWORK", value) }
+
+    var panelShowTime: Boolean
+        get() = prefs.getBoolean("PANEL_SHOW_TIME", true)
+        set(value) = prefs.edit { putBoolean("PANEL_SHOW_TIME", value) }
+
+    var panelCompact: Boolean
+        get() = prefs.getBoolean("PANEL_COMPACT", true)
+        set(value) = prefs.edit { putBoolean("PANEL_COMPACT", value) }
+
+    var panelSwipeDismiss: Boolean
+        get() = prefs.getBoolean("PANEL_SWIPE_DISMISS", true)
+        set(value) = prefs.edit { putBoolean("PANEL_SWIPE_DISMISS", value) }
+
+    var drawerCategories: Boolean
+        get() = prefs.getBoolean("DRAWER_CATEGORIES", true)
+        set(value) = prefs.edit { putBoolean("DRAWER_CATEGORIES", value) }
+
+    var drawerTextSize: Int
+        get() = prefs.getInt("DRAWER_TEXT_SIZE", 24).coerceIn(18, 32)
+        set(value) = prefs.edit { putInt("DRAWER_TEXT_SIZE", value.coerceIn(18, 32)) }
+
+    var searchTextSize: Int
+        get() = prefs.getInt("SEARCH_TEXT_SIZE", 24).coerceIn(18, 32)
+        set(value) = prefs.edit { putInt("SEARCH_TEXT_SIZE", value.coerceIn(18, 32)) }
+
+    var drawerRowSize: Int
+        get() = prefs.getInt("DRAWER_ROW_SIZE", 0).coerceIn(0, 2)
+        set(value) = prefs.edit { putInt("DRAWER_ROW_SIZE", value.coerceIn(0, 2)) }
+
+    var searchShowIcons: Boolean
+        get() = prefs.getBoolean("SEARCH_SHOW_ICONS", showDrawerIcons)
+        set(value) = prefs.edit { putBoolean("SEARCH_SHOW_ICONS", value) }
+
+    var visualizerPermissionRequested: Boolean
+        get() = prefs.getBoolean("VISUALIZER_PERMISSION_REQUESTED", false)
+        set(value) = prefs.edit { putBoolean("VISUALIZER_PERMISSION_REQUESTED", value) }
+
+    var visualizerEnabled: Boolean
+        get() = prefs.getBoolean("VISUALIZER_ENABLED", false)
+        set(value) = prefs.edit { putBoolean("VISUALIZER_ENABLED", value) }
+
+    var visualizerHome: Boolean
+        get() = prefs.getBoolean("VISUALIZER_HOME", false)
+        set(value) = prefs.edit { putBoolean("VISUALIZER_HOME", value) }
+
+    var visualizerPanel: Boolean
+        get() = prefs.getBoolean("VISUALIZER_PANEL", true)
+        set(value) = prefs.edit { putBoolean("VISUALIZER_PANEL", value) }
+
+    var visualizerStyle: Int
+        get() = prefs.getInt("VISUALIZER_STYLE", 0).coerceIn(0, 2)
+        set(value) = prefs.edit { putInt("VISUALIZER_STYLE", value.coerceIn(0, 2)) }
+
+    var visualizerColor: Int
+        get() = prefs.getInt("VISUALIZER_COLOR", 0).coerceIn(0, 2)
+        set(value) = prefs.edit { putInt("VISUALIZER_COLOR", value.coerceIn(0, 2)) }
+
+    var visualizerHeight: Int
+        get() = prefs.getInt("VISUALIZER_HEIGHT", 1).coerceIn(0, 2)
+        set(value) = prefs.edit { putInt("VISUALIZER_HEIGHT", value.coerceIn(0, 2)) }
+
     private val PREFS_FILENAME = "app.olauncher"
 
     private val FIRST_OPEN = "FIRST_OPEN"
@@ -22,6 +124,7 @@ class Prefs(context: Context) {
     private val KEYBOARD_MESSAGE = "KEYBOARD_MESSAGE"
     private val DAILY_WALLPAPER = "DAILY_WALLPAPER"
     private val DAILY_WALLPAPER_URL = "DAILY_WALLPAPER_URL"
+    private val DAILY_WALLPAPER_KEY = "DAILY_WALLPAPER_KEY"
     private val HOME_ALIGNMENT = "HOME_ALIGNMENT"
     private val HOME_BOTTOM_ALIGNMENT = "HOME_BOTTOM_ALIGNMENT"
     private val APP_LABEL_ALIGNMENT = "APP_LABEL_ALIGNMENT"
@@ -58,7 +161,6 @@ class Prefs(context: Context) {
     private val BADGE_TAP_DETAILS = "BADGE_TAP_DETAILS"
     private val HIDE_SET_DEFAULT_LAUNCHER = "HIDE_SET_DEFAULT_LAUNCHER"
     private val SCREEN_TIME_LAST_UPDATED = "SCREEN_TIME_LAST_UPDATED"
-    private val LAUNCHER_RESTART_TIMESTAMP = "LAUNCHER_RECREATE_TIMESTAMP"
     private val SHOWN_ON_DAY_OF_YEAR = "SHOWN_ON_DAY_OF_YEAR"
     // Home button for recents feature disabled
     // private val HOME_BUTTON_SHOW_RECENTS = "HOME_BUTTON_SHOW_RECENTS"
@@ -186,9 +288,23 @@ class Prefs(context: Context) {
         get() = prefs.getString(DAILY_WALLPAPER_URL, "").toString()
         set(value) = prefs.edit { putString(DAILY_WALLPAPER_URL, value) }
 
+    /** "<index key>|<light or dark>" of the day whose wallpaper is applied; empty when none. */
+    var dailyWallpaperKey: String
+        get() = prefs.getString(DAILY_WALLPAPER_KEY, "").toString()
+        set(value) = prefs.edit { putString(DAILY_WALLPAPER_KEY, value) }
+
     var homeAppsNum: Int
-        get() = prefs.getInt(HOME_APPS_NUM, 4)
-        set(value) = prefs.edit { putInt(HOME_APPS_NUM, value) }
+        get() = prefs.getInt(HOME_APPS_NUM, 4).coerceIn(0, 512)
+        set(value) = prefs.edit { putInt(HOME_APPS_NUM, value.coerceIn(0, 512)) }
+
+    /** Existing Home arrangements stay manual; an empty Home starts alphabetically. */
+    var autoSortHomeApps: Boolean
+        get() = if (prefs.contains("HOME_AUTO_SORT")) prefs.getBoolean("HOME_AUTO_SORT", false)
+            else HomeAppOrdering.defaultAutomatic(homeAppEntries())
+        set(value) {
+            if (value) replaceHomeApps(HomeAppOrdering.display(homeAppEntries(), true), automatic = true)
+            else prefs.edit(commit = true) { putBoolean("HOME_AUTO_SORT", false) }
+        }
 
     var homeAlignment: Int
         get() = prefs.getInt(HOME_ALIGNMENT, Gravity.START)
@@ -225,10 +341,6 @@ class Prefs(context: Context) {
     var textSizeScale: Float
         get() = prefs.getFloat(TEXT_SIZE_SCALE, 1.0f)
         set(value) = prefs.edit { putFloat(TEXT_SIZE_SCALE, value) }
-
-    var boldFont: Boolean
-        get() = prefs.getBoolean(BOLD_FONT, false)
-        set(value) = prefs.edit { putBoolean(BOLD_FONT, value) }
 
     // Off by default: reading notifications requires an explicit opt-in plus a system grant.
     var showNotificationBadges: Boolean
@@ -294,24 +406,147 @@ class Prefs(context: Context) {
         get() = prefs.getBoolean(HOME_ANIMATIONS, false)
         set(value) = prefs.edit { putBoolean(HOME_ANIMATIONS, value) }
 
+    /** Preserve a deliberately disabled legacy animation setting during migration. */
+    var motionPreset: Int
+        get() = prefs.getInt("MOTION_PRESET",
+            if (prefs.contains(HOME_ANIMATIONS) && !homeAnimations) 0 else 1).coerceIn(0, 3)
+        set(value) = prefs.edit { putInt("MOTION_PRESET", value.coerceIn(0, 3)) }
+
+    /** 0 static, 1 focus, 2 focus with soft outer edges. */
+    var homeScrollStyle: Int
+        get() = prefs.getInt("HOME_SCROLL_STYLE", if (android.os.Build.VERSION.SDK_INT >= 31) 2 else 1).coerceIn(0, 2)
+        set(value) = prefs.edit { putInt("HOME_SCROLL_STYLE", value.coerceIn(0, 2)) }
+
+    var ultraBatterySaver: Boolean
+        get() = prefs.getBoolean("ULTRA_BATTERY_SAVER", false)
+        set(value) = prefs.edit { putBoolean("ULTRA_BATTERY_SAVER", value) }
+
+    /** Ultra saver switches on by itself while Android Power Saver is on. Default true. */
+    var saverFollowsSystem: Boolean
+        get() = prefs.getBoolean("SAVER_FOLLOWS_SYSTEM", true)
+        set(value) = prefs.edit { putBoolean("SAVER_FOLLOWS_SYSTEM", value) }
+
+    /** Tapping a Home information widget opens its app (battery usage, clock, calendar) instead of the editor. */
+    var widgetTapOpens: Boolean
+        get() = prefs.getBoolean("WIDGET_TAP_OPENS", false)
+        set(value) = prefs.edit { putBoolean("WIDGET_TAP_OPENS", value) }
+
+    /** Length of the focus tick where the motor has no native tick effect: 30, 45 (default) or 60 ms. */
+    var focusTickMs: Int
+        get() = prefs.getInt("FOCUS_TICK_MS", 45).takeIf { it in FOCUS_TICK_CHOICES } ?: 45
+        set(value) = prefs.edit { putInt("FOCUS_TICK_MS", value) }
+
+    val informationWidgetCount: Int
+        get() = listOf(infoShowBattery, showWeather, infoShowScreenTime, showUnlockCount, infoShowAlarm).count { it }
+
+    var informationSize: Int
+        get() = prefs.getInt("INFORMATION_SIZE", 1).coerceIn(0, 2)
+        set(value) = prefs.edit { putInt("INFORMATION_SIZE", value.coerceIn(0, 2)) }
+
+    var infoShowAlarm: Boolean
+        get() = prefs.getBoolean("INFO_SHOW_ALARM", false)
+        set(value) = prefs.edit { putBoolean("INFO_SHOW_ALARM", value) }
+
+    var infoShowDate: Boolean
+        get() = prefs.getBoolean("INFO_SHOW_DATE", Constants.DateTime.isDateVisible(dateTimeVisibility))
+        set(value) = prefs.edit { putBoolean("INFO_SHOW_DATE", value) }
+
+    var infoShowBattery: Boolean
+        get() = prefs.getBoolean("INFO_SHOW_BATTERY", !showStatusBar)
+        set(value) = prefs.edit { putBoolean("INFO_SHOW_BATTERY", value) }
+
+    var infoShowScreenTime: Boolean
+        get() = prefs.getBoolean("INFO_SHOW_SCREEN_TIME", true)
+        set(value) = prefs.edit { putBoolean("INFO_SHOW_SCREEN_TIME", value) }
+
+    fun appCategoryOverride(packageName: String, user: String): Int? {
+        val key = "APP_CATEGORY_$packageName|$user"
+        return if (prefs.contains(key)) prefs.getInt(key, -1) else null
+    }
+
+    fun setAppCategory(packageName: String, user: String, category: Int?) = prefs.edit {
+        val key = "APP_CATEGORY_$packageName|$user"
+        if (category == null) remove(key) else putInt(key, category)
+    }
+
     /** Shows the current temperature on the home screen. Needs a location permission. */
     var showWeather: Boolean
         get() = prefs.getBoolean(SHOW_WEATHER, false)
         set(value) = prefs.edit { putBoolean(SHOW_WEATHER, value) }
 
+    /** Stop weather and remove every cached reading/forecast field as one durable change. */
+    fun disableWeatherAndClearCache() = synchronized(prefs) {
+        prefs.edit(commit = true) {
+            putBoolean(SHOW_WEATHER, false)
+            remove(WEATHER_CACHED)
+            remove("WEATHER_FORECAST_DAY")
+            remove("WEATHER_TIMEZONE")
+            remove("WEATHER_CODE")
+            remove("WEATHER_IS_DAY")
+            remove("WEATHER_DESCRIPTION")
+            remove(WEATHER_UPDATED_AT)
+        }
+    }
+
+    /** A delayed forecast must not put private location-derived data back after Weather is off. */
+    fun storeWeatherIfEnabled(cached: String, day: String, zone: String, code: Int,
+                              isDay: Boolean, description: String, updatedAt: Long): Boolean = synchronized(prefs) {
+        if (!prefs.getBoolean(SHOW_WEATHER, false)) return@synchronized false
+        prefs.edit {
+            putString(WEATHER_CACHED, cached)
+            putString("WEATHER_FORECAST_DAY", day)
+            putString("WEATHER_TIMEZONE", zone)
+            putInt("WEATHER_CODE", code)
+            putBoolean("WEATHER_IS_DAY", isDay)
+            putString("WEATHER_DESCRIPTION", description)
+            putLong(WEATHER_UPDATED_AT, updatedAt)
+        }
+        true
+    }
+
     /** Fahrenheit rather than Celsius. */
     var weatherFahrenheit: Boolean
         get() = prefs.getBoolean(WEATHER_FAHRENHEIT, false)
-        set(value) = prefs.edit { putBoolean(WEATHER_FAHRENHEIT, value) }
+        set(value) {
+            if (value == weatherFahrenheit) return
+            prefs.edit {
+                putBoolean(WEATHER_FAHRENHEIT, value)
+                putString(WEATHER_CACHED, "")
+                putString("WEATHER_DESCRIPTION", "")
+                putLong(WEATHER_UPDATED_AT, 0L)
+            }
+        }
 
     /** Last reading and when it was taken, so the home screen has something to show instantly. */
     var weatherCached: String
         get() = prefs.getString(WEATHER_CACHED, "").toString()
         set(value) = prefs.edit { putString(WEATHER_CACHED, value) }
 
+    var weatherForecastDay: String
+        get() = prefs.getString("WEATHER_FORECAST_DAY", "").orEmpty()
+        set(value) = prefs.edit { putString("WEATHER_FORECAST_DAY", value) }
+    var weatherTimezone: String
+        get() = prefs.getString("WEATHER_TIMEZONE", "").orEmpty()
+        set(value) = prefs.edit { putString("WEATHER_TIMEZONE", value) }
+
+    var weatherCode: Int
+        get() = prefs.getInt("WEATHER_CODE", -1)
+        set(value) = prefs.edit { putInt("WEATHER_CODE", value) }
+    var weatherIsDay: Boolean
+        get() = prefs.getBoolean("WEATHER_IS_DAY", true)
+        set(value) = prefs.edit { putBoolean("WEATHER_IS_DAY", value) }
+    var weatherDescription: String
+        get() = prefs.getString("WEATHER_DESCRIPTION", "").orEmpty()
+        set(value) = prefs.edit { putString("WEATHER_DESCRIPTION", value) }
+
     var weatherUpdatedAt: Long
         get() = prefs.getLong(WEATHER_UPDATED_AT, 0L)
         set(value) = prefs.edit { putLong(WEATHER_UPDATED_AT, value) }
+
+    /** The forecast is fetched only while Home is visible. Slower updates reduce network work. */
+    var weatherRefreshMinutes: Int
+        get() = prefs.getInt("WEATHER_REFRESH_MINUTES", 60).takeIf { it == 60 || it == 180 || it == 360 } ?: 60
+        set(value) = prefs.edit { putInt("WEATHER_REFRESH_MINUTES", value.takeIf { it == 60 || it == 180 || it == 360 } ?: 60) }
 
     /** Shows today's unlock count beside screen time. Needs the same usage-access permission. */
     var showUnlockCount: Boolean
@@ -355,10 +590,6 @@ class Prefs(context: Context) {
     var screenTimeLastUpdated: Long
         get() = prefs.getLong(SCREEN_TIME_LAST_UPDATED, 0L)
         set(value) = prefs.edit { putLong(SCREEN_TIME_LAST_UPDATED, value) }
-
-    var launcherRestartTimestamp: Long
-        get() = prefs.getLong(LAUNCHER_RESTART_TIMESTAMP, 0L)
-        set(value) = prefs.edit { putLong(LAUNCHER_RESTART_TIMESTAMP, value) }
 
     var shownOnDayOfYear: Int
         get() = prefs.getInt(SHOWN_ON_DAY_OF_YEAR, 0)
@@ -673,105 +904,24 @@ class Prefs(context: Context) {
         get() = prefs.getBoolean(IS_SHORTCUT_SWIPE_RIGHT, false)
         set(value) = prefs.edit { putBoolean(IS_SHORTCUT_SWIPE_RIGHT, value) }
 
-    fun getAppName(location: Int): String {
-        return when (location) {
-            1 -> prefs.getString(APP_NAME_1, "").toString()
-            2 -> prefs.getString(APP_NAME_2, "").toString()
-            3 -> prefs.getString(APP_NAME_3, "").toString()
-            4 -> prefs.getString(APP_NAME_4, "").toString()
-            5 -> prefs.getString(APP_NAME_5, "").toString()
-            6 -> prefs.getString(APP_NAME_6, "").toString()
-            7 -> prefs.getString(APP_NAME_7, "").toString()
-            8 -> prefs.getString(APP_NAME_8, "").toString()
-            else -> ""
-        }
-    }
+    fun getAppName(location: Int): String = prefs.getString("APP_NAME_$location", "").orEmpty()
 
-    fun getAppPackage(location: Int): String {
-        return when (location) {
-            1 -> prefs.getString(APP_PACKAGE_1, "").toString()
-            2 -> prefs.getString(APP_PACKAGE_2, "").toString()
-            3 -> prefs.getString(APP_PACKAGE_3, "").toString()
-            4 -> prefs.getString(APP_PACKAGE_4, "").toString()
-            5 -> prefs.getString(APP_PACKAGE_5, "").toString()
-            6 -> prefs.getString(APP_PACKAGE_6, "").toString()
-            7 -> prefs.getString(APP_PACKAGE_7, "").toString()
-            8 -> prefs.getString(APP_PACKAGE_8, "").toString()
-            else -> ""
-        }
-    }
+    fun getAppPackage(location: Int): String = prefs.getString("APP_PACKAGE_$location", "").orEmpty()
 
-    fun getAppActivityClassName(location: Int): String {
-        return when (location) {
-            1 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_1, "").toString()
-            2 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_2, "").toString()
-            3 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_3, "").toString()
-            4 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_4, "").toString()
-            5 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_5, "").toString()
-            6 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_6, "").toString()
-            7 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_7, "").toString()
-            8 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_8, "").toString()
-            else -> ""
-        }
-    }
+    fun getAppActivityClassName(location: Int): String = prefs.getString("APP_ACTIVITY_CLASS_NAME_$location", "").orEmpty()
 
-    fun getAppUser(location: Int): String {
-        return when (location) {
-            1 -> prefs.getString(APP_USER_1, "").toString()
-            2 -> prefs.getString(APP_USER_2, "").toString()
-            3 -> prefs.getString(APP_USER_3, "").toString()
-            4 -> prefs.getString(APP_USER_4, "").toString()
-            5 -> prefs.getString(APP_USER_5, "").toString()
-            6 -> prefs.getString(APP_USER_6, "").toString()
-            7 -> prefs.getString(APP_USER_7, "").toString()
-            8 -> prefs.getString(APP_USER_8, "").toString()
-            else -> ""
-        }
-    }
+    fun getAppUser(location: Int): String = prefs.getString("APP_USER_$location", "").orEmpty()
 
-    fun getShortcutId(location: Int): String {
-        return when (location) {
-            1 -> shortcutId1
-            2 -> shortcutId2
-            3 -> shortcutId3
-            4 -> shortcutId4
-            5 -> shortcutId5
-            6 -> shortcutId6
-            7 -> shortcutId7
-            8 -> shortcutId8
-            else -> ""
-        }
-    }
+    fun getShortcutId(location: Int): String = prefs.getString("SHORTCUT_ID_$location", "").orEmpty()
 
-    fun getIsShortcut(location: Int): Boolean {
-        return when (location) {
-            1 -> isShortcut1
-            2 -> isShortcut2
-            3 -> isShortcut3
-            4 -> isShortcut4
-            5 -> isShortcut5
-            6 -> isShortcut6
-            7 -> isShortcut7
-            8 -> isShortcut8
-            else -> false
-        }
-    }
+    fun getIsShortcut(location: Int): Boolean = prefs.getBoolean("IS_SHORTCUT_$location", false)
 
     fun setAppActivityClassName(location: Int, activityClassName: String) {
-        when (location) {
-            1 -> appActivityClassName1 = activityClassName
-            2 -> appActivityClassName2 = activityClassName
-            3 -> appActivityClassName3 = activityClassName
-            4 -> appActivityClassName4 = activityClassName
-            5 -> appActivityClassName5 = activityClassName
-            6 -> appActivityClassName6 = activityClassName
-            7 -> appActivityClassName7 = activityClassName
-            8 -> appActivityClassName8 = activityClassName
-        }
+        prefs.edit { putString("APP_ACTIVITY_CLASS_NAME_$location", activityClassName) }
     }
 
     fun updateAppActivityClassName(packageName: String, activityClassName: String) {
-        for (i in 1..8) {
+        for (i in 1..homeAppsNum) {
             if (getAppPackage(i) == packageName) setAppActivityClassName(i, activityClassName)
         }
         if (clockAppPackage == packageName) clockAppClassName = activityClassName
@@ -786,6 +936,90 @@ class Prefs(context: Context) {
         )) {
             if (getGestureAppPackage(gesture) == packageName)
                 prefs.edit { putString(gestureKey(gesture, "APP_CLASS"), activityClassName) }
+        }
+    }
+
+    fun homeAppEntries(): List<HomeAppEntry> = (1..homeAppsNum).filter { getAppPackage(it).isNotBlank() }.map {
+        HomeAppEntry(getAppName(it).ifBlank { getAppPackage(it) }, getAppPackage(it), getAppUser(it),
+            getAppActivityClassName(it), getIsShortcut(it), getShortcutId(it))
+    }
+
+    /** One preference transaction keeps batch edits and all six identity fields together. */
+    fun replaceHomeApps(entries: List<HomeAppEntry>, automatic: Boolean? = null) {
+        require(entries.size <= 512 && entries.all { it.name.isNotBlank() && it.pkg.isNotBlank() })
+        val oldCount = homeAppsNum
+        // A Home arrangement is an explicit user edit. Keep its order and mode in one durable write.
+        prefs.edit(commit = true) {
+            automatic?.let { putBoolean("HOME_AUTO_SORT", it) }
+            entries.forEachIndexed { index, app ->
+                val slot = index + 1
+                putString("APP_NAME_$slot", app.name)
+                putString("APP_PACKAGE_$slot", app.pkg)
+                putString("APP_USER_$slot", app.user)
+                putString("APP_ACTIVITY_CLASS_NAME_$slot", app.activity)
+                putBoolean("IS_SHORTCUT_$slot", app.shortcut)
+                putString("SHORTCUT_ID_$slot", app.shortcutId)
+            }
+            for (slot in (entries.size + 1)..oldCount)
+                for (key in listOf("APP_NAME", "APP_PACKAGE", "APP_USER", "APP_ACTIVITY_CLASS_NAME", "IS_SHORTCUT", "SHORTCUT_ID")) remove("${key}_$slot")
+            putInt(HOME_APPS_NUM, entries.size)
+        }
+    }
+
+    var appIconSize: Int
+        get() = prefs.getInt("APP_ICON_SIZE", 32).coerceIn(20, 48)
+        set(value) = prefs.edit { putInt("APP_ICON_SIZE", value.coerceIn(20, 48)) }
+
+    fun saveHomeApp(app: AppModel, slot: Int) {
+        require(slot in 1..512)
+        if (app !is AppModel.App && app !is AppModel.PinnedShortcut) return
+        // Choosing a numbered slot is an explicit arrangement, including replacement.
+        prefs.edit(commit = true) {
+            putBoolean("HOME_AUTO_SORT", false)
+            putString("APP_NAME_$slot", app.appLabel)
+            putString("APP_PACKAGE_$slot", app.appPackage)
+            putString("APP_USER_$slot", app.user.toString())
+            putString("APP_ACTIVITY_CLASS_NAME_$slot", (app as? AppModel.App)?.activityClassName.orEmpty())
+            putBoolean("IS_SHORTCUT_$slot", app is AppModel.PinnedShortcut)
+            putString("SHORTCUT_ID_$slot", (app as? AppModel.PinnedShortcut)?.shortcutId.orEmpty())
+            if (slot > homeAppsNum) putInt(HOME_APPS_NUM, slot)
+        }
+    }
+
+    /** The Home add action has no chosen position; respect any earlier manual arrangement. */
+    fun addHomeApp(app: AppModel) {
+        val entry = when (app) {
+            is AppModel.App -> HomeAppEntry(app.appLabel, app.appPackage, app.user.toString(),
+                app.activityClassName.orEmpty())
+            is AppModel.PinnedShortcut -> HomeAppEntry(app.appLabel, app.appPackage,
+                app.user.toString(), shortcut = true, shortcutId = app.shortcutId)
+            else -> return
+        }
+        if (homeAppEntries().size >= 512) return
+        if (autoSortHomeApps) {
+            replaceHomeApps(HomeAppOrdering.display(homeAppEntries() + entry, true), automatic = true)
+        } else {
+            val slot = (1..homeAppsNum).firstOrNull { getAppPackage(it).isBlank() }
+                ?: (homeAppsNum + 1)
+            if (slot <= 512) saveHomeApp(app, slot)
+        }
+    }
+
+    fun removeHomeApp(slot: Int) {
+        if (slot !in 1..homeAppsNum) return
+        val count = homeAppsNum
+        prefs.edit {
+            for (i in slot until count) {
+                putString("APP_NAME_$i", getAppName(i + 1))
+                putString("APP_PACKAGE_$i", getAppPackage(i + 1))
+                putString("APP_USER_$i", getAppUser(i + 1))
+                putString("APP_ACTIVITY_CLASS_NAME_$i", getAppActivityClassName(i + 1))
+                putBoolean("IS_SHORTCUT_$i", getIsShortcut(i + 1))
+                putString("SHORTCUT_ID_$i", getShortcutId(i + 1))
+            }
+            for (key in listOf("APP_NAME", "APP_PACKAGE", "APP_USER", "APP_ACTIVITY_CLASS_NAME", "IS_SHORTCUT", "SHORTCUT_ID"))
+                remove("${key}_$count")
+            putInt(HOME_APPS_NUM, count - 1)
         }
     }
 

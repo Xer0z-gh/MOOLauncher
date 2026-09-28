@@ -16,10 +16,11 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Point
-import android.net.Uri
+import androidx.core.net.toUri
 import android.os.Build
 import android.os.UserHandle
 import android.os.UserManager
+import android.os.SystemClock
 import android.provider.AlarmClock
 import android.provider.CalendarContract
 import android.provider.MediaStore
@@ -34,24 +35,25 @@ import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.graphics.createBitmap
-import androidx.core.net.toUri
 import app.olauncher.BuildConfig
 import app.olauncher.R
+import app.olauncher.data.AppCategoryResolver
 import app.olauncher.data.AppModel
 import app.olauncher.data.Constants
+import app.olauncher.data.HiddenAppKeys
 import app.olauncher.data.Prefs
 import app.olauncher.data.shortcutIdentity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.InputStream
+import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.Collator
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.Scanner
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -64,6 +66,8 @@ fun Context.showToast(stringResource: Int, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, getString(stringResource), duration).show()
 }
 
+// Lint cannot see that the finally around the whole body closes the section on every path.
+@android.annotation.SuppressLint("UnclosedTrace")
 suspend fun getAppsList(
     context: Context,
     prefs: Prefs,
@@ -72,10 +76,14 @@ suspend fun getAppsList(
 ): MutableList<AppModel> {
     return withContext(Dispatchers.IO) {
         val appList: MutableList<AppModel> = mutableListOf()
-
+        // A named slice, so a Perfetto trace can count full scans (the body never suspends, so
+        // begin and end stay on one thread). Costs nothing when nobody is tracing.
+        android.os.Trace.beginSection("Moo getAppsList")
         try {
-            if (!Prefs(context).hiddenAppsUpdated) upgradeHiddenApps(Prefs(context))
-            val hiddenApps = Prefs(context).hiddenApps
+            val hiddenApps = HiddenAppKeys.normalized(
+                prefs.hiddenApps, android.os.Process.myUserHandle().toString())
+            if (hiddenApps != prefs.hiddenApps) prefs.hiddenApps = hiddenApps.toMutableSet()
+            if (!prefs.hiddenAppsUpdated) prefs.hiddenAppsUpdated = true
 
             val userManager = context.getSystemService(Context.USER_SERVICE) as UserManager
             val launcherApps =
@@ -89,17 +97,24 @@ suspend fun getAppsList(
                         .ifBlank { app.label.toString() }
                     val appModel = AppModel.App(
                         appLabel = appLabelShown,
-                        key = collator.getCollationKey(app.label.toString()),
+                        // No CollationKey: every sort uses a Collator on appLabel, and nothing
+                        // reads the key, so each scan built and retained ~200 ICU keys for nothing.
+                        key = null,
                         appPackage = app.applicationInfo.packageName,
                         activityClassName = app.componentName.className,
+                        installedAt = app.firstInstallTime,
                         isNew = (System.currentTimeMillis() - app.firstInstallTime) < Constants.ONE_HOUR_IN_MILLIS,
-                        user = profile
+                        user = profile,
+                        category = prefs.appCategoryOverride(app.applicationInfo.packageName, profile.toString())
+                            ?: AppCategoryResolver.resolve(app.applicationInfo.packageName,
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) app.applicationInfo.category else -1),
                     )
 
                     // if the current app is not OLauncher
                     if (app.applicationInfo.packageName != BuildConfig.APPLICATION_ID) {
                         // is this a hidden app?
-                        if (hiddenApps.contains(app.applicationInfo.packageName + "|" + profile.toString())) {
+                        if (HiddenAppKeys.contains(hiddenApps,
+                                app.applicationInfo.packageName, profile.toString())) {
                             if (includeHiddenApps) {
                                 appList.add(appModel)
                             }
@@ -113,10 +128,10 @@ suspend fun getAppsList(
                 }
             }
 
-            // Add shortcuts if we're getting regular apps
-            if (includeRegularApps && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // A hidden app's pinned shortcuts obey the same profile-specific visibility rule.
+            if ((includeRegularApps || includeHiddenApps) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val pinned = try {
-                    getPinnedShortcuts(context, prefs, collator)
+                    getPinnedShortcuts(context, prefs, hiddenApps, includeRegularApps, includeHiddenApps)
                 } catch (e: Exception) {
                     emptyList()
                 }
@@ -126,6 +141,8 @@ suspend fun getAppsList(
             appList.sortWith(compareBy(collator) { it.appLabel })
         } catch (e: Exception) {
             e.printStackTrace()
+        } finally {
+            android.os.Trace.endSection()
         }
         appList
     }
@@ -135,7 +152,9 @@ suspend fun getAppsList(
 private suspend fun getPinnedShortcuts(
     context: Context,
     prefs: Prefs,
-    collator: Collator,
+    hiddenApps: Set<String>,
+    includeRegularApps: Boolean,
+    includeHiddenApps: Boolean,
 ): List<AppModel.PinnedShortcut> =
     withContext(Dispatchers.IO) {
         val pinnedShortcuts = mutableListOf<AppModel.PinnedShortcut>()
@@ -153,7 +172,10 @@ private suspend fun getPinnedShortcuts(
                             shortcut.id,
                             profile.toString()
                         )
-                        if (shortcut.isPinned && pinnedShortcuts.none { it.identity == identity }) {
+                        val hidden = HiddenAppKeys.contains(hiddenApps,
+                            shortcut.`package`, profile.toString())
+                        if (shortcut.isPinned && ((hidden && includeHiddenApps) || (!hidden && includeRegularApps)) &&
+                            pinnedShortcuts.none { it.identity == identity }) {
                             val label = prefs.getAppRenameLabel(identity)
                                 .ifBlank { prefs.getAppRenameLabel(shortcut.id) }
                                 .takeIf { it.isNotBlank() }
@@ -162,7 +184,7 @@ private suspend fun getPinnedShortcuts(
                             pinnedShortcuts.add(
                                 AppModel.PinnedShortcut(
                                     appLabel = label,
-                                    key = collator.getCollationKey(label),
+                                    key = null, // Unread; see getAppsList.
                                     appPackage = shortcut.`package`,
                                     shortcutId = shortcut.id,
                                     isNew = false,
@@ -178,19 +200,6 @@ private suspend fun getPinnedShortcuts(
         }
         pinnedShortcuts
     }
-
-// This is to ensure backward compatibility with older app versions
-// which did not support multiple user profiles
-private fun upgradeHiddenApps(prefs: Prefs) {
-    val hiddenAppsSet = prefs.hiddenApps
-    val newHiddenAppsSet = mutableSetOf<String>()
-    for (hiddenPackage in hiddenAppsSet) {
-        if (hiddenPackage.contains("|")) newHiddenAppsSet.add(hiddenPackage)
-        else newHiddenAppsSet.add(hiddenPackage + android.os.Process.myUserHandle().toString())
-    }
-    prefs.hiddenApps = newHiddenAppsSet
-    prefs.hiddenAppsUpdated = true
-}
 
 fun isPackageInstalled(context: Context, packageName: String, userString: String): Boolean {
     val launcher = context.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
@@ -245,11 +254,14 @@ suspend fun getPrivateSpaceApps(
                 appList.add(
                     AppModel.App(
                         appLabel = appLabelShown,
-                        key = collator.getCollationKey(app.label.toString()),
+                        key = null, // Unread; see getAppsList.
                         appPackage = app.applicationInfo.packageName,
                         activityClassName = app.componentName.className,
                         isNew = false,
-                        user = privateSpaceHandle
+                        user = privateSpaceHandle,
+                        category = prefs.appCategoryOverride(app.applicationInfo.packageName, privateSpaceHandle.toString())
+                            ?: AppCategoryResolver.resolve(app.applicationInfo.packageName,
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) app.applicationInfo.category else -1),
                     )
                 )
             }
@@ -304,11 +316,8 @@ fun setPlainWallpaper(context: Context, color: Int) {
         val bitmap = createBitmap(1000, 2000)
         bitmap.eraseColor(context.getColor(color))
         val manager = WallpaperManager.getInstance(context)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            manager.setBitmap(bitmap, null, false, WallpaperManager.FLAG_SYSTEM)
-            manager.setBitmap(bitmap, null, false, WallpaperManager.FLAG_LOCK)
-        } else
-            manager.setBitmap(bitmap)
+        manager.setBitmap(bitmap, null, false, WallpaperManager.FLAG_SYSTEM)
+        manager.setBitmap(bitmap, null, false, WallpaperManager.FLAG_LOCK)
         bitmap.recycle()
     } catch (e: Exception) {
         e.printStackTrace()
@@ -336,21 +345,53 @@ fun openAppInfo(context: Context, userHandle: UserHandle, packageName: String) {
         context.showToast(context.getString(R.string.unable_to_open_app_info))
 }
 
-suspend fun getBitmapFromURL(src: String?): Bitmap? {
-    return withContext(Dispatchers.IO) {
-        var bitmap: Bitmap? = null
-        try {
-            val url = URL(src)
-            val connection: HttpURLConnection = url
-                .openConnection() as HttpURLConnection
-            connection.doInput = true
-            connection.connect()
-            val input: InputStream = connection.inputStream
-            bitmap = BitmapFactory.decodeStream(input)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        bitmap
+private fun InputStream.readBoundedBytes(limit: Int, deadlineMs: Long): ByteArray {
+    val output = ByteArrayOutputStream()
+    val buffer = ByteArray(8192)
+    while (true) {
+        if (SystemClock.elapsedRealtime() > deadlineMs) throw java.net.SocketTimeoutException("Remote image deadline exceeded")
+        val count = read(buffer)
+        if (SystemClock.elapsedRealtime() > deadlineMs) throw java.net.SocketTimeoutException("Remote image deadline exceeded")
+        if (count < 0) break
+        if (output.size() + count > limit) throw java.io.IOException("Remote image is too large")
+        output.write(buffer, 0, count)
+    }
+    return output.toByteArray()
+}
+
+private fun openBoundedConnection(src: String): HttpURLConnection {
+    val url = URL(src)
+    require(url.protocol == "https")
+    return (url.openConnection() as HttpURLConnection).apply {
+        connectTimeout = 5000
+        readTimeout = 8000
+        doInput = true
+    }
+}
+
+suspend fun getBitmapFromURL(src: String?): Bitmap? = withContext(Dispatchers.IO) {
+    if (src.isNullOrBlank()) return@withContext null
+    var connection: HttpURLConnection? = null
+    try {
+        val deadline = SystemClock.elapsedRealtime() + 15000
+        connection = openBoundedConnection(src)
+        val bytes = connection.inputStream.use { it.readBoundedBytes(8 * 1024 * 1024, deadline) }
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
+        val width = options.outWidth
+        val height = options.outHeight
+        if (width <= 0 || height <= 0 || width > 10000 || height > 10000) return@withContext null
+        var sample = 1
+        while (width.toLong() * height / sample / sample > 6_000_000 ||
+            width / sample > 4096 || height / sample > 4096) sample *= 2
+        options.inJustDecodeBounds = false
+        options.inSampleSize = sample
+        BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
+    } catch (e: Exception) {
+        Log.w("MooWallpaper", "Wallpaper download or decode failed (${e.javaClass.simpleName})")
+        null
+    } finally {
+        connection?.disconnect()
     }
 }
 
@@ -386,31 +427,30 @@ suspend fun getWallpaperBitmap(originalImage: Bitmap, width: Int, height: Int): 
 
 suspend fun setWallpaper(appContext: Context, url: String): Boolean {
     return withContext(Dispatchers.IO) {
-        val originalImageBitmap = getBitmapFromURL(url) ?: return@withContext false
         if (appContext.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && isTablet(appContext).not())
             return@withContext false
+        val originalImageBitmap = getBitmapFromURL(url) ?: return@withContext false
 
-        val wallpaperManager = WallpaperManager.getInstance(appContext)
-        val (width, height) = getScreenDimensions(appContext)
-        val scaledBitmap = getWallpaperBitmap(originalImageBitmap, width, height)
-
+        var scaledBitmap: Bitmap? = null
         try {
+            val wallpaperManager = WallpaperManager.getInstance(appContext)
+            val (width, height) = getScreenDimensions(appContext)
+            scaledBitmap = getWallpaperBitmap(originalImageBitmap, width, height)
             wallpaperManager.setBitmap(scaledBitmap, null, false, WallpaperManager.FLAG_SYSTEM)
             wallpaperManager.setBitmap(scaledBitmap, null, false, WallpaperManager.FLAG_LOCK)
+            true
         } catch (e: Exception) {
-            return@withContext false
-        }
-
-        try {
+            Log.w("MooWallpaper", "Unable to set wallpaper (${e.javaClass.simpleName})")
+            false
+        } finally {
             originalImageBitmap.recycle()
-            scaledBitmap.recycle()
-        } catch (e: Exception) {
-            e.printStackTrace()
+            scaledBitmap?.recycle()
         }
-        true
     }
 }
 
+// Wallpaper sizing needs the full physical display, not the current window bounds.
+@Suppress("DEPRECATION")
 fun getScreenDimensions(context: Context): Pair<Int, Int> {
     val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val point = Point()
@@ -418,31 +458,28 @@ fun getScreenDimensions(context: Context): Pair<Int, Int> {
     return Pair(point.x, point.y)
 }
 
+/** The index entry today's wallpaper comes from. Local only: no network. */
+fun todaysWallpaperKey(firstOpenTime: Long): String =
+    if (firstOpenTime.isDaySince() < 10)
+        String.format("0_%s", firstOpenTime.isDaySince().toString())
+    else {
+        val month = SimpleDateFormat("M", Locale.ENGLISH).format(Date()) ?: "0"
+        val day = SimpleDateFormat("d", Locale.ENGLISH).format(Date()) ?: "0"
+        String.format("%s_%s", month, day)
+    }
+
 suspend fun getTodaysWallpaper(wallType: String, firstOpenTime: Long): String {
     return withContext(Dispatchers.IO) {
         var wallpaperUrl: String
         try {
-            val key = if (firstOpenTime.isDaySince() < 10)
-                String.format("0_%s", firstOpenTime.isDaySince().toString())
-            else {
-                val month = SimpleDateFormat("M", Locale.ENGLISH).format(Date()) ?: "0"
-                val day = SimpleDateFormat("d", Locale.ENGLISH).format(Date()) ?: "0"
-                String.format("%s_%s", month, day)
-            }
+            val key = todaysWallpaperKey(firstOpenTime)
 
             val url = URL(Constants.URL_WALLPAPERS)
-            val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-            connection.doInput = true
-            connection.connect()
-
-            val inputStream = connection.inputStream
-            val scanner = Scanner(inputStream)
-            val stringBuffer = StringBuffer()
-            while (scanner.hasNext()) {
-                stringBuffer.append(scanner.nextLine())
-            }
-
-            val json = JSONObject(stringBuffer.toString())
+            val deadline = SystemClock.elapsedRealtime() + 15000
+            val connection = openBoundedConnection(url.toString())
+            val payload = try { connection.inputStream.use { it.readBoundedBytes(256 * 1024, deadline) } }
+                finally { connection.disconnect() }
+            val json = JSONObject(payload.toString(Charsets.UTF_8))
             val wallpapers = json.getString(key)
             val wallpapersJson = JSONObject(wallpapers)
             wallpaperUrl = wallpapersJson.getString(wallType)
@@ -506,10 +543,12 @@ fun openAlarmApp(context: Context) {
         val intent = Intent(AlarmClock.ACTION_SHOW_ALARMS)
         context.startActivity(intent)
     } catch (e: Exception) {
-        Log.d("TAG", e.toString())
+        if (BuildConfig.DEBUG) Log.d("MooAlarm", "Alarm app unavailable", e)
     }
 }
 
+// The calendar fallback must resolve a calendar app rather than an internal component.
+@SuppressLint("UnsafeImplicitIntentLaunch")
 fun openCalendar(context: Context) {
     try {
         val calendarUri = CalendarContract.CONTENT_URI
@@ -541,6 +580,8 @@ fun isAccessServiceEnabled(context: Context): Boolean {
     return false
 }
 
+// Keep the window manager app metrics used by the existing physical-size threshold.
+@Suppress("DEPRECATION")
 fun isTablet(context: Context): Boolean {
     val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val metrics = DisplayMetrics()
@@ -567,7 +608,7 @@ fun Context.copyToClipboard(text: String) {
 fun Context.openUrl(url: String) {
     if (url.isEmpty()) return
     val intent = Intent(Intent.ACTION_VIEW)
-    intent.data = Uri.parse(url)
+    intent.data = url.toUri()
     startActivity(intent)
 }
 
@@ -594,7 +635,7 @@ fun Context.isSystemApp(packageName: String, user: UserHandle? = null): Boolean 
 
 fun Context.uninstall(packageName: String) {
     val intent = Intent(Intent.ACTION_DELETE)
-    intent.data = Uri.parse("package:$packageName")
+    intent.data = "package:$packageName".toUri()
     startActivity(intent)
 }
 
@@ -636,12 +677,12 @@ fun Context.deletePinnedShortcut(packageName: String, shortcutIdToDelete: String
     } catch (e: SecurityException) {
         // Handle cases where the app doesn't have permission
         // (e.g., not the default launcher or active voice interaction service)
-        Log.e("ShortcutHelper", "Permission denied to modify pinned shortcuts for $packageName", e)
+        if (BuildConfig.DEBUG) Log.e("ShortcutHelper", "Permission denied to modify pinned shortcuts", e)
     } catch (e: IllegalStateException) {
         // Handle cases where the user profile is locked or not running
-        Log.e("ShortcutHelper", "User profile unavailable for modifying pinned shortcuts for $packageName", e)
+        if (BuildConfig.DEBUG) Log.e("ShortcutHelper", "User profile unavailable", e)
     } catch (e: Exception) {
         // Handle other potential exceptions (like RemoteException wrapped)
-        Log.e("ShortcutHelper", "Failed to modify pinned shortcuts for $packageName", e)
+        if (BuildConfig.DEBUG) Log.e("ShortcutHelper", "Failed to modify pinned shortcuts", e)
     }
 }

@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData
  *
  * The semantics here are deliberately NOT "how many notifications are currently in the shade".
  * A counter goes up once per genuinely new notification and only comes back down when the user
- * opens that app from the launcher. Dismissing a notification from the shade does not decrement
+ * opens that app from the launcher or mutes its badges. Dismissing a notification from the shade does not decrement
  * it: it was still missed. This is what makes the badge a "what did I miss" signal rather than a
  * mirror of the status bar.
  *
@@ -74,8 +74,21 @@ object NotificationCounts {
         schedulePublish()
     }
 
-    /** Called when the user opens the app from the launcher. This is the only reset path. */
+    /** Clears an app after it is opened or its badges are switched off. */
+    /**
+     * A counter bumped by every clearApp, with the value each app was last cleared at. The badge
+     * backfill reads the shade off the main thread and applies it later; an app opened or muted
+     * in between must not be re-badged from that older snapshot. Main thread only; at most one
+     * entry per app ever cleared.
+     */
+    var clearEpoch = 0L
+        private set
+    private val clearedAt = HashMap<String, Long>()
+
+    fun clearedSince(appKey: String, epoch: Long): Boolean = (clearedAt[appKey] ?: 0L) > epoch
+
     fun clearApp(appKey: String) {
+        clearedAt[appKey] = ++clearEpoch
         val had = missed.remove(appKey) != null
         lines.remove(appKey)
         // Forget this app's notification keys too. Without this, an app that reuses the same

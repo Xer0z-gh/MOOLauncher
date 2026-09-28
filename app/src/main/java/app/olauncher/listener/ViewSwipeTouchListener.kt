@@ -22,6 +22,7 @@ internal open class ViewSwipeTouchListener(c: Context?, v: View) : OnTouchListen
     /** Screen density, so the swipe thresholds below can be expressed in dp. */
     private val density: Float = c?.resources?.displayMetrics?.density ?: 1f
 
+    @android.annotation.SuppressLint("ClickableViewAccessibility") // Gesture callbacks own taps and long presses; this listener has no generic View click.
     override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
         when (motionEvent.action) {
             MotionEvent.ACTION_DOWN -> view.isPressed = true
@@ -57,6 +58,8 @@ internal open class ViewSwipeTouchListener(c: Context?, v: View) : OnTouchListen
             return super.onDoubleTap(e)
         }
 
+        // Retain the existing delayed long-press callback lifetime in this warning-only change.
+        @OptIn(kotlinx.coroutines.DelicateCoroutinesApi::class)
         override fun onLongPress(e: MotionEvent) {
             longPressOn = true
             GlobalScope.launch {

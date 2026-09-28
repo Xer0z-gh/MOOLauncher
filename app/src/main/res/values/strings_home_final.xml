@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Home screen strings added by the 2026-09-27 Home review pass. -->
+<resources>
+    <string name="home_information_limit" translatable="false">Up to four widgets, plus the date.</string>
+    <string name="home_widget_tap_opens" translatable="false">Open app on tap</string>
+
+    <string name="home_battery_charging" translatable="false">Charging</string>
+    <string name="home_battery_plugged" translatable="false">Plugged in</string>
+    <string name="home_usage_setup_spoken" translatable="false">Set up, usage access required</string>
+
+    <string name="home_weather_no_location" translatable="false">No location</string>
+    <string name="home_weather_offline" translatable="false">Offline</string>
+    <string name="home_weather_unavailable" translatable="false">Unavailable</string>
+
+    <string name="home_allow_location" translatable="false">Allow location access</string>
+    <string name="home_allow_usage_access" translatable="false">Allow usage access</string>
+    <string name="home_open_battery_usage" translatable="false">Open battery usage</string>
+    <string name="home_open_alarms" translatable="false">Open alarms</string>
+    <string name="home_open_clock" translatable="false">Open clock</string>
+    <string name="home_choose_clock_app" translatable="false">Choose clock app</string>
+
+    <string name="home_focus_tick" translatable="false">Focus tick</string>
+    <string name="home_focus_tick_light" translatable="false">Light (30 ms)</string>
+    <string name="home_focus_tick_medium" translatable="false">Medium (45 ms)</string>
+    <string name="home_focus_tick_strong" translatable="false">Strong (60 ms)</string>
+</resources>

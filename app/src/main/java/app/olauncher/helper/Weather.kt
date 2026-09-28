@@ -1,85 +1,145 @@
 package app.olauncher.helper
 
-import java.util.Locale
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
+import android.os.CancellationSignal
+import android.os.SystemClock
 import androidx.core.content.ContextCompat
+import androidx.core.location.LocationManagerCompat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.Locale
+import kotlin.coroutines.resume
 
-/**
- * Current temperature for the home screen.
- *
- * Uses Open-Meteo, which needs no API key and no account, so the feature works out of the box
- * instead of waiting on someone to register for one. Before Launcher uses OpenWeather, which
- * does need a key - that difference is the whole reason this could be built at all.
- *
- * Location comes from the last known fix rather than requesting a new one: a launcher has no
- * business waking the GPS, and a temperature that is right to the nearest town is right enough.
- * If there is no cached fix, the widget stays quiet rather than showing a guess.
- */
+/** Optional foreground weather, with one bounded coarse fix when no recent cache exists. */
 object Weather {
+    data class Reading(val celsius: Double, val code: Int, val high: Double, val low: Double, val isDay: Boolean, val forecastDay: String, val timezone: String)
+    enum class Failure { PERMISSION, LOCATION_OFF, NO_LOCATION, NETWORK }
+    data class Result(val reading: Reading? = null, val failure: Failure? = null)
 
-    data class Reading(val celsius: Double, val code: Int)
-
-    /** Whether the user has granted a location permission at all. */
     fun hasLocationPermission(context: Context): Boolean =
-        ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) ==
-            PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ==
-            PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-    /**
-     * Fetches the current temperature, or null if it cannot be determined. Does network and
-     * location work, so it must not be called on the main thread.
-     */
+    fun locationEnabled(context: Context): Boolean =
+        (context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager)?.let {
+            LocationManagerCompat.isLocationEnabled(it)
+        } == true
+
     @SuppressLint("MissingPermission")
-    fun fetch(context: Context): Reading? {
-        if (!hasLocationPermission(context)) return null
-
+    suspend fun fetch(context: Context): Result {
+        if (!hasLocationPermission(context)) return Result(failure = Failure.PERMISSION)
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
-            ?: return null
-
-        // Newest cached fix across providers; no new fix is requested.
-        val location = runCatching {
-            manager.getProviders(true)
-                .mapNotNull { manager.getLastKnownLocation(it) }
-                .maxByOrNull { it.time }
-        }.getOrNull() ?: return null
-
-        // Locale.US, not the default: a comma-decimal locale formats 48.123 as "48,123"
-        // and the query string is then malformed for every user in one.
-        val lat = String.format(Locale.US, "%.3f", location.latitude)
-        val lon = String.format(Locale.US, "%.3f", location.longitude)
-        val url = "https://api.open-meteo.com/v1/forecast" +
-            "?latitude=$lat" +
-            "&longitude=$lon" +
-            "&current=temperature_2m,weather_code"
-
-        return runCatching {
-            val connection = (URL(url).openConnection() as HttpURLConnection).apply {
-                connectTimeout = 8000
-                readTimeout = 8000
-                requestMethod = "GET"
-            }
-            val body = connection.inputStream.bufferedReader().use { it.readText() }
-            connection.disconnect()
-
-            val current = JSONObject(body).getJSONObject("current")
-            Reading(
-                celsius = current.getDouble("temperature_2m"),
-                code = current.optInt("weather_code", -1)
-            )
-        }.getOrNull()
+            ?: return Result(failure = Failure.NO_LOCATION)
+        if (!LocationManagerCompat.isLocationEnabled(manager)) return Result(failure = Failure.LOCATION_OFF)
+        val cached = withContext(Dispatchers.IO) {
+            manager.getProviders(true).mapNotNull { provider -> runCatching { manager.getLastKnownLocation(provider) }.getOrNull() }
+                .filter { SystemClock.elapsedRealtimeNanos() - it.elapsedRealtimeNanos in 0..3_600_000_000_000L }
+                .maxByOrNull { it.elapsedRealtimeNanos }
+        }
+        val location = cached ?: currentNetworkLocation(context, manager)
+            ?: return Result(failure = Failure.NO_LOCATION)
+        return fetchAt(location)
     }
 
-    /** Rounded temperature in the unit the user asked for. */
-    fun format(reading: Reading, fahrenheit: Boolean): String {
-        val value = if (fahrenheit) reading.celsius * 9 / 5 + 32 else reading.celsius
-        return "${Math.round(value)}°"
+    @SuppressLint("MissingPermission")
+    private suspend fun currentNetworkLocation(context: Context, manager: LocationManager): Location? {
+        if (!manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) return null
+        return withTimeoutOrNull(12_000) {
+            suspendCancellableCoroutine { continuation ->
+                val cancellation = CancellationSignal()
+                continuation.invokeOnCancellation { cancellation.cancel() }
+                try {
+                    LocationManagerCompat.getCurrentLocation(manager, LocationManager.NETWORK_PROVIDER,
+                        cancellation, ContextCompat.getMainExecutor(context)) { location ->
+                        if (continuation.isActive) continuation.resume(location)
+                    }
+                } catch (_: SecurityException) {
+                    if (continuation.isActive) continuation.resume(null)
+                } catch (_: IllegalArgumentException) {
+                    if (continuation.isActive) continuation.resume(null)
+                }
+            }
+        }
+    }
+
+    private suspend fun fetchAt(location: Location): Result = suspendCancellableCoroutine { continuation ->
+        // Forecasts do not need street-level coordinates; transmit roughly town-level precision.
+        val lat = String.format(Locale.US, "%.2f", location.latitude)
+        val lon = String.format(Locale.US, "%.2f", location.longitude)
+        val url = "https://api.open-meteo.com/v1/forecast?latitude=$lat&longitude=$lon&current=temperature_2m,weather_code,is_day&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1"
+        val connection = (URL(url).openConnection() as HttpURLConnection).apply {
+            connectTimeout = 8000
+            readTimeout = 8000
+            requestMethod = "GET"
+        }
+        // Cancellation disconnects the socket even while a blocking read is in progress.
+        continuation.invokeOnCancellation { connection.disconnect() }
+        Dispatchers.IO.dispatch(continuation.context, Runnable {
+            if (!continuation.isActive) return@Runnable
+            val result = try {
+                if (connection.responseCode != HttpURLConnection.HTTP_OK) Result(failure = Failure.NETWORK)
+                else {
+                    val body = connection.inputStream.use { BoundedWeatherResponse.read(it) }
+                    val json = JSONObject(body)
+                    val current = json.getJSONObject("current")
+                    val daily = json.getJSONObject("daily")
+                    val high = daily.getJSONArray("temperature_2m_max").getDouble(0)
+                    val low = daily.getJSONArray("temperature_2m_min").getDouble(0)
+                    val temperature = current.getDouble("temperature_2m")
+                    if (!temperature.isFinite() || !high.isFinite() || !low.isFinite()) Result(failure = Failure.NETWORK)
+                    else Result(Reading(temperature, current.optInt("weather_code", -1), high, low, current.optInt("is_day", 1) == 1,
+                        daily.getJSONArray("time").getString(0), json.getString("timezone")))
+                }
+            } catch (_: Exception) {
+                Result(failure = Failure.NETWORK)
+            } finally {
+                connection.disconnect()
+            }
+            if (continuation.isActive) continuation.resume(result)
+        })
+    }
+
+    fun isCurrentDay(day: String, zone: String, now: Long = System.currentTimeMillis()): Boolean {
+        if (day.isBlank() || zone.isBlank()) return false
+        val format = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        format.timeZone = java.util.TimeZone.getTimeZone(zone)
+        return format.format(java.util.Date(now)) == day
+    }
+
+    fun temperature(celsius: Double, fahrenheit: Boolean): String =
+        "${Math.round(if (fahrenheit) celsius * 9 / 5 + 32 else celsius)}°"
+
+    fun format(reading: Reading, fahrenheit: Boolean): String =
+        "${temperature(reading.celsius, fahrenheit)}  H:${temperature(reading.high, fahrenheit)}  L:${temperature(reading.low, fahrenheit)}"
+
+    fun conditionLabel(code: Int): Int = when (code) {
+        0 -> app.olauncher.R.string.weather_clear
+        1 -> app.olauncher.R.string.weather_mostly_clear
+        2 -> app.olauncher.R.string.weather_partly_cloudy
+        3 -> app.olauncher.R.string.weather_cloudy
+        45, 48 -> app.olauncher.R.string.weather_fog
+        in 51..67, in 80..82 -> app.olauncher.R.string.weather_rain
+        in 71..77, 85, 86 -> app.olauncher.R.string.weather_snow
+        in 95..99 -> app.olauncher.R.string.weather_storm
+        else -> app.olauncher.R.string.information_weather
+    }
+
+    fun icon(code: Int, isDay: Boolean): Int = when (code) {
+        0, 1 -> if (isDay) app.olauncher.R.drawable.ic_weather_sun else app.olauncher.R.drawable.ic_weather_moon
+        45, 48 -> app.olauncher.R.drawable.ic_weather_fog
+        in 51..67, in 80..82 -> app.olauncher.R.drawable.ic_weather_rain
+        in 71..77, 85, 86 -> app.olauncher.R.drawable.ic_weather_snow
+        in 95..99 -> app.olauncher.R.drawable.ic_weather_storm
+        else -> app.olauncher.R.drawable.ic_weather_cloud
     }
 }

@@ -2,6 +2,8 @@ package app.olauncher.helper
 
 import android.app.Notification
 import android.app.PendingIntent
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.UserHandle
@@ -28,10 +30,15 @@ data class NotificationItem(
     val contentIntent: PendingIntent?,
     val clearable: Boolean,
     val autoCancel: Boolean,
+    val smallIcon: NotificationSmallIcon?,
+    val mediaToken: android.media.session.MediaSession.Token? = null,
 ) {
     /** "package|user", the same identity Prefs and NotificationCounts use. */
     val appKey: String get() = NotificationCounts.key(packageName, userString)
 }
+
+/** Resource identity only: retaining an Icon could pin a notification's full bitmap in memory. */
+data class NotificationSmallIcon(val packageName: String, val resourceId: Int)
 
 /**
  * Feeds [NotificationCounts] so the home screen can badge apps with what the user missed.
@@ -47,7 +54,6 @@ class NotificationService : NotificationListenerService() {
 
     companion object {
         /** A peek line is a preview, not the notification; long ones are truncated. */
-        const val MAX_LINE_CHARS = 100
 
         @Volatile
         private var instance: NotificationService? = null
@@ -140,9 +146,31 @@ class NotificationService : NotificationListenerService() {
         NotificationCounts.clear()
         if (!prefs.showNotificationBadges) return
 
-        val active = runCatching { activeNotifications }.getOrNull() ?: return
-        for (sbn in active) count(sbn)
+        // Off the main thread: onListenerConnected runs on it, in the same window as Home's
+        // first frame after a process restart, and this parcels every notification in the shade.
+        // Only (key, app, line) Strings come back; the counts store stays main-thread only.
+        val generation = ++backfillGeneration
+        val epoch = NotificationCounts.clearEpoch
+        kotlin.concurrent.thread(name = "moo-badge-backfill") {
+            val active = runCatching { activeNotifications }.getOrNull() ?: return@thread
+            val rows = active.mapNotNull { sbn -> countable(sbn)?.let { Triple(sbn.key, it, lineFor(sbn)) } }
+            handler.post {
+                // A disconnect, a newer backfill, or badges switched off while this ran: drop it,
+                // or it would resurrect counts that were just cleared.
+                if (generation != backfillGeneration || !NotificationCounts.connected ||
+                    !prefs.showNotificationBadges) return@post
+                // Likewise an app opened (which clears its badge) or muted in the meantime.
+                val muted = prefs.badgeMutedApps
+                rows.forEach { (key, appKey, line) ->
+                    if (appKey !in muted && !NotificationCounts.clearedSince(appKey, epoch))
+                        NotificationCounts.onPosted(key, appKey, line)
+                }
+            }
+        }
     }
+
+    /** Main thread only. */
+    private var backfillGeneration = 0
 
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
@@ -158,7 +186,10 @@ class NotificationService : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         // Only if the panel would actually show it. A group summary is filtered out of the
         // panel, so refreshing for one is a binder call that changes nothing on screen.
-        if (sbn != null && panelWorthy(sbn)) scheduleShadeNotice()
+        // And only while a panel is watching: panelWorthy reads title and text, which unparcels
+        // the extras of every notification on the phone - each download-progress tick included -
+        // on the main thread, for a notice scheduleShadeNotice would then drop.
+        if (sbn != null && onShadeChanged != null && panelWorthy(sbn)) scheduleShadeNotice()
         if (sbn == null || !prefs.showNotificationBadges) return
         count(sbn)
     }
@@ -177,13 +208,18 @@ class NotificationService : NotificationListenerService() {
     }
 
     private fun count(sbn: StatusBarNotification) {
-        if (!badgeWorthy(sbn)) return
+        val appKey = countable(sbn) ?: return
+        NotificationCounts.onPosted(sbn.key, appKey, lineFor(sbn))
+    }
+
+    /** The badge key this notification counts toward, or null when it does not count. */
+    private fun countable(sbn: StatusBarNotification): String? {
+        if (!badgeWorthy(sbn)) return null
         val user = sbn.user.toString()
         // Per-app filter. Read fresh rather than cached: the set changes from the settings screen
         // while this service stays bound, and a stale copy would quietly ignore the user's choice.
-        if ("${sbn.packageName}|$user" in prefs.badgeMutedApps) return
-        val appKey = NotificationCounts.key(sbn.packageName, user)
-        NotificationCounts.onPosted(sbn.key, appKey, lineFor(sbn))
+        if ("${sbn.packageName}|$user" in prefs.badgeMutedApps) return null
+        return NotificationCounts.key(sbn.packageName, user)
     }
 
     /**
@@ -219,14 +255,8 @@ class NotificationService : NotificationListenerService() {
      */
     private fun lineFor(sbn: StatusBarNotification): String? = runCatching {
         val extras = sbn.notification?.extras ?: return@runCatching null
-        val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()?.trim()
-        val text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString()?.trim()
-        when {
-            !title.isNullOrEmpty() && !text.isNullOrEmpty() -> "$title: ${text.take(MAX_LINE_CHARS)}"
-            !title.isNullOrEmpty() -> title.take(MAX_LINE_CHARS)
-            !text.isNullOrEmpty() -> text.take(MAX_LINE_CHARS)
-            else -> null
-        }
+        NotificationText.line(extras.getCharSequence(Notification.EXTRA_TITLE),
+            extras.getCharSequence(Notification.EXTRA_TEXT))
     }.getOrNull()
 
     /**
@@ -259,24 +289,43 @@ class NotificationService : NotificationListenerService() {
             contentIntent = notification?.contentIntent,
             clearable = sbn.isClearable,
             autoCancel = (notification?.flags ?: 0) and Notification.FLAG_AUTO_CANCEL != 0,
+            smallIcon = smallIconFor(sbn),
+            mediaToken = mediaTokenFor(notification),
         )
     }
+
+    @Suppress("DEPRECATION")
+    private fun mediaTokenFor(notification: Notification?): android.media.session.MediaSession.Token? = runCatching {
+        notification?.extras?.getParcelable<android.os.Parcelable>(Notification.EXTRA_MEDIA_SESSION) as? android.media.session.MediaSession.Token
+    }.getOrNull()
+
+    @Suppress("DEPRECATION")
+    private fun smallIconFor(sbn: StatusBarNotification): NotificationSmallIcon? = runCatching {
+        val icon = sbn.notification.smallIcon
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            // URI and bitmap icons are intentionally not retained or fetched by the launcher.
+            if (icon?.type != Icon.TYPE_RESOURCE) return@runCatching null
+            NotificationSmallIcon(icon.resPackage.ifEmpty { sbn.packageName }, icon.resId)
+        } else {
+            // Icon's type/resource accessors became public in API 28. The legacy field is
+            // still populated by notifications constructed with a resource ID on API 24-27.
+            sbn.notification.icon.takeIf { it != 0 }?.let { NotificationSmallIcon(sbn.packageName, it) }
+        }
+    }.getOrNull()
 
     /**
      * Reading extras can throw on OEM builds that put a custom Parcelable in there, so both
      * of these are guarded - the same reason [lineFor] is.
      */
     private fun titleOf(sbn: StatusBarNotification): String? = runCatching {
-        sbn.notification?.extras
-            ?.getCharSequence(Notification.EXTRA_TITLE)?.toString()?.trim()?.ifEmpty { null }
+        NotificationText.field(sbn.notification?.extras?.getCharSequence(Notification.EXTRA_TITLE),
+            NotificationText.TITLE_CHARS)
     }.getOrNull()
 
     private fun textOf(sbn: StatusBarNotification): String? = runCatching {
         val extras = sbn.notification?.extras ?: return@runCatching null
-        val text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString()?.trim()
-        // A messaging-style notification often puts nothing in EXTRA_TEXT and everything in
-        // the big text; without this fallback those rows read as a title with no body.
-        val big = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString()?.trim()
-        (text ?: big)?.ifEmpty { null }
+        // Messaging-style notifications can put the body only in BIG_TEXT.
+        NotificationText.field(extras.getCharSequence(Notification.EXTRA_TEXT), NotificationText.BODY_CHARS)
+            ?: NotificationText.field(extras.getCharSequence(Notification.EXTRA_BIG_TEXT), NotificationText.BODY_CHARS)
     }.getOrNull()
 }

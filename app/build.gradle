@@ -21,7 +21,7 @@ android {
         versionName "v6.9.17"
 
         resourceConfigurations += ["en", "ar", "cs", "da", "de", "el", "es-rES", "es-rUS", "fi", "fr", "he", "hi", "hr", "hu", "in", "it", "ja", "ko", "nb", "nl", "pl", "pt-rBR", "ro", "ru-rRU", "sv", "th", "tr", "uk", "vi", "zh"]
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "app.olauncher.MemoryInstrumentation"
     }
 
     buildTypes {
@@ -30,6 +30,14 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        // Same install identity and signing key as the existing daily-phone build.
+        // R8 and ART optimizations are exercised without migrating launcher preferences.
+        daily {
+            initWith release
+            applicationIdSuffix ".debug"
+            signingConfig signingConfigs.debug
+            matchingFallbacks = ['release']
         }
         debug {
             debuggable true
@@ -46,6 +54,12 @@ android {
         includeInApk = false
         includeInBundle = true
     }
+    // Stored, not deflated: a compressed font cannot be memory-mapped, so choosing Inter made
+    // every process start inflate a private ~0.9 MB copy on the main thread. Stored, it is
+    // mapped as clean pages the kernel can drop. Costs ~420 KB of APK; only Inter users gain.
+    androidResources {
+        noCompress += 'ttf'
+    }
     namespace 'app.olauncher'
 }
 
@@ -56,18 +70,29 @@ dependencies {
     implementation libs.appcompat
     implementation libs.recyclerview
 
-    // Android lifecycle
-    implementation libs.lifecycle.extensions
+    // Android lifecycle. lifecycle-extensions (deprecated since 2020) was dropped: nothing used it.
+    // lifecycle-process still arrives through appcompat -> emoji2; its start-up initializer is
+    // removed in the manifest instead.
     implementation libs.lifecycle.viewmodel.ktx
 
     // Navigation
     implementation libs.navigation.fragment.ktx
 
-    // Work Manager
+    // Work Manager - initialized on demand by MooApplication, not at every process start.
     implementation libs.work.runtime.ktx
 
-    //Material dependency
-    implementation libs.material
+    // com.google.android.material was dropped: no Material widget, theme or attribute is used, and
+    // R8 was still keeping 279 of its classes.
+
+    // Material's own dependencies had been lifting these to the versions below. Without it, Gradle
+    // resolved OLDER ones (drawerlayout 1.0.0, activity-ktx 1.7.2, transition 1.4.1) - found by
+    // diffing the full resolved classpath with and without Material. Pinned to what the app
+    // already shipped with, so dropping Material changes no library the app runs on.
+    constraints {
+        implementation('androidx.drawerlayout:drawerlayout:1.1.1')
+        implementation('androidx.activity:activity-ktx:1.8.0')
+        implementation('androidx.transition:transition:1.5.0')
+    }
 
     testImplementation libs.junit
 }

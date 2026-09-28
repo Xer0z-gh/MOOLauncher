@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A drawer row's rename field. Inflated from a ViewStub the first time Rename is chosen on that
+     row: an AppCompatEditText builds its Editor in the constructor, and every row used to. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/renameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:focusable="false"
+    android:importantForAccessibility="no"
+    android:gravity="end|center_vertical"
+    android:orientation="horizontal">
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etAppRename"
+        style="@style/TextLarge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:inputType="textCapWords"
+        android:maxLength="30"
+        android:maxLines="1"
+        android:paddingVertical="@dimen/app_padding_vertical"
+        android:textColorHint="?attr/primaryColorTrans50" />
+
+    <TextView
+        android:id="@+id/tvSaveRename"
+        style="@style/TextSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:drawablePadding="2dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingHorizontal="8dp"
+        android:text="@string/rename"
+        android:textSize="12sp"
+        app:drawableTopCompat="@drawable/ic_check" />
+
+    <TextView
+        android:id="@+id/appRenameClose"
+        android:minHeight="48dp"
+        android:paddingVertical="12dp"
+        style="@style/TextSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="2dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingHorizontal="8dp"
+        android:text="@string/close"
+        android:textSize="12sp"
+        app:drawableTopCompat="@drawable/ic_close" />
+</LinearLayout>

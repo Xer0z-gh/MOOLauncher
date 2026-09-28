@@ -8,4 +8,16 @@
         measure/layout loop at the display refresh rate.
     -->
     <item name="focus_ring_color" type="id" />
+    <item name="dialog_list_tint" type="id" />
+    <!-- Settings' Align to bottom switch value, a row built in code (SettingsFragment). -->
+    <item name="alignmentBottom" type="id" />
+    <!--
+        Settings sliders, built in code. A stable id lets Android put focus back on the slider when
+        a keyboard or TalkBack step recreates the page (Text size, Text weight).
+    -->
+    <item name="sliderAppIconSize" type="id" />
+    <item name="sliderHomeSpacing" type="id" />
+    <item name="sliderTextSize" type="id" />
+    <item name="sliderTextWeight" type="id" />
+    <item name="sliderAlignment" type="id" />
 </resources>

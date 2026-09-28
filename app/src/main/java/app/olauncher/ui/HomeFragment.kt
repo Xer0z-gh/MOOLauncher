@@ -3,9 +3,12 @@ package app.olauncher.ui
 import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.LauncherApps
-import android.content.res.Configuration
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
 import android.os.BatteryManager
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
@@ -16,6 +19,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -23,12 +28,14 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.bundleOf
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowInsetsControllerCompat
-import app.olauncher.helper.isDarkThemeOn
 import androidx.core.view.ViewCompat
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
+import androidx.core.content.ContextCompat
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -36,10 +43,12 @@ import androidx.navigation.fragment.findNavController
 import app.olauncher.MainViewModel
 import app.olauncher.R
 import app.olauncher.data.AppModel
+import app.olauncher.data.AppCategory
 import app.olauncher.data.ColorTheme
 import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.FragmentHomeBinding
+import app.olauncher.helper.HomeForeground
 import app.olauncher.helper.IconCache
 import app.olauncher.helper.MyAccessibilityService
 import app.olauncher.helper.NotificationCounts
@@ -53,7 +62,6 @@ import app.olauncher.helper.expandNotificationDrawer
 import app.olauncher.helper.getChangedAppTheme
 import app.olauncher.helper.getUserHandleFromString
 import app.olauncher.helper.hasBeenMinutes
-import app.olauncher.helper.isPackageInstalled
 import app.olauncher.helper.notificationAccessGranted
 import app.olauncher.helper.notificationListenerComponent
 import app.olauncher.helper.openAlarmApp
@@ -64,12 +72,17 @@ import app.olauncher.helper.setPlainWallpaperByTheme
 import app.olauncher.helper.showToast
 import app.olauncher.helper.tintTextTree
 import app.olauncher.helper.Weather
+import app.olauncher.helper.InformationPart
+import app.olauncher.helper.homeInformationText
+import app.olauncher.helper.homeInformationEditor
+import app.olauncher.helper.homeAppsEditor
+import app.olauncher.helper.LauncherMotion
+import app.olauncher.helper.showPopupMenu
+import app.olauncher.helper.showForLauncher
 import app.olauncher.helper.withAlpha
 import app.olauncher.listener.OnSwipeTouchListener
-import app.olauncher.listener.ViewSwipeTouchListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -80,6 +93,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         /** Space between the end of an app name and its badge. */
         const val BADGE_GAP_DP = 10
 
+        /** The ACTION_BATTERY_CHANGED fields the information block actually draws from. */
+        val BATTERY_SHOWN_EXTRAS = arrayOf(BatteryManager.EXTRA_LEVEL, BatteryManager.EXTRA_SCALE,
+            BatteryManager.EXTRA_STATUS, BatteryManager.EXTRA_PLUGGED)
+
         /** Home app icon edge length, and the gap between it and the name. */
         const val ICON_SIZE_DP = 32
         const val ICON_GAP_DP = 12
@@ -88,7 +105,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         const val SCREEN_TIME_GAP_DP = 4
 
         /** Weather is refreshed at most this often; a launcher has no business polling. */
-        const val WEATHER_REFRESH_MINUTES = 60
 
         /**
          * How much system bar the layout's own top margin already accounts for. Matches
@@ -101,18 +117,53 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     private lateinit var viewModel: MainViewModel
     private lateinit var deviceManager: DevicePolicyManager
 
-    /**
-     * The XML padding for a home row at this screen density, captured before any spacing setting
-     * is applied. Read from the layout rather than hard-coded, because it differs per density
-     * bucket, and re-reading it after we have changed it would let the setting compound.
-     */
-    private var basePaddingPx = 0
-
     /** Guards against two resumes firing the same weather request; see refreshWeather. */
+    private var weatherJob: kotlinx.coroutines.Job? = null
+    private var homeMenu: androidx.appcompat.app.AlertDialog? = null
     private var weatherFetchInFlight = false
+    private var weatherFailure: Weather.Failure? = null
+    private var lastWeatherAttempt = 0L
+    private var drawerWarmJob: kotlinx.coroutines.Job? = null
+    private var drawerWarmKey = ""
 
     private var latestScreenTime: String = ""
     private var latestUnlockCount: Int = -1
+    private var batteryReading: Intent? = null
+    private var informationStarted = false
+    private var batteryPowerJob: Job? = null
+    private var lastBatteryPowerSampleAt = 0L
+    private var sampledBatteryWatts: Double? = null
+    private var lastInformationColor: Int? = null
+    private var informationDialog: androidx.appcompat.app.AlertDialog? = null
+    private val informationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (_binding != null) {
+            populateDateTime()
+            refreshWeather()
+            requestInformationUsageAccess()
+        }
+    }
+    private val informationReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action == Intent.ACTION_BATTERY_CHANGED) {
+                // The sticky re-delivery right after registering, and voltage- or temperature-only
+                // updates, change nothing Home shows; the watts caption has its own 15 s poll.
+                val unchanged = batteryReading?.let { old ->
+                    BATTERY_SHOWN_EXTRAS.all { old.getIntExtra(it, -1) == intent.getIntExtra(it, -1) }
+                } == true
+                batteryReading = intent
+                if (unchanged) return
+                updateBatteryPowerPolling()
+            }
+            if (_binding != null) {
+                if (intent.action == Intent.ACTION_DATE_CHANGED) prefs.weatherUpdatedAt = 0L
+                if (intent.action == android.location.LocationManager.PROVIDERS_CHANGED_ACTION || intent.action == Intent.ACTION_DATE_CHANGED) {
+                    lastWeatherAttempt = 0L
+                    refreshWeather()
+                }
+                populateDateTime()
+            }
+        }
+    }
 
     /**
      * Screen time and unlock count share one line, because they are the same thought and the home
@@ -120,28 +171,12 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      * is off, unavailable on this Android version, or genuinely zero.
      */
     private fun renderScreenTimeLine() {
-        val unlocks = latestUnlockCount
-        val base = when {
-            !prefs.showUnlockCount || unlocks <= 0 -> latestScreenTime
-            latestScreenTime.isEmpty() ->
-                resources.getQuantityString(R.plurals.unlocks_only, unlocks, unlocks)
-
-            else -> resources.getQuantityString(
-                R.plurals.screen_time_and_unlocks, unlocks, unlocks, latestScreenTime
-            )
-        }
-
-        val weather = if (prefs.showWeather) prefs.weatherCached else ""
-        binding.tvScreenTime.text = when {
-            weather.isEmpty() -> base
-            base.isEmpty() -> weather
-            else -> getString(R.string.line_with_weather, base, weather)
-        }
-        // Spoken as "3h 31m" with no idea what the number is, otherwise.
-        binding.tvScreenTime.contentDescription =
-            getString(R.string.a11y_screen_time, binding.tvScreenTime.text)
-        binding.tvScreenTime.isVisible = binding.tvScreenTime.text.isNotEmpty()
+        // The screen-time and unlock observers land a frame or two apart after one query; one
+        // posted pass covers both instead of rebuilding the whole block for each.
+        _binding?.root?.run { removeCallbacks(informationPass); post(informationPass) }
     }
+
+    private val informationPass = Runnable { if (_binding != null) populateDateTime() }
 
     /**
      * Refreshes the temperature at most hourly, on a background thread, and only when the user
@@ -151,23 +186,37 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     private fun refreshWeather() {
         if (!prefs.showWeather) return
         val context = requireContext().applicationContext
+        if (app.olauncher.helper.LauncherMotion.savingPower(context, prefs)) return
         if (!Weather.hasLocationPermission(context)) return
-        if (!prefs.weatherUpdatedAt.hasBeenMinutes(WEATHER_REFRESH_MINUTES)) return
+        if (prefs.weatherCode >= 0 && Weather.isCurrentDay(prefs.weatherForecastDay, prefs.weatherTimezone) &&
+            !prefs.weatherUpdatedAt.hasBeenMinutes(prefs.weatherRefreshMinutes)) return
 
         // In-flight flag, not the stored timestamp: stamping before the fetch meant one
         // failed request (no signal, airplane mode) blocked the next hour of retries.
         if (weatherFetchInFlight) return
+        val now = android.os.SystemClock.elapsedRealtime()
+        if (weatherFailure != null && lastWeatherAttempt > 0L && now - lastWeatherAttempt < 60_000) return
+        lastWeatherAttempt = now
         weatherFetchInFlight = true
-        val fahrenheit = prefs.weatherFahrenheit
-        viewLifecycleOwner.lifecycleScope.launch {
+        populateDateTime()
+        // The fragment's scope, not the view's: a trip to Apps or Settings destroys Home's view,
+        // and cancelling there restarted a stale fetch (location fix, TLS) on every short visit.
+        weatherJob = lifecycleScope.launch {
             try {
-                val reading = withContext(Dispatchers.IO) { Weather.fetch(context) }
-                    ?: return@launch
-                prefs.weatherUpdatedAt = System.currentTimeMillis()
-                prefs.weatherCached = Weather.format(reading, fahrenheit)
+                val result = Weather.fetch(context)
+                weatherFailure = result.failure
+                val reading = result.reading ?: return@launch
+                if (!prefs.showWeather) return@launch
+                val fahrenheit = prefs.weatherFahrenheit
+                val description = getString(R.string.weather_spoken_range,
+                    Weather.temperature(reading.celsius, fahrenheit), Weather.temperature(reading.high, fahrenheit),
+                    Weather.temperature(reading.low, fahrenheit))
+                if (!prefs.storeWeatherIfEnabled(Weather.format(reading, fahrenheit), reading.forecastDay,
+                        reading.timezone, reading.code, reading.isDay, description, System.currentTimeMillis())) return@launch
                 renderScreenTimeLine()
             } finally {
                 weatherFetchInFlight = false
+                if (_binding != null) populateDateTime()
             }
         }
     }
@@ -182,6 +231,12 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.post {
+            if (isAdded && viewLifecycleOwnerLiveData.value?.lifecycle?.currentState?.isAtLeast(androidx.lifecycle.Lifecycle.State.STARTED) == true &&
+                ViewModelProvider(this)[app.olauncher.helper.HomeAppsDraftState::class.java].rows != null) {
+                editHomeApps()
+            }
+        }
         prefs = Prefs(requireContext())
         viewModel = activity?.run {
             ViewModelProvider(this)[MainViewModel::class.java]
@@ -189,7 +244,31 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
         deviceManager = context?.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
 
-        basePaddingPx = binding.homeApp1.paddingTop
+        if (resources.configuration.screenHeightDp < 480) {
+            binding.clock.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 32f)
+            (binding.dateTimeLayout.layoutParams as FrameLayout.LayoutParams).also {
+                it.topMargin = 12.dpToPx()
+                binding.dateTimeLayout.layoutParams = it
+            }
+        } else {
+            // Past 150% text the clock, already the largest type on Home, stops growing: at 200%
+            // it alone took about an app row's height from the list.
+            val fontScale = resources.configuration.fontScale
+            val growth = if (fontScale > 1.5f) 1.5f / fontScale else 1f
+            binding.clock.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, binding.clock.textSize * .82f * growth)
+        }
+        binding.homeAppsScroll.scope = viewLifecycleOwner.lifecycleScope
+        binding.homeAppsScroll.onLaunch = ::homeAppClicked
+        binding.homeAppsScroll.onAppMenu = ::showHomeAppMenu
+        binding.homeAppsScroll.onBadge = ::showBadgeDetails
+        binding.homeAppsScroll.onAdd = ::addHomeApp
+        binding.homeAppsScroll.onHomeMenu = ::showHomeMenu
+        binding.homeAppsScroll.onBrowse = { showAppList(Constants.FLAG_LAUNCH_APP, keyboardMode = Constants.KeyboardMode.HIDE) }
+        binding.homeAppsScroll.onSearch = { showAppList(Constants.FLAG_LAUNCH_APP, keyboardMode = Constants.KeyboardMode.SHOW) }
+        binding.homeAppsScroll.onSwipe = { right -> if (right) openSwipeRightApp() else openSwipeLeftApp() }
+        binding.mainLayout.onHorizontalSwipe = { right -> if (right) openSwipeRightApp() else openSwipeLeftApp() }
+        val homeCarousel = binding.homeAppsScroll
+        binding.mainLayout.onTouchFinished = { homeCarousel.resumeTouchNavigation() }
 
         applyTopInset()
         initObservers()
@@ -214,7 +293,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             val bars = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
             )
-            view.updatePadding(top = (bars.top - ABSORBED_TOP_DP.dpToPx()).coerceAtLeast(0))
+            view.updatePadding(top = (bars.top - ABSORBED_TOP_DP.dpToPx()).coerceAtLeast(0), bottom = bars.bottom)
             insets
         }
     }
@@ -225,29 +304,95 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      * wrapping to two lines - and every one of them is a layout pass on the name.
      */
     private fun initBadgeFollowers() {
-        // The date/time block changes height with the date format, font and text size, so the
-        // screen time line is repositioned whenever it settles rather than once at startup.
-        binding.dateTimeLayout.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-            positionScreenTime()
-        }
-
-        val badges = homeAppBadgeViews()
-        homeAppNameViews().forEachIndexed { index, name ->
-            val badge = badges[index]
-            name.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-                positionBadge(name, badge)
-            }
-        }
+        widgetRenderKey = ""
+        binding.dateTimeLayout.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> positionScreenTime() }
     }
 
     override fun onResume() {
         super.onResume()
+        // No HomeForeground.invalidate() here: a Home press on Home resumes without stopping, and
+        // each one paid a getWallpaperColors binder call. HomeForeground now drops its cache when
+        // the wallpaper's colours change.
+        binding.mainLayout.visibility = View.VISIBLE
+        // Load the catalog while Home is visible so Browse can draw its first rows with icons -
+        // but after Home's first frame, not before it. The scan is off the main thread, yet on a cold
+        // start it still competed with the first frame: a Perfetto trace on the A17 showed six
+        // getLauncherActivities and eight getPackageInfo calls in that window, with the main thread
+        // spending 78 ms waiting for a CPU. Home's rows come from preferences and need none of it.
+        if (prefs.showDrawerIcons && !LauncherMotion.savingPower(requireContext(), prefs) &&
+            viewModel.appList.value == null) binding.root.doOnPreDraw { root ->
+            root.post { if (isResumed && viewModel.appList.value == null) viewModel.ensureAppList() }
+        }
+        warmDrawerIcons(viewModel.appList.value)
         syncNotificationListener()
         refreshWeather()
         populateHomeScreen(false)
-        viewModel.isOlauncherDefault()
         if (prefs.showStatusBar) showStatusBar()
         else hideStatusBar()
+    }
+
+    override fun onPause() {
+        // Drop the old Home media layer before NavHost composites the return transition.
+        _binding?.homeVisualizer?.visibility = View.GONE
+        super.onPause()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        informationStarted = true
+        val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED).apply {
+            addAction(Intent.ACTION_TIME_TICK)
+            addAction(android.app.AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED)
+            addAction(Intent.ACTION_DATE_CHANGED)
+            addAction(Intent.ACTION_TIMEZONE_CHANGED)
+            addAction(android.location.LocationManager.PROVIDERS_CHANGED_ACTION)
+        }
+        batteryReading = ContextCompat.registerReceiver(requireContext(), informationReceiver, filter,
+            ContextCompat.RECEIVER_NOT_EXPORTED)
+        // No populate here: onResume follows in the same transaction and builds Home. A pass here
+        // was a second full build before the Home-return frame.
+        // Except when Home is drawn without resuming (a dialog-style activity over it): then it
+        // would show whatever it said when Home was last left, so build it first. The replayed
+        // LiveData observers skip that case (they only run while resumed), so this covers it.
+        binding.root.doOnPreDraw { if (_binding != null && informationStarted && !isResumed) populateHomeScreen(false) }
+        updateBatteryPowerPolling()
+        // Here rather than onResume: every path that changes the default Home stops Home first,
+        // and a Home press on Home (resume without stop) no longer pays a resolveActivity call.
+        viewModel.isOlauncherDefault()
+    }
+
+    override fun onStop() {
+        informationStarted = false
+        batteryPowerJob?.cancel()
+        batteryPowerJob = null
+        // Only when the activity itself stops (an app launch, screen off). A trip to Apps or
+        // Settings stops this fragment but not the activity; the fetch finishes in the background.
+        if (!requireActivity().lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.STARTED)) {
+            weatherJob?.cancel()
+            if (weatherFetchInFlight) lastWeatherAttempt = 0L
+        }
+        requireContext().unregisterReceiver(informationReceiver)
+        super.onStop()
+    }
+
+    private fun requestInformationUsageAccess() {
+        if ((prefs.infoShowScreenTime || prefs.showUnlockCount) && !requireContext().appUsagePermissionGranted())
+            viewModel.showDialog.postValue(Constants.Dialog.DIGITAL_WELLBEING)
+    }
+
+    private fun editHomeInformation() {
+        informationDialog?.dismiss()
+        informationDialog = requireContext().homeInformationEditor(prefs) { needsPermission ->
+            populateDateTime()
+            // A usage widget just switched on has no value yet: scan now (the scan gate sees the
+            // new widget set), rather than at the next Home return a minute later.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) populateScreenTime()
+            if (needsPermission) informationPermission.launch(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+            else {
+                refreshWeather()
+                requestInformationUsageAccess()
+            }
+        }.also { it.showForLauncher() }
     }
 
     override fun onClick(view: View) {
@@ -255,7 +400,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             // Home button for recents feature disabled
             // R.id.recents -> {}
             R.id.clock -> openClockApp()
-            R.id.date -> openCalendarApp()
+            R.id.date -> if (prefs.widgetTapOpens) openCalendarApp() else editHomeInformation()
             R.id.setDefaultLauncher -> viewModel.resetLauncherLiveData.call()
             R.id.tvScreenTime -> openScreenTimeDigitalWellbeing()
 
@@ -296,14 +441,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     override fun onLongClick(view: View): Boolean {
         when (view.id) {
-            R.id.homeApp1 -> showAppList(Constants.FLAG_SET_HOME_APP_1, prefs.appName1.isNotEmpty(), true)
-            R.id.homeApp2 -> showAppList(Constants.FLAG_SET_HOME_APP_2, prefs.appName2.isNotEmpty(), true)
-            R.id.homeApp3 -> showAppList(Constants.FLAG_SET_HOME_APP_3, prefs.appName3.isNotEmpty(), true)
-            R.id.homeApp4 -> showAppList(Constants.FLAG_SET_HOME_APP_4, prefs.appName4.isNotEmpty(), true)
-            R.id.homeApp5 -> showAppList(Constants.FLAG_SET_HOME_APP_5, prefs.appName5.isNotEmpty(), true)
-            R.id.homeApp6 -> showAppList(Constants.FLAG_SET_HOME_APP_6, prefs.appName6.isNotEmpty(), true)
-            R.id.homeApp7 -> showAppList(Constants.FLAG_SET_HOME_APP_7, prefs.appName7.isNotEmpty(), true)
-            R.id.homeApp8 -> showAppList(Constants.FLAG_SET_HOME_APP_8, prefs.appName8.isNotEmpty(), true)
             R.id.clock -> {
                 showAppList(Constants.FLAG_SET_CLOCK_APP)
                 prefs.clockAppPackage = ""
@@ -311,12 +448,17 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                 prefs.clockAppUser = ""
             }
 
-            R.id.date -> {
-                showAppList(Constants.FLAG_SET_CALENDAR_APP)
-                prefs.calendarAppPackage = ""
-                prefs.calendarAppClassName = ""
-                prefs.calendarAppUser = ""
-            }
+            R.id.date -> view.showPopupMenu(configure = { menu ->
+                menu.add(0, 1, 0, R.string.information_edit)
+                menu.add(0, 2, 1, R.string.open_calendar)
+                menu.add(0, 3, 2, R.string.calendar_app)
+                menu.add(0, 4, 3, R.string.screen_time_app)
+            }) { item -> when (item.itemId) {
+                1 -> editHomeInformation()
+                2 -> openCalendarApp()
+                3 -> showAppList(Constants.FLAG_SET_CALENDAR_APP)
+                4 -> showAppList(Constants.FLAG_SET_SCREEN_TIME_APP)
+            } }
 
             R.id.tvScreenTime -> {
                 showAppList(Constants.FLAG_SET_SCREEN_TIME_APP)
@@ -338,13 +480,20 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     private fun initObservers() {
-        if (prefs.firstSettingsOpen) {
+        // The onboarding hint is optional; on a short display with large system text it
+        // overlaps the centered Add app row, making both unreadable.
+        val config = resources.configuration
+        val roomForTips = config.screenHeightDp >= 700 || config.fontScale < 1.3f
+        if (prefs.firstSettingsOpen && roomForTips) {
             binding.firstRunTips.visibility = View.VISIBLE
             binding.setDefaultLauncher.visibility = View.GONE
         } else binding.firstRunTips.visibility = View.GONE
 
+        // These three are plain LiveData, so a new view's observers get the last value replayed
+        // at onStart - on every return from Apps, Search, Settings or the panel, once anything
+        // set them. onResume runs the same work right after, so only act while resumed.
         viewModel.refreshHome.observe(viewLifecycleOwner) {
-            populateHomeScreen(it)
+            if (isResumed) populateHomeScreen(it)
         }
         viewModel.isOlauncherDefault.observe(viewLifecycleOwner, Observer {
             if (it != true) {
@@ -359,10 +508,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             binding.setDefaultLauncher.isVisible = it.not() && prefs.hideSetDefaultLauncher.not()
         })
         viewModel.homeAppAlignment.observe(viewLifecycleOwner) {
-            setHomeAlignment(it)
+            if (isResumed) setHomeAlignment(it)
         }
         viewModel.toggleDateTime.observe(viewLifecycleOwner) {
-            populateDateTime()
+            if (isResumed) populateDateTime()
         }
         viewModel.screenTimeValue.observe(viewLifecycleOwner) {
             it?.let {
@@ -379,32 +528,16 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         NotificationCounts.counts.observe(viewLifecycleOwner) {
             refreshBadges(it)
         }
+        viewModel.appList.observe(viewLifecycleOwner) { warmDrawerIcons(it) }
         // Home button for recents feature disabled
         // viewModel.showRecentApps.observe(viewLifecycleOwner) {
         //     binding.recents.performClick()
         // }
     }
 
+    @android.annotation.SuppressLint("ClickableViewAccessibility") // Gesture listener handles taps; HomeSurface's click remains child-driven.
     private fun initSwipeTouchListener() {
-        val context = requireContext()
-        binding.mainLayout.setOnTouchListener(getSwipeGestureListener(context))
-        // Badges get the same per-row swipe listener as their app name, anchored to the NAME view,
-        // so a swipe that happens to start on the badge behaves identically to one on the label.
-        val names = homeAppNameViews()
-        homeAppBadgeViews().forEachIndexed { index, badge ->
-            // The badge needs its OWN listener, not the name's. ViewSwipeTouchListener dispatches
-            // onClick with the view it was constructed against, so reusing the name's listener
-            // made tapping a badge launch the app instead of showing what was missed.
-            badge.setOnTouchListener(getBadgeSwipeTouchListener(context, badge, names[index], index + 1))
-        }
-        binding.homeApp1.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp1))
-        binding.homeApp2.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp2))
-        binding.homeApp3.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp3))
-        binding.homeApp4.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp4))
-        binding.homeApp5.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp5))
-        binding.homeApp6.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp6))
-        binding.homeApp7.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp7))
-        binding.homeApp8.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp8))
+        binding.mainLayout.setOnTouchListener(getSwipeGestureListener(requireContext()))
     }
 
     private fun initClickListeners() {
@@ -412,114 +545,214 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         // binding.recents.setOnClickListener(this)
         binding.clock.setOnClickListener(this)
         binding.date.setOnClickListener(this)
+        binding.homeWeather.setOnClickListener { onWeatherTap() }
+        binding.homeWeather.setOnLongClickListener { customizeHomePanel(app.olauncher.helper.PanelSettings.Page.WEATHER); true }
         binding.clock.setOnLongClickListener(this)
         binding.date.setOnLongClickListener(this)
         binding.setDefaultLauncher.setOnClickListener(this)
         binding.setDefaultLauncher.setOnLongClickListener(this)
         binding.tvScreenTime.setOnClickListener(this)
         binding.tvScreenTime.setOnLongClickListener(this)
+        // The clock announced only the time; say what tap and long press do, as date and weather do.
+        labelTap(binding.clock, getString(R.string.home_open_clock))
+        ViewCompat.replaceAccessibilityAction(binding.clock,
+            androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_LONG_CLICK,
+            getString(R.string.home_choose_clock_app)) { target, _ -> target.performLongClick() }
+        // A new view: its date and weather actions are labelled on their first render.
+        dateTapLabel = null
+        weatherTapLabel = null
+    }
 
-        // These fire only on d-pad/keyboard events; touch is consumed by ViewSwipeTouchListener
-        binding.homeApp1.setOnClickListener(this)
-        binding.homeApp2.setOnClickListener(this)
-        binding.homeApp3.setOnClickListener(this)
-        binding.homeApp4.setOnClickListener(this)
-        binding.homeApp5.setOnClickListener(this)
-        binding.homeApp6.setOnClickListener(this)
-        binding.homeApp7.setOnClickListener(this)
-        binding.homeApp8.setOnClickListener(this)
-        // Badges need the same treatment as the names above: the touch listener is consumed
-        // by ViewSwipeTouchListener and never sets isClickable, so without these the badge
-        // exposes no ACTION_CLICK and the peek is reachable by finger only.
-        homeAppBadgeViews().forEachIndexed { index, badge ->
-            badge.setOnClickListener { showBadgeDetails(index + 1) }
-            badge.setOnLongClickListener { onLongClick(homeAppNameViews()[index]) }
+    /** The ACTION_CLICK labels last applied, so a minute tick does not re-announce them. */
+    private var dateTapLabel: String? = null
+    private var weatherTapLabel: String? = null
+
+    /** Names what a tap does; the action is the view's own click, so name and behaviour cannot drift. */
+    private fun labelTap(view: View, label: String) {
+        ViewCompat.replaceAccessibilityAction(view,
+            androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
+            label) { target, _ -> target.performClick() }
+    }
+
+    /** Weather without a location grant asks for it; otherwise the editor, as before. */
+    private fun onWeatherTap() {
+        if (prefs.showWeather && !Weather.hasLocationPermission(requireContext()))
+            informationPermission.launch(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+        else editHomeInformation()
+    }
+
+    private fun openBatteryUsage() {
+        runCatching { startActivity(Intent(Intent.ACTION_POWER_USAGE_SUMMARY)) }.onFailure { editHomeInformation() }
+    }
+
+    /**
+     * What tapping an information widget does, and the name TalkBack gives it. Long press is
+     * always the editor. "Open its app" (widgetTapOpens) is off by default, which is the editor.
+     */
+    private fun informationTap(part: InformationPart?): Pair<Int, () -> Unit> {
+        val battery = part?.icon == R.drawable.ic_bolt || part?.icon == R.drawable.ic_battery_outline
+        return when {
+            part == null -> R.string.information_edit to ::editHomeInformation
+            // "Set up" sets up. Only for Unlocks: Screen time's tap belongs to a separate change
+            // (opening a chosen screen-time app), so it keeps the editor here.
+            part.setup && part.icon == R.drawable.ic_unlock_outline ->
+                R.string.home_allow_usage_access to ::requestInformationUsageAccess
+            !prefs.widgetTapOpens -> R.string.information_edit to ::editHomeInformation
+            battery -> R.string.home_open_battery_usage to ::openBatteryUsage
+            // Among the metric widgets the calendar glyph is the next alarm; the date is its own view.
+            part.icon == R.drawable.ic_calendar_outline -> R.string.home_open_alarms to ::openClockApp
+            else -> R.string.information_edit to ::editHomeInformation
         }
-        binding.homeApp1.setOnLongClickListener(this)
-        binding.homeApp2.setOnLongClickListener(this)
-        binding.homeApp3.setOnLongClickListener(this)
-        binding.homeApp4.setOnLongClickListener(this)
-        binding.homeApp5.setOnLongClickListener(this)
-        binding.homeApp6.setOnLongClickListener(this)
-        binding.homeApp7.setOnLongClickListener(this)
-        binding.homeApp8.setOnLongClickListener(this)
     }
 
     private fun setHomeAlignment(horizontalGravity: Int = prefs.homeAlignment) {
-        val verticalGravity = if (prefs.homeBottomAlignment) Gravity.BOTTOM else Gravity.CENTER_VERTICAL
-        binding.homeAppsLayout.gravity = horizontalGravity or verticalGravity
         binding.dateTimeLayout.gravity = horizontalGravity
-        // The name carries the alignment itself, so it lands where it would with no badge at all.
-        // positionBadge then follows it; the badge never influences where the name sits.
-        val names = homeAppNameViews()
-        val badges = homeAppBadgeViews()
-        names.forEachIndexed { index, name ->
-            (name.layoutParams as? FrameLayout.LayoutParams)?.let { params ->
-                params.gravity = horizontalGravity or Gravity.CENTER_VERTICAL
-                name.layoutParams = params
+        binding.homeAppsScroll.refresh()
+    }
+
+    private fun updateBatteryPowerPolling() {
+        val charging = batteryReading?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) == BatteryManager.BATTERY_STATUS_CHARGING &&
+            (batteryReading?.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) ?: 0) != 0
+        // informationStarted, not the view lifecycle: a weather fetch cancelled by onStop runs its
+        // finally -> populateDateTime -> here after onStop, and the view scope outlives onStop, so
+        // the 15 s loop restarted and ran with Home hidden, reading a battery state nothing updated.
+        if (!informationStarted || !prefs.infoShowBattery || !charging || _binding == null ||
+            LauncherMotion.savingPower(requireContext(), prefs)) {
+            batteryPowerJob?.cancel()
+            batteryPowerJob = null
+            return
+        }
+        if (batteryPowerJob?.isActive == true) return
+        batteryPowerJob = viewLifecycleOwner.lifecycleScope.launch {
+            while (isActive) {
+                delay(15_000)
+                if (_binding != null) populateDateTime()
             }
-            // CENTER_VERTICAL matters now that a row has a 48dp floor: gravity REPLACES, so
-            // assigning the horizontal part alone would drop the vertical centring the layout
-            // sets and leave a short name sitting at the top of its box while a taller one
-            // filled it. This also used to be eight hardcoded bindings below the loop.
-            name.gravity = horizontalGravity or Gravity.CENTER_VERTICAL
-            positionBadge(name, badges[index])
         }
     }
 
+    private fun sampleBatteryWatts(status: Int, plugged: Int, voltage: Int): Double? {
+        if (status != BatteryManager.BATTERY_STATUS_CHARGING || plugged == 0 ||
+            LauncherMotion.savingPower(requireContext(), prefs)) {
+            lastBatteryPowerSampleAt = 0L
+            sampledBatteryWatts = null
+            return null
+        }
+        val now = android.os.SystemClock.elapsedRealtime()
+        if (lastBatteryPowerSampleAt == 0L || now - lastBatteryPowerSampleAt >= 15_000L) {
+            lastBatteryPowerSampleAt = now
+            val current = runCatching {
+                (requireContext().getSystemService(Context.BATTERY_SERVICE) as BatteryManager)
+                    .getLongProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
+            }.getOrDefault(Long.MIN_VALUE)
+            sampledBatteryWatts = app.olauncher.helper.BatteryIndicator.batteryWatts(status, plugged, current, voltage)
+        }
+        return sampledBatteryWatts
+    }
+
     private fun populateDateTime() {
-        binding.dateTimeLayout.isVisible = prefs.dateTimeVisibility != Constants.DateTime.OFF
+        updateBatteryPowerPolling()
         binding.clock.isVisible = Constants.DateTime.isTimeVisible(prefs.dateTimeVisibility)
-        binding.date.isVisible = Constants.DateTime.isDateVisible(prefs.dateTimeVisibility)
-
-//        var dateText = SimpleDateFormat("EEE, d MMM", Locale.getDefault()).format(Date())
-        val pattern = Constants.DateFormat.PATTERNS.getOrElse(prefs.dateFormatIndex) {
-            Constants.DateFormat.PATTERNS.first()
+        val pattern = Constants.DateFormat.pattern(prefs.dateFormatIndex)
+        val parts = buildList {
+            if (prefs.infoShowDate) add(InformationPart(R.drawable.ic_calendar_outline,
+                SimpleDateFormat(pattern, Locale.getDefault()).format(Date()).replace(".,", ",")))
+            if (prefs.infoShowBattery) {
+                val battery = batteryReading
+                val level = battery?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
+                val scale = battery?.getIntExtra(BatteryManager.EXTRA_SCALE, 100) ?: 100
+                val percent = if (level >= 0 && scale > 0) (level * 100 / scale).coerceIn(0, 100) else -1
+                val status = battery?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+                val plugged = battery?.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) ?: 0
+                val charging = app.olauncher.helper.BatteryIndicator.isCharging(status, plugged)
+                // Plugged in but held (Samsung battery protection at 85%): it would otherwise look
+                // exactly like unplugged, so the name reads "Plugged in" and the detail "Paused".
+                val held = app.olauncher.helper.BatteryIndicator.isPaused(status, plugged)
+                val voltage = battery?.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1) ?: -1
+                val watts = sampleBatteryWatts(status, plugged, voltage)
+                val wattsValue = watts?.let { String.format(Locale.getDefault(), "%.1f", it) }
+                val caption = when {
+                    wattsValue != null -> getString(R.string.information_charge_power, wattsValue)
+                    held -> getString(R.string.information_paused)
+                    else -> null
+                }
+                val value = if (percent >= 0) "$percent%" else getString(R.string.information_battery_unavailable)
+                // The widget's name ("Battery" or "Charging") prefixes this in bind.
+                val spoken = when {
+                    wattsValue != null -> "$value. ${getString(R.string.information_charge_power_spoken, wattsValue)}"
+                    caption != null -> "$value. $caption"
+                    else -> value
+                }
+                add(InformationPart(if (charging) R.drawable.ic_bolt else R.drawable.ic_battery_outline,
+                    value, spoken, caption = caption, level = percent, charging = charging, held = held))
+            }
+            val usageAvailable = !(prefs.infoShowScreenTime || prefs.showUnlockCount) ||
+                requireContext().appUsagePermissionGranted()
+            // The saver skips the usage query (populateScreenTime), so nothing will ever replace a
+            // placeholder: "Loading…" would stay up for as long as the saver does, and a number read
+            // before the saver started would pass for a live one. Say it is paused instead.
+            val usagePaused = LauncherMotion.savingPower(requireContext(), prefs)
+            val paused = getString(R.string.information_paused)
+            // Spoken values omit the widget's name: bind prefixes it ("Screen time, 2h 11m").
+            val setupSpoken = getString(R.string.home_usage_setup_spoken)
+            if (prefs.infoShowScreenTime) {
+                if (!usageAvailable) add(InformationPart(R.drawable.ic_usage_outline,
+                    getString(R.string.information_setup), setupSpoken, setup = true))
+                else if (latestScreenTime.isNotBlank()) add(InformationPart(R.drawable.ic_usage_outline,
+                    latestScreenTime,
+                    latestScreenTime + if (usagePaused) ". $paused" else "",
+                    caption = if (usagePaused) paused else null))
+                else add(InformationPart(R.drawable.ic_usage_outline,
+                    if (usagePaused) paused else getString(R.string.information_loading)))
+            }
+            if (prefs.showUnlockCount) {
+                if (!usageAvailable) add(InformationPart(R.drawable.ic_unlock_outline,
+                    getString(R.string.information_setup), setupSpoken, setup = true))
+                else if (latestUnlockCount >= 0) {
+                    val unlocks = resources.getQuantityString(R.plurals.unlocks_only, latestUnlockCount, latestUnlockCount)
+                    add(InformationPart(R.drawable.ic_unlock_outline, unlocks,
+                        unlocks + if (usagePaused) ". $paused" else "",
+                        caption = if (usagePaused) paused else null))
+                }
+                else add(InformationPart(R.drawable.ic_unlock_outline,
+                    if (usagePaused) paused else getString(R.string.information_loading)))
+            }
         }
-        val dateFormat = SimpleDateFormat(pattern, Locale.getDefault())
-        var dateText = dateFormat.format(Date())
-
-        if (!prefs.showStatusBar) {
-            val battery = (requireContext().getSystemService(Context.BATTERY_SERVICE) as BatteryManager)
-                .getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
-            if (battery > 0)
-                dateText = getString(R.string.day_battery, dateText, battery)
+        val color = HomeForeground.color(requireContext(), prefs)
+        val dateParts = if (prefs.infoShowDate) parts.take(1) else emptyList()
+        val description = dateParts.joinToString(". ") { it.spoken }
+        if (binding.date.contentDescription?.toString() != description || lastInformationColor != color) {
+            binding.date.text = homeInformationText(requireContext(), dateParts, color, (binding.date.textSize * .9f).toInt())
+            binding.date.contentDescription = description
+            lastInformationColor = color
         }
-        binding.date.text = dateText.replace(".,", ",")
+        binding.date.gravity = prefs.homeAlignment or Gravity.CENTER_VERTICAL
+        binding.date.isVisible = dateParts.isNotEmpty()
+        val metrics = parts.drop(dateParts.size).toMutableList()
+        if (prefs.infoShowAlarm) {
+            val alarm = (requireContext().getSystemService(Context.ALARM_SERVICE) as android.app.AlarmManager).nextAlarmClock
+            val value = alarm?.let { android.text.format.DateFormat.format(android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(),
+                if (android.text.format.DateFormat.is24HourFormat(requireContext())) "EEEHm" else "EEEhm"), it.triggerTime).toString() }
+                ?: getString(R.string.information_no_alarm)
+            metrics.add(InformationPart(R.drawable.ic_calendar_outline, value))
+        }
+        val dateTap = getString(if (prefs.widgetTapOpens) R.string.open_calendar else R.string.information_edit)
+        if (dateTapLabel != dateTap) { dateTapLabel = dateTap; labelTap(binding.date, dateTap) }
+        renderInformationWidgets(metrics, color)
+        binding.dateTimeLayout.isVisible = binding.clock.isVisible || dateParts.isNotEmpty() || binding.homeWidgets.isVisible || binding.homeVisualizer.isVisible
+        binding.tvScreenTime.isVisible = false
+        positionScreenTime()
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun populateScreenTime() {
+        if (!prefs.infoShowScreenTime && !prefs.showUnlockCount) return
         if (requireContext().appUsagePermissionGranted().not()) return
 
-        viewModel.getTodaysScreenTime()
-        binding.tvScreenTime.visibility = View.VISIBLE
-
-        val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        // The date block sits at 24dp + 3dp of its own padding; this view carries 10dp of padding,
-        // so 17dp of margin puts the two texts on exactly the same edge instead of near it.
-        val horizontalMargin = if (isLandscape) 64.dpToPx() else 17.dpToPx()
-        val marginTop = if (isLandscape) {
-            if (prefs.dateTimeVisibility == Constants.DateTime.DATE_ONLY) 36.dpToPx() else 56.dpToPx()
-        } else {
-            if (prefs.dateTimeVisibility == Constants.DateTime.DATE_ONLY) 45.dpToPx() else 72.dpToPx()
-        }
-        val params = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT
-        ).apply {
-            topMargin = marginTop
-            marginStart = horizontalMargin
-            marginEnd = horizontalMargin
-            // Follows the home alignment rather than opposing it. It used to flip to the other
-            // side, which reads as a mistake the moment the apps are centred: the line sat hard
-            // right under a centred column. Screen time, unlocks and weather are about the phone,
-            // same as the clock and date above them, so they line up with everything else.
-            gravity = prefs.homeAlignment or Gravity.TOP
-        }
-        binding.tvScreenTime.layoutParams = params
-        binding.tvScreenTime.setPadding(10.dpToPx())
-        positionScreenTime()
+        if (!LauncherMotion.savingPower(requireContext(), prefs)) viewModel.getTodaysScreenTime()
+        // Screen time is drawn by the information widgets now. This used to rebuild LayoutParams
+        // for the old, always-hidden tvScreenTime line on every resume, and setLayoutParams
+        // requests a layout of the whole Home tree even for a GONE view.
     }
 
     /**
@@ -531,27 +764,194 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      * which a fixed margin can know about.
      */
     private fun positionScreenTime() {
-        val params = binding.tvScreenTime.layoutParams as? FrameLayout.LayoutParams ?: return
-        val dateBlock = binding.dateTimeLayout
-        if (!dateBlock.isVisible || dateBlock.height == 0) return
+        val region = binding.homeAppsRegion.layoutParams as FrameLayout.LayoutParams
+        // At large system text sizes the first carousel row can enter as a clipped edge
+        // immediately under the last widget label. Scale this gap with text, not the whole
+        // Home layout: regular-density A17 spacing stays exactly as the user arranged it.
+        val widgetGap = if (resources.configuration.fontScale >= 1.5f) 24.dpToPx() else 12.dpToPx()
+        val desired = if (binding.dateTimeLayout.isVisible) binding.dateTimeLayout.bottom + widgetGap else 24.dpToPx()
+        if (region.topMargin != desired) { region.topMargin = desired; binding.homeAppsRegion.layoutParams = region }
+        val list = binding.homeAppsScroll.layoutParams as FrameLayout.LayoutParams
+        val gravity = if (prefs.homeBottomAlignment) Gravity.BOTTOM else Gravity.CENTER_VERTICAL
+        if (list.gravity != gravity) { list.gravity = gravity; binding.homeAppsScroll.layoutParams = list }
+    }
 
-        val desired = dateBlock.bottom + SCREEN_TIME_GAP_DP.dpToPx()
-        // Guarded so the relayout this triggers does not loop.
-        if (params.topMargin == desired) return
-        params.topMargin = desired
-        binding.tvScreenTime.layoutParams = params
+    private var widgetRenderKey = ""
+
+    private fun renderInformationWidgets(parts: List<InformationPart>, color: Int) {
+        val grid = binding.homeWidgets
+        grid.size = prefs.informationSize
+        grid.weatherSize = prefs.weatherSize
+        grid.alignment = prefs.homeAlignment
+        val textSp = 12f + prefs.informationSize * 2f
+        val room = if (prefs.showWeather) 3 else 4
+        val shown = parts.take(room)
+        // Value updates preserve the actual nodes and accessibility/keyboard focus.
+        val identities = shown.map { if (it.icon == R.drawable.ic_bolt) R.drawable.ic_battery_outline else it.icon }
+        val key = "${prefs.informationSize}|${prefs.homeAlignment}|$color|${prefs.showWeather}|${prefs.weatherSize}|$identities"
+        if (widgetRenderKey != key) {
+            widgetRenderKey = key
+            while (grid.childCount > 1) grid.removeViewAt(1)
+            binding.weatherCurrent.textSize = textSp * 1.25f
+            binding.weatherCondition.textSize = textSp * 1.2f
+            binding.weatherHigh.textSize = textSp * 1.1f
+            binding.weatherLow.textSize = textSp * 1.1f
+            binding.homeWeather.contentDescription = null
+            shown.forEach { _ ->
+                grid.addView(HomeInformationWidgetView(requireContext()).apply {
+                    // Read at tap time: the view is kept while its value and state change.
+                    setOnClickListener { informationTap(part).second() }
+                    setOnLongClickListener { editHomeInformation(); true }
+                    applyFocusOutline(color)
+                })
+            }
+        }
+        val weight = valueWeight()
+        shown.forEachIndexed { index, part ->
+            val view = grid.getChildAt(index + 1) as HomeInformationWidgetView
+            val label = when (part.icon) {
+                // The glyph names the widget, so the second line carries the state.
+                R.drawable.ic_bolt, R.drawable.ic_battery_outline -> getString(when {
+                    part.charging -> R.string.home_battery_charging
+                    part.held -> R.string.home_battery_plugged
+                    else -> R.string.information_battery_short
+                })
+                R.drawable.ic_usage_outline -> getString(R.string.information_screen_time)
+                R.drawable.ic_unlock_outline -> getString(R.string.information_unlocks)
+                else -> getString(R.string.information_alarm)
+            }
+            view.bind(part, label, color, textSp, weight)
+            val tap = getString(informationTap(part).first)
+            if (view.tapLabel != tap) { view.tapLabel = tap; labelTap(view, tap) }
+        }
+        renderWeather(color)
+        grid.isVisible = prefs.showWeather || parts.isNotEmpty()
+        binding.homeWidgetContainer.isVisible = grid.isVisible
+        binding.homeWidgetContainer.tintScrollbar(color)
+    }
+
+    private fun renderWeather(color: Int) {
+        val view = binding.homeWeather
+        view.isVisible = prefs.showWeather
+        if (!prefs.showWeather) return
+        val needsPermission = !Weather.hasLocationPermission(requireContext())
+        val name = getString(R.string.weather)
+        // (headline, spoken). Line 1 holds a value or a short status and line 2 the name, the same
+        // order as every other widget; the spoken name carries both words the screen shows.
+        val status: Pair<String, String>? = when {
+            needsPermission -> getString(R.string.information_setup) to getString(R.string.weather_setup)
+            !Weather.locationEnabled(requireContext()) -> getString(R.string.weather_location_off).let { it to "$name, $it" }
+            prefs.weatherCached.isNotBlank() -> null
+            weatherFetchInFlight -> getString(R.string.information_loading) to getString(R.string.weather_loading)
+            LauncherMotion.savingPower(requireContext(), prefs) -> getString(R.string.information_paused) to getString(R.string.weather_paused)
+            weatherFailure == Weather.Failure.NO_LOCATION -> getString(R.string.home_weather_no_location).let { it to "$name, $it" }
+            weatherFailure == Weather.Failure.NETWORK -> getString(R.string.home_weather_offline) to getString(R.string.weather_network_error)
+            else -> getString(R.string.home_weather_unavailable) to getString(R.string.weather_unavailable)
+        }
+        val tap = getString(if (needsPermission) R.string.home_allow_location else R.string.information_edit)
+        if (weatherTapLabel != tap) { weatherTapLabel = tap; labelTap(view, tap) }
+        val condition = getString(Weather.conditionLabel(prefs.weatherCode))
+        val currentDay = Weather.isCurrentDay(prefs.weatherForecastDay, prefs.weatherTimezone)
+        val summary = if (currentDay) prefs.weatherDescription.ifBlank { prefs.weatherCached } else prefs.weatherCached.substringBefore("  H:")
+        val spoken = status?.second ?: "$condition. $summary"
+        val current = binding.weatherCurrent
+        val conditionView = binding.weatherCondition
+        val high = binding.weatherHigh
+        val low = binding.weatherLow
+        val iconView = binding.weatherIcon
+        val iconResource = if (status == null) Weather.icon(prefs.weatherCode, prefs.weatherIsDay) else null
+        val iconSize = (conditionView.textSize * 1.2f).toInt()
+        val iconState = Triple(iconResource, color, iconSize)
+        if (view.contentDescription?.toString() != spoken || current.currentTextColor != color ||
+            iconView.tag != iconState) {
+            iconView.isVisible = status == null
+            if (iconResource != null) {
+                iconView.layoutParams = iconView.layoutParams.apply {
+                    width = iconSize
+                    height = iconSize
+                }
+                iconView.setImageDrawable(androidx.appcompat.content.res.AppCompatResources.getDrawable(
+                    requireContext(), iconResource)?.mutate()?.apply {
+                    setTint(color)
+                })
+            }
+            iconView.tag = iconState
+            current.text = status?.first ?: prefs.weatherCached.substringBefore("  H:")
+            conditionView.text = if (status == null) condition else name
+            val range = if (status == null && currentDay)
+                prefs.weatherCached.substringAfter("  H:", "") else ""
+            high.text = range.substringBefore("  L:").trim().takeIf { range.isNotBlank() }?.let { "H:$it" }.orEmpty()
+            low.text = range.substringAfter("  L:", "").trim().takeIf { it.isNotBlank() }?.let { "L:$it" }.orEmpty()
+            view.contentDescription = android.text.SpannableString(spoken).apply {
+                setSpan(android.text.style.LocaleSpan(Locale.ENGLISH), 0, length,
+                    android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
+        // Value full strength and a weight step up; everything under it at 70%.
+        current.setTextColor(color)
+        current.applyTextWeight(valueWeight())
+        conditionView.setTextColor(color.withAlpha(0xB3))
+        high.setTextColor(color.withAlpha(0xB3))
+        low.setTextColor(color.withAlpha(0xB3))
+        high.isVisible = high.text.isNotBlank()
+        low.isVisible = low.text.isNotBlank()
+        view.applyFocusOutline(color)
     }
 
     /**
-     * Repaints the home screen for the chosen colour theme. Does nothing on the System theme, so
-     * the stock light/dark behaviour and any wallpaper the user set are left completely alone.
+     * Repaints Home's own surface and text: pure black under the Ultra saver, the colour theme's
+     * background and text for a custom theme, and on the System theme a 70% surface that is dark
+     * in night mode and, by day, follows the wallpaper (HomeForeground). Then puts back the
+     * information widgets' hierarchy, which the whole-tree tint and weight pass flattens.
      */
     private fun applyColorTheme() {
+        paintColorTheme()
+        restyleInformation()
+    }
+
+    /** Widget values sit one weight step above their names: hierarchy by weight first. */
+    private fun valueWeight() = (Constants.TextWeight.value(prefs.textWeight) + 100).coerceAtMost(700)
+
+    /**
+     * tintTextTree gives every Home TextView the full-strength colour and applyTextWeight one
+     * weight, which left the weather H:/L: line, the battery caption and "Paused" at full strength
+     * until the next minute tick. Re-apply the muted lines and the value weight after it.
+     */
+    private fun restyleInformation() {
+        val color = HomeForeground.color(requireContext(), prefs)
+        val muted = color.withAlpha(0xB3)
+        val weight = valueWeight()
+        binding.weatherCurrent.applyTextWeight(weight)
+        binding.weatherCondition.setTextColor(muted)
+        binding.weatherHigh.setTextColor(muted)
+        binding.weatherLow.setTextColor(muted)
+        for (i in 0 until binding.homeWidgets.childCount)
+            (binding.homeWidgets.getChildAt(i) as? HomeInformationWidgetView)?.restyle(color, weight)
+    }
+
+    private fun paintColorTheme() {
         applyFocusOutlines()
         binding.mainLayout.applyTextWeight(Constants.TextWeight.value(prefs.textWeight))
+        if (LauncherMotion.savingPower(requireContext(), prefs)) {
+            // Pure black under the Ultra battery saver: on this AMOLED panel a black pixel is a pixel
+            // switched off. Derived here, never written to the theme setting, so the user's own theme
+            // comes straight back when the saver ends. MainActivity drops the wallpaper layer too.
+            binding.mainLayout.setBackgroundColor(android.graphics.Color.BLACK)
+            binding.mainLayout.tintTextTree(android.graphics.Color.WHITE,
+                android.graphics.Color.WHITE.withAlpha(0xB3))
+            applySystemBarIcons(false)
+            return
+        }
         if (!ColorTheme.isCustom(prefs.colorThemeId)) {
-            binding.mainLayout.setBackgroundColor(android.graphics.Color.TRANSPARENT)
-            applySystemBarIcons(requireContext().isDarkThemeOn().not())
+            // White in night mode; by day it follows the wallpaper.
+            val foreground = HomeForeground.color(requireContext(), prefs)
+            // A wallpaper can contain both bright and dark regions, and Android's color hint can
+            // lag a dimming change. A quiet surface guarantees readable Home text in either theme.
+            val surface = if (foreground == android.graphics.Color.BLACK) 0xB3FFFFFF.toInt()
+                else 0xB3000000.toInt()
+            binding.mainLayout.setBackgroundColor(surface)
+            binding.mainLayout.tintTextTree(foreground, foreground.withAlpha(0xB3))
+            applySystemBarIcons(foreground == android.graphics.Color.BLACK)
             return
         }
         val theme = ColorTheme.byId(prefs.colorThemeId)
@@ -579,73 +979,20 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     /**
-     * Puts an app icon before each home app name, or clears them when icons are off.
-     *
-     * A cached icon is applied straight away so the common path never waits. A miss is loaded on
-     * a background thread and applied when it arrives, with the slot's package re-checked first -
-     * by then the user may have changed which app that row points at.
-     */
-    private fun refreshHomeIcons() {
-        val names = homeAppNameViews()
-        if (!prefs.showHomeIcons) {
-            names.forEach { it.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null) }
-            return
-        }
-
-        val sizePx = ICON_SIZE_DP.dpToPx()
-        val grayscale = prefs.iconStyle == Constants.IconStyle.GRAYSCALE
-        val context = requireContext().applicationContext
-
-        names.forEachIndexed { index, name ->
-            val location = index + 1
-            val packageName = prefs.getAppPackage(location)
-            if (!name.isVisible || packageName.isEmpty() || prefs.getIsShortcut(location)) {
-                name.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
-                return@forEachIndexed
-            }
-
-            val className = prefs.getAppActivityClassName(location)
-            val user = getUserHandleFromString(context, prefs.getAppUser(location))
-            name.compoundDrawablePadding = ICON_GAP_DP.dpToPx()
-
-            val cached = IconCache.peek(packageName, className, user, sizePx, grayscale)
-            if (cached != null) {
-                name.setCompoundDrawablesRelative(cached, null, null, null)
-                return@forEachIndexed
-            }
-
-            name.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
-            viewLifecycleOwner.lifecycleScope.launch {
-                val icon = withContext(Dispatchers.IO) {
-                    IconCache.load(context, packageName, className, user, sizePx, grayscale)
-                } ?: return@launch
-                // The row may point somewhere else by the time this lands.
-                if (prefs.getAppPackage(location) != packageName) return@launch
-                name.setCompoundDrawablesRelative(icon, null, null, null)
-                positionBadge(name, homeAppBadgeViews()[index])
-            }
-        }
-    }
-
-    /**
      * Applies the home layout options: whether visibility changes animate, and how much air each
      * row gets. Spacing is added on top of the density default rather than replacing it, so a
      * setting of zero still looks right on every screen size.
      */
     private fun applyHomeLayoutOptions() {
-        binding.mainLayout.layoutTransition =
-            if (prefs.homeAnimations) android.animation.LayoutTransition() else null
-
-        val extra = prefs.homeSpacingExtra.dpToPx()
-        homeAppNameViews().forEach { name ->
-            name.setPadding(name.paddingLeft, basePaddingPx + extra, name.paddingRight, basePaddingPx + extra)
-        }
+        binding.mainLayout.layoutTransition = null
     }
 
     private fun populateHomeScreen(appCountUpdated: Boolean) {
+        binding.homeVisualizer.homeSurface = true
+        binding.homeVisualizer.onConfigure = { customizeHomePanel(app.olauncher.helper.PanelSettings.Page.VISUALIZER) }
+        binding.homeVisualizer.refresh()
         applyHomeLayoutOptions()
         populateHomeRows(appCountUpdated)
-        refreshHomeIcons()
         applyColorTheme()
         // Must run after the rows, and outside populateHomeRows: that function returns early at
         // every one of the eight app-count checks, so anything appended to its body would be
@@ -654,190 +1001,23 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     private fun populateHomeRows(appCountUpdated: Boolean) {
-        if (appCountUpdated) hideHomeApps()
         populateDateTime()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            populateScreenTime()
-
-        val homeAppsNum = prefs.homeAppsNum
-        if (homeAppsNum == 0) return
-
-        binding.homeApp1.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp1, prefs.appName1, prefs.appPackage1, prefs.appUser1, prefs.isShortcut1, prefs.shortcutId1)) {
-            prefs.appName1 = ""
-            prefs.appPackage1 = ""
-        }
-        if (homeAppsNum == 1) return
-
-        binding.homeApp2.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp2, prefs.appName2, prefs.appPackage2, prefs.appUser2, prefs.isShortcut2, prefs.shortcutId2)) {
-            prefs.appName2 = ""
-            prefs.appPackage2 = ""
-        }
-        if (homeAppsNum == 2) return
-
-        binding.homeApp3.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp3, prefs.appName3, prefs.appPackage3, prefs.appUser3, prefs.isShortcut3, prefs.shortcutId3)) {
-            prefs.appName3 = ""
-            prefs.appPackage3 = ""
-        }
-        if (homeAppsNum == 3) return
-
-        binding.homeApp4.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp4, prefs.appName4, prefs.appPackage4, prefs.appUser4, prefs.isShortcut4, prefs.shortcutId4)) {
-            prefs.appName4 = ""
-            prefs.appPackage4 = ""
-        }
-        if (homeAppsNum == 4) return
-
-        binding.homeApp5.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp5, prefs.appName5, prefs.appPackage5, prefs.appUser5, prefs.isShortcut5, prefs.shortcutId5)) {
-            prefs.appName5 = ""
-            prefs.appPackage5 = ""
-        }
-        if (homeAppsNum == 5) return
-
-        binding.homeApp6.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp6, prefs.appName6, prefs.appPackage6, prefs.appUser6, prefs.isShortcut6, prefs.shortcutId6)) {
-            prefs.appName6 = ""
-            prefs.appPackage6 = ""
-        }
-        if (homeAppsNum == 6) return
-
-        binding.homeApp7.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp7, prefs.appName7, prefs.appPackage7, prefs.appUser7, prefs.isShortcut7, prefs.shortcutId7)) {
-            prefs.appName7 = ""
-            prefs.appPackage7 = ""
-        }
-        if (homeAppsNum == 7) return
-
-        binding.homeApp8.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp8, prefs.appName8, prefs.appPackage8, prefs.appUser8, prefs.isShortcut8, prefs.shortcutId8)) {
-            prefs.appName8 = ""
-            prefs.appPackage8 = ""
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) populateScreenTime()
+        binding.homeAppsScroll.refresh()
     }
 
-    private fun setHomeAppText(
-        textView: TextView,
-        appName: String,
-        packageName: String,
-        userString: String,
-        isShortcut: Boolean,
-        shortcutId: String?,
-    ): Boolean {
-        // Get user handle for the app/shortcut
-        val userHandle = getUserHandleFromString(requireContext(), userString)
-
-        // If it's a shortcut, verify it still exists
-        if (isShortcut) {
-            val launcherApps = requireContext().getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-
-            // Query for the specific shortcut
-            val query = LauncherApps.ShortcutQuery().apply {
-                setPackage(packageName)
-                setQueryFlags(LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED)
-            }
-
-            try {
-                val shortcuts = launcherApps.getShortcuts(query, userHandle)
-                // Check if our shortcut still exists
-                if (shortcuts?.any { it.id == shortcutId } == true) {
-                    textView.text = appName
-                    return true
-                }
-                textView.text = ""
-                textView.contentDescription = getString(R.string.empty_home_slot)
-                return false
-            } catch (e: Exception) {
-                e.printStackTrace()
-                textView.text = ""
-                textView.contentDescription = getString(R.string.empty_home_slot)
-                return false
-            }
-        }
-
-        // Regular app check
-        if (isPackageInstalled(requireContext(), packageName, userString)) {
-            textView.text = appName
-            textView.contentDescription = null
-            return true
-        }
-        textView.text = ""
-        textView.contentDescription = getString(R.string.empty_home_slot)
-        return false
-    }
-
-    private fun homeAppNameViews(): List<TextView> = listOf(
-        binding.homeApp1, binding.homeApp2, binding.homeApp3, binding.homeApp4,
-        binding.homeApp5, binding.homeApp6, binding.homeApp7, binding.homeApp8
-    )
-
-    /**
-     * Puts the badge just past the end of the app name WITHOUT taking part in layout.
-     *
-     * The name is positioned by its own layout_gravity, exactly as it would be with no badge, so
-     * a badge appearing or disappearing never shifts it. The badge is parked at the row's start
-     * edge and moved by translationX, which is applied at draw time and cannot affect the name's
-     * measured position or the row's centring.
-     */
-    private fun positionBadge(name: TextView, badge: TextView) {
-        if (!badge.isVisible) return
-        // A badge shown for the first time has width 0 until it is laid out; placing it from
-        // that put it in the wrong spot until something else happened to trigger a pass.
-        if (badge.width == 0) {
-            badge.post { positionBadge(name, badge) }
-            return
-        }
-        val gap = BADGE_GAP_DP.dpToPx()
-        val row = badge.parent as? View
-        val rtl = badge.layoutDirection == View.LAYOUT_DIRECTION_RTL
-        val trailing = if (rtl) (name.left - badge.width - gap) else (name.right + gap)
-        val leading = if (rtl) (name.right + gap) else (name.left - badge.width - gap)
-        // A right-aligned home screen ends the name flush with the row, so the trailing
-        // position lands outside it and the row clips the badge away completely - the count
-        // disappears for everyone, with no error. Fall back to the leading side when it
-        // does not fit, which is the only place left that is still inside the row.
-        val fits = row == null ||
-            (trailing >= 0 && trailing + badge.width <= row.width)
-        // translationX is a DELTA from where the view was laid out, not an absolute x. The
-        // badge's layout_gravity is `start`, which is the RIGHT edge in RTL, so treating the
-        // target as absolute pushed it straight off an RTL row.
-        var left = if (fits) trailing else leading
-        // Neither side fits when the name is long enough to fill the row - a wrapped label,
-        // or a wide one at a large text size. Clamping keeps the count on screen; the old
-        // code let the row clip it away with no error, which reads as "no notifications".
-        if (row != null) left = left.coerceIn(0, (row.width - badge.width).coerceAtLeast(0))
-        badge.translationX = (left - badge.left).toFloat()
-    }
-
-    /**
+/**
      * Android's default focus highlight is #292929, which is 1.44:1 on a black launcher -
      * well under the 3:1 a focus indicator owes, and the text itself does not change colour
      * when focused either, so d-pad and switch-access users had no cue at all. The ring is
      * drawn in the text colour, which the palette already guarantees at 9.9:1 or better.
      */
     private fun applyFocusOutlines() {
-        val ring = if (ColorTheme.isCustom(prefs.colorThemeId))
-            ColorTheme.byId(prefs.colorThemeId).text
-        else requireContext().getColorFromAttr(R.attr.primaryColor)
-        homeAppNameViews().forEach { it.applyFocusOutline(ring) }
-        homeAppBadgeViews().forEach { it.applyFocusOutline(ring) }
-        binding.clock.applyFocusOutline(ring)
-        binding.date.applyFocusOutline(ring)
-        binding.tvScreenTime.applyFocusOutline(ring)
+        val color = HomeForeground.color(requireContext(), prefs)
+        binding.clock.applyFocusOutline(color)
+        binding.date.applyFocusOutline(color)
     }
 
-    private fun homeAppRows(): List<FrameLayout> = listOf(
-        binding.homeAppRow1, binding.homeAppRow2, binding.homeAppRow3, binding.homeAppRow4,
-        binding.homeAppRow5, binding.homeAppRow6, binding.homeAppRow7, binding.homeAppRow8
-    )
-
-    private fun homeAppBadgeViews(): List<TextView> = listOf(
-        binding.homeAppBadge1, binding.homeAppBadge2, binding.homeAppBadge3, binding.homeAppBadge4,
-        binding.homeAppBadge5, binding.homeAppBadge6, binding.homeAppBadge7, binding.homeAppBadge8
-    )
 
     /**
      * The identity a notification is matched against. A blank stored user means the slot was saved
@@ -850,50 +1030,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     )
 
     private fun refreshBadges(counts: Map<String, Int> = NotificationCounts.counts.value.orEmpty()) {
-        val names = homeAppNameViews()
-        val badges = homeAppBadgeViews()
-        val enabled = prefs.showNotificationBadges
-        val homeAppsNum = prefs.homeAppsNum
-
-        names.forEachIndexed { index, name ->
-            val location = index + 1
-            val badge = badges[index]
-
-            // A shortcut is not an app and has no notifications of its own; a row past the app
-            // count, hidden, or showing the empty hint has nothing to badge either.
-            val badgeable = enabled &&
-                location <= homeAppsNum &&
-                name.isVisible &&
-                !name.text.isNullOrEmpty() &&
-                !prefs.getIsShortcut(location) &&
-                prefs.getAppPackage(location).isNotEmpty()
-
-            val count = if (badgeable) counts[badgeKeyFor(location)] ?: 0 else 0
-
-            if (count <= 0) {
-                if (badge.isVisible) badge.isVisible = false
-                // Leave the empty-slot description alone; only clear a count we wrote.
-                if (name.text.isNotEmpty()) name.contentDescription = null
-                return@forEachIndexed
-            }
-
-            val label = when {
-                prefs.badgeStyle == Constants.BadgeStyle.DOT -> getString(R.string.badge_dot)
-                count > 99 -> getString(R.string.badge_count_overflow)
-                else -> count.toString()
-            }
-            // Guard the write: setting identical text still costs a measure pass on a TextView.
-            if (badge.text?.toString() != label) badge.text = label
-            val spoken = resources.getQuantityString(
-                R.plurals.missed_notifications, count, prefs.getAppName(location), count
-            )
-            badge.contentDescription = spoken
-            // The name is the node that launches the app, so the count belongs on it too -
-            // otherwise it is only heard by swiping onto a second node.
-            name.contentDescription = spoken
-            if (!badge.isVisible) badge.isVisible = true
-            positionBadge(name, badge)
-        }
+        binding.homeAppsScroll.updateBadges(counts)
     }
 
     /**
@@ -922,16 +1059,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         ).showRespectingStatusBar()
     }
 
-    private fun hideHomeApps() {
-        binding.homeApp1.visibility = View.GONE
-        binding.homeApp2.visibility = View.GONE
-        binding.homeApp3.visibility = View.GONE
-        binding.homeApp4.visibility = View.GONE
-        binding.homeApp5.visibility = View.GONE
-        binding.homeApp6.visibility = View.GONE
-        binding.homeApp7.visibility = View.GONE
-        binding.homeApp8.visibility = View.GONE
-    }
 
     private fun launchAppOrShortcut(
         appName: String,
@@ -946,12 +1073,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             showLongPressToast()
             return
         }
-        // Opening the app is the reset, and this is the one funnel every launch path goes
-        // through - home tap, gesture, clock, calendar, screen time. Clearing at the
-        // homeAppClicked caller instead meant launching the same app any other way left the
-        // badge showing notifications you had just read.
-        if (packageName.isNotEmpty())
-            NotificationCounts.clearApp(NotificationCounts.key(packageName, userString))
+        // MainViewModel clears the badge only after Android accepts the launch. Home, Apps,
+        // Search and shortcuts all use that same success path; a missing app keeps its badge.
         if (isShortcut && !shortcutId.isNullOrEmpty()) {
             launchShortcut(
                 packageName = packageName,
@@ -1047,17 +1170,39 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         includeHiddenApps: Boolean = false,
         keyboardMode: Int = Constants.KeyboardMode.AUTO,
     ) {
-        viewModel.getAppList(includeHiddenApps)
+        viewModel.ensureAppList(includeHiddenApps)
         val args = bundleOf(
             Constants.Key.FLAG to flag,
             Constants.Key.RENAME to rename,
             Constants.Key.KEYBOARD_MODE to keyboardMode
         )
+        // Home sits below a translucent drawer; hide its text before the drawer fades in.
+        binding.mainLayout.visibility = View.INVISIBLE
         try {
             findNavController().navigate(R.id.action_mainFragment_to_appListFragment, args)
         } catch (e: Exception) {
             findNavController().navigate(R.id.appListFragment, args)
             e.printStackTrace()
+        }
+    }
+
+    private fun warmDrawerIcons(apps: List<AppModel>?) {
+        if (apps.isNullOrEmpty() || !prefs.showDrawerIcons ||
+            LauncherMotion.savingPower(requireContext(), prefs)) return
+        val context = requireContext().applicationContext
+        val size = prefs.appIconSize.dpToPx()
+        val capacity = IconCache.warmCapacity(size)
+        val entries = AppCategory.iconWarmOrder(apps, prefs.drawerSort).take(capacity).map {
+            Triple(it.appPackage, it.activityClassName.orEmpty(), it.user)
+        }
+        val grayscale = prefs.iconStyle == Constants.IconStyle.GRAYSCALE
+        val key = "${prefs.drawerSort}|$size|$grayscale|${IconCache.iconPackPackage}|$entries"
+        if (drawerWarmKey == key && drawerWarmJob?.isActive == true) return
+        drawerWarmJob?.cancel()
+        drawerWarmKey = key
+        // The fragment survives navigation; keep the bounded warmup alive as Apps opens.
+        drawerWarmJob = lifecycleScope.launch(Dispatchers.IO) {
+            IconCache.warm(context, entries, size, grayscale, limit = capacity)
         }
     }
 
@@ -1138,12 +1283,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         }
     }
 
-    /**
-     * Everything missed across every home app, in one place. This is the opt-in stand-in for
-     * Before Launcher's notification screen: it shows what arrived, grouped by app, and nothing
-     * more - it deliberately cannot act on, dismiss or reply to a notification, because that is
-     * the notification shade's job and duplicating it is how a minimal launcher stops being one.
-     */
     /**
      * Opens the notification panel.
      *
@@ -1250,7 +1389,9 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
             override fun onLongClick() {
                 super.onLongClick()
-                runGesture(Constants.Gesture.LONG_PRESS, Constants.GestureAction.LAUNCHER_SETTINGS)
+                if (prefs.getGestureAction(Constants.Gesture.LONG_PRESS, Constants.GestureAction.LAUNCHER_SETTINGS) ==
+                    Constants.GestureAction.LAUNCHER_SETTINGS) showHomeMenu()
+                else runGesture(Constants.Gesture.LONG_PRESS, Constants.GestureAction.LAUNCHER_SETTINGS)
             }
 
             override fun onDoubleClick() {
@@ -1277,78 +1418,166 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
      * Long press still opens the app picker for that slot, so the badge never becomes a dead zone
      * over the row's own behaviour.
      */
-    private fun getBadgeSwipeTouchListener(
-        context: Context,
-        badge: View,
-        nameView: View,
-        location: Int,
-    ): View.OnTouchListener {
-        return object : ViewSwipeTouchListener(context, badge) {
-            override fun onSwipeLeft() {
-                super.onSwipeLeft()
-                openSwipeLeftApp()
-            }
 
-            override fun onSwipeRight() {
-                super.onSwipeRight()
-                openSwipeRightApp()
-            }
 
-            override fun onSwipeUp() {
-                super.onSwipeUp()
-                showAppList(Constants.FLAG_LAUNCH_APP)
-            }
+    private fun addHomeApp() {
+        if (prefs.homeAppEntries().size < 512)
+            showAppList(Constants.FLAG_HOME_ADD_AUTO, includeHiddenApps = true)
+    }
 
-            override fun onSwipeDown() {
-                super.onSwipeDown()
-                expandNotificationDrawer(context)
-            }
+    private fun customizeHomePanel(page: app.olauncher.helper.PanelSettings.Page = app.olauncher.helper.PanelSettings.Page.HOME) {
+        customizePanel(page) { widgetRenderKey = ""; populateHomeScreen(false); refreshWeather() }
+    }
+    private fun editHomeApps() {
+        homeMenu?.dismiss()
+        homeMenu = requireContext().homeAppsEditor(prefs, viewLifecycleOwner.lifecycleScope, this) {
+            populateHomeScreen(true)
+        }.also { it.showForLauncher() }
+    }
 
-            override fun onLongClick(view: View) {
-                textOnLongClick(nameView)
-            }
-
-            override fun onClick(view: View) {
-                showBadgeDetails(location)
-            }
+    private fun openHomeSettings() {
+        try {
+            findNavController().navigate(
+                R.id.action_mainFragment_to_settingsFragment,
+                bundleOf(Constants.Key.SECTION to Constants.Section.HOME)
+            )
+            viewModel.firstOpen(false)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
-    private fun getViewSwipeTouchListener(context: Context, view: View): View.OnTouchListener {
-        return object : ViewSwipeTouchListener(context, view) {
-            override fun onSwipeLeft() {
-                super.onSwipeLeft()
-                openSwipeLeftApp()
-            }
-
-            override fun onSwipeRight() {
-                super.onSwipeRight()
-                openSwipeRightApp()
-            }
-
-            override fun onSwipeUp() {
-                super.onSwipeUp()
-                showAppList(Constants.FLAG_LAUNCH_APP)
-            }
-
-            override fun onSwipeDown() {
-                super.onSwipeDown()
-                expandNotificationDrawer(requireContext())
-            }
-
-            override fun onLongClick(view: View) {
-                super.onLongClick(view)
-                textOnLongClick(view)
-            }
-
-            override fun onClick(view: View) {
-                super.onClick(view)
-                textOnClick(view)
-            }
+    /**
+     * The Home edit surface uses the same card, typography, and row rhythm as Settings. One card
+     * (the dialog's own Settings card), sized to its rows; a tap anywhere outside it closes it.
+     */
+    private fun showHomeEditMenu(title: String, actions: List<Pair<Int, () -> Unit>>) {
+        homeMenu?.dismiss()
+        val context = requireContext()
+        val card = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(12.dpToPx(), 16.dpToPx(), 12.dpToPx(), 16.dpToPx())
         }
+        card.addView(TextView(context, null, 0, R.style.TextLarge).apply {
+            text = title
+            minHeight = 48.dpToPx()
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(8.dpToPx(), 0, 8.dpToPx(), 0)
+            ViewCompat.setAccessibilityHeading(this, true)
+        })
+        val selectable = android.util.TypedValue().also {
+            context.theme.resolveAttribute(android.R.attr.selectableItemBackground, it, true)
+        }.resourceId
+        actions.forEachIndexed { index, (label, action) ->
+            if (index > 0) card.addView(View(context).apply {
+                setBackgroundColor(context.getColorFromAttr(R.attr.primaryColor).withAlpha(36))
+            }, LinearLayout.LayoutParams(-1, 1.dpToPx()).apply { marginStart = 8.dpToPx(); marginEnd = 8.dpToPx() })
+            card.addView(TextView(context, null, 0, R.style.TextSmall).apply {
+                setText(label)
+                minHeight = 48.dpToPx()
+                gravity = Gravity.CENTER_VERTICAL
+                setPadding(8.dpToPx(), 8.dpToPx(), 8.dpToPx(), 8.dpToPx())
+                if (selectable != 0) setBackgroundResource(selectable)
+                isFocusable = true
+                applyFocusOutline(context.getColorFromAttr(R.attr.primaryColor))
+                setOnClickListener { homeMenu?.dismiss(); action() }
+            }, LinearLayout.LayoutParams(-1, -2))
+        }
+        // At the Text weight, like the Settings pages and editors these rows open.
+        card.applyTextWeight(Constants.TextWeight.value(prefs.textWeight))
+        val scroll = ScrollView(context).apply {
+            addView(card, FrameLayout.LayoutParams(-1, -2))
+        }
+        val homeSurface = binding.mainLayout
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(context).setView(scroll).create()
+        dialog.setOnDismissListener {
+            homeSurface.alpha = 1f
+            if (homeMenu === dialog) homeMenu = null
+        }
+        homeMenu = dialog
+        // showForLauncher paints the opaque Settings page colour behind the card. The translucent
+        // shade this used to set let a light wallpaper through as a grey frame in dark mode.
+        dialog.showForLauncher()
+        // The window fills the screen, so Android's own outside-touch cancel never fires. The card
+        // wraps its rows and consumes its own taps; a tap on the page around it closes the menu.
+        // The page is not an accessibility node of its own: Back closes the menu for TalkBack.
+        dialog.findViewById<View>(androidx.appcompat.R.id.parentPanel)?.apply {
+            isClickable = true
+            // Swallowing taps is all it does; TalkBack must not offer it as a control. Its rows still are.
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        }
+        dialog.findViewById<View>(android.R.id.content)?.apply {
+            setOnClickListener { dialog.dismiss() }
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        }
+        dialog.window?.clearFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        homeSurface.alpha = 0f
+    }
+
+    private fun showHomeAppMenu(slot: Int) {
+        showHomeEditMenu(prefs.getAppName(slot), listOf(
+            R.string.home_replace_app to { showAppList(Constants.FLAG_HOME_SLOT_BASE + slot, includeHiddenApps = true) },
+            R.string.home_remove_app to { prefs.removeHomeApp(slot); populateHomeScreen(true) },
+            R.string.home_bulk_title to { editHomeApps() }
+        ))
+    }
+
+    private fun showHomeMenu() {
+        showHomeEditMenu(getString(R.string.home_screen), listOf(
+            R.string.home_bulk_title to { editHomeApps() },
+            R.string.home_information to { editHomeInformation() },
+            R.string.home_settings to { openHomeSettings() },
+            R.string.all_settings to { openLauncherSettings() }
+        ))
+    }
+
+    override fun onCreateAnimator(transit: Int, enter: Boolean, nextAnim: Int): android.animation.Animator? {
+        if (prefs.homeScrollStyle == 0 || LauncherMotion.savingPower(requireContext(), prefs))
+            return android.animation.ValueAnimator.ofFloat(0f, 1f).setDuration(0)
+        return super.onCreateAnimator(transit, enter, nextAnim)
+    }
+
+    /**
+     * MainActivity declares configChanges="uiMode", so a night-mode switch arrives here instead
+     * of as a recreate. Home's colours follow it (HomeForeground is white at night).
+     */
+    override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
+        super.onConfigurationChanged(newConfig)
+        HomeForeground.invalidate()
+        if (_binding != null && isResumed) populateHomeScreen(false)
+    }
+
+    override fun onPowerStateChanged() {
+        super.onPowerStateChanged()
+        val saving = LauncherMotion.savingPower(requireContext(), prefs)
+        if (saving) {
+            drawerWarmJob?.cancel()
+            drawerWarmJob = null
+            drawerWarmKey = ""
+        } else warmDrawerIcons(viewModel.appList.value)
+        if (_binding == null) return
+        // Before the rows: bind reads HomeForeground, which is white under the saver.
+        applyColorTheme()
+        binding.homeAppsScroll.refresh()
+        populateDateTime()
+        refreshWeather()
+        // Screen time is skipped while saving. When the saver ends, fetch it now rather than
+        // leaving "Paused" up until the next time Home happens to resume.
+        if (!saving && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) populateScreenTime()
+    }
+
+    override fun suppressMotion() {
+        super.suppressMotion()
+        weatherJob?.cancel()
+        if (weatherFetchInFlight) lastWeatherAttempt = 0L
+        _binding?.homeAppsScroll?.suppressMotion()
     }
 
     override fun onDestroyView() {
+        homeMenu?.dismiss()
+        homeMenu = null
+        informationDialog?.dismiss()
+        informationDialog = null
         super.onDestroyView()
         _binding = null
     }

@@ -1,6 +1,5 @@
 package app.olauncher
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -12,36 +11,42 @@ import android.content.pm.ShortcutInfo
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
 import android.provider.Settings
+import android.view.KeyEvent
 import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
+import androidx.core.view.doOnPreDraw
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import app.olauncher.data.AppModel
 import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.ActivityMainBinding
 import app.olauncher.helper.IconCache
+import app.olauncher.helper.LauncherMotion
+import app.olauncher.helper.SaverWindow
 import app.olauncher.helper.getColorFromAttr
-import app.olauncher.helper.hasBeenHours
 import app.olauncher.helper.hasBeenMinutes
 import app.olauncher.helper.isDarkThemeOn
-import app.olauncher.helper.isDaySince
 import app.olauncher.helper.isDefaultLauncher
 import app.olauncher.helper.OlDialog
 import app.olauncher.helper.isEinkDisplay
 import app.olauncher.helper.isOlauncherDefault
 import app.olauncher.helper.isSystemAnimationsDisabled
-import app.olauncher.helper.isTablet
-import app.olauncher.helper.openUrl
 import app.olauncher.helper.resetLauncherViaFakeActivity
 import app.olauncher.helper.setPlainWallpaper
 import app.olauncher.helper.showLauncherSelector
 import app.olauncher.helper.showMessageDialog
 import app.olauncher.helper.showToast
+import app.olauncher.ui.BaseFragment
+import app.olauncher.ui.HomeCarousel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -102,6 +107,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         navController = this.findNavController(R.id.nav_host_fragment)
+        // The saver drops the wallpaper layer only while Home itself is showing; see SaverWindow.
+        navController.addOnDestinationChangedListener { _, _, _ -> applyPowerWindow() }
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -122,9 +129,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         initObservers(viewModel)
-        viewModel.getAppList()
+        // After the first frame; see HomeFragment.onResume for the measured reason.
+        binding.root.doOnPreDraw { root -> root.post { afterFirstFrame() } }
         registerShortcutCallback()
-        setupOrientation()
 
         window.addFlags(FLAG_LAYOUT_NO_LIMITS)
         applyRotationPolicy()
@@ -133,7 +140,7 @@ class MainActivity : AppCompatActivity() {
             profileReceiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context?, intent: Intent?) {
                     viewModel.isPrivateSpaceToggling = false
-                    viewModel.getPrivateSpaceAppList()
+                    viewModel.getPrivateSpaceAppList(force = true)
                 }
             }
             val filter = IntentFilter().apply {
@@ -144,18 +151,96 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0 &&
+            (event.keyCode == KeyEvent.KEYCODE_TAB || event.keyCode == KeyEvent.KEYCODE_DPAD_UP ||
+                event.keyCode == KeyEvent.KEYCODE_DPAD_DOWN) &&
+            ::navController.isInitialized && navController.currentDestination?.id == R.id.mainFragment) {
+            if (findViewById<HomeCarousel>(R.id.homeAppsScroll)?.prepareKeyboardNavigation(event) == true) return true
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
     override fun onStart() {
         super.onStart()
         restartLauncherOrCheckTheme()
         // The cache is a process-wide singleton, so it has to learn the chosen pack once per
         // process start rather than only when the setting is changed.
         IconCache.iconPackPackage = prefs.iconPackPackage
+        // Registered for the whole visible span. Pulling the notification shade over Home does not
+        // stop the activity, and that is exactly where Power Saver usually gets switched on.
+        ContextCompat.registerReceiver(this, powerSaveReceiver,
+            IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED), ContextCompat.RECEIVER_NOT_EXPORTED)
+        applyPowerWindow()
+    }
+
+    /**
+     * Work that used to run before Home's first frame and never needed to.
+     *
+     * The app list: nothing on the first frame reads it. And WorkManager, which no longer starts
+     * at every process start (see the manifest): when the daily wallpaper is on it is started here
+     * instead, off the main thread, because its start-up is also where it notices a force-stop and
+     * re-registers jobs the system dropped - skip it and the wallpaper would quietly stop.
+     */
+    private fun afterFirstFrame() {
+        if (isFinishing || isDestroyed) return
+        viewModel.getAppList()
+        if (prefs.dailyWallpaper) lifecycleScope.launch(Dispatchers.IO) {
+            runCatching { androidx.work.WorkManager.getInstance(applicationContext) }
+        }
+    }
+
+    /**
+     * The only Power Saver receiver. Each BaseFragment used to register its own in onStart and
+     * drop it in onStop: two synchronous ActivityManager binder calls on the main thread per
+     * fragment swap, app launch and return, all during transitions, for a broadcast this one
+     * already receives. Fragments are started only inside this activity's onStart..onStop, where
+     * this receiver is registered, so forwarding to the STARTED ones keeps the same coverage.
+     * STARTED rather than "has a view" so a page still animating out is not driven.
+     */
+    private val powerSaveReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            applyPowerWindow()
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+                ?.childFragmentManager?.fragments?.forEach { fragment ->
+                    if (fragment is BaseFragment && fragment.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
+                        fragment.dispatchPowerStateChanged()
+                }
+        }
+    }
+
+    /**
+     * Applies the window-level half of the Ultra battery saver - refresh rate and wallpaper layer.
+     * Public so the Settings switch can apply a manual change at once instead of at the next start.
+     */
+    fun applyPowerWindow() {
+        if (!::prefs.isInitialized) return
+        val homeShowing = ::navController.isInitialized &&
+            navController.currentDestination?.id == R.id.mainFragment
+        val saving = LauncherMotion.savingPower(this, prefs)
+        SaverWindow.apply(this, saving, homeShowing)
+        // The saver paints Home black and sets light bar icons for it, and only Home sets bar
+        // icons at all, so they carried over: white icons on the white Settings page, drawer
+        // and panel of a light theme. Away from Home, match the page those screens paint.
+        if (saving && !homeShowing) {
+            val light = androidx.core.graphics.ColorUtils.calculateLuminance(
+                app.olauncher.helper.settingsPageColor(this, prefs)) > .5
+            androidx.core.view.WindowInsetsControllerCompat(window, window.decorView).apply {
+                isAppearanceLightStatusBars = light
+                isAppearanceLightNavigationBars = light
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
         isResumed = true
         viewModel.isPrivateSpaceToggling = false
+        // Something was installed, removed or pinned while away: one scan, after the return frame.
+        if (appsChangedWhileAway) {
+            appsChangedWhileAway = false
+            viewModel.requestAppListRefresh(400L)
+        }
         // No getAppList() here on purpose: it enumerated every launchable activity, resolved a
         // label per app and re-sorted with a Collator on every single Home press, even when only
         // the home screen was showing and nothing consumed the list. The LauncherApps.Callback
@@ -168,17 +253,16 @@ class MainActivity : AppCompatActivity() {
             // These three used to be no-ops, which is why onResume re-scanned every launchable
             // activity on every Home press. Answering the platform's own events instead means the
             // scan runs when the app list actually changes, which is rarely.
-            override fun onPackageRemoved(packageName: String, user: android.os.UserHandle) {
-                viewModel.getAppList()
-            }
+            // Added and removed refresh almost at once, so an uninstall from the drawer does not
+            // leave a dead row; the others coalesce, because one app update reports several.
+            override fun onPackageRemoved(packageName: String, user: android.os.UserHandle) =
+                onAppsChanged(150L)
 
-            override fun onPackageAdded(packageName: String, user: android.os.UserHandle) {
-                viewModel.getAppList()
-            }
+            override fun onPackageAdded(packageName: String, user: android.os.UserHandle) =
+                onAppsChanged(150L)
 
-            override fun onPackageChanged(packageName: String, user: android.os.UserHandle) {
-                viewModel.getAppList()
-            }
+            override fun onPackageChanged(packageName: String, user: android.os.UserHandle) =
+                onAppsChanged(750L)
             override fun onPackagesAvailable(
                 packageNames: Array<out String>,
                 user: android.os.UserHandle,
@@ -196,15 +280,42 @@ class MainActivity : AppCompatActivity() {
                 shortcuts: MutableList<ShortcutInfo>,
                 user: android.os.UserHandle,
             ) {
-                viewModel.getAppList()
+                // Messaging apps publish a conversation shortcut with nearly every message, and
+                // this fires for each one. The list shows only pinned shortcuts, so only a change
+                // that adds one, or touches a package that has one listed (an unpin or removal no
+                // longer appears in `shortcuts`), can change a row.
+                val listed = viewModel.appList.value?.any {
+                    it is AppModel.PinnedShortcut && it.appPackage == packageName && it.user == user
+                } == true
+                if (listed || Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 &&
+                    shortcuts.any { it.isPinned }) onAppsChanged(750L)
             }
         }
         launcherApps.registerCallback(launcherAppsCallback!!)
     }
 
+    private var appsChangedWhileAway = false
+
+    /**
+     * The callback is registered for the activity's whole life, so it also fires with another app
+     * in front and with the screen off - and every call used to run a full scan: every launchable
+     * activity's label, a Collator sort, the pinned shortcuts and the private space. Away from
+     * Home it now only marks the list stale, and one scan runs on the way back.
+     */
+    private fun onAppsChanged(delayMs: Long) {
+        if (isResumed) viewModel.requestAppListRefresh(delayMs)
+        else {
+            appsChangedWhileAway = true
+            viewModel.invalidateAppList()
+        }
+    }
+
     override fun onStop() {
         isResumed = false
-        backToHomeScreen()
+        runCatching { unregisterReceiver(powerSaveReceiver) }
+        // Leaving the launcher returns to Home, but a recreate is not leaving: text size, weight,
+        // font and theme recreate the page, and this used to drop you from Settings onto Home.
+        if (!isChangingConfigurations) backToHomeScreen()
         super.onStop()
     }
 
@@ -317,14 +428,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("SourceLockedOrientationActivity")
-    private fun setupOrientation() {
-        if (isTablet(this) || Build.VERSION.SDK_INT == Build.VERSION_CODES.O)
-            return
-        // In Android 8.0, windowIsTranslucent cannot be used with screenOrientation=portrait
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    }
-
     private fun backToHomeScreen() {
         if (viewModel.isPrivateSpaceToggling) return
         messageDialog?.dismiss()
@@ -345,16 +448,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Recreates only when the theme is actually wrong. Olauncher also recreated the activity, and
+     * wiped cacheDir, on the first Home press after every 4 hours: a full re-inflate of Home at the
+     * most visible moment, fixing nothing - nothing writes to cacheDir, and checkTheme() below is
+     * the recovery for a wrong theme. Date, battery and weather refresh on their own in onResume.
+     */
     private fun restartLauncherOrCheckTheme(forceRestart: Boolean = false) {
-        if (forceRestart || prefs.launcherRestartTimestamp.hasBeenHours(4)) {
-            prefs.launcherRestartTimestamp = System.currentTimeMillis()
-            // Off the main thread: a recursive filesystem delete was running inside onStart, and
-            // recreate() does not depend on it finishing.
-            val cache = cacheDir
-            lifecycleScope.launch(Dispatchers.IO) { runCatching { cache.deleteRecursively() } }
-            recreate()
-        } else
-            checkTheme()
+        if (forceRestart) recreate() else checkTheme()
     }
 
     private fun checkTheme() {
@@ -417,7 +518,7 @@ class MainActivity : AppCompatActivity() {
      * deliberately locked their screen is not overridden by their launcher.
      */
     private fun applyRotationPolicy() {
-        // 600dp, not the isTablet() helper next door: that measures physical diagonal inches
+        // 600dp, not the isTablet() helper in Utils: that measures physical diagonal inches
         // through a deprecated API, and the question here is whether a landscape LAYOUT is
         // worth showing. smallestScreenWidthDp is the same number Android uses to pick
         // sw600dp resources, so the gate and the layouts agree by construction.

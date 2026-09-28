@@ -1,70 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:background="?attr/primaryShadeDarkColor"
-    android:orientation="vertical">
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_weight="0.1" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:imeOptions="actionSearch"
-            android:paddingHorizontal="7dp"
-            android:paddingVertical="0dp"
-            android:textCursorDrawable="@null"
-            app:closeIcon="@null"
-            app:iconifiedByDefault="false"
-            app:queryBackground="@null"
-            app:queryHint="@string/search_apps"
-            app:searchIcon="@null"
-            app:theme="@style/AppSearchText" />
-
-        <TextView
-            android:id="@+id/appRename"
-            style="@style/TextSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="20dp"
-            android:paddingVertical="@dimen/app_padding_vertical"
-            android:text="@string/rename"
-            android:textAllCaps="true"
-            android:visibility="gone" />
-
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="?attr/primaryShadeDarkColor" android:orientation="vertical">
+    <LinearLayout android:id="@+id/drawerNavigation"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp" android:gravity="center_vertical">
+        <TextView style="@style/TextSmall" android:id="@+id/drawerHome"
+            android:layout_width="wrap_content" android:minWidth="48dp" android:gravity="center" android:layout_height="wrap_content" android:minHeight="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="12dp" android:contentDescription="@string/return_home"
+            android:text="@string/return_home" />
+        <TextView android:id="@+id/drawerTitle" style="@style/TextSmall"
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:minHeight="48dp"
+            android:gravity="center_vertical" android:paddingHorizontal="8dp"
+            android:text="@string/browse_apps" />
+        <!-- paddingStart 6dp puts the glyph's ink on the rows' 24dp column; minWidth keeps 48dp. -->
+        <TextView style="@style/TextSmall" android:id="@+id/drawerMode"
+            android:layout_width="wrap_content" android:minWidth="48dp" android:gravity="center" android:layout_height="wrap_content" android:minHeight="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingStart="6dp" android:paddingEnd="12dp"
+            android:paddingTop="12dp" android:paddingBottom="12dp" android:contentDescription="@string/search_mode"
+            android:text="@string/search_mode" />
+        <TextView android:id="@+id/drawerCustomize" style="@style/TextSmall"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:minWidth="48dp" android:minHeight="48dp" android:gravity="center"
+            android:padding="8dp" android:text="@string/panel_edit"
+            android:contentDescription="@string/customize_apps" android:background="?attr/selectableItemBackgroundBorderless" />
     </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.06" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="24dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:fadingEdgeLength="24dp"
-        android:requiresFadingEdge="vertical" />
-
+    <!-- centre_vertical: on narrow screens the back button moves in beside the field and is taller. -->
+    <LinearLayout android:id="@+id/searchContainer" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginHorizontal="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" android:visibility="gone">
+        <!-- Grows with the text size (48dp at least): at 200% the typed text was clipped in 48dp.
+             The prompt starts where typed text starts (its start padding is set from the field) and
+             is the same size, so the first keystroke does not jump. -->
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:minHeight="48dp" android:layout_weight="1">
+            <androidx.appcompat.widget.SearchView android:id="@+id/search"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:imeOptions="actionSearch" app:iconifiedByDefault="false"
+                app:queryBackground="@null" app:queryHint="@string/search_apps"
+                app:searchIcon="@null" app:theme="@style/AppSearchText" />
+            <TextView android:id="@+id/searchPrompt" style="@style/TextLarge"
+                android:layout_width="match_parent" android:layout_height="match_parent"
+                android:gravity="start|center_vertical" android:text="@string/search_apps"
+                android:maxLines="1" android:ellipsize="end"
+                android:importantForAccessibility="no" android:visibility="gone" />
+        </FrameLayout>
+        <TextView android:id="@+id/appRename" style="@style/TextSmall"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:minWidth="48dp" android:minHeight="48dp" android:gravity="center"
+            android:padding="8dp" android:text="@string/rename" android:visibility="gone" />
+    </LinearLayout>
+    <TextView android:id="@+id/drawerEmpty" style="@style/TextSmall"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:padding="24dp" android:visibility="gone" android:accessibilityLiveRegion="polite" />
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerView"
+        android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+        android:paddingBottom="24dp" android:clipToPadding="false" />
 </LinearLayout>

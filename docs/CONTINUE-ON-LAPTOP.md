@@ -1,81 +1,54 @@
 # Continuing on the laptop
 
-Everything is pushed to `Xer0z-gh/MOOLauncher`. The laptop already has `adb` and
-the phone plugged into it over USB, which is a better setup than the desktop had
-— the desktop reached the phone through a Tailscale relay, and a high-latency
-link makes `input swipe` unreliable enough that scroll benchmarks are unusable.
+Updated 2026-09-21. The active source is the laptop working tree, not GitHub.
+Changes are uncommitted on `moo-laptop-continuation`; no push was requested.
 
-```bash
-git clone https://github.com/Xer0z-gh/MOOLauncher.git
-cd MOOLauncher
-```
+=====
+ACTIVE DEVELOPMENT
+=====
 
-## What the build needs
+- SSH: the laptop's Tailscale address and user are in Tanner's private notes (not in this public repo); hostname Laptop, Debian.
+- Repository: `/home/xer0z/Workspace/Dev/Android/Moolauncher`.
+- Desktop mirror: `D:\Workspace\Dev\Android\Moolauncher`.
+- Toolchain/caches: `/home/xer0z/Workspace/Ops/Moo-Toolchain`.
+- JDK21, Android platform36, build-tools35.0.0, Gradle wrapper8.11.1.
+- `bash tools/build-laptop.sh :app:assembleDebug :app:testDebugUnitTest :app:assembleRelease`
+- Add `--offline` once dependencies are cached. Do not skip lint when a fresh
+  machine needs to download its lint dependencies.
 
-- **JDK 17+.** Gradle 8.11 and AGP 8.9 refuse to run on Java 8. On the desktop
-  the JDK that works is the one bundled with Android Studio
-  (`Android Studio/jbr`); on the laptop, `sudo apt install openjdk-17-jdk` or
-  Android Studio's own.
-- **Android SDK with platform 36.** `compileSdk 36`, `targetSdk 36`,
-  `minSdk 24`. Point `local.properties` at it:
-  ```
-  sdk.dir=/home/xer0z/Android/Sdk
-  ```
+The signing init script uses the same debug identity as the installed phone app.
+The keystore is outside the repository in the toolchain's signing directory.
+`install -r` preserves settings, but verify signatures and keep an APK/prefs backup.
 
-```bash
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64   # or Studio's jbr
-./gradlew assembleDebug
-adb install -r app/build/outputs/apk/debug/app-debug.apk
-```
+=====
+PHYSICAL PHONE
+=====
 
-`install -r` upgrades in place and keeps every setting.
+USB serial `R5GL55YDDNT`, Galaxy A17 SM-S176V, Android16,1080x2340,450dpi.
+Run commands on the laptop with `/usr/bin/adb -s R5GL55YDDNT` explicitly.
+The desktop emulator is `emulator-5562` and is never the physical-phone target.
+Default home is `app.olauncher.debug/app.olauncher.MainActivity`.
 
-## Verifying on the phone
+Never point the emulator preference/notification harnesses at the phone. Do not
+clear its notifications, change its default home or rewrite its preference XML.
+Back up and diff preferences around tests. Natural screen-time/weather caches
+change; explicit settings tests should use the UI and restore the selected mode.
+Match a fresh UI node before tapping. Long press with DOWN/wait/UP on the phone.
+Stop if an unexpected app is foreground. Do not dump unrelated private app text.
 
-The phone is `R5GL55YDDNT`, a Samsung SM-S176V: Android 16 (API 36), 1080x2340,
-450 dpi. Over USB it is just `adb` with no `-H` or `-s` needed if it is the only
-device attached.
+For longer tests, temporarily keep the USB-powered display awake and restore
+`stay_on_while_plugged_in` in a finally block. The device can otherwise lock
+between UI dumps, invalidating a test even if KEYCODE_HOME was sent.
 
-**It is his daily phone and his live launcher.** The rules that matter:
+=====
+EVIDENCE AND CONTINUITY
+=====
 
-- **Do not run the emulator harnesses against it.** `test_panel.py`,
-  `test_badges.py` and the settings matrix rewrite preferences, swipe rows away
-  and tap *Clear all* — on this phone that rebinds a gesture he uses and wipes a
-  shade full of his real notifications.
-- **Back up preferences first**, and diff them afterwards:
-  ```bash
-  adb shell run-as app.olauncher.debug cat shared_prefs/app.olauncher.xml > prefs.bak
-  ```
-  `SCREEN_TIME_LAST_UPDATED` changes on its own every time the launcher resumes;
-  anything else changing means something was written that should not have been.
-- **Never tap a remembered coordinate.** Dump, match the node by exact text or
-  `content-desc`, tap that node's own centre. A stale dump once opened the
-  launcher chooser and cleared the default home activity.
-- **A long press on the home screen must land on empty space.** A long press on
-  an app row is that row's own gesture, not the launcher's. Below the last app
-  is safe; the y that works on this screen is around 1990.
+Laptop `work/phone-*` directories contain APK/prefs backups, screenshots and
+JSON reports. Scripts in the transfer staging directory execute locally on the
+laptop so network latency does not affect the duration of injected swipes.
+Desktop `work/pull_remote.py` synchronizes source and checks for conflicting
+local edits using a hash baseline. Do not overwrite independent local changes.
 
-The read-only check that is safe to run is
-`ClaudeVault/Projects/Moo Launcher/attachments/phone_panel.py` — it navigates to
-the panel through Settings, reads back what rendered, screenshots it, and
-changes nothing. It needs its `HOST` list changed to `[]` when adb talks to the
-phone directly over USB.
-
-## The 20-second manual check
-
-Faster than any of it, and the one thing still unverified on the device:
-
-1. Long press an empty part of the home screen → **Settings**
-2. **Home screen** → scroll down to **Notification panel** → **Open**
-3. The shade should be listed, grouped by app, newest first.
-
-Tap a row to open what sent it. Swipe a row sideways to dismiss it. Long press a
-row to mute that app — the same list that controls the home screen badges.
-
-## Where the state is written down
-
-- `ClaudeVault/Projects/Moo Launcher/Moo Launcher.md` — hub, what is built, what
-  is open
-- `.../Decisions.md` — every design decision and the reasoning
-- `.../Toolchain.md` — how the emulator and the phone are driven
-- `.../attachments/` — every harness
+Read `docs/HANDOFF.md` and `docs/TODO.md` for scope and remaining verification.
+Historical baseline gates do not certify the current feature build.

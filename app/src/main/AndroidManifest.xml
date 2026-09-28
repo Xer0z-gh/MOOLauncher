@@ -23,7 +23,12 @@
     <!--Used for Private Space support on Android 15+-->
     <uses-permission android:name="android.permission.ACCESS_HIDDEN_PROFILES" />
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- Optional short scroll feedback on devices without native tick effects. -->
+    <uses-permission android:name="android.permission.VIBRATE" />
     <application
+        android:name=".MooApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -55,7 +60,7 @@
         <activity
             android:name=".helper.PinItemActivity"
             android:exported="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.content.pm.action.CONFIRM_PIN_SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -122,6 +127,33 @@
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
         </service>
+
+        <!--
+            Two library initializers taken off every process start. A Perfetto trace of a cold start
+            on the A17 put them on the main thread before the first frame: WorkManager 20.7 ms (it
+            builds its Room database) and EmojiCompat 10.0 ms (it loads an emoji font). A launcher
+            is restarted by the OS often - memory pressure, the notification listener rebinding - so
+            that cost recurred all day.
+            WorkManager is only used by the optional daily wallpaper; MooApplication now provides its
+            configuration and it starts on first use. EmojiCompat backports newer emoji to old
+            Android and nothing here needs that: AppCompat checks isConfigured() before using it.
+            ProcessLifecycle (5 ms on the same trace) went the same way: dexdump of the debug APK
+            finds exactly one class outside it that references it - EmojiCompatInitializer, as a
+            dependency - and nothing in the app uses ProcessLifecycleOwner.
+            With those three gone the merged manifest still carried the provider for one entry,
+            ProfileInstallerInitializer, which installs a baseline profile that measured no
+            cold-start difference on the A17 (verify 463 / speed-profile 474 / speed 464 ms). So
+            the provider itself is removed: with zero content providers ActivityThread skips
+            installContentProviders, which drops a getProviderInfo and a publishContentProviders
+            binder call from bindApplication on every process start, listener-only starts included.
+            Nothing else here uses androidx.startup, and WorkManager still starts on demand through
+            MooApplication's Configuration.Provider. A library added later that relies on
+            androidx.startup will not initialize itself: initialize it explicitly where it is used.
+        -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            tools:node="remove" />
 
     </application>
 

@@ -19,6 +19,16 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 classpath and the build fails with `ClassNotFoundException:
 GradleWrapperMain`. A stale APK then gets re-installed and reads as "no change".
 
+## Current daily-phone build (2026-09-24)
+
+The A17 now runs the optimized, non-debuggable daily build. Build with
+`bash tools/build-laptop.sh --offline :app:assembleDaily`. It preserves the
+existing app.olauncher.debug identity/signing key and data. Do not replace it
+with an ordinary debug build at the end of a session. `run-as` denial is expected;
+private-state readback requires a temporary matching signed debug `install -r`,
+then daily `install -r`. Never uninstall or clear phone data. See
+docs/PERFORMANCE.md for validation and the reversible diagnostic workflow.
+
 ## The one rule that matters here
 
 **Nothing is done until it has been exercised.** Not "it compiles", not "the

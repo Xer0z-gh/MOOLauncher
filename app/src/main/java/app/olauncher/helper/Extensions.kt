@@ -1,5 +1,6 @@
 package app.olauncher.helper
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AppOpsManager
 import android.app.SearchManager
@@ -9,14 +10,13 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
+import androidx.core.graphics.drawable.toDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import android.content.Intent
 import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
 import android.content.res.Resources
-import android.net.Uri
 import android.os.Build
 import android.os.UserHandle
 import android.provider.Settings
@@ -60,6 +60,8 @@ fun View.hideKeyboard() {
     imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
+// Forced toggle preserves the current IME behavior; showSoftInput is not equivalent.
+@Suppress("DEPRECATION")
 fun View.showKeyboard(show: Boolean = true) {
     if (show.not()) return
     if (this.requestFocus())
@@ -80,6 +82,8 @@ fun Activity.showLauncherSelector(requestCode: Int) {
         resetDefaultLauncher()
 }
 
+// The HOME intent must remain implicit so Android resolves the user's selected launcher.
+@SuppressLint("UnsafeImplicitIntentLaunch")
 fun Context.resetDefaultLauncher() {
     try {
         val componentName = ComponentName(this, FakeHomeActivity::class.java)
@@ -126,6 +130,8 @@ fun Context.isEinkDisplay(): Boolean {
         .also { isEinkDevice = it }
 }
 
+// The window manager reports the display associated with this context.
+@Suppress("DEPRECATION")
 private fun Context.hasEinkRefreshRate(): Boolean {
     return try {
         val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -139,6 +145,8 @@ private fun Context.hasEinkRefreshRate(): Boolean {
 }
 
 // Boox devices report 60Hz+ refresh rates, so the refresh rate check misses them
+// Optional Onyx firmware class has no public API; the probe must tolerate its absence.
+@SuppressLint("PrivateApi")
 private fun isOnyxDevice(): Boolean {
     if (Build.MANUFACTURER.equals("ONYX", ignoreCase = true)) return true
     return try {
@@ -187,14 +195,19 @@ fun Context.isCountryIn(): Boolean {
     return country.equals("IN", ignoreCase = true)
 }
 
-@RequiresApi(Build.VERSION_CODES.Q)
+// This reads AppOps without recording a usage access or changing its mode.
+@Suppress("DEPRECATION")
 fun Context.appUsagePermissionGranted(): Boolean {
     val appOpsManager = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-    return appOpsManager.unsafeCheckOpNoThrow(
-        "android:get_usage_stats",
-        android.os.Process.myUid(),
-        packageName
-    ) == AppOpsManager.MODE_ALLOWED
+    val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        appOpsManager.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+            android.os.Process.myUid(), packageName)
+    } else {
+        @Suppress("DEPRECATION")
+        appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+            android.os.Process.myUid(), packageName)
+    }
+    return mode == AppOpsManager.MODE_ALLOWED
 }
 
 /**
@@ -253,8 +266,8 @@ fun View.styleTextTree(@ColorInt color: Int?, @ColorInt hintColor: Int?, weight:
         is TextView -> {
             if (color != null) setTextColor(
                 ColorStateList(
-                    arrayOf(intArrayOf(android.R.attr.state_pressed), intArrayOf()),
-                    intArrayOf(color.withAlpha(0x80), color)
+                    arrayOf(intArrayOf(-android.R.attr.state_enabled), intArrayOf(android.R.attr.state_pressed), intArrayOf()),
+                    intArrayOf(color.withAlpha(0x66), color.withAlpha(0x80), color)
                 )
             )
             if (hintColor != null) setHintTextColor(hintColor)
@@ -315,7 +328,7 @@ fun View.applyFocusOutline(@ColorInt color: Int) {
     }
     foreground = StateListDrawable().apply {
         addState(intArrayOf(android.R.attr.state_focused), ring)
-        addState(intArrayOf(), ColorDrawable(Color.TRANSPARENT))
+        addState(intArrayOf(), Color.TRANSPARENT.toDrawable())
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) defaultFocusHighlightEnabled = false
 }
@@ -372,9 +385,6 @@ fun Long.convertEpochToMidnight(): Long {
 
 fun Long.isDaySince(): Int = ((System.currentTimeMillis().convertEpochToMidnight() - this.convertEpochToMidnight())
         / Constants.ONE_DAY_IN_MILLIS).toInt()
-
-fun Long.hasBeenHours(hours: Int): Boolean =
-    ((System.currentTimeMillis() - this) / Constants.ONE_HOUR_IN_MILLIS) >= hours
 
 fun Long.hasBeenMinutes(minutes: Int): Boolean =
     ((System.currentTimeMillis() - this) / Constants.ONE_MINUTE_IN_MILLIS) >= minutes

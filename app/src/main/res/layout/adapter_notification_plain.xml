@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    One notification row with no media session: adapter_notification.xml without the media card,
+    artwork, scrim and visualizer, which only a row with a session can use (see
+    NotificationPanelAdapter.ViewHolder). Keep the two in step; the ids are the same so the panel
+    harnesses match either.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/panel_padding_horizontal">
+
+    <View android:id="@+id/groupRule" android:layout_width="match_parent" android:layout_height="1dp"
+        android:layout_marginTop="12dp" android:background="?attr/primaryColorTrans50" />
+    <TextView
+        android:id="@+id/appLabel"
+        style="@style/TextSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        tools:text="Messages" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:orientation="horizontal"
+        android:paddingVertical="6dp">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="@dimen/panel_icon_size"
+            android:layout_height="@dimen/panel_icon_size"
+            android:layout_marginEnd="14dp"
+            android:importantForAccessibility="no"
+            android:visibility="gone"
+            tools:src="@drawable/ic_rounded"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/TextMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Mom" />
+
+            <TextView
+                android:id="@+id/body"
+                style="@style/TextSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                tools:text="Call me when you land" />
+
+        </LinearLayout>
+
+        <!-- Tabular figures so the times form a column instead of a ragged edge. -->
+        <TextView
+            android:id="@+id/time"
+            style="@style/TextSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFeatureSettings="tnum"
+            android:gravity="end"
+            android:maxLines="1"
+            tools:text="12:04" />
+
+    </LinearLayout>
+</LinearLayout>

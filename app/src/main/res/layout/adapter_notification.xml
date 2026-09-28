@@ -21,6 +21,8 @@
     android:orientation="vertical"
     android:paddingHorizontal="@dimen/panel_padding_horizontal">
 
+    <View android:id="@+id/groupRule" android:layout_width="match_parent" android:layout_height="1dp"
+        android:layout_marginTop="12dp" android:background="?attr/primaryColorTrans50" />
     <TextView
         android:id="@+id/appLabel"
         style="@style/TextSmall"
@@ -29,10 +31,23 @@
         android:layout_marginTop="14dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAllCaps="true"
-        android:letterSpacing="0.04"
+        android:textAllCaps="false"
+        android:textSize="18sp"
         tools:text="Messages" />
 
+    <FrameLayout android:id="@+id/mediaCard"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@drawable/media_card_clip">
+        <ImageView android:id="@+id/mediaArtwork"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:contentDescription="@null" android:importantForAccessibility="no"
+            android:scaleType="centerCrop" android:visibility="gone" />
+        <View android:id="@+id/mediaScrim"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:background="#B3000000" android:visibility="gone" />
+        <LinearLayout android:id="@+id/mediaContent"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -92,4 +107,9 @@
 
     </LinearLayout>
 
+    <app.olauncher.ui.AudioVisualizerView android:id="@+id/mediaVisualizer"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:visibility="gone" />
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

@@ -10,6 +10,10 @@ import android.graphics.drawable.Drawable
 import android.os.UserHandle
 import android.util.LruCache
 import androidx.core.graphics.createBitmap
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.content.res.ResourcesCompat
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 
 /**
  * App icons for the home screen and the app drawer.
@@ -20,17 +24,24 @@ import androidx.core.graphics.createBitmap
  *    usually an AdaptiveIconDrawable - two layers, a mask and a shader - which is re-rendered on
  *    every draw. Flattening it once means the drawer scrolls against plain bitmaps, and it makes
  *    the memory cost exactly known instead of open-ended.
- * 2. The cache is bounded by entry count, and the entries are all the same size by construction,
- *    so the ceiling is arithmetic: MAX_ENTRIES x sizePx^2 x 4 bytes. At the default 32dp on a
- *    3x density phone that is about 1.5 MB, which is a fair price for not re-decoding an icon
- *    every time a row is recycled.
+ * 2. The cache is bounded by bitmap allocation bytes. Icons can have different sizes after
+ *    customization, and dense screens must not multiply the retained memory budget.
+ *    Visible rows keep their own references; eviction never recycles a bitmap still on screen.
  */
 object IconCache {
 
     /** Roughly one screenful of drawer rows plus the home screen, with room to scroll back. */
     private const val MAX_ENTRIES = 48
 
-    private val cache = object : LruCache<String, Drawable>(MAX_ENTRIES) {}
+    private const val MAX_BYTES = 2 * 1024 * 1024
+
+    /** Do not prewarm more bitmaps than the cache can retain at the selected icon size. */
+    fun warmCapacity(sizePx: Int): Int = if (sizePx <= 0) 0 else
+        (MAX_BYTES / (sizePx.toLong() * sizePx * 4)).toInt().coerceIn(1, MAX_ENTRIES)
+    private val cache = object : LruCache<String, Drawable>(MAX_BYTES) {
+        override fun sizeOf(key: String, value: Drawable): Int =
+            (value as BitmapDrawable).bitmap.allocationByteCount.coerceAtLeast(1)
+    }
 
     /** The chosen icon pack's package, or empty for the apps' own icons. */
     @Volatile
@@ -93,7 +104,7 @@ object IconCache {
      * pops in as you scroll. Bounded by [limit] and by the cache itself, so this cannot
      * grow past the ceiling the cache already guarantees.
      */
-    fun warm(
+    suspend fun warm(
         context: Context,
         apps: List<Triple<String, String, UserHandle>>,
         sizePx: Int,
@@ -101,7 +112,8 @@ object IconCache {
         limit: Int = MAX_ENTRIES,
     ) {
         if (sizePx <= 0) return
-        for ((packageName, className, user) in apps.take(limit)) {
+        for ((packageName, className, user) in apps.take(limit.coerceIn(0, MAX_ENTRIES))) {
+            currentCoroutineContext().ensureActive()
             if (packageName.isEmpty()) continue
             if (peek(packageName, className, user, sizePx, grayscale) != null) continue
             load(context, packageName, className, user, sizePx, grayscale)
@@ -110,6 +122,27 @@ object IconCache {
 
     /** Drops everything, for when the icon style changes or apps are added or removed. */
     fun clear() = cache.evictAll()
+
+    /** The notification's own mask for packages such as System UI with no launcher activity. */
+    fun loadNotificationIcon(
+        context: Context,
+        source: NotificationSmallIcon,
+        user: UserHandle,
+        sizePx: Int,
+        tint: Int,
+    ): Drawable? {
+        if (sizePx <= 0 || source.resourceId == 0) return null
+        val key = "notification|${source.packageName}|${source.resourceId}|$user|$sizePx|$tint"
+        cache.get(key)?.let { return it }
+        val flattened = runCatching {
+            val resources = context.packageManager.getResourcesForApplication(source.packageName)
+            val drawable = ResourcesCompat.getDrawable(resources, source.resourceId, null)!!.mutate()
+            drawable.setTint(tint)
+            rasterize(context, drawable, sizePx, grayscale = false)
+        }.getOrNull() ?: return null
+        cache.put(key, flattened)
+        return flattened
+    }
 
     private fun resolveIcon(
         context: Context,
@@ -149,7 +182,7 @@ object IconCache {
         }
         drawable.draw(canvas)
         drawable.colorFilter = null
-        return BitmapDrawable(context.resources, bitmap).apply {
+        return bitmap.toDrawable(context.resources).apply {
             setBounds(0, 0, sizePx, sizePx)
         }
     }

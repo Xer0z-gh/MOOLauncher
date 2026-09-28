@@ -1,66 +1,31 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">Moo Launcher</string>
     <string name="github" translatable="false">GitHub</string>
     <!-- Home button for recents feature disabled -->
     <!-- <string name="recents_layout_description" translatable="false">recents layout description to be used a unique id to show recent apps</string> -->
-    <string name="digital_minimalism" translatable="false"><u>Digital Minimalism</u></string>
-    <string name="day_battery" formatted="false" translatable="false">%s, %d%%</string>
-    <string name="tag_0" translatable="false">0</string>
-    <string name="tag_1" translatable="false">1</string>
-    <string name="tag_2" translatable="false">2</string>
-    <string name="tag_3" translatable="false">3</string>
-    <string name="tag_4" translatable="false">4</string>
-    <string name="tag_5" translatable="false">5</string>
-    <string name="tag_6" translatable="false">6</string>
-    <string name="tag_7" translatable="false">7</string>
-    <string name="tag_8" translatable="false">8</string>
     <string name="time_spent_min" translatable="false"><b>%1$sm</b></string>
     <string name="time_spent_hour" translatable="false">%1$sh %2$sm</string>
 
-    <string name="instagram" translatable="false">Instagram</string>
 
     <string name="app">App</string>
     <string name="set_as_default_launcher">Set as default launcher</string>
     <string name="set_as_default_launcher_u"><u>Set as default launcher</u></string>
     <string name="set_as_default_launcher_first">Set Moo Launcher default first</string>
-    <string name="app_text_color">Text color</string>
-    <string name="double_tap_to_lock_screen">Double tap to lock</string>
-    <string name="home_button_show_recents">Home button for recents</string>
-    <string name="admin_permission_message">Moo Launcher promises to use the accessibility permission responsibly. Moo Launcher does not collect or share any data.</string>
-    <string name="about">About</string>
     <string name="off">Off</string>
     <string name="on">On</string>
-    <string name="black">Black</string>
-    <string name="white">White</string>
     <string name="change_default_launcher">Change default launcher</string>
-    <string name="follow">Follow</string>
-    <string name="email">Email</string>
-    <string name="donate">Donate</string>
     <string name="swipe_up_for_apps">1. Swipe up for all apps\n2. Long press anywhere for settings</string>
-    <string name="apps_on_home_screen">Apps on home screen</string>
     <string name="daily_wallpaper_update">Daily new wallpaper</string>
     <string name="left">Left</string>
     <string name="right">Right</string>
     <string name="center">Center</string>
     <string name="home_layout_alignment">App alignment</string>
     <string name="_0">0</string>
-    <string name="_1">1</string>
-    <string name="_2">2</string>
-    <string name="_3">3</string>
-    <string name="_4">4</string>
-    <string name="_5">5</string>
-    <string name="_6">6</string>
-    <string name="_7">7</string>
-    <string name="_8">8</string>
-    <string name="app_drawer_tips">Tip: Start typing an app name to auto-launch it</string>
     <string name="okay">Okay</string>
-    <string name="cool">Cool!</string>
-    <string name="auto_launch_from_search">Auto launch from search</string>
+    <string name="auto_launch_from_search" translatable="false">Auto launch from search</string>
     <string name="auto_show_keyboard">Auto show keyboard</string>
     <string name="hide">Hide</string>
-    <string name="status_bar">Status bar on top</string>
     <string name="rename">Rename</string>
-    <string name="show_date_time">Show date time</string>
     <string name="appearance">Appearance</string>
     <string name="gestures">Gestures</string>
     <string name="theme_mode">Theme mode</string>
@@ -72,48 +37,35 @@
     <!--         \n\nIf you have a moment to spare, could you please share Moo Launcher with others? Moo Launcher needs people. More importantly, people need Moo Launcher.</string>-->
     <string name="keyboard_message">Hi, keyboard is the fastest way to find and launch apps in Moo Launcher. Can we request you to keep this On for a few more days and then decide?
         \n\nThe choice is always yours.</string>
-    <string name="digital_wellbeing_message">If you want to set time limits for certain apps, Digital Wellbeing feature of Android can help you do it.           Please search for Digital Wellbeing in your phone settings and enable it.</string>
     <string name="app_usage_message">To show/hide your screen time on the home screen, please allow or disallow the app usage permission.
         \n\nNote: No app usage data is collected. Everything is processed on your device.</string>
     <string name="wallpaper_message">Moo Launcher offers beautiful new wallpapers daily. Give your homescreen a fresh new look every day, for free!
         \n\nWant to try it?</string>
     <string name="accessibility_service_description">The accessibility permission is required to enable the gesture - double tap to lock . Any data acquired by Moo Launcher via this service will not leave your device.</string>
-    <string name="open">Open link</string>
-    <string name="copy">Copy</string>
     <string name="close">Close</string>
-    <string name="not_now">Not now</string>
-    <string name="date">Date</string>
-    <string name="date_only">Date only</string>
-    <string name="bottom_on">Bottom: On</string>
-    <string name="bottom_off">Bottom: Off</string>
+    <string name="bottom_alignment" translatable="false">Align to bottom</string>
+    <string name="alignment_for_app_list" translatable="false">Use this alignment in the app list</string>
     <string name="please_set_olauncher_as_default_first">Please set Moo Launcher as default first</string>
-    <string name="affiliate">Affiliate</string>
-    <string name="tip_start_typing_for_rename">Tip: Start typing for app RENAME option</string>
-    <string name="hidden_apps_message">Note: Your hidden apps are in Settings &gt; Apps &gt; Hidden apps. Tapping \'Moo Launcher\' at the top of this Settings page opens them too.</string>
+    <!-- English-only since 2026-09-27: every translation described tapping the Settings title,
+         which no longer opens Hidden apps; retranslate before removing translatable="false". -->
+    <string name="hidden_apps_message" translatable="false">Note: Your hidden apps are in Settings &gt; Apps &gt; Hidden apps.</string>
     <string name="accessibility_disclosure">Please turn on Moo Launcher\'s accessibility service in your device\'s settings to enable Double tap to lock gesture.
     \n\nPlease note that this service is only used for this particular feature. Our accessibility service does not collect or share any data.</string>
-    <string name="accept">Accept</string>
     <string name="permission">Permission</string>
-    <string name="double_tap_lock">Double tap to lock</string>
     <string name="enable">Enable</string>
     <string name="disable">Disable</string>
     <string name="info">Info</string>
     <string name="delete">Uninstall</string>
     <string name="text_size">Text size</string>
-    <string name="bold_font">Bold font</string>
     <string name="enabled">Enabled</string>
-    <string name="disabled">Disabled</string>
     <string name="please_turn_on_double_tap_to_unlock">Please turn on double tap to lock</string>
     <string name="launcher_failed_to_lock_device">Moo Launcher failed to lock device.\nPlease check your app settings.</string>
     <string name="long_press_to_select_app">Long press to select app</string>
     <string name="unable_to_open_app">Unable to open app</string>
     <string name="unable_to_open_app_info">Unable to open app info</string>
-    <string name="copied">Copied</string>
     <string name="system_app_cannot_delete">System app, cannot delete</string>
     <string name="type_a_new_app_name_first">Type a new app name first</string>
     <string name="app_not_found">App not found</string>
-    <string name="unable_to_launch_app">Unable to launch app</string>
-    <string name="search_for_Launcher_or_home_app">Search for Launcher or Home app</string>
     <string name="your_wallpaper_will_update_shortly">Your wallpaper will update shortly</string>
     <string name="olauncher_is_not_default_launcher">Moo Launcher is not default. Wallpaper update will fail.</string>
     <string name="no_hidden_apps">No hidden apps</string>
@@ -121,126 +73,125 @@
     <string name="adapter_show">Show</string>
     <string name="adapter_hide">Hide</string>
     <string name="screen_time">Screen time</string>
-    <string name="notification_badges">Notification badges</string>
-    <string name="notification_badges_message">Moo Launcher will count the notifications you miss and show the number next to each home screen app. The count clears when you open that app. Notifications are only ever counted on this device, never stored and never sent anywhere.\n\nAndroid asks you to grant notification access on the next screen.</string>
-    <string name="notification_access">Notification access</string>
-    <string name="unable_to_open_notification_settings">Unable to open notification access settings</string>
-    <string name="badge_count_overflow">99+</string>
-    <string name="no_notification_details">Nothing to show for this app yet</string>
-    <plurals name="missed_notifications">
+    <string name="notification_badges" translatable="false">Notification badges</string>
+    <string name="show_badges" translatable="false">Show badges</string>
+    <string name="all_apps" translatable="false">All apps</string>
+    <string name="menu_back" translatable="false">Back</string>
+    <string name="back_to_badges" translatable="false">Back to notification badges</string>
+    <string name="back_to_notifications" translatable="false">Back to Notifications</string>
+    <string name="notification_badges_message" translatable="false">Moo Launcher will count the notifications you miss and show the number next to each home screen app. The count clears when you open that app. Notifications are only ever counted on this device, never stored and never sent anywhere.\n\nAndroid asks you to grant notification access on the next screen.</string>
+    <string name="notification_access" translatable="false">Notification access</string>
+    <string name="notification_access_detail" translatable="false">Also used by the notification panel and media. Tap to manage in Android.</string>
+    <string name="notification_access_status" translatable="false">Notification access %1$s. Also used by the notification panel and media. Tap to manage in Android.</string>
+    <string name="unable_to_open_notification_settings" translatable="false">Unable to open notification access settings</string>
+    <string name="badge_count_overflow" translatable="false">99+</string>
+    <string name="no_notification_details" translatable="false">Nothing to show for this app yet</string>
+    <plurals name="missed_notifications" translatable="false">
         <item quantity="one">%1$s · %2$d missed notification</item>
         <item quantity="other">%1$s · %2$d missed notifications</item>
     </plurals>
-    <string name="a11y_pair" translatable="false">%1$s, %2$s</string>
-    <string name="text_weight">Text weight</string>
-    <string name="weight_regular">Regular</string>
-    <string name="weight_medium">Medium</string>
-    <string name="weight_bold">Bold</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="a11y_work_profile">%1$s, work profile</string>
-    <string name="a11y_screen_time">Screen time, %1$s</string>
-    <string name="empty_home_slot">Empty slot, double tap to choose an app</string>
-    <string name="search_apps">Search apps</string>
-    <string name="please_select_an_app">Please select an app</string>
-    <string name="app_info">App info</string>
-    <string name="badge_dot">•</string>
-    <string name="apps_section">Apps</string>
-    <string name="font">Font</string>
-    <string name="font_light">Light</string>
-    <string name="font_regular">Regular</string>
-    <string name="font_medium">Medium</string>
-    <string name="font_condensed">Condensed</string>
-    <string name="font_serif">Serif</string>
-    <string name="font_monospace">Monospace</string>
-    <string name="font_inter">Inter</string>
-    <string name="weather">Weather</string>
-    <string name="temperature_unit">Temperature unit</string>
-    <string name="unit_celsius">Celsius</string>
-    <string name="unit_fahrenheit">Fahrenheit</string>
-    <string name="line_with_weather">%1$s · %2$s</string>
-    <string name="weather_needs_location">Weather needs location access</string>
-    <string name="date_format">Date format</string>
-    <string name="date_format_short">Sun, 21 Sep</string>
-    <string name="date_format_long">Sunday, 21 September</string>
-    <string name="date_format_with_year">21 Sep 2026</string>
-    <string name="date_format_weekday">Sunday</string>
-    <string name="date_format_numeric">21/9/2026</string>
-    <string name="unlock_count">Unlock count</string>
-    <plurals name="unlocks_only">
+    <plurals name="view_app_notifications" translatable="false">
+        <item quantity="one">View %2$d notification for %1$s</item>
+        <item quantity="other">View %2$d notifications for %1$s</item>
+    </plurals>    <string name="a11y_pair" translatable="false">%1$s, %2$s</string>
+    <string name="text_weight" translatable="false">Text weight</string>
+    <string name="weight_regular" translatable="false">Regular</string>
+    <string name="weight_medium" translatable="false">Medium</string>
+    <string name="weight_bold" translatable="false">Bold</string>
+    <string name="dismiss" translatable="false">Dismiss</string>
+    <string name="a11y_work_profile" translatable="false">%1$s, work profile</string>
+    <string name="search_apps" translatable="false">Search apps</string>
+    <string name="please_select_an_app" translatable="false">Please select an app</string>
+    <string name="app_info" translatable="false">App info</string>
+    <string name="badge_dot" translatable="false">•</string>
+    <string name="apps_section" translatable="false">Apps</string>
+    <string name="font" translatable="false">Font</string>
+    <string name="font_light" translatable="false">Sans light</string>
+    <string name="font_regular" translatable="false">Sans</string>
+    <string name="font_medium" translatable="false">Sans medium</string>
+    <string name="font_condensed" translatable="false">Condensed</string>
+    <string name="font_serif" translatable="false">Serif</string>
+    <string name="font_monospace" translatable="false">Monospace</string>
+    <string name="font_inter" translatable="false">Inter</string>
+    <string name="weather" translatable="false">Weather</string>
+    <string name="temperature_unit" translatable="false">Temperature unit</string>
+    <string name="unit_celsius" translatable="false">Celsius</string>
+    <string name="unit_fahrenheit" translatable="false">Fahrenheit</string>
+    <string name="weather_needs_location" translatable="false">Weather needs location access</string>
+    <string name="date_format" translatable="false">Date format</string>
+    <!-- Layout placeholder only: the row and its menu show today's date in each format. -->
+    <string name="date_format_short" translatable="false">Sun, 21 Sep</string>
+    <!-- Date format 5: the locale's own order for weekday, month and day. -->
+    <string name="date_format_automatic" translatable="false">Automatic (%1$s)</string>
+    <string name="unlock_count" translatable="false">Unlock count</string>
+    <plurals name="unlocks_only" translatable="false">
         <item quantity="one">%1$d unlock</item>
         <item quantity="other">%1$d unlocks</item>
     </plurals>
-    <plurals name="screen_time_and_unlocks">
-        <item quantity="one">%2$s · %1$d unlock</item>
-        <item quantity="other">%2$s · %1$d unlocks</item>
-    </plurals>
-    <string name="home_animations">Animations</string>
-    <string name="home_spacing">Row spacing</string>
-    <string name="home_spacing_value">+%1$d</string>
-    <string name="color_theme">Colour theme</string>
-    <string name="app_icons">App icons</string>
-    <string name="icons_home_only">Home only</string>
-    <string name="icons_drawer_only">App list only</string>
-    <string name="icons_everywhere">Home and app list</string>
-    <string name="icon_style">Icon style</string>
-    <string name="icon_style_full_color">Full colour</string>
-    <string name="icon_style_grayscale">Grayscale</string>
-    <string name="turn_on_app_icons_first">Turn on app icons first</string>
-    <string name="icon_pack">Icon pack</string>
-    <string name="icon_pack_default">App default</string>
-    <string name="icon_pack_selected">%1$s ·</string>
-    <string name="no_icon_packs_installed">No icon packs installed</string>
-    <string name="theme_system">System</string>
-    <string name="theme_ink">Ink</string>
-    <string name="theme_paper">Paper</string>
-    <string name="theme_charcoal">Charcoal</string>
-    <string name="theme_slate">Slate</string>
-    <string name="theme_midnight">Midnight</string>
-    <string name="theme_ocean">Ocean</string>
-    <string name="theme_forest">Forest</string>
-    <string name="theme_plum">Plum</string>
-    <string name="theme_clay">Clay</string>
-    <string name="theme_cream">Cream</string>
-    <string name="theme_sand">Sand</string>
-    <string name="theme_mist">Mist</string>
-    <string name="preview_app_one">Messages</string>
-    <string name="preview_app_two">Photos</string>
-    <string name="preview_app_three">Music</string>
-    <string name="theme_selected">%1$s, selected</string>
-    <string name="theme_not_selected">%1$s</string>
-    <string name="badge_filter">Apps to show</string>
-    <string name="all">All</string>
-    <string name="badge_muted_count">%1$d muted</string>
-    <string name="badge_filter_hint">Tap an app to mute it</string>
-    <string name="badge_muted_app">%1$s · muted</string>
-    <string name="badge_style">Badge style</string>
-    <string name="badge_style_count">Number</string>
-    <string name="badge_style_dot">Dot</string>
-    <string name="badge_tap_details">Tap badge to peek</string>
-    <string name="missed">Missed</string>
-    <string name="nothing_missed">Nothing missed</string>
-    <string name="notification_badges_are_off">Turn on notification badges first</string>
-    <string name="no_app_selected_for_gesture">Long press this gesture to pick an app</string>
-    <string name="gestures_swipe_left">Swipe left</string>
-    <string name="gestures_swipe_right">Swipe right</string>
-    <string name="gestures_swipe_up">Swipe up</string>
-    <string name="gestures_swipe_down">Swipe down</string>
-    <string name="gestures_double_tap">Double tap</string>
-    <string name="gestures_long_press">Long press</string>
-    <string name="action_nothing">Do nothing</string>
-    <string name="action_app_list">Open app list</string>
-    <string name="action_app_search">Open app search</string>
-    <string name="action_notification_shade">Open notification shade</string>
-    <string name="action_launcher_settings">Open launcher settings</string>
-    <string name="action_lock_screen">Lock screen</string>
-    <string name="action_launch_app">Launch app</string>
-    <string name="action_missed_notifications">Show missed notifications</string>
-    <string name="learn_more">Learn more</string>
+    <string name="home_spacing" translatable="false">Row spacing</string>
+    <string name="home_spacing_value" translatable="false">+%1$d dp</string>
+    <!-- Non-breaking space: the unit must never wrap away from its number. -->
+    <string name="value_dp" translatable="false">%1$d dp</string>
+    <string name="color_theme" translatable="false">Color theme</string>
+    <string name="app_icons" translatable="false">App icons</string>
+    <string name="icons_home_only" translatable="false">Home only</string>
+    <string name="icons_drawer_only" translatable="false">App list only</string>
+    <string name="icons_everywhere" translatable="false">Home and app list</string>
+    <string name="icon_style" translatable="false">Icon style</string>
+    <string name="icon_style_full_color" translatable="false">Full color</string>
+    <string name="icon_style_grayscale" translatable="false">Grayscale</string>
+    <string name="turn_on_app_icons_first" translatable="false">Turn on app icons first</string>
+    <string name="icon_pack" translatable="false">Icon pack</string>
+    <string name="icon_pack_default" translatable="false">App default</string>
+    <string name="icon_pack_selected" translatable="false">%1$s ·</string>
+    <string name="no_icon_packs_installed" translatable="false">No icon packs installed</string>
+    <string name="theme_system" translatable="false">Follow theme mode</string>
+    <string name="theme_ink" translatable="false">Ink</string>
+    <string name="theme_paper" translatable="false">Paper</string>
+    <string name="theme_charcoal" translatable="false">Charcoal</string>
+    <string name="theme_slate" translatable="false">Slate</string>
+    <string name="theme_midnight" translatable="false">Midnight</string>
+    <string name="theme_ocean" translatable="false">Ocean</string>
+    <string name="theme_forest" translatable="false">Forest</string>
+    <string name="theme_plum" translatable="false">Plum</string>
+    <string name="theme_clay" translatable="false">Clay</string>
+    <string name="theme_cream" translatable="false">Cream</string>
+    <string name="theme_sand" translatable="false">Sand</string>
+    <string name="theme_mist" translatable="false">Mist</string>
+    <string name="preview_app_one" translatable="false">Messages</string>
+    <string name="preview_app_two" translatable="false">Photos</string>
+    <string name="preview_app_three" translatable="false">Music</string>
+    <string name="theme_selected" translatable="false">%1$s, selected</string>
+    <string name="theme_not_selected" translatable="false">%1$s</string>
+    <string name="badge_filter" translatable="false">Apps with badges</string>
+    <string name="all" translatable="false">All</string>
+    <string name="badge_muted_count" translatable="false" tools:ignore="PluralsCandidate">%1$d off</string>
+    <string name="badge_filter_hint" translatable="false">Search apps</string>
+    <string name="badge_style" translatable="false">Badge style</string>
+    <string name="badge_style_count" translatable="false">Number</string>
+    <string name="badge_style_dot" translatable="false">Dot</string>
+    <string name="badge_tap_details" translatable="false">Tap badge to peek</string>
+    <string name="no_app_selected_for_gesture" translatable="false">Long press this gesture to pick an app</string>
+    <string name="gestures_swipe_left" translatable="false">Swipe left</string>
+    <string name="gestures_swipe_right" translatable="false">Swipe right</string>
+    <string name="gestures_swipe_up" translatable="false">Swipe up</string>
+    <string name="gestures_swipe_down" translatable="false">Swipe down</string>
+    <string name="gestures_double_tap" translatable="false">Double tap</string>
+    <string name="gestures_long_press" translatable="false">Long press</string>
+    <string name="action_nothing" translatable="false">Do nothing</string>
+    <string name="action_app_list" translatable="false">Open app list</string>
+    <string name="action_app_search" translatable="false">Open app search</string>
+    <string name="action_notification_shade" translatable="false">Open notification shade</string>
+    <string name="action_launcher_settings" translatable="false">Open launcher settings</string>
+    <string name="action_lock_screen" translatable="false">Lock screen</string>
+    <string name="action_launch_app" translatable="false">Launch app</string>
+    <!-- What swipe left and right open while no app is chosen for them (HomeFragment fallbacks). -->
+    <string name="gesture_default_camera" translatable="false">Camera</string>
+    <string name="gesture_default_phone" translatable="false">Phone</string>
     <string name="did_you_know">Did you know?</string>
     <string name="alignment_changed">Alignment changed ✅</string>
     <string name="home_screen">Home screen</string>
     <string name="hey">Hey</string>
-    <string name="more_features">More features…</string>
     <string name="new_year_wish">Here\'s to a year better than any before. Happy new year!</string>
     <string name="new_year_wish_1">It doesn’t matter how January went. You still have the rest of the year to do better than ever.</string>
     <string name="cheers">Cheers!</string>
@@ -249,27 +200,229 @@
     <string name="invalid_pin_request">Invalid pin request</string>
     <string name="widgets_not_supported">Widgets are not supported</string>
     <string name="pin_action_not_supported">This pin action is not supported</string>
+    <string name="pin_shortcut_title" translatable="false">Add shortcut</string>
+    <string name="pin_shortcut_message" translatable="false">Add %1$s to Home?\nFrom %2$s (%3$s)</string>
+    <string name="pin_shortcut_add" translatable="false">Add</string>
     <string name="shortcut_pinned">Shortcut added</string>
     <string name="shortcut_pin_failed">Could not add shortcut</string>
     <string name="invalid_shortcut">Invalid shortcut</string>
     <string name="shortcut_not_found">Shortcut not found</string>
     <string name="unable_to_open_shortcut">Unable to open shortcut</string>
     <!-- Notification panel -->
-    <string name="notifications">Notifications</string>
-    <string name="notifications_filtered">Filtered</string>
-    <string name="notifications_all">All</string>
-    <string name="clear_all">Clear all</string>
-    <string name="nothing_in_the_shade">Nothing in the shade</string>
-    <string name="nothing_unfiltered">Nothing from the apps you kept. Tap All to see the rest.</string>
-    <string name="nothing_to_clear">Nothing here can be cleared</string>
-    <string name="notification_access_needed">Notification access is off. Tap to turn it on.</string>
-    <string name="notification_service_connecting">Connecting to notifications\u2026</string>
-    <string name="notification_cannot_open">This notification has nothing to open</string>
-    <string name="app_muted_for_notifications">%1$s muted</string>
-    <string name="app_unmuted_for_notifications">%1$s unmuted</string>
-    <string name="filter_selected">%1$s, selected</string>
-    <string name="filter_not_selected">%1$s, not selected</string>
-    <string name="action_notification_panel">Notification panel</string>
-    <string name="notification_panel">Notification panel</string>
-    <string name="open_now">Open</string>
+    <string name="notifications" translatable="false">Notifications</string>
+    <string name="notifications_filtered" translatable="false">Filtered</string>
+    <string name="notifications_all" translatable="false">All</string>
+    <string name="nothing_in_the_shade" translatable="false">Nothing in the shade</string>
+    <string name="notification_access_needed" translatable="false">Notification access is off. Tap to turn it on.</string>
+    <string name="notification_service_connecting" translatable="false">Connecting to notifications\u2026</string>
+    <string name="notification_cannot_open" translatable="false">This notification has nothing to open</string>
+    <string name="app_muted_for_notifications" translatable="false">%1$s muted</string>
+    <string name="notification_actions" translatable="false">Notification actions</string>
+    <string name="app_unmuted_for_notifications" translatable="false">%1$s unmuted</string>
+    <string name="filter_selected" translatable="false">%1$s, selected</string>
+    <string name="filter_not_selected" translatable="false">%1$s, not selected</string>
+    <string name="action_notification_panel" translatable="false">Open missed notifications</string>
+    <string name="gesture_value_app_list" translatable="false">App list</string>
+    <string name="gesture_value_app_search" translatable="false">App search</string>
+    <string name="gesture_value_notification_shade" translatable="false">Notification shade</string>
+    <string name="gesture_value_launcher_settings" translatable="false">Launcher settings</string>
+    <string name="gesture_value_notification_panel" translatable="false">Missed notifications</string>
+    <string name="category_social" translatable="false">Social</string>
+    <string name="category_productivity" translatable="false">Productivity</string>
+    <string name="category_audio" translatable="false">Media</string>
+    <string name="category_video" translatable="false">Video</string>
+    <string name="category_photography" translatable="false">Photography</string>
+    <string name="category_games" translatable="false">Games</string>
+    <string name="category_news" translatable="false">News &amp; reading</string>
+    <string name="category_travel" translatable="false">Maps &amp; travel</string>
+    <string name="category_tools" translatable="false">Tools</string>
+    <string name="category_shortcuts" translatable="false">Shortcuts</string>
+    <string name="category_other" translatable="false">Other</string>
+    <string name="choose_app_category" translatable="false">App category</string>
+    <string name="category_automatic" translatable="false">Automatic</string>
+    <string name="motion_presets" translatable="false">Motion</string>
+    <string name="motion_liquid" translatable="false">Liquid</string>
+    <string name="motion_glide" translatable="false">Glide</string>
+    <string name="motion_fade" translatable="false">Fade</string>
+    <string name="ultra_battery_saver" translatable="false">Ultra battery saver</string>
+    <string name="ultra_saver_system_on" translatable="false">On (system battery saver)</string>
+    <string name="motion_paused" translatable="false">Motion disabled by device or battery settings</string>
+    <string name="home_information" translatable="false">Home information</string>
+    <string name="widget_text_size" translatable="false">Widget text size</string>
+    <string name="information_date" translatable="false">Date</string>
+    <string name="information_battery" translatable="false">Battery &amp; charging</string>
+    <string name="information_weather" translatable="false">Weather</string>
+    <string name="information_edit" translatable="false">Edit home information</string>
+    <string name="weather_unavailable" translatable="false">Weather unavailable</string>
+    <string name="weather_paused" translatable="false">Weather paused</string>
+    <string name="browse_apps" translatable="false">Apps</string>
+    <string name="search_mode" translatable="false">Search</string>
+    <string name="return_home" translatable="false">Home</string>
+    <string name="search_no_matches" translatable="false">No matching apps</string>
+    <string name="browse_no_apps" translatable="false">No apps to show</string>
+    <string name="loading_apps" translatable="false">Loading apps…</string>
+    <string name="save_changes" translatable="false">Save</string>
+    <string name="motion_preview" translatable="false">Preview</string>
+    <string name="information_unlocks" translatable="false">Unlocks</string>
+    <string name="information_screen_time" translatable="false">Screen time</string>
+    <string name="information_battery_unavailable" translatable="false">Battery unavailable</string>
+    <string name="weather_setup" translatable="false">Set up weather</string>
+    <string name="weather_loading" translatable="false">Loading weather…</string>
+    <string name="open_calendar" translatable="false">Open calendar</string>
+    <string name="calendar_app" translatable="false">Calendar app</string>
+    <string name="screen_time_app" translatable="false">Screen time app</string>
+    <string name="ultra_saver_desc" translatable="false">Turns home black, lowers the refresh rate, and pauses motion, weather, screen time and the media wave.</string>
+    <string name="saver_follows_system" translatable="false">Follow system battery saver</string>
+    <string name="wallpaper_source_action" translatable="false">Open wallpaper source in browser</string>
+    <string name="motion_off_saver" translatable="false">Off (Ultra battery saver)</string>
+    <string name="clock_display" translatable="false">Clock</string>
+    <string name="category_accessibility" translatable="false">Accessibility</string>
+    <string name="category_action" translatable="false">Category</string>
+    <string name="home_add_app" translatable="false">Add home app</string>
+    <string name="home_replace_app" translatable="false">Replace app</string>
+    <string name="home_remove_app" translatable="false">Remove from home</string>
+    <string name="category_communication" translatable="false">Communication</string>
+    <string name="category_browsers" translatable="false">Browsers</string>
+    <string name="category_money" translatable="false">Money</string>
+    <string name="category_shopping" translatable="false">Shopping</string>
+    <string name="home_app_unavailable" translatable="false">%1$s (unavailable)</string>
+    <string name="weather_location_off" translatable="false">Location off</string>
+    <string name="weather_network_error" translatable="false">Weather offline</string>
+    <string name="home_scroll_style" translatable="false">Home layout</string>
+    <string name="home_scroll_static" translatable="false">Static</string>
+    <string name="home_scroll_focus" translatable="false">Focus</string>
+    <string name="home_scroll_soft" translatable="false">Focus with soft edges</string>
+    <string name="home_scroll_state" translatable="false">Home layout: %1$s</string>
+    <string name="weather_spoken_range" translatable="false">%1$s, high %2$s, low %3$s</string>
+    <string name="weather_clear" translatable="false">Clear</string>
+    <string name="weather_mostly_clear" translatable="false">Mostly clear</string>
+    <string name="weather_partly_cloudy" translatable="false">Partly cloudy</string>
+    <string name="weather_cloudy" translatable="false">Cloudy</string>
+    <string name="weather_fog" translatable="false">Fog</string>
+    <string name="weather_rain" translatable="false">Rain</string>
+    <string name="weather_snow" translatable="false">Snow</string>
+    <string name="weather_storm" translatable="false">Thunderstorms</string>
+    <string name="information_alarm" translatable="false">Next alarm</string>
+    <string name="information_no_alarm" translatable="false">No alarm set</string>
+    <string name="information_widget_limit" translatable="false">Up to four widgets, plus the date.</string>
+    <string name="information_small" translatable="false">Small</string>
+    <string name="information_medium" translatable="false">Medium</string>
+    <string name="information_large" translatable="false">Large</string>
+    <string name="information_loading" translatable="false">Loading…</string>
+    <string name="information_paused" translatable="false">Paused</string>
+    <string name="information_setup" translatable="false">Set up</string>
+    <string name="information_battery_short" translatable="false">Battery</string>
+    <string name="information_charge_power" translatable="false">≈%1$s W</string>
+    <string name="information_charge_power_spoken" translatable="false">About %1$s watts entering the battery</string>
+    <string name="app_icon_size" translatable="false">App icon size</string>
+    <string name="home_bulk_title" translatable="false">Edit home apps</string>
+    <string name="home_settings" translatable="false">Home settings</string>
+    <string name="all_settings" translatable="false">All settings</string>
+    <string name="motion_and_power" translatable="false">Motion and power</string>
+    <string name="home_bulk_rename" translatable="false">Rename</string>
+    <string name="home_bulk_up" translatable="false">Move up</string>
+    <string name="home_bulk_down" translatable="false">Move down</string>
+    <string name="home_bulk_name" translatable="false">Home app name</string>
+    <string name="home_bulk_name_required" translatable="false">Enter a name</string>
+    <string name="home_bulk_check" translatable="false">Add %1$s to Home</string>
+    <string name="home_bulk_uncheck" translatable="false">Remove %1$s from Home</string>
+    <string name="home_bulk_added_announcement" translatable="false">Added %1$s to Home</string>
+    <string name="home_bulk_removed_announcement" translatable="false">Removed %1$s from Home</string>
+    <string name="home_bulk_edit" translatable="false">Edit %1$s</string>
+    <string name="home_bulk_on_home" translatable="false">Home apps</string>
+    <string name="home_bulk_other_apps" translatable="false">Unadded apps</string>
+    <string name="home_bulk_no_matches" translatable="false">No other apps available</string>
+    <string name="home_bulk_limit" translatable="false">Home supports up to 512 apps</string>
+    <string name="home_bulk_position" translatable="false">%1$s, position %2$d of %3$d</string>
+    <string name="home_bulk_work" translatable="false">Work profile</string>
+    <string name="home_bulk_shortcut" translatable="false">Shortcut</string>
+    <string name="customize_panels" translatable="false">Customize panels</string>
+    <string name="customize_home" translatable="false">Customize home</string>
+    <string name="customize_apps" translatable="false">Customize apps</string>
+    <string name="apps_browser_layout" translatable="false">Apps layout</string>
+    <string name="apps_layout_legacy" translatable="false">Legacy</string>
+    <string name="apps_layout_card" translatable="false">Card</string>
+    <string name="customize_search" translatable="false">Customize search</string>
+    <string name="customize_notifications" translatable="false">Customize notifications</string>
+    <string name="customize_weather" translatable="false">Customize weather</string>
+    <string name="customize_visualizer" translatable="false">Audio visualizer</string>
+    <string name="visualizer_settings" translatable="false">Visualizer settings</string>
+    <string name="visualizer_seek_position" translatable="false">Playback position</string>
+    <string name="visualizer_playing_settings" translatable="false">Playing device audio. Visualizer settings</string>
+    <string name="panel_edit" translatable="false">Edit</string>
+    <string name="panel_off" translatable="false">Off</string>
+    <string name="panel_on" translatable="false">On</string>
+    <string name="panel_small" translatable="false">Small</string>
+    <string name="panel_medium" translatable="false">Medium</string>
+    <string name="panel_large" translatable="false">Large</string>
+    <string name="panel_wide" translatable="false">Wide</string>
+    <string name="panel_icons" translatable="false">App icons</string>
+    <string name="panel_home_layout" translatable="false">Home layout</string>
+    <string name="panel_focus_soft" translatable="false">Focus with soft edges</string>
+    <string name="panel_weather_size" translatable="false">Weather size</string>
+    <string name="panel_categories" translatable="false">Category sections</string>
+    <string name="panel_text_size" translatable="false">App text size</string>
+    <string name="panel_spacing" translatable="false">App spacing</string>
+    <string name="panel_compact" translatable="false">Compact rows</string>
+    <string name="panel_comfortable" translatable="false">Comfortable</string>
+    <string name="spacing_compact" translatable="false">Compact</string>
+    <string name="panel_roomy" translatable="false">Roomy</string>
+    <string name="panel_keyboard" translatable="false">Show search keyboard</string>
+    <string name="panel_auto_launch" translatable="false">Launch single search result</string>
+    <string name="panel_default_view" translatable="false">Notification view</string>
+    <string name="panel_filter_position" translatable="false">Filter position</string>
+    <string name="panel_top" translatable="false">Top</string>
+    <string name="panel_bottom" translatable="false">Bottom</string>
+    <string name="panel_filter_order" translatable="false">Filter order</string>
+    <string name="panel_filtered_first" translatable="false">Filtered then All</string>
+    <string name="panel_all_first" translatable="false">All then Filtered</string>
+    <string name="panel_focus" translatable="false">Focus</string>
+    <string name="panel_preview" translatable="false">Message previews</string>
+    <string name="panel_media_artwork" translatable="false">Media cover art</string>
+    <string name="panel_time" translatable="false">Timestamps</string>
+    <string name="panel_swipe_dismiss" translatable="false">Swipe to dismiss</string>
+    <string name="panel_visualizer_enabled" translatable="false">Enable visualizer</string>
+    <string name="panel_on_home" translatable="false">Show on home</string>
+    <string name="panel_on_notifications" translatable="false">Show in notifications</string>
+    <string name="panel_visualizer_style" translatable="false">Shape</string>
+    <string name="panel_wave" translatable="false">Android wave</string>
+    <string name="panel_raw_wave" translatable="false">Raw waveform</string>
+    <string name="panel_bars" translatable="false">Bars</string>
+    <string name="panel_visualizer_color" translatable="false">Color</string>
+    <string name="panel_follow_theme" translatable="false">Follow theme</string>
+    <string name="panel_monochrome" translatable="false">Monochrome</string>
+    <string name="panel_color" translatable="false">Theme color</string>
+    <string name="panel_visualizer_height" translatable="false">Visualizer size</string>
+    <string name="visualizer_audio_access" translatable="false">Allow audio visualization</string>
+    <string name="visualizer_permission_explanation" translatable="false">Android requires audio permission to visualize playback. Moo uses the output mix, never records the microphone or saves audio.</string>
+    <string name="visualizer_notification_access" translatable="false">Allow notification access to find playback</string>
+    <string name="visualizer_unavailable" translatable="false">Audio visualization unavailable</string>
+    <string name="visualizer_paused_power" translatable="false">Visualizer paused</string>
+    <string name="visualizer_no_playback" translatable="false">No active playback</string>
+    <string name="visualizer_multiple_playback" translatable="false">Visualizer paused: multiple apps playing</string>
+    <string name="visualizer_listening" translatable="false">Playing audio</string>
+    <string name="panel_focus_empty" translatable="false">Nothing in Focus</string>
+    <string name="panel_filtered_empty" translatable="false">No filtered notifications</string>
+    <string name="panel_filter_help" translatable="false">Filtered holds apps you set aside. Hold a notification to change its filter.</string>
+    <string name="panel_move_filtered" translatable="false">Move app to Filtered</string>
+    <string name="panel_private_notification" translatable="false">Notification</string>
+    <string name="panel_clear" translatable="false">Clear all</string>
+    <string name="visualizer_permission_settings" translatable="false">Audio permission was denied. Open Android app settings to allow it. Moo uses playback output only and never records or saves microphone audio.</string>
+    <string name="visualizer_open_settings" translatable="false">Open app settings</string>
+    <string name="home_scroll_haptics" translatable="false">Focus vibration</string>
+    <string name="app_sort_order" translatable="false">App order</string>
+    <string name="sort_az" translatable="false">Name A to Z</string>
+    <string name="sort_za" translatable="false">Name Z to A</string>
+    <string name="sort_installed" translatable="false">Recently installed</string>
+    <string name="panel_unfilter" translatable="false">Remove from Filtered</string>
+    <string name="home_reorder_app" translatable="false">Reorder %1$s</string>
+    <string name="home_bulk_dialog_title" translatable="false">Manage Home</string>
+    <string name="settings_back" translatable="false">Back to Settings</string>
+    <string name="home_order" translatable="false">Home app order</string>
+    <string name="home_order_manual" translatable="false">Manual</string>
+    <string name="home_order_alphabetical" translatable="false">Alphabetical</string>
+    <string name="weather_refresh_interval" translatable="false">Weather update interval</string>
+    <string name="weather_refresh_hourly" translatable="false">Every hour</string>
+    <string name="weather_refresh_three_hours" translatable="false">Every 3 hours</string>
+    <string name="weather_refresh_six_hours" translatable="false">Every 6 hours</string>
 </resources>

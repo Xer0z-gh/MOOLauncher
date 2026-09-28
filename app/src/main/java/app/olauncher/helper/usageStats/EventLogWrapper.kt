@@ -16,6 +16,14 @@ class EventLogWrapper(private val context: Context) {
     private val usageStatsManager by lazy { context.getSystemService("usagestats") as UsageStatsManager }
     private val guardian = UnmatchedCloseEventGuardian(usageStatsManager)
 
+    /**
+     * KEYGUARD_HIDDEN events seen by the last getForegroundStatsByTimestamps pass: the unlock
+     * count, read from the events that pass already walks instead of a second full-day query.
+     * -1 below API 28, where that event does not exist.
+     */
+    var unlockCount = -1
+        private set
+
 
     /**
      * Collects event information from system to calculate and aggregate precise
@@ -70,9 +78,12 @@ class EventLogWrapper(private val context: Context) {
 
         // Iterate over events
         val event = UsageEvents.Event()
+        val countUnlocks = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P
+        var unlocks = 0
 
         while (events.hasNextEvent()) {
             events.getNextEvent(event)
+            if (countUnlocks && event.eventType == UsageEvents.Event.KEYGUARD_HIDDEN) unlocks++
             if (context.packageName == event.packageName) continue
 
             val appClass = AppClass(event.packageName, event.className)
@@ -174,6 +185,8 @@ class EventLogWrapper(private val context: Context) {
             }
         }
 
+        unlockCount = if (countUnlocks) unlocks else -1
+
         // Iterate over remaining start events
         moveToForegroundMap.forEach { (key, value) ->
             if (value != null) { // If it's a remaining start event
@@ -209,7 +222,7 @@ class EventLogWrapper(private val context: Context) {
                         )
                     )
                     if (BuildConfig.DEBUG)
-                        Log.d("EventLogWrapper", "Assuming that application $foregroundProcess has been used the whole query time")
+                        Log.d("EventLogWrapper", "Assuming foreground use for the whole query time")
                 }
             }
         }

@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.LauncherApps
 import android.os.Build
+import android.os.SystemClock
 import android.os.UserHandle
 import android.os.UserManager
 import androidx.lifecycle.AndroidViewModel
@@ -25,6 +26,7 @@ import app.olauncher.data.AppModel
 import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.helper.SingleLiveEvent
+import app.olauncher.helper.NotificationCounts
 import app.olauncher.helper.WallpaperWorker
 import app.olauncher.helper.formattedTimeSpent
 import app.olauncher.helper.getAppsList
@@ -37,13 +39,24 @@ import app.olauncher.helper.isPrivateSpaceLocked
 import app.olauncher.helper.showToast
 import app.olauncher.helper.usageStats.EventLogWrapper
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private companion object { const val APP_LIST_CACHE_MS = 5 * 60_000L }
+
     private val appContext by lazy { application.applicationContext }
     private val prefs = Prefs(appContext)
+    private var appListJob: Job? = null
+    private var appListLoadedAt = 0L
+    private var appListIncludesHiddenApps: Boolean? = null
+    private var appListRequestIncludesHiddenApps: Boolean? = null
+    private var privateSpaceJob: Job? = null
+    private var privateSpaceLoadedAt = 0L
+    private var privateSpaceHandleAtLoad: android.os.UserHandle? = null
+    private var privateSpaceLockedAtLoad: Boolean? = null
 
     val firstOpen = MutableLiveData<Boolean>()
     val refreshHome = MutableLiveData<Boolean>()
@@ -72,8 +85,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     // val showRecentApps = SingleLiveEvent<Unit?>()
 
     fun selectedApp(appModel: AppModel, flag: Int) {
-        if (appModel is AppModel.PrivateSpaceHeader) return
+        if (flag in Constants.FLAG_HOME_SLOT_BASE + 1..Constants.FLAG_HOME_SLOT_BASE + 512) {
+            saveHomeApp(appModel, flag - Constants.FLAG_HOME_SLOT_BASE)
+            return
+        }
+        if (appModel is AppModel.PrivateSpaceHeader || appModel is AppModel.CategoryHeader) return
         when (flag) {
+            Constants.FLAG_HOME_ADD_AUTO -> {
+                prefs.addHomeApp(appModel)
+                refreshHome(false)
+            }
             Constants.FLAG_LAUNCH_APP -> {
                 when (appModel) {
                     is AppModel.PinnedShortcut -> launchShortcut(appModel)
@@ -113,6 +134,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun launchShortcut(appModel: AppModel.PinnedShortcut) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
+            appContext.showToast(appContext.getString(R.string.unable_to_open_shortcut))
+            return
+        }
         val launcher = appContext.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
         val query = LauncherApps.ShortcutQuery().apply {
             setPackage(appModel.appPackage)
@@ -126,166 +151,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 return
             }
             launcher.startShortcut(shortcut, null, null)
+            clearOpenedAppBadge(appModel.appPackage, appModel.user)
         } catch (_: Exception) {
             appContext.showToast(appContext.getString(R.string.unable_to_open_shortcut))
         }
     }
 
     private fun saveHomeApp(appModel: AppModel, position: Int) {
-        when (appModel) {
-            is AppModel.PrivateSpaceHeader -> return
-            is AppModel.App -> {
-                when (position) {
-                    1 -> {
-                        prefs.appName1 = appModel.appLabel
-                        prefs.appPackage1 = appModel.appPackage
-                        prefs.appUser1 = appModel.user.toString()
-                        prefs.appActivityClassName1 = appModel.activityClassName
-                        prefs.isShortcut1 = false
-                        prefs.shortcutId1 = ""
-                    }
-
-                    2 -> {
-                        prefs.appName2 = appModel.appLabel
-                        prefs.appPackage2 = appModel.appPackage
-                        prefs.appUser2 = appModel.user.toString()
-                        prefs.appActivityClassName2 = appModel.activityClassName
-                        prefs.isShortcut2 = false
-                        prefs.shortcutId2 = ""
-                    }
-
-                    3 -> {
-                        prefs.appName3 = appModel.appLabel
-                        prefs.appPackage3 = appModel.appPackage
-                        prefs.appUser3 = appModel.user.toString()
-                        prefs.appActivityClassName3 = appModel.activityClassName
-                        prefs.isShortcut3 = false
-                        prefs.shortcutId3 = ""
-                    }
-
-                    4 -> {
-                        prefs.appName4 = appModel.appLabel
-                        prefs.appPackage4 = appModel.appPackage
-                        prefs.appUser4 = appModel.user.toString()
-                        prefs.appActivityClassName4 = appModel.activityClassName
-                        prefs.isShortcut4 = false
-                        prefs.shortcutId4 = ""
-                    }
-
-                    5 -> {
-                        prefs.appName5 = appModel.appLabel
-                        prefs.appPackage5 = appModel.appPackage
-                        prefs.appUser5 = appModel.user.toString()
-                        prefs.appActivityClassName5 = appModel.activityClassName
-                        prefs.isShortcut5 = false
-                        prefs.shortcutId5 = ""
-                    }
-
-                    6 -> {
-                        prefs.appName6 = appModel.appLabel
-                        prefs.appPackage6 = appModel.appPackage
-                        prefs.appUser6 = appModel.user.toString()
-                        prefs.appActivityClassName6 = appModel.activityClassName
-                        prefs.isShortcut6 = false
-                        prefs.shortcutId6 = ""
-                    }
-
-                    7 -> {
-                        prefs.appName7 = appModel.appLabel
-                        prefs.appPackage7 = appModel.appPackage
-                        prefs.appUser7 = appModel.user.toString()
-                        prefs.appActivityClassName7 = appModel.activityClassName
-                        prefs.isShortcut7 = false
-                        prefs.shortcutId7 = ""
-                    }
-
-                    8 -> {
-                        prefs.appName8 = appModel.appLabel
-                        prefs.appPackage8 = appModel.appPackage
-                        prefs.appUser8 = appModel.user.toString()
-                        prefs.appActivityClassName8 = appModel.activityClassName
-                        prefs.isShortcut8 = false
-                        prefs.shortcutId8 = ""
-                    }
-                }
-            }
-
-            is AppModel.PinnedShortcut -> {
-                when (position) {
-                    1 -> {
-                        prefs.appName1 = appModel.appLabel
-                        prefs.appPackage1 = appModel.appPackage
-                        prefs.appUser1 = appModel.user.toString()
-                        prefs.appActivityClassName1 = null
-                        prefs.isShortcut1 = true
-                        prefs.shortcutId1 = appModel.shortcutId
-                    }
-
-                    2 -> {
-                        prefs.appName2 = appModel.appLabel
-                        prefs.appPackage2 = appModel.appPackage
-                        prefs.appUser2 = appModel.user.toString()
-                        prefs.appActivityClassName2 = null
-                        prefs.isShortcut2 = true
-                        prefs.shortcutId2 = appModel.shortcutId
-                    }
-
-                    3 -> {
-                        prefs.appName3 = appModel.appLabel
-                        prefs.appPackage3 = appModel.appPackage
-                        prefs.appUser3 = appModel.user.toString()
-                        prefs.appActivityClassName3 = null
-                        prefs.isShortcut3 = true
-                        prefs.shortcutId3 = appModel.shortcutId
-                    }
-
-                    4 -> {
-                        prefs.appName4 = appModel.appLabel
-                        prefs.appPackage4 = appModel.appPackage
-                        prefs.appUser4 = appModel.user.toString()
-                        prefs.appActivityClassName4 = null
-                        prefs.isShortcut4 = true
-                        prefs.shortcutId4 = appModel.shortcutId
-                    }
-
-                    5 -> {
-                        prefs.appName5 = appModel.appLabel
-                        prefs.appPackage5 = appModel.appPackage
-                        prefs.appUser5 = appModel.user.toString()
-                        prefs.appActivityClassName5 = null
-                        prefs.isShortcut5 = true
-                        prefs.shortcutId5 = appModel.shortcutId
-                    }
-
-                    6 -> {
-                        prefs.appName6 = appModel.appLabel
-                        prefs.appPackage6 = appModel.appPackage
-                        prefs.appUser6 = appModel.user.toString()
-                        prefs.appActivityClassName6 = null
-                        prefs.isShortcut6 = true
-                        prefs.shortcutId6 = appModel.shortcutId
-                    }
-
-                    7 -> {
-                        prefs.appName7 = appModel.appLabel
-                        prefs.appPackage7 = appModel.appPackage
-                        prefs.appUser7 = appModel.user.toString()
-                        prefs.appActivityClassName7 = null
-                        prefs.isShortcut7 = true
-                        prefs.shortcutId7 = appModel.shortcutId
-                    }
-
-                    8 -> {
-                        prefs.appName8 = appModel.appLabel
-                        prefs.appPackage8 = appModel.appPackage
-                        prefs.appUser8 = appModel.user.toString()
-                        prefs.appActivityClassName8 = null
-                        prefs.isShortcut8 = true
-                        prefs.shortcutId8 = appModel.shortcutId
-                    }
-                }
-            }
-        }
+        prefs.saveHomeApp(appModel, position)
         refreshHome(false)
     }
 
@@ -297,10 +170,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun saveGestureApp(appModel: AppModel, gesture: String) {
         // Choosing an app IS choosing Launch app. Set it here, after the pick, so abandoning
         // the picker leaves the gesture as it was.
-        if (appModel !is AppModel.PrivateSpaceHeader)
-            prefs.setGestureAction(gesture, Constants.GestureAction.LAUNCH_APP)
+        if (appModel is AppModel.PrivateSpaceHeader || appModel is AppModel.CategoryHeader) return
+        prefs.setGestureAction(gesture, Constants.GestureAction.LAUNCH_APP)
         when (appModel) {
-            is AppModel.PrivateSpaceHeader -> return
+            is AppModel.PrivateSpaceHeader, is AppModel.CategoryHeader -> return
             is AppModel.App -> prefs.setGestureApp(
                 gesture = gesture,
                 name = appModel.appLabel,
@@ -358,6 +231,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         toggleDateTime.postValue(Unit)
     }
 
+    private fun clearOpenedAppBadge(packageName: String, userHandle: UserHandle) {
+        NotificationCounts.clearApp(NotificationCounts.key(packageName, userHandle.toString()))
+    }
+
     private fun launchApp(packageName: String, activityClassName: String?, userHandle: UserHandle) {
         val launcher = appContext.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
         val activityInfo = launcher.getActivityList(packageName, userHandle)
@@ -381,9 +258,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         try {
             launcher.startMainActivity(component, userHandle, null, null)
+            clearOpenedAppBadge(packageName, userHandle)
         } catch (e: SecurityException) {
             try {
-                launcher.startMainActivity(component, android.os.Process.myUserHandle(), null, null)
+                val personalUser = android.os.Process.myUserHandle()
+                launcher.startMainActivity(component, personalUser, null, null)
+                clearOpenedAppBadge(packageName, personalUser)
             } catch (e: Exception) {
                 appContext.showToast(appContext.getString(R.string.unable_to_open_app))
             }
@@ -392,12 +272,64 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /** Opening Apps can reuse the last scan; install/edit callbacks still call getAppList directly. */
+    fun ensureAppList(includeHiddenApps: Boolean = false) {
+        val age = SystemClock.elapsedRealtime() - appListLoadedAt
+        if (appList.value != null && appListIncludesHiddenApps == includeHiddenApps &&
+            age in 0L..APP_LIST_CACHE_MS) {
+            getPrivateSpaceAppList()
+            return
+        }
+        if (appListJob?.isActive == true && appListRequestIncludesHiddenApps == includeHiddenApps) return
+        getAppList(includeHiddenApps)
+    }
+
     fun getAppList(includeHiddenApps: Boolean = false) {
-        viewModelScope.launch {
+        appListJob?.cancel()
+        appListLoadedAt = 0L
+        appListRequestIncludesHiddenApps = includeHiddenApps
+        // A picker that includes hidden apps must never flash its cached rows in ordinary Browse.
+        if (appListIncludesHiddenApps != null && appListIncludesHiddenApps != includeHiddenApps)
+            appList.value = null
+        val generation = appListGeneration
+        appListJob = viewModelScope.launch {
             val apps = getAppsList(appContext, prefs, includeRegularApps = true, includeHiddenApps)
+            appListIncludesHiddenApps = includeHiddenApps
+            // cancel() cannot stop a scan already inside its IO block, so one that started before
+            // an invalidation can still land here. Its rows are shown, but not trusted as fresh.
+            appListLoadedAt = if (apps.isEmpty() || generation != appListGeneration) 0L
+                else SystemClock.elapsedRealtime()
             appList.value = apps
         }
-        getPrivateSpaceAppList()
+        getPrivateSpaceAppList(force = true)
+    }
+
+    private var appListGeneration = 0
+    private var appListRefresh: Job? = null
+
+    /**
+     * An app or shortcut changed while nothing is showing the list. Costs nothing now: the next
+     * ensureAppList() - opening Apps - rescans instead of reusing the cached rows.
+     */
+    fun invalidateAppList() {
+        appListGeneration++
+        appListLoadedAt = 0L
+        privateSpaceLoadedAt = 0L
+    }
+
+    /**
+     * One scan for a burst of LauncherApps callbacks. An update of one app can report several
+     * package and shortcut changes in a row, and each used to start its own full scan.
+     */
+    fun requestAppListRefresh(delayMs: Long) {
+        invalidateAppList()
+        appListRefresh?.cancel()
+        appListRefresh = viewModelScope.launch {
+            kotlinx.coroutines.delay(delayMs)
+            // The mode the screen on top last ASKED for, not the last one that finished: a picker
+            // that just requested hidden apps must not be cancelled by a scan without them.
+            getAppList(appListRequestIncludesHiddenApps ?: appListIncludesHiddenApps ?: false)
+        }
     }
 
     fun getHiddenApps() {
@@ -412,6 +344,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setWallpaperWorker() {
+        // Every enqueue site comes through here, so this one guard keeps the job off while the
+        // Ultra saver is on - it used to wake the phone (and cold-start a killed launcher) every
+        // 4 hours only for the worker to return early. The Ultra switch calls this again on the
+        // way out. Android Power Saver is left to the worker's own early return: it defers jobs.
+        if (prefs.ultraBatterySaver) {
+            WorkManager.getInstance(appContext).cancelUniqueWork(Constants.WALLPAPER_WORKER_NAME)
+            return
+        }
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
@@ -431,6 +371,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun cancelWallpaperWorker() {
         WorkManager.getInstance(appContext).cancelUniqueWork(Constants.WALLPAPER_WORKER_NAME)
         prefs.dailyWallpaperUrl = ""
+        prefs.dailyWallpaperKey = ""
         prefs.dailyWallpaper = false
     }
 
@@ -441,18 +382,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private var screenTimeJob: Job? = null
 
+    /** (screen time, unlocks) as they were for the last scan; null until the first. */
+    private var scannedFor: Pair<Boolean, Boolean>? = null
+
     /**
      * Walks a full day of usage events and aggregates them, which on a phone in daily use is
-     * thousands of events plus a per-close-event rescan. This used to run synchronously on the
-     * main thread from HomeFragment.onResume, so the home screen froze for the length of the scan
-     * every time the user pressed Home - the most visible possible moment to stall.
+     * thousands of events (the look-back for apps open across midnight is cached per day in
+     * UnmatchedCloseEventGuardian). This used to run synchronously on the main thread from
+     * HomeFragment.onResume, so the home screen froze for the length of the scan every time the
+     * user pressed Home - the most visible possible moment to stall.
      */
     fun getTodaysScreenTime() {
-        if (prefs.screenTimeLastUpdated.hasBeenMinutes(1).not()) return
+        // The minute gate covers a scan of the SAME widgets. Each scan now only computes what
+        // is switched on, so turning the other widget on must scan at once, not show "Loading…"
+        // until a resume a minute later. And the gate is persisted but the values are not:
+        // scannedFor starts null, so a fresh process always scans.
+        val wanted = prefs.infoShowScreenTime to prefs.showUnlockCount
+        if (wanted == scannedFor && prefs.screenTimeLastUpdated.hasBeenMinutes(1).not()) return
         // Claim the minute window BEFORE going async. The gate above reads a timestamp that used
         // to be written at the end of a synchronous scan; off the main thread, two resumes a
         // second apart would both pass it and start concurrent full-day scans.
-        if (screenTimeJob?.isActive == true) return
+        if (screenTimeJob?.isActive == true && wanted == scannedFor) return
+        screenTimeJob?.cancel()
+        scannedFor = wanted
         val endTime = System.currentTimeMillis()
         prefs.screenTimeLastUpdated = endTime
 
@@ -467,15 +419,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
             val startTime = calendar.timeInMillis
 
-            val timeSpent = eventLogWrapper.aggregateSimpleUsageStats(
-                eventLogWrapper.aggregateForegroundStats(
-                    eventLogWrapper.getForegroundStatsByTimestamps(startTime, endTime)
+            // Each widget pays only for itself. The unlock count used to be a second full-day
+            // queryEvents - parcelling the whole day's log over binder again - even with screen
+            // time on, where the first pass already walks every KEYGUARD_HIDDEN, and even with
+            // the unlock count switched off.
+            if (prefs.infoShowScreenTime) {
+                val timeSpent = eventLogWrapper.aggregateSimpleUsageStats(
+                    eventLogWrapper.aggregateForegroundStats(
+                        eventLogWrapper.getForegroundStatsByTimestamps(startTime, endTime)
+                    )
                 )
-            )
-            screenTimeValue.postValue(appContext.formattedTimeSpent(timeSpent))
-            // Counted in the same background pass rather than with a second query: the events
-            // are already being fetched, and this is one more cheap scan over today's window.
-            unlockCountValue.postValue(countUnlocksSince(startTime, endTime))
+                screenTimeValue.postValue(appContext.formattedTimeSpent(timeSpent))
+                // Free here, so always posted: a widget switched on later has a value at once.
+                unlockCountValue.postValue(eventLogWrapper.unlockCount)
+            } else if (prefs.showUnlockCount) unlockCountValue.postValue(countUnlocksSince(startTime, endTime))
         }
     }
 
@@ -500,17 +457,35 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }.getOrDefault(-1)
     }
 
-    fun getPrivateSpaceAppList() {
-        viewModelScope.launch {
-            val handle = getPrivateSpaceUserHandle(appContext)
-            privateSpaceAvailable.value = handle != null
-            if (handle != null) {
-                privateSpaceLocked.value = isPrivateSpaceLocked(appContext, handle)
-                privateSpaceApps.value = getPrivateSpaceApps(appContext, prefs)
-            } else {
-                privateSpaceLocked.value = true
-                privateSpaceApps.value = emptyList()
+    fun getPrivateSpaceAppList(force: Boolean = false) {
+        if (!force && privateSpaceJob?.isActive == true) return
+        privateSpaceJob?.cancel()
+        privateSpaceJob = viewModelScope.launch {
+            // Off main: viewModelScope starts immediately on the caller's frame, and this is two
+            // or three binder calls (profiles, launcher user info, quiet mode) on every Apps open.
+            val (handle, locked) = withContext(Dispatchers.IO) {
+                val h = getPrivateSpaceUserHandle(appContext)
+                h to (h == null || isPrivateSpaceLocked(appContext, h))
             }
+            if (privateSpaceAvailable.value != (handle != null))
+                privateSpaceAvailable.value = handle != null
+            if (privateSpaceLocked.value != locked) privateSpaceLocked.value = locked
+            if (handle == null) {
+                if (privateSpaceApps.value?.isNotEmpty() != false)
+                    privateSpaceApps.value = emptyList()
+                privateSpaceHandleAtLoad = null
+                privateSpaceLockedAtLoad = true
+                privateSpaceLoadedAt = SystemClock.elapsedRealtime()
+                return@launch
+            }
+            val age = SystemClock.elapsedRealtime() - privateSpaceLoadedAt
+            if (!force && privateSpaceApps.value != null &&
+                privateSpaceHandleAtLoad == handle && privateSpaceLockedAtLoad == locked &&
+                age in 0L..APP_LIST_CACHE_MS) return@launch
+            privateSpaceApps.value = getPrivateSpaceApps(appContext, prefs)
+            privateSpaceHandleAtLoad = handle
+            privateSpaceLockedAtLoad = locked
+            privateSpaceLoadedAt = SystemClock.elapsedRealtime()
         }
     }
 

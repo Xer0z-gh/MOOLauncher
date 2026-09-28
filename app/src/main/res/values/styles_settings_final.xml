@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Supporting line under a Settings row. Smaller and muted, so the row's label and state
+        are read first. 0.72 alpha matches notificationAccessDetail and stays above 4.5:1 on
+        the light and dark Settings surfaces.
+    -->
+    <style name="SettingsDescription" parent="TextSmall">
+        <item name="android:textSize">14sp</item>
+        <item name="android:alpha">0.72</item>
+    </style>
+</resources>

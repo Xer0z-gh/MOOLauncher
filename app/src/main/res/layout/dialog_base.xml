@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingStart="24dp"
     android:paddingTop="20dp"
@@ -41,28 +41,41 @@
             android:src="@drawable/ic_close" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/tvMessage"
-        style="@style/TextSmall"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="12dp"
-        android:includeFontPadding="false"
-        android:lineSpacingExtra="2dp"
-        android:paddingEnd="8dp"
-        android:textColor="?attr/primaryColor"
-        android:visibility="gone"
-        tools:ignore="RtlSymmetry"
-        tools:text="@string/welcome_to_olauncher_settings"
-        tools:visibility="visible" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never">
 
-    <!-- Custom content supplies its own margins, see dialog_text_size.xml -->
-    <FrameLayout
-        android:id="@+id/contentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvMessage"
+                style="@style/TextSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="12dp"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="2dp"
+                android:paddingEnd="8dp"
+                android:textColor="?attr/primaryColor"
+                android:visibility="gone"
+                tools:ignore="RtlSymmetry"
+                tools:text="@string/welcome_to_olauncher_settings"
+                tools:visibility="visible" />
+
+            <!-- Custom content supplies its own margins. -->
+            <FrameLayout
+                android:id="@+id/contentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

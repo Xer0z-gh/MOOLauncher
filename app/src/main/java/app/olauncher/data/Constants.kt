@@ -1,6 +1,9 @@
 package app.olauncher.data
 
 object Constants {
+    const val FLAG_HOME_SLOT_BASE = 1000
+    const val FLAG_HOME_ADD_AUTO = 103
+
 
     object Key {
         const val FLAG = "flag"
@@ -117,6 +120,23 @@ object Constants {
      */
     object DateFormat {
         val PATTERNS = listOf("EEE, d MMM", "EEEE, d MMMM", "d MMM yyyy", "EEEE", "d/M/yyyy")
+
+        /** Index 5: the locale's own order ("Sat, Sep 27" in the US, "Sat 27 Sept" in the UK). */
+        const val AUTOMATIC = 5
+
+        private var automaticLocale: java.util.Locale? = null
+        private var automaticPattern = ""
+
+        /** The pattern for a stored index; AUTOMATIC resolves per locale, cached until it changes. */
+        fun pattern(index: Int): String {
+            if (index != AUTOMATIC) return PATTERNS.getOrElse(index) { PATTERNS.first() }
+            val locale = java.util.Locale.getDefault()
+            if (locale != automaticLocale) {
+                automaticPattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "EEEMMMd")
+                automaticLocale = locale
+            }
+            return automaticPattern
+        }
     }
 
     /** Font choices, stored as an index. Append only; these numbers are saved data. */

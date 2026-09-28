@@ -94,10 +94,6 @@
         <item name="android:textSize">@dimen/text_small</item>
     </style>
 
-    <style name="TextSmallLight" parent="TextSmall">
-        <item name="android:textColor">@drawable/text_colors_light</item>
-    </style>
-
     <!-- Popup menu anchored to a settings row -->
     <style name="OlPopupMenu" parent="Widget.AppCompat.PopupMenu">
         <item name="android:popupBackground">@drawable/rounded_primary_gradient</item>
@@ -119,6 +115,9 @@
         <item name="android:windowBackground">@drawable/bg_dialog</item>
         <item name="android:backgroundDimAmount">0.5</item>
         <item name="android:windowAnimationStyle">@style/OlDialogAnimation</item>
+        <item name="android:fontFamily">?attr/mainFontFamily</item>
+        <item name="buttonBarButtonStyle">@style/OlDialogButton</item>
+        <item name="dialogPreferredPadding">20dp</item>
     </style>
 
     <style name="OlDialogAnimation" parent="android:Animation">

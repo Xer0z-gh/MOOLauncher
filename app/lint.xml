@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Keep the existing Hebrew qualifier: renaming it can change locale selection on installed devices. -->
+    <issue id="LocaleFolder">
+        <ignore path="src/main/res/values-he" />
+    </issue>
+    <!-- This existing bitmap is loaded through the default drawable density path; moving it changes scaling. -->
+    <issue id="IconLocation">
+        <ignore path="src/main/res/drawable/ic_rounded.webp" />
+    </issue>
+    <!-- Toolchain/library versions are pinned to the tested laptop build; update them in a separate compatibility pass. -->
+    <issue id="AndroidGradlePluginVersion">
+        <ignore path="../gradle/libs.versions.toml" />
+    </issue>
+    <issue id="GradleDependency">
+        <ignore path="../gradle/libs.versions.toml" />
+    </issue>
+</lint>

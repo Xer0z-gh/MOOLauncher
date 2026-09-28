@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:paddingHorizontal="24dp"
+    android:paddingTop="20dp" android:paddingBottom="8dp">
+    <TextView android:id="@+id/categoryTitle" style="@style/TextSmall"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:paddingBottom="8dp" />
+    <View android:id="@+id/categoryRule" android:layout_width="match_parent"
+        android:layout_height="1dp" android:importantForAccessibility="no"
+        android:background="?attr/primaryColor" android:alpha="0.16" />
+</LinearLayout>

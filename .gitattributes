@@ -1,0 +1,3 @@
+# Store text with LF, the ending every file in this repo was committed with. Windows editors
+# and tools write CRLF; without this, whole files showed as changed for their line endings.
+* text=auto eol=lf

@@ -17,6 +17,8 @@ sealed class AppModel : Comparable<AppModel> {
         val activityClassName: String?,
         override val isNew: Boolean = false,
         override val user: UserHandle,
+        val category: Int = AppCategory.OTHER,
+        val installedAt: Long = 0,
     ) : AppModel()
 
     data class PinnedShortcut(
@@ -36,6 +38,16 @@ sealed class AppModel : Comparable<AppModel> {
         override val user: UserHandle = android.os.Process.myUserHandle(),
     ) : AppModel() {
         override val appLabel: String = ""
+        override val key: CollationKey? = null
+        override val appPackage: String = ""
+        override val isNew: Boolean = false
+    }
+
+    data class CategoryHeader(
+        val category: Int,
+        override val appLabel: String,
+        override val user: UserHandle = android.os.Process.myUserHandle(),
+    ) : AppModel() {
         override val key: CollationKey? = null
         override val appPackage: String = ""
         override val isNew: Boolean = false

@@ -23,7 +23,8 @@ private const val DIM_WITH_BLUR = 0.3f
  */
 class WindowBlur(private val window: Window) {
 
-    private val supported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !window.context.isEinkDisplay()
+    private val supported get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+        LauncherMotion.preset(window.context, app.olauncher.data.Prefs(window.context)) != LauncherMotion.OFF
     private val duration = window.context.resources.getInteger(R.integer.dialog_anim_duration).toLong()
     private val radius = window.context.resources.getDimensionPixelSize(R.dimen.dialog_blur_behind_radius)
     private val dimWithoutBlur = window.attributes.dimAmount
@@ -34,13 +35,14 @@ class WindowBlur(private val window: Window) {
 
     /** Call after the window is shown so its theme attributes have been resolved. */
     fun fadeIn() {
-        if (!supported) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || !supported) return
         start()
     }
 
     /** Fades the window and its blur out together, then runs [onEnd]. */
     fun fadeOut(onEnd: () -> Unit) {
-        if (!supported) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || !supported) {
+            animator?.cancel()
             onEnd()
             return
         }
