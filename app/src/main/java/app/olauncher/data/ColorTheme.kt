@@ -49,6 +49,9 @@ data class ColorTheme(
 
         fun byId(id: Int): ColorTheme = ALL.firstOrNull { it.id == id } ?: SYSTEM
 
+        /** Moo Pro themes: everything but following light/dark, plain black and plain white. */
+        fun isPro(id: Int): Boolean = id !in setOf(SYSTEM_ID, 1, 2)
+
         /** True when the theme overrides colours rather than deferring to light/dark. */
         fun isCustom(id: Int): Boolean = id != SYSTEM_ID
     }

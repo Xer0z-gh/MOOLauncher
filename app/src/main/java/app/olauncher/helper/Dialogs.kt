@@ -45,7 +45,7 @@ fun settingsCardDrawable(context: Context, prefs: Prefs): GradientDrawable {
 }
 
 /** Full-height Settings detail page. Short value pickers continue to use showForLauncher. */
-fun AlertDialog.showSettingsPage() {
+fun AlertDialog.showSettingsPage(@androidx.annotation.StringRes back: Int = R.string.settings_back) {
     showForLauncher()
     findViewById<View>(androidx.appcompat.R.id.parentPanel)?.let { panel ->
         panel.layoutParams = panel.layoutParams.apply { height = ViewGroup.LayoutParams.MATCH_PARENT }
@@ -68,7 +68,7 @@ fun AlertDialog.showSettingsPage() {
         minHeight = 48.dpToPx()
         isClickable = true
         isFocusable = true
-        contentDescription = context.getString(R.string.settings_back) + ", " + text
+        contentDescription = context.getString(back) + ", " + text
         ViewCompat.setAccessibilityDelegate(this, object : AccessibilityDelegateCompat() {
             override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
                 super.onInitializeAccessibilityNodeInfo(host, info)
@@ -135,7 +135,7 @@ private fun AlertDialog.applyLauncherSurface(prefs: Prefs) {
 }
 
 fun View.tintDialogControls(color: Int) {
-    if (isFocusable || isClickable) applyFocusOutline(color)
+    if ((isFocusable || isClickable) && this !is android.widget.EditText) applyFocusOutline(color)
     if (this is android.widget.CheckedTextView) checkMarkTintList = android.content.res.ColorStateList.valueOf(color)
     if (this is android.widget.CompoundButton) buttonTintList = android.content.res.ColorStateList.valueOf(color)
     if (this is android.widget.EditText) backgroundTintList = android.content.res.ColorStateList.valueOf(color)
@@ -220,6 +220,7 @@ fun Context.createDialog(
     @StringRes title: Int,
     @StringRes action: Int,
     @StringRes message: Int = 0,
+    messageText: CharSequence? = null,
     @StringRes neutral: Int = 0,
     onNeutral: () -> Unit = {},
     onAction: () -> Unit = {},
@@ -234,6 +235,8 @@ fun Context.createDialog(
     binding.ivClose.imageTintList = android.content.res.ColorStateList.valueOf(foreground)
     binding.ivClose.alpha = 1f
     binding.tvTitle.setText(title)
+    // Long compound words ("Bedienungshilfendienst") break at a syllable with a hyphen, not mid-letter.
+    binding.tvTitle.hyphenationFrequency = android.text.Layout.HYPHENATION_FREQUENCY_FULL
     ViewCompat.setAccessibilityHeading(binding.tvTitle, true)
     listOf(binding.ivClose, binding.tvNeutral, binding.tvAction).forEach { control ->
         ViewCompat.setAccessibilityDelegate(control, object : AccessibilityDelegateCompat() {
@@ -244,10 +247,9 @@ fun Context.createDialog(
         })
     }
     binding.tvAction.setText(action)
-    if (message != 0) {
-        binding.tvMessage.setText(message)
-        binding.tvMessage.isVisible = true
-    }
+    if (message != 0) binding.tvMessage.setText(message)
+    messageText?.let(binding.tvMessage::setText)
+    binding.tvMessage.isVisible = message != 0 || messageText != null
     if (neutral != 0) {
         binding.tvNeutral.setText(neutral)
         binding.tvNeutral.isVisible = true

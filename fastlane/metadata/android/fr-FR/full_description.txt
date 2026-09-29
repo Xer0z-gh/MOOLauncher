@@ -1,0 +1,61 @@
+Moo est un écran d'accueil Android minimaliste, centré sur le texte : une horloge et une courte liste de noms d'applis, rien d'autre pour vous distraire. Cette version inclut toutes les fonctions, sans bibliothèques Google, publicité, outils d'analyse, traceurs ni compte.
+
+<b>Écran d'accueil</b>
+<ul>
+<li>Une horloge et les applis de votre choix, par leur nom.</li>
+<li>Pastilles de notifications manquées près de chaque appli (nombre ou point). Le nombre s'efface à l'ouverture de l'appli via Moo : il montre ce que vous avez manqué, pas ce qui reste dans le volet des notifications. Touchez une pastille pour lire les dernières lignes ; sourdine possible par appli.</li>
+<li>Infos facultatives : date, batterie, météo, temps d'écran, déverrouillages et prochaine alarme.</li>
+<li>Visualiseur musical qui dessine ce que joue le téléphone.</li>
+</ul>
+
+<b>Notifications et gestes</b>
+<ul>
+<li>Un panneau de notifications avec filtres, ouvert d'un balayage.</li>
+<li>Six gestes (balayage haut, bas, gauche, droite, double appui, appui long). Chacun peut ne rien faire ; ouvrir la liste ou la recherche d'applis, le volet des notifications, les réglages du lanceur, une appli choisie ou les notifications manquées ; ou verrouiller l'écran (Android 9+).</li>
+</ul>
+
+<b>Liste des applis</b>
+<ul>
+<li>Catégories ou A-Z, recherche avec lancement automatique en option, applis masquées et espace privé (Android 15).</li>
+<li>Désinstallation depuis la liste.</li>
+</ul>
+
+<b>Apparence</b>
+<ul>
+<li>13 thèmes de couleur, prévisualisés sur votre écran d'accueil. Moo peint son propre fond et ne touche jamais à votre fond d'écran.</li>
+<li>Icônes : aucune, sur l'accueil, dans la liste ou les deux. Packs d'icônes ADW ou Nova, en couleur ou en niveaux de gris.</li>
+<li>Polices, dont Inter ; curseurs par paliers pour les tailles, la taille et la graisse du texte.</li>
+<li>Styles d'animation et défilement focalisé avec retour haptique à chaque cran.</li>
+</ul>
+
+<b>Batterie</b>
+Le mode Ultra fait tourner l'accueil à 60 Hz, sur fond noir pur, avec moins de réveils ; il peut suivre l'économiseur de batterie d'Android.
+
+<b>Météo</b>
+Par Open-Meteo, selon la position approximative du téléphone ou, sans autorisation de localisation, une ville saisie dans les Réglages. Désactivée par défaut.
+
+Les réglages sont regroupés en pages : Écran d'accueil, Apparence, Applis, Notifications, Météo, et Mouvement et énergie (avec les gestes).
+
+<b>Réseau</b>
+Rien ne quitte l'appareil, sauf :
+<ul>
+<li>Météo, si activée : une position approximative (env. 1 km, arrondie à 2 décimales) ou la ville saisie, envoyée à Open-Meteo.</li>
+<li>Recherche de lieu : la ville saisie, envoyée au géocodeur d'Open-Meteo.</li>
+<li>Fond d'écran du jour, si activé : une liste d'un gist GitHub et des images de images.unsplash.com, images.pexels.com, i.redd.it et images2.imgbox.com.</li>
+</ul>
+Le contenu des notifications, l'usage des applis, les applis installées et l'audio du visualiseur restent sur l'appareil.
+
+<b>Autorisations</b>
+<ul>
+<li>QUERY_ALL_PACKAGES : lister, rechercher et lancer les applis ; lire les packs d'icônes.</li>
+<li>PACKAGE_USAGE_STATS : temps d'écran et déverrouillages.</li>
+<li>ACCESS_COARSE_LOCATION : météo, facultatif.</li>
+<li>RECORD_AUDIO : visualiseur uniquement. Lit le son en sortie ; n'enregistre jamais le micro, ne stocke aucun audio.</li>
+<li>Accès aux notifications : pastilles, panneau de notifications, médias du visualiseur.</li>
+<li>Service d'accessibilité : uniquement pour verrouiller l'écran et ouvrir le volet des notifications par geste. Ne lit rien à l'écran.</li>
+<li>REQUEST_DELETE_PACKAGES : désinstaller depuis la liste des applis.</li>
+</ul>
+
+
+Moo est un logiciel libre (GPLv3), basé sur Olauncher, le lanceur open source de tanujnotes.
+Code source : <a href="https://github.com/Xer0z-gh/MOOLauncher">github.com/Xer0z-gh/MOOLauncher</a>

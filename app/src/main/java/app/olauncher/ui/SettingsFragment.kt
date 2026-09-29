@@ -1,7 +1,5 @@
 package app.olauncher.ui
 
-import android.app.admin.DevicePolicyManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -52,6 +50,8 @@ import app.olauncher.helper.dpToPx
 import app.olauncher.helper.getColorFromAttr
 import app.olauncher.helper.hideStatusBar
 import app.olauncher.helper.isAccessServiceEnabled
+import app.olauncher.pro.ProStore
+import app.olauncher.pro.showProDialog
 import app.olauncher.helper.isDarkThemeOn
 import app.olauncher.helper.isEinkDisplay
 import app.olauncher.helper.isOlauncherDefault
@@ -87,14 +87,11 @@ import app.olauncher.helper.tintTextTree
 import app.olauncher.helper.tintCompoundDrawables
 import app.olauncher.helper.tintDialogControls
 import app.olauncher.helper.LauncherMotion
-import app.olauncher.listener.DeviceAdmin
 
 class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListener {
 
     private lateinit var prefs: Prefs
     private lateinit var viewModel: MainViewModel
-    private lateinit var deviceManager: DevicePolicyManager
-    private lateinit var componentName: ComponentName
 
     private var _binding: FragmentSettingsBinding? = null
     private var featureDialog: androidx.appcompat.app.AlertDialog? = null
@@ -142,7 +139,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.sectionHub.isVisible = section == Constants.Section.HUB
         binding.sectionHome.isVisible = section == Constants.Section.HOME
         binding.sectionAppearance.isVisible = section == Constants.Section.APPEARANCE
-        binding.sectionGestures.isVisible = section == Constants.Section.GESTURES
+        // Gestures live on the Motion and power page, as a card of their own below it.
+        binding.sectionGestures.isVisible = section == SECTION_POWER
         binding.sectionApps.isVisible = section == Constants.Section.APPS
         binding.sectionNotifications.isVisible = section == SECTION_NOTIFICATIONS
         binding.sectionBadges.isVisible = section == SECTION_BADGES
@@ -150,6 +148,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.sectionPower.isVisible = section == SECTION_POWER
         binding.settingsHeader.isVisible = section == Constants.Section.HUB
         binding.settingsFooter.isVisible = section == Constants.Section.HUB
+        // Three links in a row overflow at large text; stack them instead.
+        if (resources.configuration.fontScale > 1.3f) binding.settingsFooter.orientation = LinearLayout.VERTICAL
     }
 
     private fun applySettingsSurface() {
@@ -170,9 +170,9 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
     }
     /** All seven section headers use the same 48dp Back affordance and title hierarchy. */
     private fun addSectionBackButtons() {
+        (binding.sectionGestures.getChildAt(0) as? TextView)?.let { androidx.core.view.ViewCompat.setAccessibilityHeading(it, true) }
         listOf(binding.sectionHome, binding.sectionAppearance, binding.sectionApps,
-            binding.sectionNotifications, binding.sectionBadges, binding.sectionWeather, binding.sectionPower,
-            binding.sectionGestures).forEach { card ->
+            binding.sectionNotifications, binding.sectionBadges, binding.sectionWeather, binding.sectionPower).forEach { card ->
             val title = card.getChildAt(0) as? TextView ?: return@forEach
             card.removeViewAt(0)
             val row = LinearLayout(requireContext()).apply {
@@ -318,13 +318,17 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             ViewModelProvider(this)[MainViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
 
-        deviceManager = requireContext().getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        componentName = ComponentName(requireContext(), DeviceAdmin::class.java)
-        checkAdminPermission()
 
-        section = arguments?.getInt(Constants.Key.SECTION, Constants.Section.HUB)
-            ?: Constants.Section.HUB
+        val requested = arguments?.getInt(Constants.Key.SECTION, Constants.Section.HUB) ?: Constants.Section.HUB
+        section = if (requested == Constants.Section.GESTURES) SECTION_POWER else requested
         applySection()
+        // Sent here by a gesture that needs the accessibility service: offer it at once, or at
+        // least land on the gesture rows (they sit below the motion rows on this page).
+        if (requested == Constants.Section.GESTURES && savedInstanceState == null) view.post {
+            if (_binding == null) return@post
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && !isAccessServiceEnabled(requireContext())) showAccessibilityDialog()
+            else binding.sectionGestures.requestRectangleOnScreen(android.graphics.Rect(0, 0, binding.sectionGestures.width, binding.sectionGestures.height), true)
+        }
         // A resolveActivity binder call. Only the hub's launcher prompt, Home's bottom alignment
         // and Appearance's wallpaper toggle read it, and Home refreshes it on every resume.
         if (section == Constants.Section.HUB || section == Constants.Section.HOME ||
@@ -625,7 +629,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         when (view.id) {
             R.id.hubHome -> openSection(Constants.Section.HOME)
             R.id.hubAppearance -> openSection(Constants.Section.APPEARANCE)
-            R.id.hubGestures -> openSection(Constants.Section.GESTURES)
             R.id.hubApps -> openSection(Constants.Section.APPS)
             R.id.hubNotifications -> openSection(SECTION_NOTIFICATIONS)
             R.id.badgesSettings -> openSection(SECTION_BADGES)
@@ -750,6 +753,17 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.gestureSwipeRight -> showGestureMenu(view)
 
             R.id.github -> requireContext().openUrl(Constants.URL_MOO_GITHUB)
+            R.id.privacy -> requireContext().openUrl(Constants.URL_MOO_PRIVACY)
+            R.id.about -> showDialog(
+                requireContext().createDialog(
+                    title = R.string.about,
+                    action = R.string.source_code,
+                    messageText = getString(R.string.about_text, BuildConfig.VERSION_NAME),
+                    neutral = R.string.privacy,
+                    onNeutral = { requireContext().openUrl(Constants.URL_MOO_PRIVACY) },
+                    onAction = { requireContext().openUrl(Constants.URL_MOO_GITHUB) },
+                )
+            )
         }
     }
 
@@ -804,7 +818,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.notificationBadges.setOnLongClickListener(this)
         binding.hubHome.setOnClickListener(this)
         binding.hubAppearance.setOnClickListener(this)
-        binding.hubGestures.setOnClickListener(this)
         binding.hubApps.setOnClickListener(this)
         binding.hubNotifications.setOnClickListener(this)
         binding.hubWeather.setOnClickListener(this)
@@ -846,6 +859,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         binding.gestureSwipeRight.setOnClickListener(this)
 
         binding.github.setOnClickListener(this)
+        binding.about.setOnClickListener(this)
+        binding.privacy.setOnClickListener(this)
 
         binding.dailyWallpaper.setOnLongClickListener(this)
         binding.gestureSwipeLeft.setOnLongClickListener(this)
@@ -853,10 +868,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
     }
 
     private fun initObservers() {
-        if (prefs.firstSettingsOpen) {
-            viewModel.showDialog.postValue(Constants.Dialog.ABOUT)
-            prefs.firstSettingsOpen = false
-        }
+        prefs.firstSettingsOpen = false
         viewModel.isOlauncherDefault.observe(viewLifecycleOwner) {
             if (it) {
                 binding.setLauncher.text = getString(R.string.change_default_launcher)
@@ -876,12 +888,12 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
 
     // Prominent disclosure before sending the user to accessibility settings
     private fun showAccessibilityDialog() {
-        val serviceEnabled = isAccessServiceEnabled(requireContext())
         showDialog(
             requireContext().createDialog(
-                title = R.string.gestures,
-                action = if (serviceEnabled) R.string.disable else R.string.enable,
+                title = R.string.accessibility_service_title,
+                action = R.string.open_settings,
                 message = R.string.accessibility_disclosure,
+                neutral = R.string.not_now,
                 // The "Not working?" button opened Olauncher's own troubleshooting page. A
                 // button in this app that explains a different app is worse than no button.
                 onAction = { openAccessibilityService() },
@@ -928,12 +940,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             R.id.action_settingsFragment_to_appListFragment,
             bundleOf(Constants.Key.FLAG to Constants.FLAG_HIDDEN_APPS)
         )
-    }
-
-    /** Below API 28 lock mode is device admin. Above it the binder result was thrown away. */
-    private fun checkAdminPermission() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
-            prefs.lockModeOn = deviceManager.isAdminActive(componentName)
     }
 
     /**
@@ -1029,7 +1035,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             Constants.GestureAction.LOCK_SCREEN to R.string.action_lock_screen,
             Constants.GestureAction.LAUNCHER_SETTINGS to R.string.action_launcher_settings,
             Constants.GestureAction.NOTHING to R.string.action_nothing,
-        )
+        ).filter { it.first != Constants.GestureAction.LOCK_SCREEN || Build.VERSION.SDK_INT >= Build.VERSION_CODES.P }
         val current = actions.indexOfFirst { it.first == prefs.getGestureAction(row.gesture, row.default) }
         val name = (rowOf(anchor) as? ViewGroup)?.let(::settingsPair)?.first?.text
         featureDialog?.dismiss()
@@ -1038,7 +1044,10 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
                 choice.dismiss()
                 // Launch app again is how the app is changed, so it is never a no-op.
                 val action = actions[picked].first
-                if (picked != current || action == Constants.GestureAction.LAUNCH_APP) applyGestureAction(row, action)
+                // Re-picking Lock screen or the shade while the service is off must still offer it.
+                val needsService = (action == Constants.GestureAction.LOCK_SCREEN || action == Constants.GestureAction.NOTIFICATION_SHADE) &&
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && !isAccessServiceEnabled(requireContext())
+                if (picked != current || action == Constants.GestureAction.LAUNCH_APP || needsService) applyGestureAction(row, action)
             }.create().also { it.showForLauncher() }
     }
 
@@ -1053,7 +1062,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         // the row still read whatever it said before.
         prefs.setGestureAction(row.gesture, action)
 
-        if (action == Constants.GestureAction.LOCK_SCREEN &&
+        // The shade gesture needs the same service, so it gets the same disclosure.
+        if ((action == Constants.GestureAction.LOCK_SCREEN || action == Constants.GestureAction.NOTIFICATION_SHADE) &&
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
             !isAccessServiceEnabled(requireContext())
         ) {
@@ -1125,6 +1135,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             // The preview: a miniature of the home screen in this theme's colours, so what is on
             // screen is what choosing it produces, rather than a colour you have to imagine text on.
             val preview = LinearLayout(context).apply {
+                setTag(R.id.keep_text_color, true)
                 orientation = LinearLayout.VERTICAL
                 gravity = Gravity.CENTER
                 setPadding(gap, gap, gap, gap)
@@ -1157,12 +1168,14 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
                 isFocusable = true
                 contentDescription = getString(
                     if (selected) R.string.theme_selected else R.string.theme_not_selected,
-                    getString(theme.nameRes)
+                    if (ColorTheme.isPro(theme.id) && !ProStore.unlocked(prefs))
+                        getString(R.string.pro_theme_label, getString(theme.nameRes)) else getString(theme.nameRes)
                 )
                 setOnClickListener { applyColorTheme(theme) }
                 addView(preview, LinearLayout.LayoutParams(tileWidth, tileHeight))
                 addView(TextView(context).apply {
-                    text = getString(theme.nameRes)
+                    text = if (ColorTheme.isPro(theme.id) && !ProStore.unlocked(prefs))
+                        getString(R.string.pro_theme_label, getString(theme.nameRes)) else getString(theme.nameRes)
                     setTextColor(requireContext().getColorFromAttr(R.attr.primaryColor))
                     textSize = 11f
                     // "Follow theme mode" wraps under its tile instead of widening its column.
@@ -1181,6 +1194,10 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
     }
 
     private fun applyColorTheme(theme: ColorTheme) {
+        if (ColorTheme.isPro(theme.id) && !ProStore.unlocked(prefs)) {
+            requireContext().showProDialog()
+            return
+        }
         prefs.colorThemeId = theme.id
         if (ColorTheme.isCustom(theme.id)) {
             // A flat colour theme and a rotating wallpaper cannot both win.
@@ -1452,7 +1469,7 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
             requireContext().showToast(getString(R.string.information_widget_limit))
             return
         }
-        if (Weather.hasLocationPermission(requireContext())) {
+        if (Weather.canLocate(requireContext())) {
             prefs.showWeather = true
             // Force the next resume to fetch rather than wait out the hourly gate.
             prefs.weatherUpdatedAt = 0L
@@ -1580,15 +1597,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         // prefs.lockModeOn = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-    }
-
-    private fun removeActiveAdmin(toastMessage: String? = null) {
-        try {
-            deviceManager.removeActiveAdmin(componentName) // for backward compatibility
-            requireContext().showToast(toastMessage)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 
     private fun removeWallpaper() {
@@ -1820,10 +1828,4 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
         _binding = null
     }
 
-    override fun onDestroy() {
-        // A section lower in the back stack comes back from a recreate with no view, so no
-        // viewModel; destroying it on the next recreate used to crash the launcher.
-        if (::viewModel.isInitialized) viewModel.checkForMessages.call()
-        super.onDestroy()
-    }
 }

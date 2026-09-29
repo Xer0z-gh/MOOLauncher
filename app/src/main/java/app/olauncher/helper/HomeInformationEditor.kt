@@ -75,6 +75,6 @@ fun Context.homeInformationEditor(prefs: Prefs, onSaved: (needsWeatherPermission
             prefs.infoShowAlarm = selected[5]
             prefs.informationSize = size
             prefs.widgetTapOpens = tapOpens
-            onSaved(selected[2] && !Weather.hasLocationPermission(this))
+            onSaved(selected[2] && !Weather.canLocate(this))
         }.create()
 }

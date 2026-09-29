@@ -1,0 +1,61 @@
+O Moo é uma tela inicial minimalista para Android, focada em texto: um relógio e uma lista curta de nomes de apps, sem mais nada disputando sua atenção. Esta versão inclui todos os recursos, sem bibliotecas do Google, anúncios, análises, rastreadores ou conta.
+
+<b>Tela inicial</b>
+<ul>
+<li>Um relógio e os apps que você escolher, pelo nome.</li>
+<li>Selos de notificações perdidas ao lado de cada app, em número ou ponto. O número zera quando você abre o app pelo Moo: ele mostra o que você perdeu, não o que ainda está na aba de notificações. Toque num selo para ver as últimas linhas; silencie qualquer app.</li>
+<li>Informações opcionais: data, bateria, clima, tempo de tela, número de desbloqueios e próximo alarme.</li>
+<li>Visualizador de música que desenha o que está tocando no celular.</li>
+</ul>
+
+<b>Notificações e gestos</b>
+<ul>
+<li>Um painel de notificações com filtros, aberto com um deslize.</li>
+<li>Seis gestos (deslizar para cima, baixo, esquerda ou direita, toque duplo, toque longo). Cada um pode não fazer nada, abrir a lista ou a busca de apps, puxar a aba de notificações, abrir as configurações do launcher, bloquear a tela (Android 9+), abrir um app escolhido ou mostrar as notificações perdidas.</li>
+</ul>
+
+<b>Lista de apps</b>
+<ul>
+<li>Categorias ou A a Z, busca com abertura automática opcional, apps ocultos e espaço privado no Android 15.</li>
+<li>Desinstale direto da lista.</li>
+</ul>
+
+<b>Aparência</b>
+<ul>
+<li>13 temas de cores, com prévia na sua própria tela inicial. O Moo pinta o próprio fundo e nunca substitui seu papel de parede.</li>
+<li>Ícones desativados, na tela inicial, na lista de apps ou em ambas. Pacotes de ícones no formato ADW ou Nova, coloridos ou em tons de cinza.</li>
+<li>Fontes, incluindo a Inter; controles deslizantes em etapas para tamanhos, tamanho e peso do texto.</li>
+<li>Estilos de movimento e um layout de rolagem com foco e vibração a cada item.</li>
+</ul>
+
+<b>Bateria</b>
+O modo Ultra de economia de bateria roda a tela inicial a 60 Hz, com fundo preto puro e menos ativações, e pode seguir a Economia de bateria do Android.
+
+<b>Clima</b>
+Do Open-Meteo, pela localização aproximada do celular ou por uma cidade digitada nas Configurações; nesse caso, sem permissão de localização. Desativado até você ativar.
+
+As configurações ficam em páginas: Tela inicial, Aparência, Apps, Notificações, Clima e Movimento e energia (onde estão os gestos).
+
+<b>Uso de rede</b>
+Nada sai do aparelho, exceto:
+<ul>
+<li>Clima, se ativado: uma localização aproximada (cerca de 1 km, arredondada para 2 casas decimais) ou a cidade digitada, enviada ao Open-Meteo.</li>
+<li>Busca de local: o nome da cidade digitada, enviado ao geocodificador do Open-Meteo.</li>
+<li>Papel de parede diário, se ativado: uma lista de um gist do GitHub e imagens de images.unsplash.com, images.pexels.com, i.redd.it e images2.imgbox.com.</li>
+</ul>
+O conteúdo das notificações, o uso de apps, a lista de apps instalados e o áudio do visualizador ficam no aparelho.
+
+<b>Permissões</b>
+<ul>
+<li>QUERY_ALL_PACKAGES: listar, buscar e abrir apps; ler pacotes de ícones.</li>
+<li>PACKAGE_USAGE_STATS: tempo de tela e número de desbloqueios.</li>
+<li>ACCESS_COARSE_LOCATION: clima, opcional.</li>
+<li>RECORD_AUDIO: só para o visualizador. Lê a saída de áudio; nunca grava pelo microfone nem armazena áudio.</li>
+<li>Acesso a notificações: selos, painel de notificações e mídia para o visualizador.</li>
+<li>Serviço de acessibilidade: só para bloquear a tela e abrir a aba de notificações quando você faz esse gesto. Não lê o conteúdo da tela.</li>
+<li>REQUEST_DELETE_PACKAGES: desinstalar pela lista de apps.</li>
+</ul>
+
+
+O Moo é software livre (GPLv3), baseado no Olauncher, o launcher de código aberto de tanujnotes.
+Código-fonte: <a href="https://github.com/Xer0z-gh/MOOLauncher">github.com/Xer0z-gh/MOOLauncher</a>

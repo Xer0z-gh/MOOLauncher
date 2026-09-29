@@ -23,27 +23,16 @@
     <string name="system_default">Sistem</string>
     <string name="dark">Întunecat</string>
     <string name="light">Luminos</string>
-    <string name="welcome_to_olauncher_settings">Bine ai venit în setări!</string>
     <string name="keyboard_message">Salut, tastatura este cea mai rapidă modalitate de a găsi și lansa aplicații în Moo Launcher. Te putem ruga să o lași activată câteva zile în plus și apoi să decizi?
         \n\nAlegerea îți aparține întotdeauna.</string>
     <string name="app_usage_message">Pentru a afișa/ascunde timpul petrecut pe ecran de pe ecranul de start, permite sau refuză permisiunea de utilizare a aplicațiilor.
         \n\nNotă: Nu se colectează date privind utilizarea aplicațiilor. Totul este procesat pe dispozitivul tău.</string>
-    <string name="wallpaper_message">Moo Launcher oferă fundaluri noi și frumoase zilnic, gratuit. Dă ecranului tău de start un aspect nou în fiecare zi, gratis!
-        \n\nVrei să încerci?</string>
-    <string name="accessibility_service_description">Permisiunea de accesibilitate este necesară pentru a activa gestul - atinge dublu pentru blocare. Niciun fel de date obținute de Moo Launcher prin acest serviciu nu părăsesc dispozitivul tău.</string>
     <string name="close">Închide</string>
     <string name="please_set_olauncher_as_default_first">Te rugăm să setezi mai întâi Moo Launcher ca implicit</string>
-    <string name="accessibility_disclosure">Te rugăm să activezi serviciul de accesibilitate Moo Launcher din setările dispozitivului pentru a activa gestul Atinge dublu pentru blocare.
-    \n\nTe rugăm să reții că acest serviciu este utilizat doar pentru această funcție specifică. Serviciul nostru de accesibilitate nu colectează și nu partajează date.</string>
     <string name="permission">Permisiune</string>
-    <string name="enable">Activează</string>
-    <string name="disable">Dezactivează</string>
     <string name="info">Informații</string>
     <string name="delete">Dezinstalează</string>
     <string name="text_size">Dimensiune text</string>
-    <string name="enabled">Activat</string>
-    <string name="please_turn_on_double_tap_to_unlock">Te rugăm să activezi atinge dublu pentru blocare</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher nu a reușit să blocheze dispozitivul.\nTe rugăm să verifici setările aplicației.</string>
     <string name="long_press_to_select_app">Apasă lung pentru a selecta aplicația</string>
     <string name="unable_to_open_app">Nu se poate deschide aplicația</string>
     <string name="unable_to_open_app_info">Nu se pot deschide informațiile aplicației</string>
@@ -57,13 +46,8 @@
     <string name="adapter_show">Afișează</string>
     <string name="adapter_hide">Ascunde</string>
     <string name="screen_time">Timp pe ecran</string>
-    <string name="did_you_know">Știai că?</string>
     <string name="alignment_changed">Aliniere schimbată ✅</string>
     <string name="home_screen">Ecran de start</string>
-    <string name="hey">Salut</string>
-    <string name="new_year_wish">Un an mai bun decât oricare altul. La mulți ani!</string>
-    <string name="new_year_wish_1">Nu contează cum a fost ianuarie. Mai ai tot restul anului pentru a face mai bine ca niciodată.</string>
-    <string name="cheers">Noroc!</string>
     <string name="notification_bar">Bară de notificări</string>
     <string name="private_space">Spațiu privat</string>
     <string name="invalid_pin_request">Cerere de fixare nevalidă</string>
@@ -74,4 +58,10 @@
     <string name="invalid_shortcut">Comandă rapidă nevalidă</string>
     <string name="shortcut_not_found">Comanda rapidă nu a fost găsită</string>
     <string name="unable_to_open_shortcut">Nu se poate deschide comanda rapidă</string>
+    <string name="accessibility_service_title">Serviciu de accesibilitate</string>
+    <string name="accessibility_disclosure">Pentru a bloca ecranul sau a deschide panoul de notificări printr-un gest, activați serviciul de accesibilitate al aplicației Moo Launcher din setările dispozitivului.\n\nMoo Launcher folosește serviciul doar pentru a efectua aceste două acțiuni atunci când faceți gestul. Nu citește nici ce apare pe ecran, nici ce tastați și nu colectează și nu distribuie niciun fel de date.</string>
+    <string name="accessibility_service_description">Moo Launcher folosește acest serviciu pentru două gesturi pe care le alegeți: blocarea ecranului și deschiderea panoului de notificări. Nu citește nici ce apare pe ecran, nici ce tastați, iar nimic din ce face nu părăsește dispozitivul.</string>
+    <string name="not_now">Nu acum</string>
+    <string name="open_settings">Deschideți setările</string>
+    <string name="gesture_needs_service">Activați serviciul de accesibilitate al aplicației Moo Launcher pentru a folosi acest gest.</string>
 </resources>

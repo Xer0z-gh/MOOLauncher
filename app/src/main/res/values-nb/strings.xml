@@ -23,26 +23,16 @@
     <string name="system_default">System</string>
     <string name="dark">Mørk</string>
     <string name="light">Lys</string>
-    <string name="welcome_to_olauncher_settings">Velkommen til innstillingene!</string>
     <string name="keyboard_message">Hei, tastaturet er den raskeste måten å finne og åpne apper på i Moo Launcher. Kan vi be deg la det stå på i noen dager til før du bestemmer deg?
         \n\nValget er alltid ditt.</string>
     <string name="app_usage_message">For å vise/skjule skjermtiden din på startskjermen må du tillate eller avslå tillatelsen for appbruk.
         \n\nMerk: Ingen data om appbruk samles inn. Alt behandles på enheten din.</string>
-    <string name="wallpaper_message">Moo Launcher tilbyr vakre nye bakgrunnsbilder daglig. Gi startskjermen din et nytt utseende hver dag, helt gratis!
-        \n\nVil du prøve det?</string>
-    <string name="accessibility_service_description">Tilgjengelighetstillatelsen kreves for å aktivere bevegelsen - dobbelttrykk for å låse. Ingen data hentet av Moo Launcher via denne tjenesten forlater enheten din.</string>
     <string name="close">Lukk</string>
     <string name="please_set_olauncher_as_default_first">Angi først Moo Launcher som standard</string>
-    <string name="accessibility_disclosure">Slå på Moo Launchers tilgjengelighetstjeneste i enhetens innstillinger for å aktivere bevegelsen Dobbelttrykk for å låse.\n\nMerk at denne tjenesten kun brukes til denne bestemte funksjonen. Tilgjengelighetstjenesten vår samler ikke inn eller deler noen data.</string>
     <string name="permission">Tillatelse</string>
-    <string name="enable">Aktiver</string>
-    <string name="disable">Deaktiver</string>
     <string name="info">Info</string>
     <string name="delete">Avinstaller</string>
     <string name="text_size">Tekststørrelse</string>
-    <string name="enabled">Aktivert</string>
-    <string name="please_turn_on_double_tap_to_unlock">Slå på dobbelttrykk for å låse</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher klarte ikke å låse enheten.\nSjekk appinnstillingene dine.</string>
     <string name="long_press_to_select_app">Langt trykk for å velge app</string>
     <string name="unable_to_open_app">Kan ikke åpne app</string>
     <string name="unable_to_open_app_info">Kan ikke åpne appinformasjon</string>
@@ -56,13 +46,8 @@
     <string name="adapter_show">Vis</string>
     <string name="adapter_hide">Skjul</string>
     <string name="screen_time">Skjermtid</string>
-    <string name="did_you_know">Visste du det?</string>
     <string name="alignment_changed">Justering endret ✅</string>
     <string name="home_screen">Startskjerm</string>
-    <string name="hey">Hei</string>
-    <string name="new_year_wish">Her er til et år bedre enn noe annet. Godt nytt år!</string>
-    <string name="new_year_wish_1">Det spiller ingen rolle hvordan januar gikk. Du har fortsatt resten av året til å gjøre det bedre enn noen gang.</string>
-    <string name="cheers">Skål!</string>
     <string name="notification_bar">Varslingslinje</string>
     <string name="private_space">Privat område</string>
     <string name="invalid_pin_request">Ugyldig festeforespørsel</string>
@@ -73,4 +58,10 @@
     <string name="invalid_shortcut">Ugyldig snarvei</string>
     <string name="shortcut_not_found">Snarvei ikke funnet</string>
     <string name="unable_to_open_shortcut">Kan ikke åpne snarvei</string>
+    <string name="accessibility_service_title">Tilgjengelighetstjeneste</string>
+    <string name="accessibility_disclosure">For å låse skjermen eller åpne varselskuffen med en bevegelse må du slå på tilgjengelighetstjenesten til Moo Launcher i innstillingene på enheten.\n\nMoo Launcher bruker tjenesten bare til å utføre disse to handlingene når du gjør bevegelsen. Den leser verken det som vises på skjermen, eller det du skriver, og den verken samler inn eller deler noen data.</string>
+    <string name="accessibility_service_description">Moo Launcher bruker denne tjenesten til to bevegelser du velger: å låse skjermen og å åpne varselskuffen. Den leser verken det som vises på skjermen, eller det du skriver, og ingenting den gjør, forlater enheten din.</string>
+    <string name="not_now">Ikke nå</string>
+    <string name="open_settings">Åpne innstillinger</string>
+    <string name="gesture_needs_service">Slå på tilgjengelighetstjenesten til Moo Launcher for å bruke denne bevegelsen.</string>
 </resources>

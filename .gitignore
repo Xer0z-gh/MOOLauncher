@@ -1,5 +1,12 @@
 *.iml
 *.jks
+*.keystore
+*.p12
+keystore.properties
+*.apk
+*.aab
+/work/
+__pycache__/
 .gradle
 /local.properties
 /.idea/*
@@ -16,3 +23,13 @@
 .externalNativeBuild
 .cxx
 google-services.json
+
+# Working notes stay on this machine (device serials, local paths, process notes).
+/AGENTS.md
+/docs/CONTINUE-ON-LAPTOP.md
+/docs/HANDOFF.md
+/docs/PERFORMANCE.md
+/docs/REQUEST-AUDIT-2026-09-25.md
+/docs/TODO.md
+/docs/VERIFICATION-2026-09-24.md
+.kotlin/

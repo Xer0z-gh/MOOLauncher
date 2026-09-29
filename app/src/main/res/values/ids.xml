@@ -9,6 +9,10 @@
     -->
     <item name="focus_ring_color" type="id" />
     <item name="dialog_list_tint" type="id" />
+    <!-- A subtree that paints its own text colours (theme previews): dialog tints skip it. -->
+    <item name="keep_text_color" type="id" />
+    <!-- The value TextView of a Settings value row, so the row can be updated in place. -->
+    <item name="value_view" type="id" />
     <!-- Settings' Align to bottom switch value, a row built in code (SettingsFragment). -->
     <item name="alignmentBottom" type="id" />
     <!--

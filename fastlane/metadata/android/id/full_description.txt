@@ -1,0 +1,61 @@
+Moo adalah layar utama Android yang minimalis dan berfokus pada teks: jam dan daftar pendek nama aplikasi, tanpa hal lain yang merebut perhatian Anda. Versi ini berisi semua fitur, tanpa pustaka Google, iklan, analitik, pelacak, maupun akun.
+
+<b>Layar utama</b>
+<ul>
+<li>Jam dan aplikasi pilihan Anda, berupa daftar nama.</li>
+<li>Lencana notifikasi terlewat di samping setiap aplikasi, berupa angka atau titik. Angkanya hilang saat Anda membuka aplikasi dari Moo, jadi yang tampil adalah yang Anda lewatkan, bukan yang masih ada di bilah notifikasi. Ketuk lencana untuk mengintip baris terbaru; bisukan aplikasi mana pun.</li>
+<li>Baris info opsional: tanggal, baterai, cuaca, waktu layar, jumlah buka kunci, dan alarm berikutnya.</li>
+<li>Visualizer musik yang menggambarkan apa yang sedang diputar ponsel.</li>
+</ul>
+
+<b>Notifikasi dan gestur</b>
+<ul>
+<li>Panel notifikasi dengan filter, dibuka dengan usapan.</li>
+<li>Enam gestur (usap ke atas, bawah, kiri, kanan, ketuk dua kali, tekan lama). Masing-masing bisa tidak melakukan apa pun, membuka daftar atau pencarian aplikasi, menurunkan bilah notifikasi, membuka setelan launcher, mengunci layar (Android 9+), membuka aplikasi pilihan, atau menampilkan notifikasi terlewat.</li>
+</ul>
+
+<b>Daftar aplikasi</b>
+<ul>
+<li>Kategori atau A-Z, pencarian dengan buka otomatis opsional, aplikasi tersembunyi, dan ruang pribadi di Android 15.</li>
+<li>Uninstal langsung dari daftar.</li>
+</ul>
+
+<b>Tampilan</b>
+<ul>
+<li>13 tema warna, dengan pratinjau di layar utama Anda sendiri. Moo menggambar latarnya sendiri dan tidak pernah menimpa wallpaper Anda.</li>
+<li>Ikon nonaktif, di layar utama, di daftar aplikasi, atau keduanya. Paket ikon format ADW atau Nova, berwarna atau skala abu-abu.</li>
+<li>Font termasuk Inter; penggeser bertahap untuk ukuran, ukuran dan ketebalan teks.</li>
+<li>Gaya gerak dan tata letak gulir fokus dengan getaran haptik di tiap langkah.</li>
+</ul>
+
+<b>Baterai</b>
+Penghemat baterai Ultra menjalankan layar utama di 60 Hz dengan latar hitam pekat dan lebih jarang membangunkan perangkat, serta bisa mengikuti Penghemat Baterai Android.
+
+<b>Cuaca</b>
+Dari Open-Meteo, memakai lokasi perkiraan ponsel atau, tanpa perlu izin lokasi, kota yang Anda ketik di Setelan. Nonaktif sampai Anda menyalakannya.
+
+Setelan dikelompokkan per halaman: Layar beranda, Tampilan, Aplikasi, Notifikasi, Cuaca, serta Gerak dan daya (berisi setelan gestur).
+
+<b>Penggunaan jaringan</b>
+Tidak ada yang keluar dari perangkat, kecuali:
+<ul>
+<li>Cuaca, jika aktif: lokasi perkiraan (sekitar 1 km, dibulatkan ke 2 desimal) atau kota yang diketik, dikirim ke Open-Meteo.</li>
+<li>Pencarian tempat: nama kota yang diketik, dikirim ke geocoder Open-Meteo.</li>
+<li>Wallpaper harian, jika aktif: daftar dari gist GitHub, serta gambar dari images.unsplash.com, images.pexels.com, i.redd.it, dan images2.imgbox.com.</li>
+</ul>
+Isi notifikasi, penggunaan aplikasi, daftar aplikasi terpasang, dan audio visualizer tetap di perangkat.
+
+<b>Izin</b>
+<ul>
+<li>QUERY_ALL_PACKAGES: menampilkan, mencari, dan membuka aplikasi; membaca paket ikon.</li>
+<li>PACKAGE_USAGE_STATS: waktu layar dan jumlah buka kunci.</li>
+<li>ACCESS_COARSE_LOCATION: cuaca, opsional.</li>
+<li>RECORD_AUDIO: hanya untuk visualizer. Membaca audio keluaran; tidak pernah merekam mikrofon atau menyimpan audio.</li>
+<li>Akses notifikasi: lencana, panel notifikasi, dan media untuk visualizer.</li>
+<li>Layanan aksesibilitas: hanya untuk mengunci layar dan membuka bilah notifikasi saat Anda melakukan gestur tersebut. Tidak membaca konten layar.</li>
+<li>REQUEST_DELETE_PACKAGES: uninstal dari daftar aplikasi.</li>
+</ul>
+
+
+Moo adalah perangkat lunak bebas (GPLv3), berbasis Olauncher, launcher sumber terbuka karya tanujnotes.
+Kode sumber: <a href="https://github.com/Xer0z-gh/MOOLauncher">github.com/Xer0z-gh/MOOLauncher</a>

@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.view.Gravity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
+import app.olauncher.pro.ProStore
 
 /** Focus tick lengths offered in Customize Home, in ms. */
 val FOCUS_TICK_CHOICES = listOf(30, 45, 60)
@@ -85,8 +86,14 @@ class Prefs(context: Context) {
         get() = prefs.getBoolean("VISUALIZER_PERMISSION_REQUESTED", false)
         set(value) = prefs.edit { putBoolean("VISUALIZER_PERMISSION_REQUESTED", value) }
 
+    /** Moo Pro, as last confirmed by Google Play (Play builds only; see ProStore). */
+    var proUnlocked: Boolean
+        get() = prefs.getBoolean("PRO_UNLOCKED", false)
+        set(value) = prefs.edit { putBoolean("PRO_UNLOCKED", value) }
+
+    // Moo Pro. Read through the unlock, so a refund turns it off without touching the setting.
     var visualizerEnabled: Boolean
-        get() = prefs.getBoolean("VISUALIZER_ENABLED", false)
+        get() = prefs.getBoolean("VISUALIZER_ENABLED", false) && ProStore.unlocked(this)
         set(value) = prefs.edit { putBoolean("VISUALIZER_ENABLED", value) }
 
     var visualizerHome: Boolean
@@ -115,7 +122,6 @@ class Prefs(context: Context) {
     private val FIRST_OPEN_TIME = "FIRST_OPEN_TIME"
     private val FIRST_SETTINGS_OPEN = "FIRST_SETTINGS_OPEN"
     private val FIRST_HIDE = "FIRST_HIDE"
-    private val USER_STATE = "USER_STATE"
     private val LOCK_MODE = "LOCK_MODE"
     private val HOME_APPS_NUM = "HOME_APPS_NUM"
     private val AUTO_SHOW_KEYBOARD = "AUTO_SHOW_KEYBOARD"
@@ -136,7 +142,6 @@ class Prefs(context: Context) {
     private val HIDDEN_APPS = "HIDDEN_APPS"
     private val HIDDEN_APPS_UPDATED = "HIDDEN_APPS_UPDATED"
     private val APP_THEME = "APP_THEME"
-    private val WALLPAPER_MSG_SHOWN = "WALLPAPER_MSG_SHOWN"
     private val TEXT_SIZE_SCALE = "TEXT_SIZE_SCALE"
     private val BOLD_FONT = "BOLD_FONT"
     private val SHOW_NOTIFICATION_BADGES = "SHOW_NOTIFICATION_BADGES"
@@ -158,10 +163,12 @@ class Prefs(context: Context) {
     private val WEATHER_FAHRENHEIT = "WEATHER_FAHRENHEIT"
     private val WEATHER_CACHED = "WEATHER_CACHED"
     private val WEATHER_UPDATED_AT = "WEATHER_UPDATED_AT"
+    private val WEATHER_PLACE_NAME = "WEATHER_PLACE_NAME"
+    private val WEATHER_PLACE_LAT = "WEATHER_PLACE_LAT"
+    private val WEATHER_PLACE_LON = "WEATHER_PLACE_LON"
     private val BADGE_TAP_DETAILS = "BADGE_TAP_DETAILS"
     private val HIDE_SET_DEFAULT_LAUNCHER = "HIDE_SET_DEFAULT_LAUNCHER"
     private val SCREEN_TIME_LAST_UPDATED = "SCREEN_TIME_LAST_UPDATED"
-    private val SHOWN_ON_DAY_OF_YEAR = "SHOWN_ON_DAY_OF_YEAR"
     // Home button for recents feature disabled
     // private val HOME_BUTTON_SHOW_RECENTS = "HOME_BUTTON_SHOW_RECENTS"
 
@@ -255,10 +262,6 @@ class Prefs(context: Context) {
     var firstHide: Boolean
         get() = prefs.getBoolean(FIRST_HIDE, true)
         set(value) = prefs.edit { putBoolean(FIRST_HIDE, value) }
-
-    var userState: String
-        get() = prefs.getString(USER_STATE, Constants.UserState.START).toString()
-        set(value) = prefs.edit { putString(USER_STATE, value) }
 
     var lockModeOn: Boolean
         get() = prefs.getBoolean(LOCK_MODE, false)
@@ -504,6 +507,22 @@ class Prefs(context: Context) {
         true
     }
 
+    /** A place named in Settings > Weather; blank means the phone's own location. */
+    val weatherPlaceName: String get() = prefs.getString(WEATHER_PLACE_NAME, "").orEmpty()
+    val weatherPlaceLatitude: Double get() = prefs.getFloat(WEATHER_PLACE_LAT, 0f).toDouble()
+    val weatherPlaceLongitude: Double get() = prefs.getFloat(WEATHER_PLACE_LON, 0f).toDouble()
+
+    /** A blank [name] goes back to the phone's location. The cached reading was for the old place. */
+    fun setWeatherPlace(name: String, latitude: Double = 0.0, longitude: Double = 0.0) = prefs.edit {
+        putString(WEATHER_PLACE_NAME, name)
+        putFloat(WEATHER_PLACE_LAT, latitude.toFloat())
+        putFloat(WEATHER_PLACE_LON, longitude.toFloat())
+        putString(WEATHER_CACHED, "")
+        putString("WEATHER_DESCRIPTION", "")
+        putInt("WEATHER_CODE", -1)
+        putLong(WEATHER_UPDATED_AT, 0L)
+    }
+
     /** Fahrenheit rather than Celsius. */
     var weatherFahrenheit: Boolean
         get() = prefs.getBoolean(WEATHER_FAHRENHEIT, false)
@@ -571,6 +590,7 @@ class Prefs(context: Context) {
     /** ColorTheme.id. SYSTEM means follow light/dark and leave the wallpaper alone. */
     var colorThemeId: Int
         get() = prefs.getInt(COLOR_THEME_ID, ColorTheme.SYSTEM_ID)
+            .let { if (ColorTheme.isPro(it) && !ProStore.unlocked(this)) ColorTheme.SYSTEM_ID else it }
         set(value) = prefs.edit { putInt(COLOR_THEME_ID, value) }
 
     /** Constants.BadgeStyle - a number, or a plain dot for people who only want the signal. */
@@ -590,10 +610,6 @@ class Prefs(context: Context) {
     var screenTimeLastUpdated: Long
         get() = prefs.getLong(SCREEN_TIME_LAST_UPDATED, 0L)
         set(value) = prefs.edit { putLong(SCREEN_TIME_LAST_UPDATED, value) }
-
-    var shownOnDayOfYear: Int
-        get() = prefs.getInt(SHOWN_ON_DAY_OF_YEAR, 0)
-        set(value) = prefs.edit { putInt(SHOWN_ON_DAY_OF_YEAR, value) }
 
     // Home button for recents feature disabled
     // var homeButtonShowRecents: Boolean
@@ -623,9 +639,6 @@ class Prefs(context: Context) {
 
 
 
-    var wallpaperMsgShown: Boolean
-        get() = prefs.getBoolean(WALLPAPER_MSG_SHOWN, false)
-        set(value) = prefs.edit { putBoolean(WALLPAPER_MSG_SHOWN, value) }
 
 
     var appName1: String

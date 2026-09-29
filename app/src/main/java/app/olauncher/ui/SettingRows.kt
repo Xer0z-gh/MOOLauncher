@@ -82,6 +82,28 @@ fun Context.choiceRow(title: CharSequence, labels: List<String>, index: Int, @Co
  * The user's Text weight as Settings pages apply it: names at the weight, values one step
  * heavier. Without it these pages rendered lighter than the Settings page that opened them.
  */
+/** A title/value row that opens its own editor (not a list of fixed choices). */
+fun Context.valueRow(title: CharSequence, value: String, @ColorInt textColor: Int, onClick: () -> Unit): View {
+    val valueView = valueText(textColor).apply {
+        text = value
+        maxWidth = (resources.displayMetrics.widthPixels * 0.55f).toInt()
+        maxLines = 1
+        ellipsize = android.text.TextUtils.TruncateAt.END
+    }
+    val row = pairRow(title, valueView, textColor)
+    row.setTag(R.id.value_view, valueView)
+    row.contentDescription = getString(R.string.a11y_pair, title, value)
+    ViewCompat.setAccessibilityDelegate(row, role(android.widget.Button::class.java.name, null))
+    row.setOnClickListener { onClick() }
+    return row
+}
+
+/** Shows a new value on a row built by [valueRow] without rebuilding it, so focus stays on it. */
+fun View.updateValueRow(title: CharSequence, value: String) {
+    (getTag(R.id.value_view) as? TextView)?.text = value
+    contentDescription = context.getString(R.string.a11y_pair, title, value)
+}
+
 internal fun Context.settingsWeight() = Constants.TextWeight.value(Prefs(this).textWeight)
 internal fun valueWeight(weight: Int) = (weight + 200).coerceAtMost(900)
 
@@ -121,7 +143,7 @@ private fun Context.pairRow(title: CharSequence, value: TextView, @ColorInt text
     }
 }
 
-private fun role(className: String, checked: (() -> Boolean)?) = object : AccessibilityDelegateCompat() {
+internal fun role(className: String, checked: (() -> Boolean)?) = object : AccessibilityDelegateCompat() {
     override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
         super.onInitializeAccessibilityNodeInfo(host, info)
         info.className = className

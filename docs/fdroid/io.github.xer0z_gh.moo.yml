@@ -1,0 +1,28 @@
+Categories:
+  - Launcher
+License: GPL-3.0-only
+AuthorName: Xer0z-gh
+SourceCode: https://github.com/Xer0z-gh/MOOLauncher
+IssueTracker: https://github.com/Xer0z-gh/MOOLauncher/issues
+Changelog: https://github.com/Xer0z-gh/MOOLauncher/releases
+
+AutoName: Moo Launcher
+
+RepoType: git
+Repo: https://github.com/Xer0z-gh/MOOLauncher.git
+Binaries: https://github.com/Xer0z-gh/MOOLauncher/releases/download/v%v/MooLauncher.apk
+
+Builds:
+  - versionName: 1.0.0
+    versionCode: 1
+    commit: REPLACE_WITH_FULL_SHA_OF_TAG_v1.0.0
+    subdir: app
+    gradle:
+      - foss
+
+AllowedAPKSigningKeys: ed92d7271208c877d38eca0edc41238b058c26e64a9783b58b8d6e34c174e13d
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.0.0
+CurrentVersionCode: 1

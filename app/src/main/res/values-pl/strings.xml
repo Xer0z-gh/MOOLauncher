@@ -10,16 +10,10 @@
     <string name="olauncher_is_not_default_launcher">Moo Launcher nie jest domyślnym programem uruchamiającym. Codzienna aktualizacja tapety może się nie powieść.</string>
     <string name="no_hidden_apps">Brak ukrytych aplikacji</string>
     <string name="hidden_apps">Ukryte aplikacje</string>
-    <string name="accessibility_disclosure">Włącz usługę ułatwień dostępu Moo Launcher w ustawieniach urządzenia, aby włączyć gest podwójnego dotknięcia do zablokowania.\n\nPamiętaj, że ta usługa jest używana wyłącznie do tej jednej funkcji. Nasza usługa ułatwień dostępu nie zbiera ani nie udostępnia żadnych danych.</string>
     <string name="permission">Uprawnienie</string>
-    <string name="enable">Włącz</string>
-    <string name="disable">Wyłącz</string>
     <string name="info">Informacje</string>
     <string name="delete">Odinstaluj</string>
     <string name="text_size">Rozmiar czcionki</string>
-    <string name="enabled">Włączono</string>
-    <string name="please_turn_on_double_tap_to_unlock">Włącz podwójne dotknięcie, aby zablokować</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcherowi nie udało się zablokować urządzenia. Sprawdź ustawienia aplikacji.</string>
     <string name="long_press_to_select_app">Naciśnij długo, aby wybrać aplikację</string>
     <string name="unable_to_open_app">Nie można otworzyć aplikacji</string>
     <string name="system_app_cannot_delete">Aplikacja systemowa, nie można odinstalować</string>
@@ -45,24 +39,15 @@
     <string name="system_default">System</string>
     <string name="dark">Ciemny</string>
     <string name="light">Jasny</string>
-    <string name="welcome_to_olauncher_settings">Witamy w ustawieniach!</string>
     <string name="keyboard_message">Cześć, klawiatura to najszybszy sposób znajdowania i uruchamiania aplikacji w Moo Launcher. Czy możemy poprosić o pozostawienie tego włączonego jeszcze przez kilka dni, a następnie podjęcie decyzji?\n\nWybór zawsze należy do Ciebie.</string>
     <string name="app_usage_message">Aby wyświetlić/ukryć czas ekranu na ekranie głównym, pozwól lub zabroń aplikacji na dostęp do danych o użyciu.
         \n\nUwaga: Nie są gromadzone żadne dane o użyciu aplikacji. Wszystko jest przetwarzane na Twoim urządzeniu.</string>
-    <string name="wallpaper_message">Moo Launcher oferuje piękne nowe tapety codziennie. Nadaj swojemu ekranowi głównemu świeży wygląd każdego dnia, za darmo!
-        \n\nChcesz spróbować?</string>
-    <string name="accessibility_service_description">Uprawnienie ułatwień dostępu jest wymagane, aby włączyć gest podwójnego dotknięcia do zablokowania. Żadne dane pozyskane przez Moo Launcher za pośrednictwem tej usługi nie opuszczą Twojego urządzenia.</string>
     <string name="close">Zamknij</string>
     <string name="please_set_olauncher_as_default_first">Najpierw ustaw Moo Launcher jako domyślny program uruchamiający</string>
     <string name="app_not_found">Nie znaleziono aplikacji</string>
     <string name="screen_time">Czas ekranowy</string>
-    <string name="did_you_know">Czy wiesz?</string>
     <string name="alignment_changed">Wyrównanie zmienione ✅</string>
     <string name="home_screen">Ekran główny</string>
-    <string name="hey">Hej</string>
-    <string name="new_year_wish">Za rok lepszy niż wszystkie poprzednie. Szczęśliwego nowego roku!</string>
-    <string name="new_year_wish_1">Nie ma znaczenia, jak minął styczeń. Wciąż masz resztę roku, aby poradzić sobie lepiej niż kiedykolwiek.</string>
-    <string name="cheers">Na zdrowie!</string>
     <string name="notification_bar">Pasek powiadomień</string>
     <string name="private_space">Przestrzeń prywatna</string>
     <string name="invalid_pin_request">Nieprawidłowe żądanie przypięcia</string>
@@ -74,4 +59,10 @@
     <string name="shortcut_not_found">Nie znaleziono skrótu</string>
     <string name="unable_to_open_shortcut">Nie można otworzyć skrótu</string>
     <string name="unable_to_open_app_info">Nie można otworzyć informacji o aplikacji</string>
+    <string name="accessibility_service_title">Usługa ułatwień dostępu</string>
+    <string name="accessibility_disclosure">Aby blokować ekran lub otwierać panel powiadomień gestem, włącz usługę ułatwień dostępu aplikacji Moo Launcher w ustawieniach urządzenia.\n\nMoo Launcher używa tej usługi wyłącznie do wykonywania tych dwóch czynności, gdy użyjesz gestu. Nie odczytuje tego, co jest na ekranie, ani tego, co wpisujesz, i nie zbiera ani nie udostępnia żadnych danych.</string>
+    <string name="accessibility_service_description">Moo Launcher używa tej usługi do dwóch wybranych przez Ciebie gestów: blokowania ekranu i otwierania panelu powiadomień. Nie odczytuje tego, co jest na ekranie, ani tego, co wpisujesz, a nic z tego, co robi, nie opuszcza Twojego urządzenia.</string>
+    <string name="not_now">Nie teraz</string>
+    <string name="open_settings">Otwórz ustawienia</string>
+    <string name="gesture_needs_service">Aby używać tego gestu, włącz usługę ułatwień dostępu aplikacji Moo Launcher.</string>
 </resources><!-- Polish -->

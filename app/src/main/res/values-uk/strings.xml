@@ -25,26 +25,16 @@
     <string name="system_default">Системна</string>
     <string name="dark">Темна</string>
     <string name="light">Світла</string>
-    <string name="welcome_to_olauncher_settings">Ласкаво просимо до налаштувань!</string>
     <string name="keyboard_message">Привіт, клавіатура - це найшвидший спосіб знайти та запустити програми в Moo Launcher. Чи можемо ми попросити вас залишити це увімкненим ще на кілька днів, а потім прийняти рішення?
         \n\nВибір завжди за вами.</string>
     <string name="app_usage_message">Щоб показати/ховати час роботи з екраном на головному екрані, будь ласка, дозвольте або забороніть дозвіл на використання програми.
         \n\nПримітка: Не збираються дані про використання програми. Все обробляється на вашому пристрої.</string>
-    <string name="wallpaper_message">Moo Launcher пропонує красиві нові шпалери щодня. Дайте вашому головному екрану новий вигляд кожного дня, безкоштовно!
-        \n\nХочете спробувати?</string>
-    <string name="accessibility_service_description">Дозвіл спеціальних можливостей потрібен, щоб увімкнути жест подвійного торкання для блокування. Будь-які дані, отримані Moo Launcher через цей сервіс, не залишать ваш пристрій.</string>
     <string name="close">Закрити</string>
     <string name="please_set_olauncher_as_default_first">Спочатку встановіть Moo Launcher як стандартний лаунчер.</string>
-    <string name="accessibility_disclosure">Увімкніть службу спеціальних можливостей Moo Launcher у налаштуваннях вашого пристрою, щоб увімкнути жест подвійного торкання для блокування.\n\nЗверніть увагу, що ця служба використовується лише для цієї функції. Наша служба спеціальних можливостей не збирає та не поширює жодних даних.</string>
     <string name="permission">Дозвіл</string>
-    <string name="enable">Увімкнути</string>
-    <string name="disable">Вимкнути</string>
     <string name="info">Інформація</string>
     <string name="delete">Видалити</string>
     <string name="text_size">Розмір тексту</string>
-    <string name="enabled">Увімкнено</string>
-    <string name="please_turn_on_double_tap_to_unlock">Будь ласка, увімкніть подвійний дотик для блокування</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher не вдалося заблокувати пристрій.\nБудь ласка, перевірте налаштування вашої програми.</string>
     <string name="long_press_to_select_app">Тривале натискання для вибору програми</string>
     <string name="unable_to_open_app">Неможливо відкрити додаток</string>
     <string name="system_app_cannot_delete">Неможливо видалити системну програму</string>
@@ -57,13 +47,8 @@
     <string name="adapter_show">Показати</string>
     <string name="adapter_hide">Приховати</string>
     <string name="screen_time">Час екрану</string>
-    <string name="did_you_know">Чи знали ви?</string>
     <string name="alignment_changed">Вирівнювання змінено ✅</string>
     <string name="home_screen">Головний екран</string>
-    <string name="hey">Привіт</string>
-    <string name="new_year_wish">За рік, кращий за всі попередні. З новим роком!</string>
-    <string name="new_year_wish_1">Неважливо, як пройшов січень. У вас ще є решта року, щоб досягти успіху, як ніколи раніше.</string>
-    <string name="cheers">Будьмо!</string>
     <string name="notification_bar">Панель сповіщень</string>
     <string name="private_space">Приватний простір</string>
     <string name="invalid_pin_request">Недійсний запит на закріплення</string>
@@ -75,4 +60,10 @@
     <string name="shortcut_not_found">Ярлик не знайдено</string>
     <string name="unable_to_open_shortcut">Не вдалося відкрити ярлик</string>
     <string name="unable_to_open_app_info">Неможливо відкрити інформацію про додаток</string>
+    <string name="accessibility_service_title">Служба спеціальних можливостей</string>
+    <string name="accessibility_disclosure">Щоб блокувати екран або відкривати панель сповіщень жестом, увімкніть службу спеціальних можливостей Moo Launcher у налаштуваннях пристрою.\n\nMoo Launcher використовує цю службу лише для виконання цих двох дій, коли ви робите жест. Додаток не зчитує ні вміст екрана, ні текст, який ви вводите, а також не збирає й не передає жодних даних.</string>
+    <string name="accessibility_service_description">Moo Launcher використовує цю службу для двох вибраних вами жестів: блокування екрана й відкриття панелі сповіщень. Додаток не зчитує ні вміст екрана, ні текст, який ви вводите, і ніщо з того, що він робить, не виходить за межі вашого пристрою.</string>
+    <string name="not_now">Не зараз</string>
+    <string name="open_settings">Відкрити налаштування</string>
+    <string name="gesture_needs_service">Щоб використовувати цей жест, увімкніть службу спеціальних можливостей Moo Launcher.</string>
 </resources><!-- Ukrainian -->

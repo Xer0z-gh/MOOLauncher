@@ -25,25 +25,15 @@
     <string name="system_default">Sistema</string>
     <string name="dark">Oscuro</string>
     <string name="light">Claro</string>
-    <string name="welcome_to_olauncher_settings">¡Bienvenido a la configuración!</string>
     <string name="keyboard_message">Hola, el teclado es la forma más rápida de encontrar y abrir aplicaciones en Moo Launcher. ¿Podemos pedirte que lo mantengas activado unos días más y luego decidas?\n\nLa decisión siempre es tuya.</string>
     <string name="app_usage_message">Para mostrar/ocultar el tiempo de pantalla en la pantalla de inicio, permita o deniegue el permiso de uso de la aplicación.
         \n\nNota: No se recopilan datos de uso de la aplicación. Todo se procesa en su dispositivo.</string>
-    <string name="wallpaper_message">Moo Launcher ofrece hermosos fondos de pantalla nuevos a diario. ¡Dale un nuevo look a tu pantalla de inicio cada día, gratis!
-        \n\n¿Quieres probarlo?</string>
-    <string name="accessibility_service_description">El permiso de accesibilidad es necesario para habilitar el gesto de doble toque para bloquear. Ningún dato obtenido por Moo Launcher a través de este servicio saldrá de tu dispositivo.</string>
     <string name="close">Cerrar</string>
     <string name="please_set_olauncher_as_default_first">Primero seleccione Moo Launcher como su iniciador predeterminado</string>
-    <string name="accessibility_disclosure">Activa el servicio de accesibilidad de Moo Launcher en la configuración de tu dispositivo para habilitar el gesto de doble toque para bloquear.\n\nTen en cuenta que este servicio solo se utiliza para esta función en concreto. Nuestro servicio de accesibilidad no recopila ni comparte ningún dato.</string>
     <string name="permission">Permiso</string>
-    <string name="enable">Activar</string>
-    <string name="disable">Desactivar</string>
     <string name="info">Información</string>
     <string name="delete">Desinstalar</string>
     <string name="text_size">Tamaño del texto</string>
-    <string name="enabled">Activado</string>
-    <string name="please_turn_on_double_tap_to_unlock">Active el bloqueo con doble toque</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher no pudo bloquear el dispositivo.\nVerifique la configuración de la aplicación.</string>
     <string name="long_press_to_select_app">Mantenga pulsado para seleccionar una aplicación</string>
     <string name="unable_to_open_app">No se ha podido abrir la aplicación</string>
     <string name="system_app_cannot_delete">Aplicación del sistema, no se puede desinstalar</string>
@@ -55,14 +45,9 @@
     <string name="hidden_apps">Aplicaciones ocultas</string>
     <string name="adapter_show">Mostrar</string>
     <string name="adapter_hide">Ocultar</string>
-    <string name="did_you_know">¿Lo sabías?</string>
     <string name="screen_time">Tiempo de pantalla</string>
     <string name="alignment_changed">Alineación cambiada ✅</string>
     <string name="home_screen">Pantalla de inicio</string>
-    <string name="hey">Hola</string>
-    <string name="new_year_wish">Por un año mejor que cualquiera anterior. ¡Feliz año nuevo!</string>
-    <string name="new_year_wish_1">No importa cómo haya ido enero. Todavía tienes el resto del año para hacerlo mejor que nunca.</string>
-    <string name="cheers">¡Salud!</string>
     <string name="notification_bar">Barra de notificaciones</string>
     <string name="private_space">Espacio privado</string>
     <string name="invalid_pin_request">Solicitud de anclaje no válida</string>
@@ -74,4 +59,10 @@
     <string name="shortcut_not_found">No se encontró el acceso directo</string>
     <string name="unable_to_open_shortcut">No se puede abrir el acceso directo</string>
     <string name="unable_to_open_app_info">No se ha podido abrir la información de la aplicación</string>
+    <string name="accessibility_service_title">Servicio de accesibilidad</string>
+    <string name="accessibility_disclosure">Para bloquear la pantalla o abrir el panel de notificaciones con un gesto, activa el servicio de accesibilidad de Moo Launcher en los ajustes de tu dispositivo.\n\nMoo Launcher usa el servicio solo para realizar esas dos acciones cuando haces el gesto. No lee lo que aparece en tu pantalla ni lo que escribes, y no recopila ni comparte ningún dato.</string>
+    <string name="accessibility_service_description">Moo Launcher usa este servicio para dos gestos de tu elección: bloquear la pantalla y abrir el panel de notificaciones. No lee lo que aparece en tu pantalla ni lo que escribes, y nada de lo que hace sale de tu dispositivo.</string>
+    <string name="not_now">Ahora no</string>
+    <string name="open_settings">Abrir ajustes</string>
+    <string name="gesture_needs_service">Activa el servicio de accesibilidad de Moo Launcher para usar este gesto.</string>
 </resources><!-- Spanish -->

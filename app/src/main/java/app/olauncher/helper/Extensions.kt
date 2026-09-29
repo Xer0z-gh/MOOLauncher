@@ -262,6 +262,10 @@ fun View.applyTextWeight(weight: Int) = styleTextTree(null, null, weight)
  * still pay for a single traversal.
  */
 fun View.styleTextTree(@ColorInt color: Int?, @ColorInt hintColor: Int?, weight: Int?) {
+    if (color != null && getTag(R.id.keep_text_color) == true) {
+        if (weight != null) styleTextTree(null, null, weight)
+        return
+    }
     when (this) {
         is TextView -> {
             if (color != null) setTextColor(

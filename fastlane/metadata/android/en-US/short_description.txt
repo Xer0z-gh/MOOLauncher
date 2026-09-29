@@ -1,0 +1,1 @@
+Minimal text launcher with missed-notification badges, gestures and screen time

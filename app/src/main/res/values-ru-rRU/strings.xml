@@ -25,26 +25,16 @@
     <string name="system_default">Системная</string>
     <string name="dark">Темная</string>
     <string name="light">Светлая</string>
-    <string name="welcome_to_olauncher_settings">Добро пожаловать в настройки!</string>
     <string name="keyboard_message">Привет, клавиатура — это самый быстрый способ найти и запустить приложения в Moo Launcher. Могли бы вы продолжить использовать Автопоказ клавиатуры еще несколько дней, прежде чем принять окончательное решение?
         \n\nВыбор всегда за вами.</string>
     <string name="app_usage_message">Чтобы показать/скрыть время экрана на домашнем экране, разрешите или запретите разрешение на использование приложения.
         \n\nПримечание: Не собираются данные об использовании приложения. Все обрабатывается на вашем устройстве.</string>
-    <string name="wallpaper_message">Moo Launcher предлагает красивые новые обои каждый день. Обновите свой главный экран каждый день, бесплатно!
-        \n\nХотите попробовать?</string>
-    <string name="accessibility_service_description">Разрешение специальных возможностей требуется для включения жеста двойного касания для блокировки. Любые данные, полученные Moo Launcher через этот сервис, не покинут ваше устройство.</string>
     <string name="close">Закрыть</string>
     <string name="please_set_olauncher_as_default_first">Сначала установите Moo Launcher в качестве лаунчера по умолчанию.</string>
-    <string name="accessibility_disclosure">Включите службу специальных возможностей Moo Launcher в настройках вашего устройства, чтобы включить жест двойного касания для блокировки.\n\nОбратите внимание, что эта служба используется только для этой функции. Наша служба специальных возможностей не собирает и не передаёт никакие данные.</string>
     <string name="permission">Разрешение</string>
-    <string name="enable">Включить</string>
-    <string name="disable">Выключить</string>
     <string name="info">Информация</string>
     <string name="delete">Удалить</string>
     <string name="text_size">Размер текста</string>
-    <string name="enabled">Включено</string>
-    <string name="please_turn_on_double_tap_to_unlock">Пожалуйста, включите двойное касание для блокировки</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher не удалось заблокировать устройство.\nПожалуйста, проверьте настройки вашего приложения.</string>
     <string name="long_press_to_select_app">Длительное нажатие для выбора приложения</string>
     <string name="unable_to_open_app">Не удалось открыть приложение</string>
     <string name="system_app_cannot_delete">Невозможно удалить системное приложение</string>
@@ -57,13 +47,8 @@
     <string name="adapter_show">Показать</string>
     <string name="adapter_hide">Скрыть</string>
     <string name="screen_time">Время на экране</string>
-    <string name="did_you_know">Вы знали?</string>
     <string name="alignment_changed">Выравнивание изменено ✅</string>
     <string name="home_screen">Главный экран</string>
-    <string name="hey">Привет</string>
-    <string name="new_year_wish">За год, который будет лучше всех предыдущих. С Новым годом!</string>
-    <string name="new_year_wish_1">Неважно, как прошёл январь. У вас ещё есть остаток года, чтобы добиться большего, чем когда-либо.</string>
-    <string name="cheers">Ваше здоровье!</string>
     <string name="notification_bar">Панель уведомлений</string>
     <string name="private_space">Личное пространство</string>
     <string name="invalid_pin_request">Недопустимый запрос на закрепление</string>
@@ -75,4 +60,10 @@
     <string name="shortcut_not_found">Ярлык не найден</string>
     <string name="unable_to_open_shortcut">Не удалось открыть ярлык</string>
     <string name="unable_to_open_app_info">Не удалось открыть информацию о приложении</string>
+    <string name="accessibility_service_title">Служба специальных возможностей</string>
+    <string name="accessibility_disclosure">Чтобы блокировать экран или открывать панель уведомлений жестом, включите службу специальных возможностей Moo Launcher в настройках устройства.\n\nMoo Launcher использует службу только для того, чтобы выполнять эти два действия, когда вы делаете жест. Приложение не считывает ни содержимое экрана, ни вводимый вами текст, а также не собирает и не передает никаких данных.</string>
+    <string name="accessibility_service_description">Moo Launcher использует эту службу для двух выбранных вами жестов: блокировки экрана и открытия панели уведомлений. Приложение не считывает ни содержимое экрана, ни вводимый вами текст, и ничто из того, что оно делает, не покидает ваше устройство.</string>
+    <string name="not_now">Не сейчас</string>
+    <string name="open_settings">Открыть настройки</string>
+    <string name="gesture_needs_service">Чтобы использовать этот жест, включите службу специальных возможностей Moo Launcher.</string>
 </resources><!-- Russian -->

@@ -65,7 +65,7 @@
                 android:textColor="?attr/primaryColor"
                 android:visibility="gone"
                 tools:ignore="RtlSymmetry"
-                tools:text="@string/welcome_to_olauncher_settings"
+                tools:text="@string/accessibility_disclosure"
                 tools:visibility="visible" />
 
             <!-- Custom content supplies its own margins. -->
@@ -89,6 +89,10 @@
             style="@style/TextSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             android:focusable="true"
             android:includeFontPadding="false"
             android:paddingVertical="8dp"

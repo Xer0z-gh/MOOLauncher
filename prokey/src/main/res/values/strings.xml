@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Moo Pro</string>
+    <string name="title">Moo Pro</string>
+    <string name="active">Active. Ten more color themes and the audio visualizer are unlocked in Moo Launcher. Keep this app installed: removing it locks them again.</string>
+    <string name="needs_launcher">Moo Pro unlocks ten more color themes and the audio visualizer in Moo Launcher. Install Moo Launcher from Google Play to use them.</string>
+    <string name="open_launcher">Open Moo Launcher</string>
+    <string name="get_launcher">Get Moo Launcher</string>
+</resources>

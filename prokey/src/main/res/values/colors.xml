@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Moo Launcher's cow on the accent blue, so the key reads as Moo Pro, not a second Moo. -->
+    <color name="ic_launcher_background">#3F7FB8</color>
+</resources>

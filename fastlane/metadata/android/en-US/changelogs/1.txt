@@ -1,0 +1,9 @@
+First release.
+- Missed-notification badges beside home apps, with peek and per-app mute
+- Notification panel with filters
+- Six assignable gestures, including lock screen and launch an app
+- 13 color themes that never overwrite your wallpaper
+- Icons and icon packs where you want them
+- Home lines: date, battery, weather, screen time, unlock count, next alarm
+- Weather by approximate location or a town you type
+- Music visualizer, Ultra battery saver, app categories and private space

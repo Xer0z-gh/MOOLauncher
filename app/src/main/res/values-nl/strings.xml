@@ -24,27 +24,17 @@
     <string name="system_default">Systeem</string>
     <string name="dark">Donker</string>
     <string name="light">Licht</string>
-    <string name="welcome_to_olauncher_settings">Welkom bij de instellingen!</string>
     <!--         \n\nIf you have a moment to spare, could you please share Olauncher with others? Olauncher needs people. More importantly, people need Olauncher.</string>-->
     <string name="keyboard_message">Hoi, het toetsenbord is de snelste manier om apps te vinden en te starten in Moo Launcher. Mag ik je vragen dit nog een paar dagen ingeschakeld te laten en daarna te beslissen?
         \n\nDe keuze is altijd aan jou.</string>
     <string name="app_usage_message">Om je schermtijd op het startscherm te tonen of te verbergen, geef of weiger de toestemming voor app-gebruik.
         \n\nOpmerking: er worden geen app-gebruiksgegevens verzameld. Alles wordt op je apparaat verwerkt.</string>
-    <string name="wallpaper_message">Moo Launcher biedt dagelijks mooie nieuwe achtergronden. Geef je startscherm iedere dag een frisse nieuwe look, gratis!
-        \n\nWil je het proberen?</string>
-    <string name="accessibility_service_description">De toegankelijkheidstoestemming is vereist om het gebaar dubbel tikken om te vergrendelen mogelijk te maken. Gegevens die Moo Launcher via deze service verkrijgt, verlaten je apparaat niet.</string>
     <string name="close">Sluiten</string>
     <string name="please_set_olauncher_as_default_first">Stel Moo Launcher eerst in als standaard</string>
-    <string name="accessibility_disclosure">Schakel de toegankelijkheidsdienst van Moo Launcher in via de instellingen van je apparaat om het gebaar dubbel tikken om te vergrendelen te activeren.\n\nHoud er rekening mee dat deze service alleen voor deze specifieke functie wordt gebruikt. Onze toegankelijkheidsdienst verzamelt of deelt geen gegevens.</string>
     <string name="permission">Toestemming</string>
-    <string name="enable">Inschakelen</string>
-    <string name="disable">Uitschakelen</string>
     <string name="info">Info</string>
     <string name="delete">Verwijderen</string>
     <string name="text_size">Tekstgrootte</string>
-    <string name="enabled">Ingeschakeld</string>
-    <string name="please_turn_on_double_tap_to_unlock">Schakel dubbel tik om te vergrendelen in</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher kon het apparaat niet vergrendelen.\nControleer je app-instellingen.</string>
     <string name="long_press_to_select_app">Lang indrukken om app te selecteren</string>
     <string name="unable_to_open_app">Kan app niet openen</string>
     <string name="system_app_cannot_delete">Systeem-app, kan niet worden verwijderd</string>
@@ -57,13 +47,8 @@
     <string name="adapter_show">Toon</string>
     <string name="adapter_hide">Verbergen</string>
     <string name="screen_time">Schermtijd</string>
-    <string name="did_you_know">Wist je dat?</string>
     <string name="alignment_changed">Uitlijning gewijzigd ✅</string>
     <string name="home_screen">Startscherm</string>
-    <string name="hey">Hoi</string>
-    <string name="new_year_wish">Op een jaar beter dan ooit tevoren. Gelukkig nieuwjaar!</string>
-    <string name="new_year_wish_1">Het maakt niet uit hoe januari is verlopen. Je hebt nog de rest van het jaar om het beter te doen dan ooit.</string>
-    <string name="cheers">Proost!</string>
     <string name="notification_bar">Meldingenbalk</string>
     <string name="private_space">Privéruimte</string>
     <string name="invalid_pin_request">Ongeldig vastzetverzoek</string>
@@ -75,4 +60,10 @@
     <string name="shortcut_not_found">Snelkoppeling niet gevonden</string>
     <string name="unable_to_open_shortcut">Kan snelkoppeling niet openen</string>
     <string name="unable_to_open_app_info">Kan app-info niet openen</string>
+    <string name="accessibility_service_title">Toegankelijkheidsservice</string>
+    <string name="accessibility_disclosure">Als je het scherm wilt vergrendelen of het meldingenpaneel wilt openen met een gebaar, zet je de toegankelijkheidsservice van Moo Launcher aan in de instellingen van je apparaat.\n\nMoo Launcher gebruikt de service alleen om die twee acties uit te voeren wanneer je het gebaar maakt. De app leest niet wat er op je scherm staat of wat je typt, en verzamelt of deelt geen gegevens.</string>
+    <string name="accessibility_service_description">Moo Launcher gebruikt deze service voor twee gebaren die je zelf kiest: het scherm vergrendelen en het meldingenpaneel openen. De app leest niet wat er op je scherm staat of wat je typt, en niets wat de app doet verlaat je apparaat.</string>
+    <string name="not_now">Niet nu</string>
+    <string name="open_settings">Instellingen openen</string>
+    <string name="gesture_needs_service">Zet de toegankelijkheidsservice van Moo Launcher aan om dit gebaar te gebruiken.</string>
 </resources><!-- Dutch -->

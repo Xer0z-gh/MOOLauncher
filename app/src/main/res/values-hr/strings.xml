@@ -24,29 +24,18 @@
     <string name="system_default">Sustav</string>
     <string name="dark">Tamna</string>
     <string name="light">Svijetla</string>
-    <string name="welcome_to_olauncher_settings">Dobrodošli u postavke!</string>
     <string name="keyboard_message">Bok, tipkovnica je najbrži način za pronalaženje i pokretanje aplikacija u Moo Launcheru. Možemo li vas zamoliti da to zadržite uključeno još nekoliko dana, a zatim odlučite?
         \n\nIzbor je uvijek vaš.</string>
     <string name="app_usage_message">Da biste prikazali/sakrili vrijeme korištenja ekrana na početnom zaslonu, molimo dozvolite ili onemogućite dopuštenje korištenja aplikacije.
         \n\nNapomena: Ne prikupljaju se podaci o korištenju aplikacije. Sve se obrađuje na vašem uređaju.</string>
-    <string name="wallpaper_message">Moo Launcher nudi predivne nove pozadine svaki dan. Daj svom početnom ekranu svjež izgled svaki dan, besplatno!
-        \n\nŽeliš li isprobati?</string>
-    <string name="accessibility_service_description">Dozvola pristupačnosti potrebna je za omogućavanje geste dvostrukog dodira za zaključavanje. Nikakvi podaci koje Moo Launcher prikupi putem ove usluge neće napustiti vaš uređaj.</string>
     <string name="close">Zatvori</string>
     <string name="please_set_olauncher_as_default_first">Prvo postavite Moo Launcher kao zadani pokretač</string>
-    <string name="did_you_know">Jeste li znali?</string>
     <string name="screen_time">Vrijeme na ekranu</string>
 
-    <string name="accessibility_disclosure">Molimo uključite Moo Launcherovu uslugu pristupačnosti u postavkama uređaja kako biste omogućili gestu dvostrukog dodira za zaključavanje.\n\nImajte na umu da se ova usluga koristi samo za tu značajku. Naša usluga pristupačnosti ne prikuplja niti dijeli nikakve podatke.</string>
     <string name="permission">Dozvola</string>
-    <string name="enable">Omogući</string>
-    <string name="disable">Onemogući</string>
     <string name="info">Informacije</string>
     <string name="delete">Deinstaliraj</string>
     <string name="text_size">Veličina teksta</string>
-    <string name="enabled">Omogućeno</string>
-    <string name="please_turn_on_double_tap_to_unlock">Molimo uključite dvostruki dodir za zaključavanje</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher nije uspio zaključati uređaj.\nMolimo provjerite postavke aplikacije.</string>
     <string name="long_press_to_select_app">Dugo pritisnite za odabir aplikacije</string>
     <string name="unable_to_open_app">Nije moguće otvoriti aplikaciju</string>
     <string name="system_app_cannot_delete">Sistemska aplikacija, ne može se deinstalirati</string>
@@ -60,10 +49,6 @@
     <string name="adapter_hide">Sakrij</string>
     <string name="alignment_changed">Poravnanje promijenjeno ✅</string>
     <string name="home_screen">Početni ekran</string>
-    <string name="hey">Bok</string>
-    <string name="new_year_wish">Neka je ova godina bolja od svih prije. Sretna nova godina!</string>
-    <string name="new_year_wish_1">Nije važno kako je prošao siječanj. Još uvijek imate ostatak godine da budete bolji nego ikad.</string>
-    <string name="cheers">Živjeli!</string>
     <string name="notification_bar">Traka obavijesti</string>
     <string name="private_space">Privatni prostor</string>
     <string name="invalid_pin_request">Nevažeći zahtjev za prikvačivanje</string>
@@ -75,4 +60,10 @@
     <string name="shortcut_not_found">Prečac nije pronađen</string>
     <string name="unable_to_open_shortcut">Prečac nije moguće otvoriti</string>
     <string name="unable_to_open_app_info">Nije moguće otvoriti informacije o aplikaciji</string>
+    <string name="accessibility_service_title">Usluga pristupačnosti</string>
+    <string name="accessibility_disclosure">Da biste pokretom zaključali zaslon ili otvorili ploču s obavijestima, uključite uslugu pristupačnosti aplikacije Moo Launcher u postavkama uređaja.\n\nMoo Launcher upotrebljava uslugu samo za izvođenje tih dviju radnji kada napravite pokret. Ne čita ono što je na vašem zaslonu ni ono što upisujete te ne prikuplja niti dijeli nikakve podatke.</string>
+    <string name="accessibility_service_description">Moo Launcher upotrebljava ovu uslugu za dva pokreta koja odaberete: zaključavanje zaslona i otvaranje ploče s obavijestima. Ne čita ono što je na vašem zaslonu ni ono što upisujete i ništa od onoga što radi ne napušta vaš uređaj.</string>
+    <string name="not_now">Ne sada</string>
+    <string name="open_settings">Otvori postavke</string>
+    <string name="gesture_needs_service">Uključite uslugu pristupačnosti aplikacije Moo Launcher da biste upotrebljavali ovaj pokret.</string>
 </resources><!-- Croatian -->

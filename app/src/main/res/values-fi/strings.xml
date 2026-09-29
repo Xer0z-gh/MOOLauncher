@@ -23,26 +23,16 @@
     <string name="system_default">Järjestelmä</string>
     <string name="dark">Tumma</string>
     <string name="light">Vaalea</string>
-    <string name="welcome_to_olauncher_settings">Tervetuloa asetuksiin!</string>
     <string name="keyboard_message">Hei, näppäimistö on nopein tapa löytää ja avata sovelluksia Moo Launcherissa. Voisitko pitää sen päällä vielä muutaman päivän ja päättää sitten?
         \n\nValinta on aina sinun.</string>
     <string name="app_usage_message">Näyttääksesi/piilottaaksesi ruutuajan aloitusnäytöllä, salli tai kiellä sovellusten käyttöoikeus.
         \n\nHuomio: Sovellusten käyttötietoja ei kerätä. Kaikki käsitellään laitteellasi.</string>
-    <string name="wallpaper_message">Moo Launcher tarjoaa kauniita uusia taustakuvia päivittäin. Anna aloitusnäytöllesi uusi ilme joka päivä, ilmaiseksi!
-        \n\nHaluatko kokeilla?</string>
-    <string name="accessibility_service_description">Esteettömyysoikeus vaaditaan Lukitse kaksoisnapautuksella -eleen käyttöönottoon. Mitään Moo Launcherin tämän palvelun kautta hankkimaa tietoa ei lähetetä laitteestasi pois.</string>
     <string name="close">Sulje</string>
     <string name="please_set_olauncher_as_default_first">Aseta ensin Moo Launcher oletukseksi</string>
-    <string name="accessibility_disclosure">Ota Moo Launcherin esteettömyyspalvelu käyttöön laitteesi asetuksista, jotta voit ottaa käyttöön Lukitse kaksoisnapautuksella -eleen.\n\nHuomaa, että tätä palvelua käytetään vain tähän tiettyyn ominaisuuteen. Esteettömyyspalvelumme ei kerää tai jaa mitään tietoja.</string>
     <string name="permission">Käyttöoikeus</string>
-    <string name="enable">Ota käyttöön</string>
-    <string name="disable">Poista käytöstä</string>
     <string name="info">Tiedot</string>
     <string name="delete">Poista asennus</string>
     <string name="text_size">Tekstin koko</string>
-    <string name="enabled">Käytössä</string>
-    <string name="please_turn_on_double_tap_to_unlock">Ota käyttöön lukitus kaksoisnapautuksella</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher ei pystynyt lukitsemaan laitetta.\nTarkista sovelluksen asetukset.</string>
     <string name="long_press_to_select_app">Pitkä painallus valitaksesi sovelluksen</string>
     <string name="unable_to_open_app">Sovellusta ei voida avata</string>
     <string name="unable_to_open_app_info">Sovelluksen tietoja ei voida avata</string>
@@ -56,13 +46,8 @@
     <string name="adapter_show">Näytä</string>
     <string name="adapter_hide">Piilota</string>
     <string name="screen_time">Ruutuaika</string>
-    <string name="did_you_know">Tiesitkö?</string>
     <string name="alignment_changed">Tasaus muutettu ✅</string>
     <string name="home_screen">Aloitusnäyttö</string>
-    <string name="hey">Hei</string>
-    <string name="new_year_wish">Tässä malja vuodelle, joka on parempi kuin mikään aiempi. Hyvää uutta vuotta!</string>
-    <string name="new_year_wish_1">Sillä ei ole väliä, miten tammikuu meni. Sinulla on vielä koko loppuvuosi tehdäksesi paremmin kuin koskaan.</string>
-    <string name="cheers">Kippis!</string>
     <string name="notification_bar">Ilmoituspalkki</string>
     <string name="private_space">Yksityinen tila</string>
     <string name="invalid_pin_request">Virheellinen kiinnityspyyntö</string>
@@ -73,4 +58,10 @@
     <string name="invalid_shortcut">Virheellinen pikakuvake</string>
     <string name="shortcut_not_found">Pikakuvaketta ei löytynyt</string>
     <string name="unable_to_open_shortcut">Pikakuvaketta ei voida avata</string>
+    <string name="accessibility_service_title">Esteettömyyspalvelu</string>
+    <string name="accessibility_disclosure">Jos haluat lukita näytön tai avata ilmoituspaneelin eleellä, ota Moo Launcherin esteettömyyspalvelu käyttöön laitteen asetuksista.\n\nMoo Launcher käyttää palvelua ainoastaan näiden kahden toiminnon suorittamiseen, kun teet eleen. Se ei lue näytön sisältöä eikä sitä, mitä kirjoitat, eikä se kerää tai jaa mitään tietoja.</string>
+    <string name="accessibility_service_description">Moo Launcher käyttää tätä palvelua kahteen valitsemaasi eleeseen: näytön lukitsemiseen ja ilmoituspaneelin avaamiseen. Se ei lue näytön sisältöä eikä sitä, mitä kirjoitat, ja kaikki, mitä se tekee, pysyy laitteellasi.</string>
+    <string name="not_now">Ei nyt</string>
+    <string name="open_settings">Avaa asetukset</string>
+    <string name="gesture_needs_service">Ota Moo Launcherin esteettömyyspalvelu käyttöön, jotta voit käyttää tätä elettä.</string>
 </resources>

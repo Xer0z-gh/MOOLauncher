@@ -1,6 +1,5 @@
 package app.olauncher.ui
 
-import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.Intent
 import android.content.BroadcastReceiver
@@ -115,7 +114,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     private lateinit var prefs: Prefs
     private lateinit var viewModel: MainViewModel
-    private lateinit var deviceManager: DevicePolicyManager
 
     /** Guards against two resumes firing the same weather request; see refreshWeather. */
     private var weatherJob: kotlinx.coroutines.Job? = null
@@ -187,7 +185,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         if (!prefs.showWeather) return
         val context = requireContext().applicationContext
         if (app.olauncher.helper.LauncherMotion.savingPower(context, prefs)) return
-        if (!Weather.hasLocationPermission(context)) return
+        if (!Weather.canLocate(context)) return
         if (prefs.weatherCode >= 0 && Weather.isCurrentDay(prefs.weatherForecastDay, prefs.weatherTimezone) &&
             !prefs.weatherUpdatedAt.hasBeenMinutes(prefs.weatherRefreshMinutes)) return
 
@@ -203,7 +201,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         // and cancelling there restarted a stale fetch (location fix, TLS) on every short visit.
         weatherJob = lifecycleScope.launch {
             try {
+                val place = prefs.weatherPlaceName
                 val result = Weather.fetch(context)
+                // A place picked while this was in flight: the reading is for the old location.
+                if (prefs.weatherPlaceName != place) return@launch
                 weatherFailure = result.failure
                 val reading = result.reading ?: return@launch
                 if (!prefs.showWeather) return@launch
@@ -241,8 +242,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         viewModel = activity?.run {
             ViewModelProvider(this)[MainViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
-
-        deviceManager = context?.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
 
         if (resources.configuration.screenHeightDp < 480) {
             binding.clock.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 32f)
@@ -576,7 +575,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     /** Weather without a location grant asks for it; otherwise the editor, as before. */
     private fun onWeatherTap() {
-        if (prefs.showWeather && !Weather.hasLocationPermission(requireContext()))
+        if (prefs.showWeather && !Weather.canLocate(requireContext()))
             informationPermission.launch(android.Manifest.permission.ACCESS_COARSE_LOCATION)
         else editHomeInformation()
     }
@@ -710,7 +709,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                     getString(R.string.information_setup), setupSpoken, setup = true))
                 else if (latestUnlockCount >= 0) {
                     val unlocks = resources.getQuantityString(R.plurals.unlocks_only, latestUnlockCount, latestUnlockCount)
-                    add(InformationPart(R.drawable.ic_unlock_outline, unlocks,
+                    add(InformationPart(R.drawable.ic_unlock_outline, latestUnlockCount.toString(),
                         unlocks + if (usagePaused) ". $paused" else "",
                         caption = if (usagePaused) paused else null))
                 }
@@ -834,13 +833,13 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         val view = binding.homeWeather
         view.isVisible = prefs.showWeather
         if (!prefs.showWeather) return
-        val needsPermission = !Weather.hasLocationPermission(requireContext())
+        val needsPermission = !Weather.canLocate(requireContext())
         val name = getString(R.string.weather)
         // (headline, spoken). Line 1 holds a value or a short status and line 2 the name, the same
         // order as every other widget; the spoken name carries both words the screen shows.
         val status: Pair<String, String>? = when {
             needsPermission -> getString(R.string.information_setup) to getString(R.string.weather_setup)
-            !Weather.locationEnabled(requireContext()) -> getString(R.string.weather_location_off).let { it to "$name, $it" }
+            !Weather.hasPlace(requireContext()) && !Weather.locationEnabled(requireContext()) -> getString(R.string.weather_location_off).let { it to "$name, $it" }
             prefs.weatherCached.isNotBlank() -> null
             weatherFetchInFlight -> getString(R.string.information_loading) to getString(R.string.weather_loading)
             LauncherMotion.savingPower(requireContext(), prefs) -> getString(R.string.information_paused) to getString(R.string.weather_paused)
@@ -1206,20 +1205,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         }
     }
 
-    private fun lockPhone() {
-        requireActivity().runOnUiThread {
-            try {
-                deviceManager.lockNow()
-            } catch (e: SecurityException) {
-                requireContext().showToast(getString(R.string.please_turn_on_double_tap_to_unlock), Toast.LENGTH_LONG)
-                findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
-            } catch (e: Exception) {
-                requireContext().showToast(getString(R.string.launcher_failed_to_lock_device), Toast.LENGTH_LONG)
-                prefs.lockModeOn = false
-            }
-        }
-    }
-
     private fun showStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
             requireActivity().window.insetsController?.show(WindowInsets.Type.statusBars())
@@ -1353,10 +1338,13 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     private fun lockPhoneByGesture() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
-            MyAccessibilityService.lockScreen()
-        ) return
-        lockPhone()
+        if (MyAccessibilityService.lockScreen()) return
+        // Android 7-8 cannot lock through the service; the option is hidden there, so stay silent.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return
+        requireContext().showToast(getString(R.string.gesture_needs_service), Toast.LENGTH_LONG)
+        // Straight to the gesture rows (they live on Motion and power), where the disclosure is.
+        findNavController().navigate(R.id.action_mainFragment_to_settingsFragment,
+            androidx.core.os.bundleOf(Constants.Key.SECTION to Constants.Section.GESTURES))
     }
 
     private fun showLongPressToast() = requireContext().showToast(getString(R.string.long_press_to_select_app))
@@ -1406,10 +1394,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                 runGesture(Constants.Gesture.DOUBLE_TAP, Constants.GestureAction.LOCK_SCREEN)
             }
 
-            override fun onClick() {
-                super.onClick()
-                viewModel.checkForMessages.call()
-            }
         }
     }
 

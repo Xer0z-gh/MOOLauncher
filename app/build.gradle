@@ -1,6 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+// Release signing lives outside the repo. keystore.properties (gitignored) names storeFile,
+// storePassword, keyAlias and keyPassword; without it release builds come out unsigned, which
+// is what F-Droid expects before comparing against the published APK.
+def releaseSigningFile = rootProject.file("keystore.properties")
+def releaseSigning = new Properties()
+if (releaseSigningFile.exists()) releaseSigningFile.withInputStream { releaseSigning.load(it) }
+
 android {
     compileSdk 36
 
@@ -14,25 +21,40 @@ android {
     }
 
     defaultConfig {
-        applicationId "app.olauncher"
+        applicationId "io.github.xer0z_gh.moo"
         minSdkVersion 24
         targetSdkVersion 36
-        versionCode 113
-        versionName "v6.9.17"
+        versionCode 1
+        versionName "1.0.0"
 
         resourceConfigurations += ["en", "ar", "cs", "da", "de", "el", "es-rES", "es-rUS", "fi", "fr", "he", "hi", "hr", "hu", "in", "it", "ja", "ko", "nb", "nl", "pl", "pt-rBR", "ro", "ru-rRU", "sv", "th", "tr", "uk", "vi", "zh"]
         testInstrumentationRunner "app.olauncher.MemoryInstrumentation"
     }
 
+    signingConfigs {
+        if (releaseSigningFile.exists()) {
+            release {
+                storeFile file(releaseSigning["storeFile"])
+                storePassword releaseSigning["storePassword"]
+                keyAlias releaseSigning["keyAlias"]
+                keyPassword releaseSigning["keyPassword"]
+            }
+        }
+    }
+
     buildTypes {
         release {
             debuggable false
+            if (releaseSigningFile.exists()) signingConfig signingConfigs.release
+            // Reproducible builds: F-Droid publishes the developer-signed APK only if its own
+            // rebuild matches byte for byte, and embedded git state never does.
+            vcsInfo.include false
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        // Same install identity and signing key as the existing daily-phone build.
-        // R8 and ART optimizations are exercised without migrating launcher preferences.
+        // Release code (R8, ART profiles) under the debug key and a .debug suffix, so it installs
+        // beside a store copy and never needs the release key.
         daily {
             initWith release
             applicationIdSuffix ".debug"
@@ -45,6 +67,14 @@ android {
             applicationIdSuffix ".debug"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    flavorDimensions += "store"
+    productFlavors {
+        // Google Play: colour themes and the visualizer unlock when the paid Moo Pro key app (:prokey)
+        // is installed. No billing library is linked, so the GPL code stays free of proprietary code.
+        play { dimension "store" }
+        // GitHub, F-Droid and other stores: no proprietary library, and every feature included.
+        foss { dimension "store" }
     }
     buildFeatures {
         viewBinding = true
@@ -64,7 +94,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation libs.kotlin.stdlib
     implementation libs.core.ktx
     implementation libs.appcompat

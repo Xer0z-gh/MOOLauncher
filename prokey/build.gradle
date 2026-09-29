@@ -1,0 +1,58 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+// Moo Pro: the paid key app. Installed next to Moo Launcher (Google Play build) and signed with the
+// same key, it unlocks the colour themes and the music visualizer. It contains no billing code:
+// Google Play sells it as an ordinary paid app.
+def releaseSigningFile = rootProject.file("keystore.properties")
+def releaseSigning = new Properties()
+if (releaseSigningFile.exists()) releaseSigningFile.withInputStream { releaseSigning.load(it) }
+
+android {
+    namespace 'io.github.xer0z_gh.moo.pro'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "io.github.xer0z_gh.moo.pro"
+        minSdkVersion 24
+        targetSdkVersion 36
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    signingConfigs {
+        if (releaseSigningFile.exists()) {
+            release {
+                storeFile file(releaseSigning["storeFile"])
+                storePassword releaseSigning["storePassword"]
+                keyAlias releaseSigning["keyAlias"]
+                keyPassword releaseSigning["keyPassword"]
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+            if (releaseSigningFile.exists()) signingConfig signingConfigs.release
+            vcsInfo.include false
+        }
+    }
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = true
+    }
+}
+
+dependencies {
+    implementation libs.kotlin.stdlib
+}

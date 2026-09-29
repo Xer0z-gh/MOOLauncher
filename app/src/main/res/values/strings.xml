@@ -32,16 +32,13 @@
     <string name="system_default">System</string>
     <string name="dark">Dark</string>
     <string name="light">Light</string>
-    <string name="welcome_to_olauncher_settings">Welcome to the settings!</string>
     <!--    <string name="share_message">Your monthly reminder - you should use your phone, not the other way round. Stay strong. You\'re doing great!-->
     <!--         \n\nIf you have a moment to spare, could you please share Moo Launcher with others? Moo Launcher needs people. More importantly, people need Moo Launcher.</string>-->
     <string name="keyboard_message">Hi, keyboard is the fastest way to find and launch apps in Moo Launcher. Can we request you to keep this On for a few more days and then decide?
         \n\nThe choice is always yours.</string>
     <string name="app_usage_message">To show/hide your screen time on the home screen, please allow or disallow the app usage permission.
         \n\nNote: No app usage data is collected. Everything is processed on your device.</string>
-    <string name="wallpaper_message">Moo Launcher offers beautiful new wallpapers daily. Give your homescreen a fresh new look every day, for free!
-        \n\nWant to try it?</string>
-    <string name="accessibility_service_description">The accessibility permission is required to enable the gesture - double tap to lock . Any data acquired by Moo Launcher via this service will not leave your device.</string>
+    <string name="accessibility_service_description">Moo Launcher uses this service for two gestures you choose: locking the screen and opening the notification shade. It does not read what is on your screen or what you type, and nothing it does leaves your device.</string>
     <string name="close">Close</string>
     <string name="bottom_alignment" translatable="false">Align to bottom</string>
     <string name="alignment_for_app_list" translatable="false">Use this alignment in the app list</string>
@@ -49,17 +46,31 @@
     <!-- English-only since 2026-09-27: every translation described tapping the Settings title,
          which no longer opens Hidden apps; retranslate before removing translatable="false". -->
     <string name="hidden_apps_message" translatable="false">Note: Your hidden apps are in Settings &gt; Apps &gt; Hidden apps.</string>
-    <string name="accessibility_disclosure">Please turn on Moo Launcher\'s accessibility service in your device\'s settings to enable Double tap to lock gesture.
-    \n\nPlease note that this service is only used for this particular feature. Our accessibility service does not collect or share any data.</string>
+    <string name="accessibility_disclosure">To lock the screen or open the notification shade from a gesture, turn on Moo Launcher\'s accessibility service in your device\'s settings.\n\nMoo Launcher uses the service only to perform those two actions when you make the gesture. It does not read what is on your screen or what you type, and it does not collect or share any data.</string>
+    <string name="not_now">Not now</string>
+    <string name="accessibility_service_title">Accessibility service</string>
+    <string name="open_settings">Open settings</string>
+    <string name="gesture_needs_service">Turn on Moo Launcher\'s accessibility service to use this gesture.</string>
+    <string name="back_to_weather">Back to Customize weather</string>
+    <string name="weather_location_too_short">Type at least two letters.</string>
+    <string name="weather_location_allow">Allow location access, then choose Use phone location again.</string>
+    <plurals name="weather_location_found">
+        <item quantity="one">%d place found. Choose it.</item>
+        <item quantity="other">%d places found. Choose one.</item>
+    </plurals>
+    <string name="moo_pro">Moo Pro</string>
+    <string name="pro_get">Get Moo Pro</string>
+    <string name="pro_message">Moo Pro adds ten more color themes and the audio visualizer. It is a small separate app on Google Play, bought once: install it and these features unlock here. Everything else in Moo stays free, with no ads.</string>
+    <string name="pro_unlock_visualizer">Unlock with Moo Pro</string>
+    <string name="pro_theme_label">%1$s (Pro)</string>
+    <string name="about">About</string>
+    <string name="privacy">Privacy</string>
+    <string name="source_code">Source code</string>
+    <string name="about_text">Version %1$s\n\nFree software under the GNU General Public License, version 3. It comes with no warranty.\n\nBased on Olauncher by Tanuj M. (tanujnotes), modified by Xer0z-gh since September 2026.\n\nWeather data by Open-Meteo.com (CC BY 4.0). Inter typeface under the SIL Open Font License 1.1.</string>
     <string name="permission">Permission</string>
-    <string name="enable">Enable</string>
-    <string name="disable">Disable</string>
     <string name="info">Info</string>
     <string name="delete">Uninstall</string>
     <string name="text_size">Text size</string>
-    <string name="enabled">Enabled</string>
-    <string name="please_turn_on_double_tap_to_unlock">Please turn on double tap to lock</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher failed to lock device.\nPlease check your app settings.</string>
     <string name="long_press_to_select_app">Long press to select app</string>
     <string name="unable_to_open_app">Unable to open app</string>
     <string name="unable_to_open_app_info">Unable to open app info</string>
@@ -117,7 +128,15 @@
     <string name="temperature_unit" translatable="false">Temperature unit</string>
     <string name="unit_celsius" translatable="false">Celsius</string>
     <string name="unit_fahrenheit" translatable="false">Fahrenheit</string>
-    <string name="weather_needs_location" translatable="false">Weather needs location access</string>
+    <string name="weather_needs_location" translatable="false">Weather needs location access, or a place set in Settings, Weather</string>
+    <string name="weather_location">Location</string>
+    <string name="weather_location_automatic">Phone location</string>
+    <string name="weather_location_hint">Town or city</string>
+    <string name="weather_location_search">Search</string>
+    <string name="weather_location_use_phone">Use phone location</string>
+    <string name="weather_location_searching">Searching…</string>
+    <string name="weather_location_none">No places found. Check the spelling.</string>
+    <string name="weather_location_offline">Could not search. Check your connection.</string>
     <string name="date_format" translatable="false">Date format</string>
     <!-- Layout placeholder only: the row and its menu show today's date in each format. -->
     <string name="date_format_short" translatable="false">Sun, 21 Sep</string>
@@ -188,13 +207,8 @@
     <!-- What swipe left and right open while no app is chosen for them (HomeFragment fallbacks). -->
     <string name="gesture_default_camera" translatable="false">Camera</string>
     <string name="gesture_default_phone" translatable="false">Phone</string>
-    <string name="did_you_know">Did you know?</string>
     <string name="alignment_changed">Alignment changed ✅</string>
     <string name="home_screen">Home screen</string>
-    <string name="hey">Hey</string>
-    <string name="new_year_wish">Here\'s to a year better than any before. Happy new year!</string>
-    <string name="new_year_wish_1">It doesn’t matter how January went. You still have the rest of the year to do better than ever.</string>
-    <string name="cheers">Cheers!</string>
     <string name="notification_bar">Notification bar</string>
     <string name="private_space">Private space</string>
     <string name="invalid_pin_request">Invalid pin request</string>

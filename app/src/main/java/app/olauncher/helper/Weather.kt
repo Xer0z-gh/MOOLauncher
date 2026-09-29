@@ -10,6 +10,7 @@ import android.os.CancellationSignal
 import android.os.SystemClock
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
+import app.olauncher.data.Prefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -17,6 +18,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.URLEncoder
 import java.util.Locale
 import kotlin.coroutines.resume
 
@@ -25,6 +27,13 @@ object Weather {
     data class Reading(val celsius: Double, val code: Int, val high: Double, val low: Double, val isDay: Boolean, val forecastDay: String, val timezone: String)
     enum class Failure { PERMISSION, LOCATION_OFF, NO_LOCATION, NETWORK }
     data class Result(val reading: Reading? = null, val failure: Failure? = null)
+    data class Place(val name: String, val detail: String, val latitude: Double, val longitude: Double)
+
+    /** A place named in Settings, used instead of the phone's location. */
+    fun hasPlace(context: Context): Boolean = Prefs(context).weatherPlaceName.isNotBlank()
+
+    /** Weather can run: a named place, or permission to read the phone's location. */
+    fun canLocate(context: Context): Boolean = hasPlace(context) || hasLocationPermission(context)
 
     fun hasLocationPermission(context: Context): Boolean =
         ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
@@ -37,6 +46,8 @@ object Weather {
 
     @SuppressLint("MissingPermission")
     suspend fun fetch(context: Context): Result {
+        val prefs = Prefs(context)
+        if (prefs.weatherPlaceName.isNotBlank()) return fetchAt(prefs.weatherPlaceLatitude, prefs.weatherPlaceLongitude)
         if (!hasLocationPermission(context)) return Result(failure = Failure.PERMISSION)
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
             ?: return Result(failure = Failure.NO_LOCATION)
@@ -48,7 +59,7 @@ object Weather {
         }
         val location = cached ?: currentNetworkLocation(context, manager)
             ?: return Result(failure = Failure.NO_LOCATION)
-        return fetchAt(location)
+        return fetchAt(location.latitude, location.longitude)
     }
 
     @SuppressLint("MissingPermission")
@@ -72,10 +83,10 @@ object Weather {
         }
     }
 
-    private suspend fun fetchAt(location: Location): Result = suspendCancellableCoroutine { continuation ->
+    private suspend fun fetchAt(latitude: Double, longitude: Double): Result = suspendCancellableCoroutine { continuation ->
         // Forecasts do not need street-level coordinates; transmit roughly town-level precision.
-        val lat = String.format(Locale.US, "%.2f", location.latitude)
-        val lon = String.format(Locale.US, "%.2f", location.longitude)
+        val lat = String.format(Locale.US, "%.2f", latitude)
+        val lon = String.format(Locale.US, "%.2f", longitude)
         val url = "https://api.open-meteo.com/v1/forecast?latitude=$lat&longitude=$lon&current=temperature_2m,weather_code,is_day&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1"
         val connection = (URL(url).openConnection() as HttpURLConnection).apply {
             connectTimeout = 8000
@@ -107,6 +118,35 @@ object Weather {
             }
             if (continuation.isActive) continuation.resume(result)
         })
+    }
+
+    /** Places matching [query] from Open-Meteo's geocoder; null when the search itself failed. */
+    suspend fun searchPlaces(query: String): List<Place>? = withContext(Dispatchers.IO) {
+        val language = Locale.getDefault().language.ifBlank { "en" }
+        val url = "https://geocoding-api.open-meteo.com/v1/search?count=6&format=json&language=$language&name=" +
+            URLEncoder.encode(query, "UTF-8")
+        val connection = (URL(url).openConnection() as HttpURLConnection).apply {
+            connectTimeout = 8000
+            readTimeout = 8000
+        }
+        try {
+            if (connection.responseCode != HttpURLConnection.HTTP_OK) return@withContext null
+            val results = JSONObject(connection.inputStream.use { BoundedWeatherResponse.read(it) })
+                .optJSONArray("results") ?: return@withContext emptyList()
+            (0 until results.length()).mapNotNull { i ->
+                val place = results.getJSONObject(i)
+                val latitude = place.optDouble("latitude")
+                val longitude = place.optDouble("longitude")
+                val name = place.optString("name")
+                if (name.isBlank() || !latitude.isFinite() || !longitude.isFinite()) null
+                else Place(name, listOf(place.optString("admin1"), place.optString("country"))
+                    .filter { it.isNotBlank() }.joinToString(", "), latitude, longitude)
+            }
+        } catch (_: Exception) {
+            null
+        } finally {
+            connection.disconnect()
+        }
     }
 
     fun isCurrentDay(day: String, zone: String, now: Long = System.currentTimeMillis()): Boolean {

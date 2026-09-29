@@ -366,6 +366,12 @@ private fun openBoundedConnection(src: String): HttpURLConnection {
         connectTimeout = 5000
         readTimeout = 8000
         doInput = true
+        // A redirect could lead off the wallpaper host allowlist; anything but a direct 200 fails.
+        instanceFollowRedirects = false
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            disconnect()
+            throw java.io.IOException("HTTP $responseCode")
+        }
     }
 }
 
@@ -483,6 +489,8 @@ suspend fun getTodaysWallpaper(wallType: String, firstOpenTime: Long): String {
             val wallpapers = json.getString(key)
             val wallpapersJson = JSONObject(wallpapers)
             wallpaperUrl = wallpapersJson.getString(wallType)
+            if (wallpaperUrl.toUri().let { it.scheme != "https" || it.host !in Constants.WALLPAPER_HOSTS })
+                wallpaperUrl = getBackupWallpaper(wallType)
             wallpaperUrl
 
         } catch (e: Exception) {
@@ -607,9 +615,8 @@ fun Context.copyToClipboard(text: String) {
 
 fun Context.openUrl(url: String) {
     if (url.isEmpty()) return
-    val intent = Intent(Intent.ACTION_VIEW)
-    intent.data = url.toUri()
-    startActivity(intent)
+    runCatching { startActivity(Intent(Intent.ACTION_VIEW, url.toUri())) }
+        .onFailure { showToast(url) }
 }
 
 fun Context.isSystemApp(packageName: String, user: UserHandle? = null): Boolean {

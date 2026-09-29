@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isEmpty
+import androidx.core.view.isVisible
 import app.olauncher.R
 import app.olauncher.data.ColorTheme
 import app.olauncher.data.FOCUS_TICK_CHOICES
@@ -19,6 +20,14 @@ import app.olauncher.ui.choiceRow
 import app.olauncher.ui.settingsWeight
 import app.olauncher.ui.stepSliderRow
 import app.olauncher.ui.switchRow
+import app.olauncher.ui.valueRow
+import app.olauncher.ui.updateValueRow
+import app.olauncher.ui.role
+import app.olauncher.pro.ProStore
+import app.olauncher.pro.showProDialog
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 /** Each surface exposes its own controls. Changes apply immediately and remain bounded. */
 class PanelSettings(private val context: Context, private val prefs: Prefs,
@@ -96,7 +105,7 @@ class PanelSettings(private val context: Context, private val prefs: Prefs,
                     listOf(60, 180, 360).indexOf(prefs.weatherRefreshMinutes).coerceAtLeast(0), scale = true) {
                     prefs.weatherRefreshMinutes = listOf(60, 180, 360)[it]
                 })
-            Page.VISUALIZER -> if (!prefs.visualizerEnabled) listOf(
+            Page.VISUALIZER -> if (!ProStore.unlocked(prefs)) emptyList() else if (!prefs.visualizerEnabled) listOf(
                 toggle(R.string.panel_visualizer_enabled, false) { prefs.visualizerEnabled = it })
             else listOf(
                 toggle(R.string.panel_visualizer_enabled, prefs.visualizerEnabled) { prefs.visualizerEnabled = it },
@@ -124,6 +133,19 @@ class PanelSettings(private val context: Context, private val prefs: Prefs,
         val gap = { LinearLayout.LayoutParams(-1, -2).apply { topMargin = 12.dpToPx() } }
         fun render(options: List<Option>) {
             list.removeAllViews()
+            if (page == Page.WEATHER) {
+                val title = context.getString(R.string.weather_location)
+                val place = prefs.weatherPlaceName.ifBlank { context.getString(R.string.weather_location_automatic) }
+                lateinit var row: View
+                row = context.valueRow(title, place, text) {
+                    pickWeatherPlace { name ->
+                        changed()
+                        // Updated in place: rebuilding the page would drop keyboard and TalkBack focus.
+                        row.updateValueRow(title, name.ifBlank { context.getString(R.string.weather_location_automatic) })
+                    }
+                }
+                list.addView(row)
+            }
             options.forEach { option ->
                 val after = { rebuildIfShapeChanged(page, options, list, ::render) }
                 val name = context.getString(option.title)
@@ -139,6 +161,12 @@ class PanelSettings(private val context: Context, private val prefs: Prefs,
                     }
                 }
                 list.addView(row, gap().apply { if (list.isEmpty()) topMargin = 0 })
+            }
+            if (page == Page.VISUALIZER && !ProStore.unlocked(prefs)) {
+                list.addView(actionRow(R.string.pro_unlock_visualizer, text) {
+                    context.showProDialog()
+                }, gap().apply { topMargin = 0 })
+                return
             }
             if (page == Page.VISUALIZER && ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)
                 list.addView(actionRow(R.string.visualizer_audio_access, text) { audioPermission() }, gap())
@@ -158,6 +186,129 @@ class PanelSettings(private val context: Context, private val prefs: Prefs,
             .create().also { it.showSettingsPage() }
     }
 
+    /**
+     * Weather for a named place instead of the phone's location: type a town, pick a match. The
+     * typed name goes to Open-Meteo's geocoder only when Search is pressed.
+     */
+    private fun pickWeatherPlace(onPicked: (String) -> Unit) {
+        val text = if (ColorTheme.isCustom(prefs.colorThemeId)) ColorTheme.byId(prefs.colorThemeId).text
+            else context.getColorFromAttr(R.attr.primaryColor)
+        val scope = MainScope()
+        val field = android.widget.EditText(context).apply {
+            hint = context.getString(R.string.weather_location_hint)
+            isSingleLine = true
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS
+            imeOptions = android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
+            setTextColor(text)
+            setHintTextColor(text.withAlpha(0xB3))
+            minHeight = 48.dpToPx()
+            // Starts from the current place, selected, so typing replaces it.
+            setText(prefs.weatherPlaceName)
+            setSelectAllOnFocus(true)
+        }
+        val status = TextView(context, null, 0, R.style.TextSmall).apply {
+            setTextColor(text.withAlpha(0xB3))
+            isVisible = false
+            accessibilityLiveRegion = View.ACCESSIBILITY_LIVE_REGION_POLITE
+        }
+        val results = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
+        lateinit var picker: AlertDialog
+        lateinit var search: () -> Unit
+        // Search and "use phone location" sit under the field, not as dialog buttons: the page is
+        // edge-to-edge, so bottom buttons stay behind the keyboard (ADJUST_RESIZE is ignored).
+        val column = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setPaddingRelative(20.dpToPx(), 8.dpToPx(), 24.dpToPx(), 8.dpToPx())
+            addView(field, LinearLayout.LayoutParams(-1, -2))
+            addView(actionRow(R.string.weather_location_search, text) { search() }, LinearLayout.LayoutParams(-1, -2))
+            addView(actionRow(R.string.weather_location_use_phone, text) {
+                // Without the permission this would silently stop the weather: ask first, keep the place.
+                if (!Weather.hasLocationPermission(context)) {
+                    context.findActivity()?.let {
+                        androidx.core.app.ActivityCompat.requestPermissions(it, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 0)
+                    }
+                    status.isVisible = true
+                    status.text = context.getString(R.string.weather_location_allow)
+                    return@actionRow
+                }
+                prefs.setWeatherPlace("")
+                picker.dismiss()
+                onPicked("")
+            }, LinearLayout.LayoutParams(-1, -2))
+            addView(status, LinearLayout.LayoutParams(-1, -2).apply { topMargin = 8.dpToPx() })
+            addView(results, LinearLayout.LayoutParams(-1, -2))
+        }
+        var searchJob: kotlinx.coroutines.Job? = null
+        search = fun() {
+            val query = field.text.toString().trim()
+            if (query.length < 2) {
+                status.isVisible = true
+                status.text = context.getString(R.string.weather_location_too_short)
+                return
+            }
+            // One search at a time: a second press replaces the first rather than appending to it.
+            searchJob?.cancel()
+            status.isVisible = true
+            status.text = context.getString(R.string.weather_location_searching)
+            results.removeAllViews()
+            // The keyboard would cover the results, which appear below the field.
+            (context.getSystemService(Context.INPUT_METHOD_SERVICE) as? android.view.inputmethod.InputMethodManager)
+                ?.hideSoftInputFromWindow(field.windowToken, 0)
+            searchJob = scope.launch {
+                val places = Weather.searchPlaces(query)
+                results.removeAllViews()
+                status.text = when {
+                    places == null -> context.getString(R.string.weather_location_offline)
+                    places.isEmpty() -> context.getString(R.string.weather_location_none)
+                    else -> context.resources.getQuantityString(R.plurals.weather_location_found, places.size, places.size)
+                }
+                places.orEmpty().forEach { place ->
+                    // The region line tells same-named towns apart; it is the secondary grey.
+                    val label = android.text.SpannableString(if (place.detail.isBlank()) place.name else "${place.name}\n${place.detail}")
+                    if (place.detail.isNotBlank()) label.setSpan(android.text.style.ForegroundColorSpan(text.withAlpha(0xB3)),
+                        place.name.length + 1, label.length, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    results.addView(TextView(context, null, 0, R.style.TextSmall).apply {
+                        this.text = label
+                        androidx.core.view.ViewCompat.setAccessibilityDelegate(this, role(android.widget.Button::class.java.name, null))
+                        minHeight = 48.dpToPx()
+                        gravity = Gravity.START or Gravity.CENTER_VERTICAL
+                        setPadding(0, 8.dpToPx(), 0, 8.dpToPx())
+                        setTextColor(text)
+                        applyTextWeight(context.settingsWeight())
+                        background = ripple()
+                        applyFocusOutline(text)
+                        setOnClickListener {
+                            // "Lyon, France": the row then says which Lyon was picked.
+                            val country = place.detail.substringAfterLast(", ").trim()
+                            val name = if (country.isBlank()) place.name else "${place.name}, $country"
+                            prefs.setWeatherPlace(name, place.latitude, place.longitude)
+                            picker.dismiss()
+                            onPicked(name)
+                        }
+                    }, LinearLayout.LayoutParams(-1, -2))
+                }
+            }
+        }
+        // A hardware Enter reports both key-down and key-up; search once.
+        field.setOnEditorActionListener { _, _, event ->
+            if (event == null || event.action == android.view.KeyEvent.ACTION_DOWN) search()
+            true
+        }
+        picker = AlertDialog.Builder(context).setTitle(R.string.weather_location)
+            .setView(android.widget.ScrollView(context).apply { addView(column) })
+            .create()
+        picker.setOnDismissListener { scope.cancel() }
+        // Keyboard once on open; results below it stay reachable because the column pads by the IME.
+        picker.window?.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(column) { v, insets ->
+            v.setPaddingRelative(v.paddingStart, v.paddingTop, v.paddingEnd,
+                insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.ime()).bottom + 8.dpToPx())
+            insets
+        }
+        picker.showSettingsPage(R.string.back_to_weather)
+        field.requestFocus()
+    }
+
     /** Re-reads the page's settings and rebuilds only if one appeared or went (not on a value change). */
     private fun rebuildIfShapeChanged(page: Page, shown: List<Option>, list: LinearLayout, render: (List<Option>) -> Unit) {
         val now = options(page)
@@ -174,8 +325,15 @@ class PanelSettings(private val context: Context, private val prefs: Prefs,
             applyTextWeight(context.settingsWeight())
             background = ripple()
             applyFocusOutline(text)
+            androidx.core.view.ViewCompat.setAccessibilityDelegate(this, role(android.widget.Button::class.java.name, null))
             setOnClickListener { action() }
         }
+
+    private tailrec fun Context.findActivity(): android.app.Activity? = when (this) {
+        is android.app.Activity -> this
+        is android.content.ContextWrapper -> baseContext.findActivity()
+        else -> null
+    }
 
     private fun ripple() = android.util.TypedValue().let {
         context.theme.resolveAttribute(android.R.attr.selectableItemBackground, it, true)

@@ -10,16 +10,10 @@
     <string name="olauncher_is_not_default_launcher">Moo Launcher ist kein Standard-Launcher. Die tägliche Aktualisierung des Hintergrundbilds schlägt möglicherweise fehl.</string>
     <string name="no_hidden_apps">Keine versteckten Apps</string>
     <string name="hidden_apps">Versteckte Apps</string>
-    <string name="accessibility_disclosure">Bitte aktivieren Sie den Bedienungshilfen-Dienst von Moo Launcher in den Einstellungen Ihres Geräts, um die Geste „Doppeltippen zum Sperren“ zu aktivieren.\n\nBitte beachten Sie, dass dieser Dienst nur für diese eine Funktion verwendet wird. Unser Bedienungshilfen-Dienst sammelt oder teilt keine Daten.</string>
     <string name="permission">Erlaubnis</string>
-    <string name="enable">Aktivieren</string>
-    <string name="disable">Deaktivieren</string>
     <string name="info">Info</string>
     <string name="delete">Deinstallieren</string>
     <string name="text_size">Textgröße</string>
-    <string name="enabled">Aktiviert</string>
-    <string name="please_turn_on_double_tap_to_unlock">Zum Sperren bitte Doppeltippen aktivieren</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher konnte das Gerät nicht sperren. Bitte überprüfen Sie Ihre App-Einstellungen.</string>
     <string name="long_press_to_select_app">Lange drücken, um die App auszuwählen</string>
     <string name="unable_to_open_app">App kann nicht geöffnet werden</string>
     <string name="system_app_cannot_delete">System-App, kann nicht deinstalliert werden</string>
@@ -45,24 +39,16 @@
     <string name="system_default">System</string>
     <string name="dark">Dunkel</string>
     <string name="light">Hell</string>
-    <string name="welcome_to_olauncher_settings">Willkommen in den Einstellungen!</string>
     <string name="keyboard_message">Hallo, die Tastatur ist der schnellste Weg, Apps in Moo Launcher zu finden und zu starten. Können wir Sie bitten, die Funktion noch ein paar Tage eingeschaltet zu lassen und dann zu entscheiden?
         \n\nDie Wahl liegt immer bei Ihnen.</string>
     <string name="app_usage_message">Um die Bildschirmzeit auf dem Startbildschirm anzuzeigen oder zu verbergen, erteilen Sie bitte die Erlaubnis für die App-Nutzung oder verweigern Sie sie.
         \n\nHinweis: Es werden keine Daten zur App-Nutzung gesammelt. Alles wird auf Ihrem Gerät verarbeitet.</string>
-    <string name="wallpaper_message">Moo Launcher bietet täglich wunderschöne neue Hintergrundbilder. Verleihen Sie Ihrem Startbildschirm jeden Tag ein frisches Aussehen – kostenlos!\n\nMöchten Sie es ausprobieren?</string>
-    <string name="accessibility_service_description">Die Berechtigung für Bedienungshilfen ist erforderlich, um die Geste „Doppeltippen zum Sperren“ zu aktivieren. Daten, die Moo Launcher über diesen Dienst erhält, verlassen Ihr Gerät nicht.</string>
     <string name="close">Schließen</string>
     <string name="please_set_olauncher_as_default_first">Bitte legen Sie zunächst Moo Launcher als Ihren Standard-Launcher fest</string>
     <string name="app_not_found">App nicht gefunden</string>
     <string name="screen_time">Bildschirmzeit</string>
-    <string name="did_you_know">Wussten Sie?</string>
     <string name="alignment_changed">Ausrichtung geändert ✅</string>
     <string name="home_screen">Startbildschirm</string>
-    <string name="hey">Hey</string>
-    <string name="new_year_wish">Auf ein Jahr, das besser ist als alle zuvor. Frohes neues Jahr!</string>
-    <string name="new_year_wish_1">Egal, wie der Januar gelaufen ist. Sie haben noch den Rest des Jahres Zeit, um besser zu sein als je zuvor.</string>
-    <string name="cheers">Prost!</string>
     <string name="notification_bar">Benachrichtigungsleiste</string>
     <string name="private_space">Privater Bereich</string>
     <string name="invalid_pin_request">Ungültige Anheftanfrage</string>
@@ -74,4 +60,10 @@
     <string name="shortcut_not_found">Verknüpfung nicht gefunden</string>
     <string name="unable_to_open_shortcut">Verknüpfung kann nicht geöffnet werden</string>
     <string name="unable_to_open_app_info">App-Informationen können nicht geöffnet werden</string>
+    <string name="accessibility_service_title">Bedienungshilfendienst</string>
+    <string name="accessibility_disclosure">Um per Geste den Bildschirm zu sperren oder die Benachrichtigungsleiste zu öffnen, aktiviere den Bedienungshilfendienst von Moo Launcher in den Einstellungen deines Geräts.\n\nMoo Launcher nutzt den Dienst ausschließlich, um diese beiden Aktionen auszuführen, wenn du die Geste machst. Die App liest weder, was auf deinem Bildschirm angezeigt wird, noch, was du eingibst, und erfasst oder teilt keinerlei Daten.</string>
+    <string name="accessibility_service_description">Moo Launcher nutzt diesen Dienst für zwei Gesten, die du auswählst: den Bildschirm sperren und die Benachrichtigungsleiste öffnen. Die App liest weder, was auf deinem Bildschirm angezeigt wird, noch, was du eingibst, und nichts von dem, was sie tut, verlässt dein Gerät.</string>
+    <string name="not_now">Nicht jetzt</string>
+    <string name="open_settings">Einstellungen öffnen</string>
+    <string name="gesture_needs_service">Aktiviere den Bedienungshilfendienst von Moo Launcher, um diese Geste zu verwenden.</string>
 </resources>

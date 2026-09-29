@@ -171,7 +171,7 @@ class AppDrawerFragment : BaseFragment() {
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query?.startsWith("!") == true)
-                    requireContext().openUrl(Constants.URL_DUCK_SEARCH + query.replace(" ", "%20"))
+                    requireContext().openUrl(Constants.URL_DUCK_SEARCH + android.net.Uri.encode(query))
                 else if (adapter.itemCount == 0)
                     requireContext().openSearch(query?.trim())
                 else
@@ -632,7 +632,6 @@ class AppDrawerFragment : BaseFragment() {
     private fun checkMessageAndExit() {
         if (flag == Constants.FLAG_LAUNCH_APP) {
             goHome()
-            viewModel.checkForMessages.call()
         } else findNavController().popBackStack()
     }
 

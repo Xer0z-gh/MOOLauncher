@@ -23,27 +23,16 @@
     <string name="system_default">ระบบ</string>
     <string name="dark">มืด</string>
     <string name="light">สว่าง</string>
-    <string name="welcome_to_olauncher_settings">ยินดีต้อนรับสู่การตั้งค่า!</string>
     <string name="keyboard_message">สวัสดี แป้นพิมพ์เป็นวิธีที่เร็วที่สุดในการค้นหาและเปิดแอปใน Moo Launcher เราขอให้คุณเปิดฟีเจอร์นี้ไว้อีกสองสามวันแล้วค่อยตัดสินใจได้ไหม
         \n\nทางเลือกเป็นของคุณเสมอ</string>
     <string name="app_usage_message">หากต้องการแสดง/ซ่อนเวลาหน้าจอบนหน้าจอหลัก โปรดอนุญาตหรือปฏิเสธสิทธิ์การใช้งานแอป
         \n\nหมายเหตุ: ไม่มีการเก็บรวบรวมข้อมูลการใช้งานแอป ทุกอย่างได้รับการประมวลผลบนอุปกรณ์ของคุณเอง</string>
-    <string name="wallpaper_message">Moo Launcher มอบวอลเปเปอร์ใหม่ที่สวยงามให้ทุกวัน ให้หน้าจอหลักของคุณมีลุคใหม่ทุกวันโดยไม่เสียค่าใช้จ่าย!
-        \n\nอยากลองไหม</string>
-    <string name="accessibility_service_description">จำเป็นต้องมีสิทธิ์การเข้าถึงเพื่อเปิดใช้งานท่าทาง - แตะสองครั้งเพื่อล็อก ข้อมูลใดๆ ที่ Moo Launcher ได้รับผ่านบริการนี้จะไม่ออกจากอุปกรณ์ของคุณ</string>
     <string name="close">ปิด</string>
     <string name="please_set_olauncher_as_default_first">โปรดตั้งค่า Moo Launcher เป็นค่าเริ่มต้นก่อน</string>
-    <string name="accessibility_disclosure">โปรดเปิดบริการการเข้าถึงของ Moo Launcher ในการตั้งค่าอุปกรณ์ของคุณเพื่อเปิดใช้งานท่าทางแตะสองครั้งเพื่อล็อก
-    \n\nโปรดทราบว่าบริการนี้ใช้สำหรับฟีเจอร์นี้เท่านั้น บริการการเข้าถึงของเราไม่เก็บรวบรวมหรือแชร์ข้อมูลใดๆ</string>
     <string name="permission">สิทธิ์การเข้าถึง</string>
-    <string name="enable">เปิดใช้งาน</string>
-    <string name="disable">ปิดใช้งาน</string>
     <string name="info">ข้อมูล</string>
     <string name="delete">ถอนการติดตั้ง</string>
     <string name="text_size">ขนาดข้อความ</string>
-    <string name="enabled">เปิดใช้งานแล้ว</string>
-    <string name="please_turn_on_double_tap_to_unlock">โปรดเปิดใช้งานแตะสองครั้งเพื่อล็อก</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher ล็อกอุปกรณ์ไม่สำเร็จ\nโปรดตรวจสอบการตั้งค่าแอปของคุณ</string>
     <string name="long_press_to_select_app">กดค้างเพื่อเลือกแอป</string>
     <string name="unable_to_open_app">ไม่สามารถเปิดแอปได้</string>
     <string name="unable_to_open_app_info">ไม่สามารถเปิดข้อมูลแอปได้</string>
@@ -57,13 +46,8 @@
     <string name="adapter_show">แสดง</string>
     <string name="adapter_hide">ซ่อน</string>
     <string name="screen_time">เวลาหน้าจอ</string>
-    <string name="did_you_know">คุณรู้หรือไม่?</string>
     <string name="alignment_changed">เปลี่ยนการจัดวางแล้ว ✅</string>
     <string name="home_screen">หน้าจอหลัก</string>
-    <string name="hey">สวัสดี</string>
-    <string name="new_year_wish">ขอให้ปีนี้ดีกว่าปีที่ผ่านมา สวัสดีปีใหม่!</string>
-    <string name="new_year_wish_1">ไม่สำคัญว่าเดือนมกราคมจะเป็นอย่างไร คุณยังมีเวลาที่เหลือของปีเพื่อทำให้ดีกว่าที่เคย</string>
-    <string name="cheers">ชนแก้ว!</string>
     <string name="notification_bar">แถบการแจ้งเตือน</string>
     <string name="private_space">พื้นที่ส่วนตัว</string>
     <string name="invalid_pin_request">คำขอปักหมุดไม่ถูกต้อง</string>
@@ -74,4 +58,10 @@
     <string name="invalid_shortcut">ทางลัดไม่ถูกต้อง</string>
     <string name="shortcut_not_found">ไม่พบทางลัด</string>
     <string name="unable_to_open_shortcut">ไม่สามารถเปิดทางลัดได้</string>
+    <string name="accessibility_service_title">บริการการช่วยเหลือพิเศษ</string>
+    <string name="accessibility_disclosure">หากต้องการล็อกหน้าจอหรือเปิดแผงการแจ้งเตือนด้วยท่าทางสัมผัส ให้เปิดบริการการช่วยเหลือพิเศษของ Moo Launcher ในการตั้งค่าของอุปกรณ์\n\nMoo Launcher ใช้บริการนี้เพียงเพื่อดำเนินการ 2 อย่างดังกล่าวเมื่อคุณใช้ท่าทางสัมผัสเท่านั้น แอปจะไม่อ่านสิ่งที่แสดงบนหน้าจอหรือสิ่งที่คุณพิมพ์ และไม่เก็บรวบรวมหรือแชร์ข้อมูลใดๆ</string>
+    <string name="accessibility_service_description">Moo Launcher ใช้บริการนี้สำหรับท่าทางสัมผัส 2 แบบที่คุณเลือก ได้แก่ การล็อกหน้าจอและการเปิดแผงการแจ้งเตือน แอปจะไม่อ่านสิ่งที่แสดงบนหน้าจอหรือสิ่งที่คุณพิมพ์ และทุกอย่างที่แอปทำจะอยู่ในอุปกรณ์ของคุณเท่านั้น</string>
+    <string name="not_now">ไว้ทีหลัง</string>
+    <string name="open_settings">เปิดการตั้งค่า</string>
+    <string name="gesture_needs_service">เปิดบริการการช่วยเหลือพิเศษของ Moo Launcher เพื่อใช้ท่าทางสัมผัสนี้</string>
 </resources>

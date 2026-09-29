@@ -1,0 +1,61 @@
+Moo ist ein minimalistischer, textbasierter Startbildschirm für Android: eine Uhr und eine kurze Liste von App-Namen, sonst nichts, was ablenkt. Diese Version enthält alle Funktionen, ohne Google-Bibliotheken, Werbung, Analysedienste, Tracker oder Konto.
+
+<b>Startbildschirm</b>
+<ul>
+<li>Eine Uhr und die Apps Ihrer Wahl, als Namen.</li>
+<li>Badges für verpasste Benachrichtigungen neben jeder App, als Zahl oder Punkt. Die Zahl verschwindet, sobald Sie die App über Moo öffnen, und zeigt so, was Sie verpasst haben, nicht was noch in der Benachrichtigungsleiste liegt. Ein Tipp auf ein Badge zeigt die letzten Zeilen; jede App lässt sich stummschalten.</li>
+<li>Optionale Infos: Datum, Akku, Wetter, Bildschirmzeit, Entsperrungen und nächster Wecker.</li>
+<li>Musik-Visualizer, der zeichnet, was gerade auf dem Handy läuft.</li>
+</ul>
+
+<b>Benachrichtigungen und Gesten</b>
+<ul>
+<li>Ein Benachrichtigungsfeld mit Filtern, per Wischen geöffnet.</li>
+<li>Sechs Gesten (Wischen nach oben, unten, links, rechts, Doppeltippen, langes Drücken). Jede kann nichts tun; App-Liste oder -Suche, Benachrichtigungsleiste, Launcher-Einstellungen, eine gewählte App oder verpasste Benachrichtigungen öffnen; oder den Bildschirm sperren (Android 9+).</li>
+</ul>
+
+<b>App-Liste</b>
+<ul>
+<li>Kategorien oder A-Z, Suche mit optionalem Direktstart, versteckte Apps und privater Bereich (Android 15).</li>
+<li>Deinstallieren aus der Liste.</li>
+</ul>
+
+<b>Darstellung</b>
+<ul>
+<li>13 Farbthemen, als Vorschau auf Ihrem eigenen Startbildschirm. Moo zeichnet seinen Hintergrund selbst und überschreibt nie Ihr Hintergrundbild.</li>
+<li>Symbole aus, auf dem Startbildschirm, in der App-Liste oder beides; Icon-Pakete im ADW- oder Nova-Format, farbig oder in Graustufen.</li>
+<li>Schriften, darunter Inter; Stufenregler für Größen, Textgröße und Schriftstärke.</li>
+<li>Bewegungsstile und ein Fokus-Scroll-Layout mit haptischem Feedback.</li>
+</ul>
+
+<b>Akku</b>
+Im Ultra-Energiesparmodus läuft der Startbildschirm mit 60 Hz, echtem Schwarz und seltenerem Aufwecken; er kann dem Energiesparmodus von Android folgen.
+
+<b>Wetter</b>
+Von Open-Meteo, per ungefährem Standort des Handys oder einem in den Einstellungen eingegebenen Ort (dann ohne Standortberechtigung). Standardmäßig aus.
+
+Die Einstellungen sind in Seiten gegliedert: Startbildschirm, Aussehen, Apps, Benachrichtigungen, Wetter sowie Bewegung und Energie (mit den Gesten).
+
+<b>Netzwerknutzung</b>
+Nichts verlässt das Gerät, außer:
+<ul>
+<li>Wetter, falls aktiv: ungefährer Standort (ca. 1 km, auf 2 Nachkommastellen gerundet) oder eingegebener Ort, an Open-Meteo.</li>
+<li>Ortssuche: der eingegebene Ortsname, an den Geocoder von Open-Meteo.</li>
+<li>Tägliches Hintergrundbild, falls aktiv: eine Liste aus einem GitHub-Gist sowie Bilder von images.unsplash.com, images.pexels.com, i.redd.it und images2.imgbox.com.</li>
+</ul>
+Benachrichtigungsinhalte, App-Nutzung, die Liste installierter Apps und Visualizer-Audio bleiben auf dem Gerät.
+
+<b>Berechtigungen</b>
+<ul>
+<li>QUERY_ALL_PACKAGES: Apps auflisten, suchen und starten; Icon-Pakete lesen.</li>
+<li>PACKAGE_USAGE_STATS: Bildschirmzeit und Entsperrungen.</li>
+<li>ACCESS_COARSE_LOCATION: Wetter, optional.</li>
+<li>RECORD_AUDIO: nur für den Visualizer. Liest die Audioausgabe; nimmt nie vom Mikrofon auf, speichert kein Audio.</li>
+<li>Benachrichtigungszugriff: Badges, Benachrichtigungsfeld und Medien für den Visualizer.</li>
+<li>Bedienungshilfe: nur zum Sperren des Bildschirms und Öffnen der Benachrichtigungsleiste per Geste. Liest keine Bildschirminhalte.</li>
+<li>REQUEST_DELETE_PACKAGES: Deinstallieren aus der App-Liste.</li>
+</ul>
+
+
+Moo ist freie Software (GPLv3) und basiert auf Olauncher, dem Open-Source-Launcher von tanujnotes.
+Quellcode: <a href="https://github.com/Xer0z-gh/MOOLauncher">github.com/Xer0z-gh/MOOLauncher</a>

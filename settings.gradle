@@ -1,2 +1,3 @@
 include ':app'
-rootProject.name = "Olauncher"
+include ':prokey'
+rootProject.name = "MooLauncher"

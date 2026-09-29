@@ -32,7 +32,7 @@ def main():
     args = parser.parse_args()
     if not re.fullmatch(r'emulator-\d+', args.serial) or args.rounds < 1:
         parser.error('An explicit emulator serial and positive round count are required.')
-    package = 'app.olauncher.debug'
+    package = 'io.github.xer0z_gh.moo.debug'
 
     def adb(*cmd):
         return subprocess.run([args.adb, '-s', args.serial, *cmd], check=True,

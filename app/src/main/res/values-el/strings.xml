@@ -23,27 +23,16 @@
     <string name="system_default">Σύστημα</string>
     <string name="dark">Σκούρο</string>
     <string name="light">Ανοιχτόχρωμο</string>
-    <string name="welcome_to_olauncher_settings">Καλώς ήρθατε στις ρυθμίσεις!</string>
     <string name="keyboard_message">Γεια σας, το πληκτρολόγιο είναι ο ταχύτερος τρόπος για να βρείτε και να ανοίξετε εφαρμογές στο Moo Launcher. Μπορούμε να σας ζητήσουμε να το αφήσετε ενεργό για λίγες ακόμη ημέρες και μετά να αποφασίσετε;
         \n\nΗ επιλογή είναι πάντα δική σας.</string>
     <string name="app_usage_message">Για να εμφανίσετε/αποκρύψετε τον χρόνο οθόνης στην αρχική οθόνη, επιτρέψτε ή απορρίψτε την άδεια χρήσης εφαρμογών.
         \n\nΣημείωση: Δεν συλλέγονται δεδομένα χρήσης εφαρμογών. Όλα επεξεργάζονται στη συσκευή σας.</string>
-    <string name="wallpaper_message">Το Moo Launcher προσφέρει καθημερινά όμορφες νέες ταπετσαρίες. Δώστε στην αρχική σας οθόνη μια νέα εμφάνιση κάθε μέρα, δωρεάν!
-        \n\nΘέλετε να το δοκιμάσετε;</string>
-    <string name="accessibility_service_description">Η άδεια προσβασιμότητας απαιτείται για την ενεργοποίηση της χειρονομίας - διπλό πάτημα για κλείδωμα. Κανένα δεδομένο που αποκτάται από το Moo Launcher μέσω αυτής της υπηρεσίας δεν εγκαταλείπει τη συσκευή σας.</string>
     <string name="close">Κλείσιμο</string>
     <string name="please_set_olauncher_as_default_first">Ορίστε πρώτα το Moo Launcher ως προεπιλογή</string>
-    <string name="accessibility_disclosure">Ενεργοποιήστε την υπηρεσία προσβασιμότητας του Moo Launcher στις ρυθμίσεις της συσκευής σας για να ενεργοποιήσετε τη χειρονομία Διπλό πάτημα για κλείδωμα.
-    \n\nΣημειώστε ότι αυτή η υπηρεσία χρησιμοποιείται μόνο για αυτή τη συγκεκριμένη λειτουργία. Η υπηρεσία προσβασιμότητάς μας δεν συλλέγει ούτε μοιράζεται δεδομένα.</string>
     <string name="permission">Άδεια</string>
-    <string name="enable">Ενεργοποίηση</string>
-    <string name="disable">Απενεργοποίηση</string>
     <string name="info">Πληροφορίες</string>
     <string name="delete">Απεγκατάσταση</string>
     <string name="text_size">Μέγεθος κειμένου</string>
-    <string name="enabled">Ενεργοποιημένο</string>
-    <string name="please_turn_on_double_tap_to_unlock">Ενεργοποιήστε το διπλό πάτημα για κλείδωμα</string>
-    <string name="launcher_failed_to_lock_device">Το Moo Launcher απέτυχε να κλειδώσει τη συσκευή.\nΕλέγξτε τις ρυθμίσεις της εφαρμογής σας.</string>
     <string name="long_press_to_select_app">Παρατεταμένο πάτημα για επιλογή εφαρμογής</string>
     <string name="unable_to_open_app">Αδύνατο το άνοιγμα εφαρμογής</string>
     <string name="unable_to_open_app_info">Αδύνατο το άνοιγμα πληροφοριών εφαρμογής</string>
@@ -57,13 +46,8 @@
     <string name="adapter_show">Εμφάνιση</string>
     <string name="adapter_hide">Απόκρυψη</string>
     <string name="screen_time">Χρόνος οθόνης</string>
-    <string name="did_you_know">Το γνωρίζατε;</string>
     <string name="alignment_changed">Η στοίχιση άλλαξε ✅</string>
     <string name="home_screen">Αρχική οθόνη</string>
-    <string name="hey">Γεια</string>
-    <string name="new_year_wish">Σε μια χρονιά καλύτερη από κάθε άλλη. Καλή χρονιά!</string>
-    <string name="new_year_wish_1">Δεν έχει σημασία πώς πήγε ο Ιανουάριος. Έχετε ακόμα τον υπόλοιπο χρόνο για να τα πάτε καλύτερα από ποτέ.</string>
-    <string name="cheers">Στην υγειά μας!</string>
     <string name="notification_bar">Γραμμή ειδοποιήσεων</string>
     <string name="private_space">Ιδιωτικός χώρος</string>
     <string name="invalid_pin_request">Μη έγκυρο αίτημα καρφιτσώματος</string>
@@ -74,4 +58,10 @@
     <string name="invalid_shortcut">Μη έγκυρη συντόμευση</string>
     <string name="shortcut_not_found">Η συντόμευση δεν βρέθηκε</string>
     <string name="unable_to_open_shortcut">Αδύνατο το άνοιγμα της συντόμευσης</string>
+    <string name="accessibility_service_title">Υπηρεσία προσβασιμότητας</string>
+    <string name="accessibility_disclosure">Για να κλειδώνετε την οθόνη ή να ανοίγετε το πλαίσιο ειδοποιήσεων με μια κίνηση, ενεργοποιήστε την υπηρεσία προσβασιμότητας του Moo Launcher στις ρυθμίσεις της συσκευής σας.\n\nΤο Moo Launcher χρησιμοποιεί την υπηρεσία μόνο για να εκτελεί αυτές τις δύο ενέργειες όταν κάνετε την κίνηση. Δεν διαβάζει τι εμφανίζεται στην οθόνη σας ούτε τι πληκτρολογείτε και δεν συλλέγει ούτε κοινοποιεί κανένα δεδομένο.</string>
+    <string name="accessibility_service_description">Το Moo Launcher χρησιμοποιεί αυτήν την υπηρεσία για δύο κινήσεις που επιλέγετε: το κλείδωμα της οθόνης και το άνοιγμα του πλαισίου ειδοποιήσεων. Δεν διαβάζει τι εμφανίζεται στην οθόνη σας ούτε τι πληκτρολογείτε και τίποτα από όσα κάνει δεν φεύγει από τη συσκευή σας.</string>
+    <string name="not_now">Όχι τώρα</string>
+    <string name="open_settings">Άνοιγμα ρυθμίσεων</string>
+    <string name="gesture_needs_service">Ενεργοποιήστε την υπηρεσία προσβασιμότητας του Moo Launcher για να χρησιμοποιήσετε αυτήν την κίνηση.</string>
 </resources>

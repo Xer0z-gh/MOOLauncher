@@ -10,16 +10,10 @@
     <string name="olauncher_is_not_default_launcher">Moo Launcher ليس المشغل الافتراضي. قد يفشل التحديث اليومي للخلفية.</string>
     <string name="no_hidden_apps">لا توجد تطبيقات مخفية</string>
     <string name="hidden_apps">تطبيقات مخفية</string>
-    <string name="accessibility_disclosure">يرجى تشغيل خدمة إمكانية الوصول الخاصة بـ Moo Launcher في إعدادات جهازك لتفعيل إيماءة النقر المزدوج للقفل.\n\nيرجى ملاحظة أن هذه الخدمة تُستخدم فقط لهذه الميزة بالذات. خدمة إمكانية الوصول لدينا لا تجمع أو تشارك أي بيانات.</string>
     <string name="permission">إذن</string>
-    <string name="enable">تشغيل</string>
-    <string name="disable">إيقاف</string>
     <string name="info">معلومات</string>
     <string name="delete">إلغاء التثبيت</string>
     <string name="text_size">حجم الخط</string>
-    <string name="enabled">ممكّن</string>
-    <string name="please_turn_on_double_tap_to_unlock">يرجى تشغيل النقر المزدوج للقفل</string>
-    <string name="launcher_failed_to_lock_device">فشل Moo Launcher في قفل الجهاز.\nيرجى التحقق من إعدادات التطبيق.</string>
     <string name="long_press_to_select_app">اضغط مطوّلًا لاختيار التطبيق</string>
     <string name="unable_to_open_app">تعذر فتح التطبيق</string>
     <string name="system_app_cannot_delete">تطبيق نظام، لا يمكن إلغاء تثبيته</string>
@@ -44,24 +38,15 @@
     <string name="system_default">نظام</string>
     <string name="dark">داكن</string>
     <string name="light">فاتح</string>
-    <string name="welcome_to_olauncher_settings">مرحبًا بك في الإعدادات!</string>
     <string name="keyboard_message">مرحبًا، لوحة المفاتيح هي أسرع طريقة للعثور على التطبيقات وتشغيلها في Moo Launcher. هل يمكننا أن نطلب منك إبقاء هذا الخيار مفعّلًا لبضعة أيام أخرى ثم اتخاذ القرار؟\n\nالاختيار دائمًا لك.</string>
     <string name="app_usage_message">لعرض/إخفاء وقت استخدام الشاشة على الشاشة الرئيسية، يرجى السماح أو منع إذن استخدام التطبيق.
         \n\nملاحظة: لا يتم جمع أي بيانات حول استخدام التطبيقات. يتم معالجة كل شيء على جهازك.</string>
-    <string name="wallpaper_message">يقدم Moo Launcher خلفيات جميلة جديدة يوميًا. امنح شاشتك الرئيسية مظهرًا جديدًا كل يوم، مجانًا!
-        \n\nهل ترغب في تجربته؟</string>
-    <string name="accessibility_service_description">إذن إمكانية الوصول مطلوب لتفعيل إيماءة النقر المزدوج للقفل. أي بيانات يحصل عليها Moo Launcher عبر هذه الخدمة لن تغادر جهازك.</string>
     <string name="close">إغلاق</string>
     <string name="please_set_olauncher_as_default_first">يرجى تعيين Moo Launcher كمشغل افتراضي أولاً</string>
     <string name="app_not_found">التطبيق غير موجود</string>
-    <string name="did_you_know">هل كنت تعلم؟</string>
     <string name="screen_time">وقت الشاشة</string>
     <string name="alignment_changed">تم تغيير المحاذاة ✅</string>
     <string name="home_screen">الشاشة الرئيسية</string>
-    <string name="hey">مرحبا</string>
-    <string name="new_year_wish">إليك عامًا أفضل من كل ما سبقه. سنة جديدة سعيدة!</string>
-    <string name="new_year_wish_1">لا يهم كيف مضى شهر يناير. لا يزال لديك بقية العام لتقدم أداءً أفضل من أي وقت مضى.</string>
-    <string name="cheers">بصحتك!</string>
     <string name="notification_bar">شريط الإشعارات</string>
     <string name="private_space">المساحة الخاصة</string>
     <string name="invalid_pin_request">طلب تثبيت غير صالح</string>
@@ -73,4 +58,10 @@
     <string name="shortcut_not_found">لم يتم العثور على الاختصار</string>
     <string name="unable_to_open_shortcut">يتعذر فتح الاختصار</string>
     <string name="unable_to_open_app_info">تعذر فتح معلومات التطبيق</string>
+    <string name="accessibility_service_title">خدمة تسهيل الاستخدام</string>
+    <string name="accessibility_disclosure">لقفل الشاشة أو فتح لوحة الإشعارات باستخدام إيماءة، فعِّل خدمة تسهيل الاستخدام في Moo Launcher من إعدادات جهازك.\n\nيستخدم Moo Launcher هذه الخدمة فقط لتنفيذ هذين الإجراءين عندما تُجري الإيماءة. ولا يقرأ ما يظهر على شاشتك ولا ما تكتبه، ولا يجمع أي بيانات ولا يشاركها.</string>
+    <string name="accessibility_service_description">يستخدم Moo Launcher هذه الخدمة لإيماءتين تختارهما: قفل الشاشة وفتح لوحة الإشعارات. ولا يقرأ ما يظهر على شاشتك ولا ما تكتبه، ولا يغادر جهازك أي شيء مما يقوم به.</string>
+    <string name="not_now">ليس الآن</string>
+    <string name="open_settings">فتح الإعدادات</string>
+    <string name="gesture_needs_service">فعِّل خدمة تسهيل الاستخدام في Moo Launcher لاستخدام هذه الإيماءة.</string>
 </resources>

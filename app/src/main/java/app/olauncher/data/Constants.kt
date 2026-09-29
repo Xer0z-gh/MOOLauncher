@@ -40,17 +40,9 @@ object Constants {
     }
 
     object Dialog {
-        const val ABOUT = "ABOUT"
-        const val WALLPAPER = "WALLPAPER"
         const val HIDDEN = "HIDDEN"
         const val KEYBOARD = "KEYBOARD"
         const val DIGITAL_WELLBEING = "DIGITAL_WELLBEING"
-    }
-
-    object UserState {
-        const val START = "START"
-        const val WALLPAPER = "WALLPAPER"
-        const val DONE = "DONE"
     }
 
     object DateTime {
@@ -210,7 +202,6 @@ object Constants {
     const val FLAG_SET_CALENDAR_APP = 14
     const val FLAG_SET_SCREEN_TIME_APP = 15
 
-    const val REQUEST_CODE_ENABLE_ADMIN = 666
     const val REQUEST_CODE_LAUNCHER_SELECTOR = 678
 
 
@@ -222,7 +213,13 @@ object Constants {
     const val MIN_ANIM_REFRESH_RATE = 30f
 
     const val URL_MOO_GITHUB = "https://github.com/Xer0z-gh/MOOLauncher"
+    const val MOO_PRO_PACKAGE = "io.github.xer0z_gh.moo.pro"
+    const val URL_MOO_PRIVACY = "https://github.com/Xer0z-gh/MOOLauncher/blob/master/PRIVACY.md"
+    // The daily-wallpaper index is Olauncher's, hosted by its author. Only these image hosts are
+    // accepted from it (every entry on 2026-09-28 used one), so the index can never point the
+    // launcher at an arbitrary server. PRIVACY.md lists the same hosts.
     const val URL_WALLPAPERS = "https://gist.githubusercontent.com/tanujnotes/85e2d0343ace71e76615ac346fbff82b/raw"
+    val WALLPAPER_HOSTS = setOf("images.unsplash.com", "images.pexels.com", "i.redd.it", "images2.imgbox.com")
     const val URL_DEFAULT_DARK_WALLPAPER = "https://images.unsplash.com/photo-1512551980832-13df02babc9e"
     const val URL_DEFAULT_LIGHT_WALLPAPER = "https://images.unsplash.com/photo-1515549832467-8783363e19b6"
     const val URL_DUCK_SEARCH = "https://duck.co/?q="

@@ -23,27 +23,16 @@
     <string name="system_default">Hệ thống</string>
     <string name="dark">Tối</string>
     <string name="light">Sáng</string>
-    <string name="welcome_to_olauncher_settings">Chào mừng bạn đến với phần cài đặt!</string>
     <string name="keyboard_message">Xin chào, bàn phím là cách nhanh nhất để tìm và mở ứng dụng trong Moo Launcher. Chúng tôi có thể xin bạn giữ tính năng này bật thêm vài ngày rồi quyết định sau không?
         \n\nLựa chọn luôn là của bạn.</string>
     <string name="app_usage_message">Để hiện/ẩn thời gian sử dụng màn hình trên màn hình chính, vui lòng cho phép hoặc từ chối quyền sử dụng ứng dụng.
         \n\nLưu ý: Không có dữ liệu sử dụng ứng dụng nào được thu thập. Mọi thứ đều được xử lý trên thiết bị của bạn.</string>
-    <string name="wallpaper_message">Moo Launcher cung cấp những hình nền mới đẹp mắt mỗi ngày, hoàn toàn miễn phí. Hãy cho màn hình chính của bạn một diện mạo mới mỗi ngày, miễn phí!
-        \n\nBạn có muốn thử không?</string>
-    <string name="accessibility_service_description">Quyền trợ năng là bắt buộc để bật cử chỉ - chạm hai lần để khóa. Không có bất kỳ dữ liệu nào mà Moo Launcher thu được qua dịch vụ này rời khỏi thiết bị của bạn.</string>
     <string name="close">Đóng</string>
     <string name="please_set_olauncher_as_default_first">Vui lòng đặt Moo Launcher làm mặc định trước</string>
-    <string name="accessibility_disclosure">Vui lòng bật dịch vụ trợ năng của Moo Launcher trong cài đặt thiết bị của bạn để bật cử chỉ Chạm hai lần để khóa.
-    \n\nXin lưu ý rằng dịch vụ này chỉ được sử dụng cho tính năng cụ thể này. Dịch vụ trợ năng của chúng tôi không thu thập hoặc chia sẻ bất kỳ dữ liệu nào.</string>
     <string name="permission">Quyền</string>
-    <string name="enable">Bật</string>
-    <string name="disable">Tắt</string>
     <string name="info">Thông tin</string>
     <string name="delete">Gỡ cài đặt</string>
     <string name="text_size">Cỡ chữ</string>
-    <string name="enabled">Đã bật</string>
-    <string name="please_turn_on_double_tap_to_unlock">Vui lòng bật chạm hai lần để khóa</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher không thể khóa thiết bị.\nVui lòng kiểm tra cài đặt ứng dụng của bạn.</string>
     <string name="long_press_to_select_app">Nhấn giữ để chọn ứng dụng</string>
     <string name="unable_to_open_app">Không thể mở ứng dụng</string>
     <string name="unable_to_open_app_info">Không thể mở thông tin ứng dụng</string>
@@ -57,13 +46,8 @@
     <string name="adapter_show">Hiện</string>
     <string name="adapter_hide">Ẩn</string>
     <string name="screen_time">Thời gian sử dụng màn hình</string>
-    <string name="did_you_know">Bạn có biết?</string>
     <string name="alignment_changed">Đã thay đổi căn chỉnh ✅</string>
     <string name="home_screen">Màn hình chính</string>
-    <string name="hey">Này</string>
-    <string name="new_year_wish">Chúc một năm tốt đẹp hơn bất kỳ năm nào trước đây. Chúc mừng năm mới!</string>
-    <string name="new_year_wish_1">Tháng Một đã trôi qua như thế nào không quan trọng. Bạn vẫn còn cả năm phía trước để làm tốt hơn bao giờ hết.</string>
-    <string name="cheers">Cạn ly!</string>
     <string name="notification_bar">Thanh thông báo</string>
     <string name="private_space">Không gian riêng tư</string>
     <string name="invalid_pin_request">Yêu cầu ghim không hợp lệ</string>
@@ -74,4 +58,10 @@
     <string name="invalid_shortcut">Lối tắt không hợp lệ</string>
     <string name="shortcut_not_found">Không tìm thấy lối tắt</string>
     <string name="unable_to_open_shortcut">Không thể mở lối tắt</string>
+    <string name="accessibility_service_title">Dịch vụ hỗ trợ tiếp cận</string>
+    <string name="accessibility_disclosure">Để khóa màn hình hoặc mở ngăn thông báo bằng cử chỉ, hãy bật dịch vụ hỗ trợ tiếp cận của Moo Launcher trong phần cài đặt của thiết bị.\n\nMoo Launcher chỉ dùng dịch vụ này để thực hiện hai thao tác đó khi bạn dùng cử chỉ. Ứng dụng không đọc nội dung trên màn hình hay nội dung bạn nhập, đồng thời không thu thập hay chia sẻ bất kỳ dữ liệu nào.</string>
+    <string name="accessibility_service_description">Moo Launcher dùng dịch vụ này cho hai cử chỉ mà bạn chọn: khóa màn hình và mở ngăn thông báo. Ứng dụng không đọc nội dung trên màn hình hay nội dung bạn nhập, và mọi thao tác của ứng dụng chỉ diễn ra trên thiết bị của bạn.</string>
+    <string name="not_now">Để sau</string>
+    <string name="open_settings">Mở cài đặt</string>
+    <string name="gesture_needs_service">Hãy bật dịch vụ hỗ trợ tiếp cận của Moo Launcher để dùng cử chỉ này.</string>
 </resources>

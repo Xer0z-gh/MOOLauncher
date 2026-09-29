@@ -43,7 +43,8 @@ class MyAccessibilityService : AccessibilityService() {
 
     override fun onServiceConnected() {
         instance = this
-        Prefs(applicationContext).lockModeOn = true
+        // Locking through the service needs Android 9; below it the double tap stays a no-op.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) Prefs(applicationContext).lockModeOn = true
         super.onServiceConnected()
     }
 

@@ -24,27 +24,17 @@
     <string name="system_default">Rendszer</string>
     <string name="dark">Sötét</string>
     <string name="light">Világos</string>
-    <string name="welcome_to_olauncher_settings">Üdvözöljük a beállításokban!</string>
     <!--        \n\nHa van egy kis ideje, kérjük, ossza meg másokkal is az Olauncher-t. Az Olauncher-nek szüksége van emberekre. De ami még fontosabb, az embereknek szüksége van az Olauncher-re..</string>-->
     <string name="keyboard_message">Üdvözöljük! A billentyűzet a leggyorsabb módja az alkalmazások megtalálásához és elindításához az Moo Launcherben. Megkérhetjük, hogy hagyja bekapcsolva még néhány napig, és utána döntsön?
         \n\nA választás mindig az Öné.</string>
     <string name="app_usage_message">A képernyőidő megjelenítéséhez/elrejtéséhez a kezdőképernyőn engedélyezze vagy tagadja meg az alkalmazás használati engedélyét.
         \n\nMegjegyzés: Nem gyűjtünk alkalmazás-használati adatokat. Minden az Ön eszközén kerül feldolgozásra.</string>
-    <string name="wallpaper_message">Az Moo Launcher minden nap gyönyörű, új háttérképeket kínál, amelyekkel frissen tarthatja kezdőképernyőjét, ingyen!
-        \n\nSzeretné kipróbálni?</string>
-    <string name="accessibility_service_description">A kisegítő lehetőségek engedélye szükséges a dupla koppintás a lezáráshoz mozdulat engedélyezéséhez. Az Moo Launcher által ezen a szolgáltatáson keresztül megszerzett adatok nem hagyják el a készüléket.</string>
     <string name="close">Bezárás</string>
     <string name="please_set_olauncher_as_default_first">Kérjük, először állítsa be az Moo Launcher-t alapértelmezettként</string>
-    <string name="accessibility_disclosure">Kérjük, kapcsolja be az Moo Launcher kisegítő lehetőségek szolgáltatását az eszköz beállításaiban a dupla koppintás a lezáráshoz mozdulat engedélyezéséhez.\n\nKérjük, vegye figyelembe, hogy ez a szolgáltatás csak ehhez az egy funkcióhoz használatos. Kisegítő lehetőségek szolgáltatásunk nem gyűjt és nem oszt meg semmilyen adatot.</string>
     <string name="permission">Engedély</string>
-    <string name="enable">Engedélyezés</string>
-    <string name="disable">Letiltás</string>
     <string name="info">Információ</string>
     <string name="delete">Eltávolítás</string>
     <string name="text_size">Szövegméret</string>
-    <string name="enabled">Engedélyezve</string>
-    <string name="please_turn_on_double_tap_to_unlock">Kérjük, kapcsolja be a dupla koppintást a lezáráshoz</string>
-    <string name="launcher_failed_to_lock_device">Az Moo Launcher nem tudta lezárni az eszközt.\nKérjük, ellenőrizze az alkalmazás beállításait.</string>
     <string name="long_press_to_select_app">Hosszan nyomva tartás az alkalmazás kiválasztásához</string>
     <string name="unable_to_open_app">Nem lehet megnyitni az alkalmazást</string>
     <string name="system_app_cannot_delete">Rendszeralkalmazás, nem távolítható el</string>
@@ -57,13 +47,8 @@
     <string name="adapter_show">Megjelenítés</string>
     <string name="adapter_hide">Elrejtés</string>
     <string name="screen_time">Képernyőidő</string>
-    <string name="did_you_know">Tudta?</string>
     <string name="alignment_changed">Az igazítás megváltozott ✅</string>
     <string name="home_screen">Kezdőképernyő</string>
-    <string name="hey">Üdvözöljük!</string>
-    <string name="new_year_wish">Egy évre, amely jobb lesz minden eddiginél. Boldog új évet!</string>
-    <string name="new_year_wish_1">Nem számít, hogyan telt a január. Még mindig van hátra az évből, hogy minden eddiginél jobban teljesíts.</string>
-    <string name="cheers">Egészségére!</string>
     <string name="notification_bar">Értesítési sáv</string>
     <string name="private_space">Privát tér</string>
     <string name="invalid_pin_request">Érvénytelen rögzítési kérelem</string>
@@ -75,4 +60,10 @@
     <string name="shortcut_not_found">A parancsikon nem található</string>
     <string name="unable_to_open_shortcut">Nem lehet megnyitni a parancsikont</string>
     <string name="unable_to_open_app_info">Nem lehet megnyitni az alkalmazás adatait</string>
+    <string name="accessibility_service_title">Kisegítő szolgáltatás</string>
+    <string name="accessibility_disclosure">Ha kézmozdulattal szeretné lezárni a képernyőt vagy megnyitni az értesítési panelt, kapcsolja be a Moo Launcher kisegítő szolgáltatását az eszköz beállításaiban.\n\nA Moo Launcher a szolgáltatást kizárólag arra használja, hogy végrehajtsa ezt a két műveletet, amikor Ön elvégzi a kézmozdulatot. Nem olvassa sem a képernyő tartalmát, sem azt, amit begépel, és semmilyen adatot nem gyűjt és nem oszt meg.</string>
+    <string name="accessibility_service_description">A Moo Launcher ezt a szolgáltatást két, Ön által választott kézmozdulathoz használja: a képernyő lezárásához és az értesítési panel megnyitásához. Nem olvassa sem a képernyő tartalmát, sem azt, amit begépel, és semmi, amit tesz, nem hagyja el az eszközét.</string>
+    <string name="not_now">Most nem</string>
+    <string name="open_settings">Beállítások megnyitása</string>
+    <string name="gesture_needs_service">E kézmozdulat használatához kapcsolja be a Moo Launcher kisegítő szolgáltatását.</string>
 </resources><!-- Hungarian -->

@@ -1,0 +1,61 @@
+Moo is a minimal, text-first home screen for Android: a clock and a short list of app names, with nothing else competing for your attention. This build includes every feature, with no Google libraries, no ads, no analytics, no trackers and no account.
+
+<b>Home screen</b>
+<ul>
+<li>A clock and the apps you choose, listed by name.</li>
+<li>Missed-notification badges beside each home app, as a count or a dot. The count clears when you open the app from Moo, so it shows what you missed, not what is still in the shade. Tap a badge to peek at the recent lines; mute any app.</li>
+<li>Optional information lines: date, battery, weather, screen time, unlock count and next alarm.</li>
+<li>Music visualizer that draws what the phone is playing.</li>
+</ul>
+
+<b>Notifications and gestures</b>
+<ul>
+<li>A notification panel with filters, opened with a swipe.</li>
+<li>Six gestures (swipe up, down, left, right, double tap, long press). Each can do nothing, open the app list or app search, pull down the notification shade, open launcher settings, lock the screen (Android 9+), launch a chosen app, or show missed notifications.</li>
+</ul>
+
+<b>App list</b>
+<ul>
+<li>Categories or A to Z, search with optional auto-launch, hidden apps, and private space on Android 15.</li>
+<li>Uninstall from the list.</li>
+</ul>
+
+<b>Appearance</b>
+<ul>
+<li>13 color themes, each previewed as your own home screen. Moo paints its own background and never overwrites your wallpaper.</li>
+<li>Icons off, on the home screen, in the app list, or both. Icon packs in ADW or Nova format, in color or greyscale.</li>
+<li>Fonts including Inter; stepped sliders for sizes, text size and weight.</li>
+<li>Motion styles and a focus scroll layout with haptic ticks.</li>
+</ul>
+
+<b>Battery</b>
+Ultra battery saver runs the home screen at 60 Hz with a true-black background and fewer wake-ups, and can follow Android's Power Saver.
+
+<b>Weather</b>
+From Open-Meteo, using the phone's approximate location or a town you type in Settings. With a typed town, no location permission is needed. Off until you turn it on.
+
+Settings are grouped into pages: Home screen, Appearance, Apps, Notifications, Weather, and Motion and power, which holds the gesture settings.
+
+<b>Network use</b>
+Nothing leaves the device except:
+<ul>
+<li>Weather, if on: an approximate location (about 1 km, rounded to 2 decimals) or the typed town, sent to Open-Meteo.</li>
+<li>Place search: the typed town name, sent to Open-Meteo's geocoder.</li>
+<li>Daily wallpaper, if on: a wallpaper list from a GitHub gist, and images from images.unsplash.com, images.pexels.com, i.redd.it and images2.imgbox.com.</li>
+</ul>
+Notification contents, app usage, the installed-app list and visualizer audio stay on the device.
+
+<b>Permissions</b>
+<ul>
+<li>QUERY_ALL_PACKAGES: list, search and launch apps; read icon packs.</li>
+<li>PACKAGE_USAGE_STATS: screen time and unlock count.</li>
+<li>ACCESS_COARSE_LOCATION: weather, optional.</li>
+<li>RECORD_AUDIO: visualizer only. Reads the output mix; never records the microphone or stores audio.</li>
+<li>Notification listener: badges, the notification panel, and media for the visualizer.</li>
+<li>Accessibility service: only to lock the screen and open the notification shade when you make that gesture. It reads no screen content.</li>
+<li>REQUEST_DELETE_PACKAGES: uninstall from the app list.</li>
+</ul>
+
+
+Moo is free software (GPLv3), based on the open-source Olauncher by tanujnotes.
+Source code: <a href="https://github.com/Xer0z-gh/MOOLauncher">https://github.com/Xer0z-gh/MOOLauncher</a>

@@ -25,25 +25,15 @@
     <string name="system_default">Sistem</string>
     <string name="dark">Gelap</string>
     <string name="light">Terang</string>
-    <string name="welcome_to_olauncher_settings">Selamat datang di pengaturan!</string>
     <string name="keyboard_message">Hai, keyboard adalah cara tercepat untuk menemukan dan membuka aplikasi di Moo Launcher. Bisakah kami meminta Anda untuk tetap mengaktifkannya selama beberapa hari lagi lalu memutuskan?\n\nPilihan selalu ada di tangan Anda.</string>
     <string name="app_usage_message">Untuk menampilkan/menyembunyikan waktu layar di layar utama, izinkan atau tolak izin penggunaan aplikasi.
         \n\nCatatan: Tidak ada data penggunaan aplikasi yang dikumpulkan. Semua diproses di perangkat Anda.</string>
-    <string name="wallpaper_message">Moo Launcher menawarkan wallpaper baru yang indah setiap hari. Berikan tampilan baru pada layar utama Anda setiap hari, secara gratis!
-        \n\nIngin mencobanya?</string>
-    <string name="accessibility_service_description">Izin aksesibilitas diperlukan untuk mengaktifkan gerakan ketuk dua kali untuk mengunci. Data apa pun yang diperoleh Moo Launcher melalui layanan ini tidak akan meninggalkan perangkat Anda.</string>
     <string name="close">Tutup</string>
     <string name="please_set_olauncher_as_default_first">Silakan atur Moo Launcher sebagai peluncur default Anda terlebih dahulu</string>
-    <string name="accessibility_disclosure">Harap aktifkan layanan aksesibilitas Moo Launcher di pengaturan perangkat Anda untuk mengaktifkan gerakan ketuk dua kali untuk mengunci.\n\nHarap perhatikan bahwa layanan ini hanya digunakan untuk fitur ini saja. Layanan aksesibilitas kami tidak mengumpulkan atau membagikan data apa pun.</string>
     <string name="permission">Izin</string>
-    <string name="enable">Aktifkan</string>
-    <string name="disable">Nonaktifkan</string>
     <string name="info">Info</string>
     <string name="delete">Uninstal</string>
     <string name="text_size">Ukuran teks</string>
-    <string name="enabled">Diaktifkan</string>
-    <string name="please_turn_on_double_tap_to_unlock">Harap aktifkan ketuk dua kali untuk mengunci</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher gagal mengunci perangkat.\nSilakan periksa pengaturan aplikasi Anda.</string>
     <string name="long_press_to_select_app">Tekan lama untuk memilih aplikasi</string>
     <string name="unable_to_open_app">Tidak dapat membuka aplikasi</string>
     <string name="system_app_cannot_delete">Aplikasi sistem, tidak dapat di-uninstal</string>
@@ -56,13 +46,8 @@
     <string name="adapter_show">Tampilkan</string>
     <string name="adapter_hide">Sembunyikan</string>
     <string name="screen_time">Waktu layar</string>
-    <string name="did_you_know">Tahukah Anda?</string>
     <string name="alignment_changed">Penyelarasan diubah ✅</string>
     <string name="home_screen">Layar beranda</string>
-    <string name="hey">Hai</string>
-    <string name="new_year_wish">Untuk tahun yang lebih baik dari sebelumnya. Selamat tahun baru!</string>
-    <string name="new_year_wish_1">Tidak peduli bagaimana bulan Januari berlalu. Anda masih punya sisa tahun untuk melakukan yang lebih baik dari sebelumnya.</string>
-    <string name="cheers">Bersulang!</string>
     <string name="notification_bar">Bilah pemberitahuan</string>
     <string name="private_space">Ruang pribadi</string>
     <string name="invalid_pin_request">Permintaan penyematan tidak valid</string>
@@ -74,4 +59,10 @@
     <string name="shortcut_not_found">Pintasan tidak ditemukan</string>
     <string name="unable_to_open_shortcut">Tidak dapat membuka pintasan</string>
     <string name="unable_to_open_app_info">Tidak dapat membuka info aplikasi</string>
+    <string name="accessibility_service_title">Layanan aksesibilitas</string>
+    <string name="accessibility_disclosure">Untuk mengunci layar atau membuka panel notifikasi dengan gestur, aktifkan layanan aksesibilitas Moo Launcher di setelan perangkat Anda.\n\nMoo Launcher hanya menggunakan layanan ini untuk menjalankan kedua tindakan tersebut saat Anda melakukan gestur. Moo Launcher tidak membaca apa yang ada di layar Anda atau apa yang Anda ketik, serta tidak mengumpulkan atau membagikan data apa pun.</string>
+    <string name="accessibility_service_description">Moo Launcher menggunakan layanan ini untuk dua gestur yang Anda pilih: mengunci layar dan membuka panel notifikasi. Moo Launcher tidak membaca apa yang ada di layar Anda atau apa yang Anda ketik, dan semua yang dilakukannya tetap berada di perangkat Anda.</string>
+    <string name="not_now">Lain kali</string>
+    <string name="open_settings">Buka setelan</string>
+    <string name="gesture_needs_service">Aktifkan layanan aksesibilitas Moo Launcher untuk menggunakan gestur ini.</string>
 </resources><!-- Indonesian -->

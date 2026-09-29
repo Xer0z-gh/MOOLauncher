@@ -10,16 +10,10 @@
     <string name="olauncher_is_not_default_launcher">Moo Launcher varsayılan başlatıcınız değil. Günlük duvar kağıtları hatalı çalışabilir.</string>
     <string name="no_hidden_apps">Gizli uygulama yok</string>
     <string name="hidden_apps">Gizli uygulamalar</string>
-    <string name="accessibility_disclosure">Kilitlemek için çift dokunma hareketini etkinleştirmek için lütfen cihazınızın ayarlarında Moo Launcher\'ın erişilebilirlik hizmetini açın.\n\nBu hizmetin yalnızca bu özellik için kullanıldığını lütfen unutmayın. Erişilebilirlik hizmetimiz herhangi bir veri toplamaz veya paylaşmaz.</string>
     <string name="permission">İzin</string>
-    <string name="enable">Etkinleştir</string>
-    <string name="disable">Devre dışı bırak</string>
     <string name="info">Bilgi</string>
     <string name="delete">Kaldır</string>
     <string name="text_size">Yazı Boyutu</string>
-    <string name="enabled">Etkin</string>
-    <string name="please_turn_on_double_tap_to_unlock">Lütfen kilitlemek için çift dokunmayı açın</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher cihazı kilitleyemedi. Lütfen uygulama ayarlarınızı kontrol edin.</string>
     <string name="long_press_to_select_app">Uygulamayı seçmek için uzun basın</string>
     <string name="unable_to_open_app">Uygulama açılamıyor</string>
     <string name="system_app_cannot_delete">Sistem uygulaması, kaldırılamaz</string>
@@ -45,25 +39,16 @@
     <string name="system_default">Sistem</string>
     <string name="dark">Koyu</string>
     <string name="light">Açık</string>
-    <string name="welcome_to_olauncher_settings">Ayarlar sayfasına hoş geldiniz!</string>
     <string name="keyboard_message">Merhaba, klavye, Moo Launcher\'da uygulamaları bulmanın ve başlatmanın en hızlı yoludur. Birkaç gün daha kullanıp karar vermenizi rica ederiz.
         \n\nSeçim her zaman sizindir.</string>
     <string name="app_usage_message">Ana ekranınızda ekran sürenizi göstermek/gizlemek için lütfen uygulama kullanım iznini onaylayın veya reddedin.
         \n\nNot: Uygulama kullanım verileri toplanmaz. Her şey cihazınızda işlenir.</string>
-    <string name="wallpaper_message">Moo Launcher, ana ekranınıza taze bir görünüm kazandırmak için her gün yeni duvar kağıtları sunuyor. Hem de ücretsiz!
-        \n\nDenemek ister misiniz?</string>
-    <string name="accessibility_service_description">Kilitlemek için çift dokunma hareketini etkinleştirmek için erişilebilirlik izni gereklidir. Moo Launcher tarafından bu hizmet aracılığıyla elde edilen hiçbir veri cihazınızdan ayrılmaz.</string>
     <string name="close">Kapat</string>
     <string name="please_set_olauncher_as_default_first">Lütfen önce Moo Launcher\'ı varsayılan başlatıcınız olarak ayarlayın</string>
     <string name="app_not_found">Uygulama bulunamadı</string>
     <string name="screen_time">Ekran süresi</string>
-    <string name="did_you_know">Biliyor muydunuz?</string>
     <string name="alignment_changed">Hizalama değiştirildi ✅</string>
     <string name="home_screen">Ana ekran</string>
-    <string name="hey">Merhaba</string>
-    <string name="new_year_wish">Öncekilerin hepsinden daha iyi bir yıl olsun. Mutlu yıllar!</string>
-    <string name="new_year_wish_1">Ocak ayının nasıl geçtiği önemli değil. Her zamankinden daha iyisini yapmak için hala yılın geri kalanı var.</string>
-    <string name="cheers">Şerefe!</string>
     <string name="notification_bar">Bildirim çubuğu</string>
     <string name="private_space">Özel alan</string>
     <string name="invalid_pin_request">Geçersiz sabitleme isteği</string>
@@ -75,4 +60,10 @@
     <string name="shortcut_not_found">Kısayol bulunamadı</string>
     <string name="unable_to_open_shortcut">Kısayol açılamıyor</string>
     <string name="unable_to_open_app_info">Uygulama bilgisi açılamıyor</string>
+    <string name="accessibility_service_title">Erişilebilirlik hizmeti</string>
+    <string name="accessibility_disclosure">Bir hareketle ekranı kilitlemek veya bildirim panelini açmak için cihazınızın ayarlarından Moo Launcher\'ın erişilebilirlik hizmetini açın.\n\nMoo Launcher bu hizmeti yalnızca siz hareketi yaptığınızda bu iki işlemi gerçekleştirmek için kullanır. Ekranınızda görünenleri veya yazdıklarınızı okumaz ve hiçbir veri toplamaz ya da paylaşmaz.</string>
+    <string name="accessibility_service_description">Moo Launcher bu hizmeti seçtiğiniz iki hareket için kullanır: ekranı kilitleme ve bildirim panelini açma. Ekranınızda görünenleri veya yazdıklarınızı okumaz ve yaptığı hiçbir şey cihazınızın dışına çıkmaz.</string>
+    <string name="not_now">Şimdi değil</string>
+    <string name="open_settings">Ayarları aç</string>
+    <string name="gesture_needs_service">Bu hareketi kullanmak için Moo Launcher\'ın erişilebilirlik hizmetini açın.</string>
 </resources><!-- Turkish -->

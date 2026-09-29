@@ -23,22 +23,13 @@
     <string name="system_default">מערכת</string>
     <string name="dark">כהה</string>
     <string name="light">בהירה</string>
-    <string name="welcome_to_olauncher_settings">ברוכים הבאים להגדרות!</string>
     <string name="keyboard_message">היי, המקלדת היא הדרך המהירה ביותר למצוא ולפתוח יישומים ב־Moo Launcher. האם נוכל לבקש מכם להשאיר את ההגדרה הזאת פעילה עוד כמה ימים ואז להחליט?\n\nהבחירה תמיד שלכם.</string>
-    <string name="wallpaper_message">Moo Launcher מציע טפטים חדשים ויפים מדי יום. תנו למסך הבית שלכם מראה חדש ורענן בכל יום, בחינם!\n\nרוצים לנסות?</string>
-    <string name="accessibility_service_description">הרשאת הנגישות נחוצה להפעלת המחווה של נעילה בהקשה כפולה. כל הנתונים שייאספו על ידי Moo Launcher דרך שירות זה לא יעזבו את המכשיר שלכם.</string>
     <string name="close">סגירה</string>
     <string name="please_set_olauncher_as_default_first">ראשית, נא להגדיר את Moo Launcher בתור ברירת המחדל למסך בית.</string>
-    <string name="accessibility_disclosure">נא להפעיל את שירות הנגישות של Moo Launcher בהגדרות המכשיר כדי להפעיל את מחוות הנעילה בהקשה כפולה.\n\nשימו לב ששירות זה משמש רק לתכונה זו בלבד. שירות הנגישות שלנו אינו אוסף או משתף נתונים כלשהם.</string>
     <string name="permission">הרשאה</string>
-    <string name="enable">הפעלה</string>
-    <string name="disable">השבתה</string>
     <string name="info">מידע</string>
     <string name="delete">הסרת התקנה</string>
     <string name="text_size">גודל הטקסט</string>
-    <string name="enabled">מופעל</string>
-    <string name="please_turn_on_double_tap_to_unlock">נא להפעיל את מחוות ההקשה הכפולה לנעילה</string>
-    <string name="launcher_failed_to_lock_device">ל־Moo Launcher אין אפשרות לנעול את המסך.\nנא לבדוק את הגדרות היישום.</string>
     <string name="long_press_to_select_app">לבחירת יישום יש ללחוץ לחיצה ארוכה</string>
     <string name="unable_to_open_app">אין אפשרות לפתוח את היישום</string>
     <string name="system_app_cannot_delete">יישום מערכת, לא ניתן להסיר</string>
@@ -50,12 +41,7 @@
     <string name="hidden_apps">יישומים מוסתרים</string>
     <string name="adapter_show">הצגה</string>
     <string name="adapter_hide">הסתרה</string>
-    <string name="hey">היי</string>
-    <string name="new_year_wish">לעבר שנה טובה יותר מכל מה שקדם. שנה טובה!</string>
-    <string name="new_year_wish_1">לא משנה איך עבר ינואר. עדיין יש לך את שאר השנה להצליח יותר מתמיד</string>
-    <string name="cheers">לחיים!</string>
     <string name="screen_time">זמן מסך</string>
-    <string name="did_you_know">האם ידעת?</string>
     <string name="alignment_changed">היישור השתנה ✅</string>
     <string name="home_screen">מסך הבית</string>
     <string name="app_usage_message">כדי להציג/להסתיר את זמן המסך במסך הבית, נא לאפשר או לבטל את הרשאת השימוש ביישומים.\n\nהערה: לא נאספים נתוני שימוש ביישומים. הכל מעובד במכשיר שלכם.</string>
@@ -70,4 +56,10 @@
     <string name="shortcut_not_found">קיצור הדרך לא נמצא</string>
     <string name="unable_to_open_shortcut">לא ניתן לפתוח את קיצור הדרך</string>
     <string name="unable_to_open_app_info">אין אפשרות לפתוח את המידע על היישום</string>
+    <string name="accessibility_service_title">שירות נגישות</string>
+    <string name="accessibility_disclosure">כדי לנעול את המסך או לפתוח את חלונית ההתראות באמצעות תנועה, צריך להפעיל את שירות הנגישות של Moo Launcher בהגדרות המכשיר.\n\nMoo Launcher משתמש בשירות רק כדי לבצע את שתי הפעולות האלה כשמבצעים את התנועה. הוא לא קורא את מה שמוצג במסך ולא את מה שמקלידים, ולא אוסף או משתף נתונים כלשהם.</string>
+    <string name="accessibility_service_description">Moo Launcher משתמש בשירות הזה לשתי תנועות לבחירתך: נעילת המסך ופתיחת חלונית ההתראות. הוא לא קורא את מה שמוצג במסך ולא את מה שמקלידים, ושום דבר שהוא עושה לא יוצא מהמכשיר.</string>
+    <string name="not_now">לא עכשיו</string>
+    <string name="open_settings">פתיחת ההגדרות</string>
+    <string name="gesture_needs_service">כדי להשתמש בתנועה הזו, צריך להפעיל את שירות הנגישות של Moo Launcher.</string>
 </resources>

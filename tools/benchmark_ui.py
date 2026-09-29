@@ -33,7 +33,7 @@ a = p.parse_args()
 if not a.serial.startswith('emulator-') or a.rounds < 1:
     p.error('Use an explicit emulator serial and at least one round')
 adb = a.adb
-pkg = 'app.olauncher.debug'
+pkg = 'io.github.xer0z_gh.moo.debug'
 
 def call(*args):
     return subprocess.check_output([str(adb), '-s', a.serial, *args], text=True,

@@ -24,26 +24,16 @@
     <string name="system_default">System</string>
     <string name="dark">Mörkt</string>
     <string name="light">Ljust</string>
-    <string name="welcome_to_olauncher_settings">Välkommen till inställningarna!</string>
     <string name="keyboard_message">Hejsan, tangentbordet är det snabbaste sättet att hitta och starta appar i Moo Launcher. Får vi be dig att behålla denna På i några dagar till innan du bestämmer dig?
         \n\nValet är alltid ditt.</string>
     <string name="app_usage_message">För att visa/dölja din skärmtid på startsidan, vänligen tillåt eller neka appanvändningsbehörigheten.
         \n\nObs: Inga data om appanvändning samlas in. Allt bearbetas på din enhet.</string>
-    <string name="wallpaper_message">Moo Launcher erbjuder vackra nya bakgrundsbilder varje dag. Ge din hemskärm ett fräscht utseende varje dag, gratis!
-        \n\nVill du prova?</string>
-    <string name="accessibility_service_description">Tillgänglighetsbehörigheten krävs för att aktivera gesten dubbeltryck för att låsa. Inga data som Moo Launcher får via denna tjänst lämnar din enhet.</string>
     <string name="close">Stäng</string>
     <string name="please_set_olauncher_as_default_first">Vänligen ange Moo Launcher som förvald först</string>
-    <string name="accessibility_disclosure">Vänligen sätt på Moo Launchers tillgänglighetstjänst i din enhets inställningar för att aktivera gesten dubbeltryck för att låsa.\n\nObservera att denna tjänst bara används för just denna funktion. Vår tillgänglighetstjänst samlar inte in eller delar några data.</string>
     <string name="permission">Behörighet</string>
-    <string name="enable">Aktivera</string>
-    <string name="disable">Inaktivera</string>
     <string name="info">Info</string>
     <string name="delete">Avinstallera</string>
     <string name="text_size">Textstorlek</string>
-    <string name="enabled">Aktiverad</string>
-    <string name="please_turn_on_double_tap_to_unlock">Vänligen sätt på dubbeltryck för att låsa</string>
-    <string name="launcher_failed_to_lock_device">Moo Launcher lyckades inte låsa enheten.\nVänligen kontrollera dina appinställningar.</string>
     <string name="long_press_to_select_app">Långtryck för att välja app</string>
     <string name="unable_to_open_app">Kunde inte öppna appen</string>
     <string name="system_app_cannot_delete">Systemapp, kan inte avinstalleras</string>
@@ -56,13 +46,8 @@
     <string name="adapter_show">Visa</string>
     <string name="adapter_hide">Dölj</string>
     <string name="screen_time">Skärmtid</string>
-    <string name="did_you_know">Visste du?</string>
     <string name="alignment_changed">Justering ändrad ✅</string>
     <string name="home_screen">Startskärm</string>
-    <string name="hey">Hej</string>
-    <string name="new_year_wish">För ett år bättre än alla tidigare. Gott nytt år!</string>
-    <string name="new_year_wish_1">Det spelar ingen roll hur januari gick. Du har fortfarande resten av året på dig att göra bättre ifrån dig än någonsin.</string>
-    <string name="cheers">Skål!</string>
     <string name="notification_bar">Aviseringsfält</string>
     <string name="private_space">Privat rum</string>
     <string name="invalid_pin_request">Ogiltig begäran om att fästa</string>
@@ -74,4 +59,10 @@
     <string name="shortcut_not_found">Genvägen hittades inte</string>
     <string name="unable_to_open_shortcut">Det går inte att öppna genvägen</string>
     <string name="unable_to_open_app_info">Kunde inte öppna appinfon</string>
+    <string name="accessibility_service_title">Tillgänglighetstjänst</string>
+    <string name="accessibility_disclosure">Om du vill låsa skärmen eller öppna aviseringspanelen med en gest aktiverar du Moo Launchers tillgänglighetstjänst i enhetens inställningar.\n\nMoo Launcher använder tjänsten endast för att utföra de två åtgärderna när du gör gesten. Den läser varken det som visas på skärmen eller det du skriver, och den varken samlar in eller delar några data.</string>
+    <string name="accessibility_service_description">Moo Launcher använder den här tjänsten för två gester som du väljer: att låsa skärmen och att öppna aviseringspanelen. Den läser varken det som visas på skärmen eller det du skriver, och inget av det den gör lämnar din enhet.</string>
+    <string name="not_now">Inte nu</string>
+    <string name="open_settings">Öppna inställningar</string>
+    <string name="gesture_needs_service">Aktivera Moo Launchers tillgänglighetstjänst för att använda den här gesten.</string>
 </resources><!-- Swedish -->
