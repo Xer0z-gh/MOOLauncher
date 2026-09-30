@@ -1,6 +1,6 @@
 # Moo Launcher privacy policy
 
-Effective 2026-09-29. Applies to Moo Launcher (package `io.github.xer0z_gh.moo`) on Google Play,
+Effective 2026-09-30. Applies to Moo Launcher (package `io.github.xer0z_gh.moo`) on Google Play,
 GitHub, F-Droid and any other store.
 
 Moo Launcher has no accounts, no ads, no analytics and no trackers. The developer receives no
@@ -11,9 +11,9 @@ when you turn on the feature that needs it.
 
 | Feature (off unless you turn it on) | Sent to | What is sent |
 | --- | --- | --- |
-| Weather, using the phone's location | Open-Meteo (`api.open-meteo.com`) | Approximate coordinates, rounded to about 1 km |
-| Weather, using a place you typed | Open-Meteo (`api.open-meteo.com`) | That place's coordinates |
-| Searching for a weather place | Open-Meteo geocoder (`geocoding-api.open-meteo.com`) | The name you typed, and your language |
+| Weather, using the phone's location | GitHub and F-Droid version: Open-Meteo (`api.open-meteo.com`). Google Play version: MET Norway, the Norwegian Meteorological Institute (`api.met.no`) | Approximate coordinates, rounded to about 1 km |
+| Weather, using a place you typed | The same service as above | That place's coordinates, rounded the same way |
+| Searching for a weather place | GitHub and F-Droid version: Open-Meteo's geocoder (`geocoding-api.open-meteo.com`). Google Play version: Photon, run by komoot with OpenStreetMap data (`photon.komoot.io`) | The name you typed, and your language (on Photon, only when it is English, German or French) |
 | Daily wallpaper | GitHub (`gist.githubusercontent.com`, a list kept by Olauncher's author) and the image hosts it names: `images.unsplash.com`, `images.pexels.com`, `i.redd.it`, `images2.imgbox.com` | A normal download request |
 
 **Moo Pro (Google Play version).** Moo Pro is a separate app sold on Google Play. Moo Launcher checks,
@@ -22,9 +22,11 @@ Google Play handles the payment and gives the developer the order details it giv
 (order number, date, price, country or region, postal code). They are used only for accounting and
 refunds.
 
-Like any download, each request also carries your IP address and a standard Android user-agent
-(device model and Android version). Moo does not keep or use either. Open-Meteo's own policy is at
-<https://open-meteo.com/en/terms>.
+Like any download, each request also carries your IP address. Most requests also carry Android's
+standard user-agent (device model and Android version); on the Google Play version, the weather and
+place-search requests carry the app's name and version instead, as MET Norway asks. Moo
+does not keep or use any of it. The services' own policies: Open-Meteo <https://open-meteo.com/en/terms>,
+MET Norway <https://www.met.no/en/About-us/privacy>, komoot (Photon) <https://www.komoot.com/privacy>.
 
 Searching the web with `!` in app search opens your browser at DuckDuckGo with what you typed;
 the browser sends it, not Moo.

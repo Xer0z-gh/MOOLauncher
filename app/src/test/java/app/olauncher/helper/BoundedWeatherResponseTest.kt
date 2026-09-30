@@ -12,10 +12,10 @@ class BoundedWeatherResponseTest {
         assertEquals(payload, BoundedWeatherResponse.read(ByteArrayInputStream(payload.toByteArray())))
     }
 
-    @Test fun acceptsExactly64KiBAndRejectsAnExtraByte() {
-        assertEquals(64 * 1024, BoundedWeatherResponse.read(ByteArrayInputStream(ByteArray(64 * 1024) { 65 })).length)
+    @Test fun acceptsExactly128KiBAndRejectsAnExtraByte() {
+        assertEquals(128 * 1024, BoundedWeatherResponse.read(ByteArrayInputStream(ByteArray(128 * 1024) { 65 })).length)
         assertThrows(IOException::class.java) {
-            BoundedWeatherResponse.read(ByteArrayInputStream(ByteArray(64 * 1024 + 1) { 65 }))
+            BoundedWeatherResponse.read(ByteArrayInputStream(ByteArray(128 * 1024 + 1) { 65 }))
         }
     }
 }

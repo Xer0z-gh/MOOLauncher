@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- CC BY 4.0 asks for credit, a licence link and a note of changes; ODbL for credit where the data shows. -->
+    <string name="weather_credit" translatable="false"><![CDATA[Weather from <a href="https://api.met.no/">MET Norway</a> under <a href="https://creativecommons.org/licenses/by/4.0/">CC&#160;BY&#160;4.0</a>; Moo works out the high and low for each day from it. Place search by <a href="https://photon.komoot.io/">Photon</a>, with data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (<a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>).]]></string>
+    <string name="place_search_credit" translatable="false">Places © OpenStreetMap contributors</string>
+</resources>

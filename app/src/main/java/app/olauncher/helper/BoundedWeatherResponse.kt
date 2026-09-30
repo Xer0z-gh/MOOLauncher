@@ -6,7 +6,8 @@ import java.io.InputStream
 
 /** Forecast payloads are small; bound a misbehaving server before allocating or parsing JSON. */
 internal object BoundedWeatherResponse {
-    private const val MAX_BYTES = 64 * 1024
+    // MET Norway's compact forecast is about 40 KB; Open-Meteo's is about 1 KB.
+    private const val MAX_BYTES = 128 * 1024
 
     fun read(input: InputStream): String {
         val output = ByteArrayOutputStream()

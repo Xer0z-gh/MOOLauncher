@@ -162,6 +162,12 @@ class PanelSettings(private val context: Context, private val prefs: Prefs,
                 }
                 list.addView(row, gap().apply { if (list.isEmpty()) topMargin = 0 })
             }
+            // The data's credit sits with its settings: Open-Meteo asks for a link, MET and OSM for credit.
+            if (page == Page.WEATHER) list.addView(TextView(context, null, 0, R.style.TextSmall).apply {
+                this.text = Weather.credit(context)
+                setTextColor(text.withAlpha(0xB3))
+                movementMethod = android.text.method.LinkMovementMethod.getInstance()
+            }, gap())
             if (page == Page.VISUALIZER && !ProStore.unlocked(prefs)) {
                 list.addView(actionRow(R.string.pro_unlock_visualizer, text) {
                     context.showProDialog()
@@ -188,7 +194,7 @@ class PanelSettings(private val context: Context, private val prefs: Prefs,
 
     /**
      * Weather for a named place instead of the phone's location: type a town, pick a match. The
-     * typed name goes to Open-Meteo's geocoder only when Search is pressed.
+     * typed name goes to the build's geocoder (Open-Meteo, or Photon on Play) only when Search is pressed.
      */
     private fun pickWeatherPlace(onPicked: (String) -> Unit) {
         val text = if (ColorTheme.isCustom(prefs.colorThemeId)) ColorTheme.byId(prefs.colorThemeId).text
@@ -260,7 +266,9 @@ class PanelSettings(private val context: Context, private val prefs: Prefs,
                 status.text = when {
                     places == null -> context.getString(R.string.weather_location_offline)
                     places.isEmpty() -> context.getString(R.string.weather_location_none)
-                    else -> context.resources.getQuantityString(R.plurals.weather_location_found, places.size, places.size)
+                    // The Play build's places are OpenStreetMap data, credited where they show.
+                    else -> listOf(context.resources.getQuantityString(R.plurals.weather_location_found, places.size, places.size),
+                        context.getString(R.string.place_search_credit)).filter { it.isNotEmpty() }.joinToString("\n")
                 }
                 places.orEmpty().forEach { place ->
                     // The region line tells same-named towns apart; it is the secondary grey.

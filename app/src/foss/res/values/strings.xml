@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- This build's weather source (Open-Meteo). Its licence asks for a link to open-meteo.com. -->
+    <string name="weather_credit" translatable="false"><![CDATA[Weather data by <a href="https://open-meteo.com/">Open-Meteo.com</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC&#160;BY&#160;4.0</a>).]]></string>
+    <string name="place_search_credit" translatable="false"></string>
+</resources>

@@ -193,7 +193,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         // failed request (no signal, airplane mode) blocked the next hour of retries.
         if (weatherFetchInFlight) return
         val now = android.os.SystemClock.elapsedRealtime()
-        if (weatherFailure != null && lastWeatherAttempt > 0L && now - lastWeatherAttempt < 60_000) return
+        // Turned away (403/429): wait for the next scheduled refresh, as MET's terms ask ("limit
+        // traffic immediately"). No signal and other failures retry after a minute.
+        val retryAfter = if (weatherFailure == Weather.Failure.REFUSED) prefs.weatherRefreshMinutes * 60_000L else 60_000L
+        if (weatherFailure != null && lastWeatherAttempt > 0L && now - lastWeatherAttempt < retryAfter) return
         lastWeatherAttempt = now
         weatherFetchInFlight = true
         populateDateTime()

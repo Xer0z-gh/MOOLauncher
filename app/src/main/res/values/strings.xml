@@ -66,7 +66,7 @@
     <string name="about">About</string>
     <string name="privacy">Privacy</string>
     <string name="source_code">Source code</string>
-    <string name="about_text">Version %1$s\n\nFree software under the GNU General Public License, version 3. It comes with no warranty.\n\nBased on Olauncher by Tanuj M. (tanujnotes), modified by Xer0z-gh since September 2026.\n\nWeather data by Open-Meteo.com (CC BY 4.0). Inter typeface under the SIL Open Font License 1.1.</string>
+    <string name="about_text">Version %1$s\n\nFree software under the GNU General Public License, version 3. It comes with no warranty.\n\nBased on Olauncher by Tanuj M. (tanujnotes), modified by Xer0z-gh since September 2026.\n\n%2$s Inter typeface under the SIL Open Font License 1.1.</string>
     <string name="permission">Permission</string>
     <string name="info">Info</string>
     <string name="delete">Uninstall</string>

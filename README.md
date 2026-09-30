@@ -26,7 +26,7 @@ After you install it, press Home and choose Moo. You can also set it in Android'
 
 **App drawer.** The drawer sorts apps A to Z and can group them into categories. Search can open the app automatically when only one result is left. You can hide apps, and Private Space works on Android 15 and newer.
 
-**Weather.** Weather comes from Open-Meteo and needs no account or key. Moo uses either the phone's approximate location or a town you type in Settings. For the phone's location, Moo reads a recent location fix, or asks Android for a network location if there is none; it does not turn on GPS. With a typed town, Moo needs no location permission.
+**Weather.** Weather comes from Open-Meteo in the GitHub/F-Droid build and from MET Norway in the Play build; neither needs an account or key. Moo uses either the phone's approximate location or a town you type in Settings. For the phone's location, Moo reads a recent location fix, or asks Android for a network location if there is none; it does not turn on GPS. With a typed town, Moo needs no location permission.
 
 **Motion and power.** You can choose a motion style, and turn on a focus scroll layout with haptic ticks. Ultra battery saver runs the screen at 60 Hz, makes Home true black and wakes the phone less often. It can switch on and off with Android's Power Saver.
 
@@ -41,6 +41,7 @@ There are two builds, made from the same source.
 | Features | Every feature, including all 13 themes and the music visualizer | Every feature except 10 of the themes and the music visualizer, which come with Moo Pro |
 | Moo Pro | Not needed | A small separate app on Google Play (`io.github.xer0z_gh.moo.pro`), bought once. With it installed, 10 color themes and the music visualizer unlock. System, Ink and Paper are free. |
 | Proprietary Google libraries | None | None. Google Play sells Moo Pro as an ordinary paid app; Moo only checks that it is installed and signed with the same key. |
+| Weather and place search | Open-Meteo | MET Norway and Photon (OpenStreetMap). Open-Meteo's free API is for non-commercial apps, and this build sells Moo Pro. |
 | Ads, analytics, trackers, accounts | None | None |
 
 The FOSS build is not a cut-down version, and nothing in it is locked. Buying Moo Pro on Google Play pays for development. If you want to support the project and you use Play, that is the way to do it.
@@ -49,8 +50,8 @@ The FOSS build is not a cut-down version, and nothing in it is locked. Buying Mo
 
 Moo sends data off the device only in these cases:
 
-1. **Weather, when it is on.** Moo sends Open-Meteo the coordinates of either your approximate location or the town you typed, rounded to 2 decimal places (roughly 1 km).
-2. **Place search.** When you search for a town, Moo sends the name you typed, and your language setting, to Open-Meteo's geocoder.
+1. **Weather, when it is on.** Moo sends the coordinates of either your approximate location or the town you typed, rounded to 2 decimal places (roughly 1 km), to Open-Meteo (FOSS build) or MET Norway (Play build).
+2. **Place search.** When you search for a town, Moo sends the name you typed and your language setting to Open-Meteo's geocoder (FOSS build), or the name you typed to Photon (Play build), with your language only if it is English, German or French.
 3. **Daily wallpaper, when it is on.** Moo downloads a wallpaper list from GitHub (a gist that Olauncher's author maintains). The images come from images.unsplash.com, images.pexels.com, i.redd.it and images2.imgbox.com.
 4. **Moo Pro (Play build only).** Moo checks on the phone, with no network request, whether the Moo Pro app is installed. Google Play handles buying it.
 
@@ -124,4 +125,5 @@ Moo is free software under the GNU General Public License v3.0. See [LICENSE](LI
 - Based on [Olauncher](https://github.com/tanujnotes/Olauncher) by Tanuj M. (tanujnotes), GPLv3.
 - **Modification notice (GPLv3 section 5(a)):** Xer0z-gh has modified this program since September 2026. The changes are recorded in this repository's commit history and are released under the same licence.
 - The bundled typeface is [Inter](https://rsms.me/inter/), under the SIL Open Font License 1.1. See [INTER-FONT-LICENSE.txt](INTER-FONT-LICENSE.txt).
-- [Weather data by Open-Meteo.com](https://open-meteo.com/), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- FOSS build: [Weather data by Open-Meteo.com](https://open-meteo.com/), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- Play build: weather forecasts from [MET Norway](https://api.met.no/), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); Moo derives each day's high and low from them. Place search by [Photon](https://photon.komoot.io/), with data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), licensed under the [ODbL](https://opendatacommons.org/licenses/odbl/).

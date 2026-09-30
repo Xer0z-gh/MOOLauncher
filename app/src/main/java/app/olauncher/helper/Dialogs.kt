@@ -249,6 +249,10 @@ fun Context.createDialog(
     binding.tvAction.setText(action)
     if (message != 0) binding.tvMessage.setText(message)
     messageText?.let(binding.tvMessage::setText)
+    // A message with links (About's credits) needs taps routed to them.
+    if (messageText is android.text.Spanned &&
+        messageText.getSpans(0, messageText.length, android.text.style.ClickableSpan::class.java).isNotEmpty())
+        binding.tvMessage.movementMethod = android.text.method.LinkMovementMethod.getInstance()
     binding.tvMessage.isVisible = message != 0 || messageText != null
     if (neutral != 0) {
         binding.tvNeutral.setText(neutral)

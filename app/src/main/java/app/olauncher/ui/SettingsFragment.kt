@@ -758,7 +758,8 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
                 requireContext().createDialog(
                     title = R.string.about,
                     action = R.string.source_code,
-                    messageText = getString(R.string.about_text, BuildConfig.VERSION_NAME),
+                    messageText = android.text.SpannableStringBuilder(getString(R.string.about_text, BuildConfig.VERSION_NAME, "\uFFFC"))
+                        .let { about -> about.indexOf("\uFFFC").let { at -> about.replace(at, at + 1, Weather.credit(requireContext())) } },
                     neutral = R.string.privacy,
                     onNeutral = { requireContext().openUrl(Constants.URL_MOO_PRIVACY) },
                     onAction = { requireContext().openUrl(Constants.URL_MOO_GITHUB) },

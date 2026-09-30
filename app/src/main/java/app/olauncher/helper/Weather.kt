@@ -15,17 +15,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLEncoder
 import java.util.Locale
 import kotlin.coroutines.resume
 
 /** Optional foreground weather, with one bounded coarse fix when no recent cache exists. */
 object Weather {
     data class Reading(val celsius: Double, val code: Int, val high: Double, val low: Double, val isDay: Boolean, val forecastDay: String, val timezone: String)
-    enum class Failure { PERMISSION, LOCATION_OFF, NO_LOCATION, NETWORK }
+    /** REFUSED: the service answered 403 or 429 (blocked or throttling), so Home backs off instead of retrying soon. */
+    enum class Failure { PERMISSION, LOCATION_OFF, NO_LOCATION, NETWORK, REFUSED }
     data class Result(val reading: Reading? = null, val failure: Failure? = null)
     data class Place(val name: String, val detail: String, val latitude: Double, val longitude: Double)
 
@@ -83,77 +82,76 @@ object Weather {
         }
     }
 
-    private suspend fun fetchAt(latitude: Double, longitude: Double): Result = suspendCancellableCoroutine { continuation ->
+    private suspend fun fetchAt(latitude: Double, longitude: Double): Result {
         // Forecasts do not need street-level coordinates; transmit roughly town-level precision.
         val lat = String.format(Locale.US, "%.2f", latitude)
         val lon = String.format(Locale.US, "%.2f", longitude)
-        val url = "https://api.open-meteo.com/v1/forecast?latitude=$lat&longitude=$lon&current=temperature_2m,weather_code,is_day&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1"
-        val connection = (URL(url).openConnection() as HttpURLConnection).apply {
-            connectTimeout = 8000
-            readTimeout = 8000
-            requestMethod = "GET"
-        }
-        // Cancellation disconnects the socket even while a blocking read is in progress.
-        continuation.invokeOnCancellation { connection.disconnect() }
-        Dispatchers.IO.dispatch(continuation.context, Runnable {
-            if (!continuation.isActive) return@Runnable
-            val result = try {
-                if (connection.responseCode != HttpURLConnection.HTTP_OK) Result(failure = Failure.NETWORK)
-                else {
-                    val body = connection.inputStream.use { BoundedWeatherResponse.read(it) }
-                    val json = JSONObject(body)
-                    val current = json.getJSONObject("current")
-                    val daily = json.getJSONObject("daily")
-                    val high = daily.getJSONArray("temperature_2m_max").getDouble(0)
-                    val low = daily.getJSONArray("temperature_2m_min").getDouble(0)
-                    val temperature = current.getDouble("temperature_2m")
-                    if (!temperature.isFinite() || !high.isFinite() || !low.isFinite()) Result(failure = Failure.NETWORK)
-                    else Result(Reading(temperature, current.optInt("weather_code", -1), high, low, current.optInt("is_day", 1) == 1,
-                        daily.getJSONArray("time").getString(0), json.getString("timezone")))
-                }
-            } catch (_: Exception) {
-                Result(failure = Failure.NETWORK)
-            } finally {
-                connection.disconnect()
-            }
-            if (continuation.isActive) continuation.resume(result)
-        })
+        return WeatherSource.forecast(lat, lon)
     }
 
-    /** Places matching [query] from Open-Meteo's geocoder; null when the search itself failed. */
-    suspend fun searchPlaces(query: String): List<Place>? = withContext(Dispatchers.IO) {
-        val language = Locale.getDefault().language.ifBlank { "en" }
-        val url = "https://geocoding-api.open-meteo.com/v1/search?count=6&format=json&language=$language&name=" +
-            URLEncoder.encode(query, "UTF-8")
-        val connection = (URL(url).openConnection() as HttpURLConnection).apply {
-            connectTimeout = 8000
-            readTimeout = 8000
-        }
-        try {
-            if (connection.responseCode != HttpURLConnection.HTTP_OK) return@withContext null
-            val results = JSONObject(connection.inputStream.use { BoundedWeatherResponse.read(it) })
-                .optJSONArray("results") ?: return@withContext emptyList()
-            (0 until results.length()).mapNotNull { i ->
-                val place = results.getJSONObject(i)
-                val latitude = place.optDouble("latitude")
-                val longitude = place.optDouble("longitude")
-                val name = place.optString("name")
-                if (name.isBlank() || !latitude.isFinite() || !longitude.isFinite()) null
-                else Place(name, listOf(place.optString("admin1"), place.optString("country"))
-                    .filter { it.isNotBlank() }.joinToString(", "), latitude, longitude)
-            }
-        } catch (_: Exception) {
-            null
-        } finally {
-            connection.disconnect()
-        }
+    /** Places matching [query] from this build's geocoder; null when the search itself failed. */
+    suspend fun searchPlaces(query: String): List<Place>? = WeatherSource.places(query)
+
+    /**
+     * One GET's outcome. [value] is the parsed 200/203 body, [status] the HTTP code (-1 when no answer
+     * came), [expires] the Expires header in epoch ms (0 when absent).
+     */
+    internal class Fetched<T>(val status: Int, val value: T?, val expires: Long = 0L, val lastModified: String? = null) {
+        /** 403 and 429: turned away (blocked, or throttling). Not an outage, so no quick retry. */
+        val refused get() = status == HttpURLConnection.HTTP_FORBIDDEN || status == 429
+
+        fun failure() = Result(failure = if (refused) Failure.REFUSED else Failure.NETWORK)
     }
+
+    /** GET [url] and [parse] the body on the IO thread. Cancelling disconnects the socket, even mid-read. */
+    internal suspend fun <T> get(url: String, headers: Map<String, String> = emptyMap(), parse: (String) -> T?): Fetched<T> =
+        suspendCancellableCoroutine { continuation ->
+            val connection = (URL(url).openConnection() as HttpURLConnection).apply {
+                connectTimeout = 8000
+                readTimeout = 8000
+                requestMethod = "GET"
+                headers.forEach { (name, value) -> setRequestProperty(name, value) }
+            }
+            continuation.invokeOnCancellation { connection.disconnect() }
+            Dispatchers.IO.dispatch(continuation.context, Runnable {
+                if (!continuation.isActive) return@Runnable
+                val fetched: Fetched<T> = try {
+                    val status = connection.responseCode
+                    // 203 is MET's "this API version is deprecated" notice; its terms ask for it to be logged.
+                    if (status == HttpURLConnection.HTTP_NOT_AUTHORITATIVE) android.util.Log.w("Weather", "Deprecated API version: $url")
+                    val value = if (status == HttpURLConnection.HTTP_OK || status == HttpURLConnection.HTTP_NOT_AUTHORITATIVE)
+                        runCatching { connection.inputStream.use { parse(BoundedWeatherResponse.read(it)) } }.getOrNull() else null
+                    Fetched(status, value, connection.expiration, connection.getHeaderField("Last-Modified"))
+                } catch (_: Exception) {
+                    Fetched(-1, null)
+                } finally {
+                    connection.disconnect()
+                }
+                if (continuation.isActive) continuation.resume(fetched)
+            })
+        }
 
     fun isCurrentDay(day: String, zone: String, now: Long = System.currentTimeMillis()): Boolean {
         if (day.isBlank() || zone.isBlank()) return false
         val format = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.US)
         format.timeZone = java.util.TimeZone.getTimeZone(zone)
         return format.format(java.util.Date(now)) == day
+    }
+
+    /** This build's weather credit, links underlined in the text's own colour: a credit, not an accent. */
+    fun credit(context: Context): CharSequence {
+        val text = android.text.SpannableStringBuilder(androidx.core.text.HtmlCompat.fromHtml(
+            context.getString(app.olauncher.R.string.weather_credit), androidx.core.text.HtmlCompat.FROM_HTML_MODE_COMPACT))
+        text.getSpans(0, text.length, android.text.style.URLSpan::class.java).forEach { span ->
+            val start = text.getSpanStart(span)
+            val end = text.getSpanEnd(span)
+            text.removeSpan(span)
+            text.setSpan(object : android.text.style.ClickableSpan() {
+                override fun onClick(widget: android.view.View) = widget.context.openUrl(span.url)
+                override fun updateDrawState(ds: android.text.TextPaint) { ds.isUnderlineText = true }
+            }, start, end, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        return text
     }
 
     fun temperature(celsius: Double, fahrenheit: Boolean): String =
